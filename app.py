@@ -1,9 +1,3 @@
-import streamlit as st
-import plotly.express as px
-import pandas as pd
-
-# Seiteneinstellungen
-st.set_page_config(page_title="Lebenslauf Andrey Gerber", layout="wide")
 
 import streamlit as st
 import plotly.express as px
