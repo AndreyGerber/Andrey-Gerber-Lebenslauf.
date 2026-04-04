@@ -19,15 +19,19 @@ col1, col2 = st.columns([1, 1]) # Erstellt zwei gleich breite Spalten
 with col1:
     st.subheader("Slideshow: it's me")
     
-    # 1. Erstelle eine Liste mit DEINEN echten Dateipfaden
-    # Wichtig: Achte auf .JPG (groß) bei ich1
+    # Die Pfade MÜSSEN exakt so geschrieben sein wie im Ordner 'images'
+    # Achte auf .JPG (groß) bei ich1 und .png (klein) bei ich_pass!
     meine_bilder = ["images/ich1.JPG", "images/ich_pass.png"]
     
-    # 2. Ein einfacher Button/Radio zum Wechseln der Bilder
-    wahl = st.radio("Bild wählen:", [1, 2], horizontal=True)
+    # Auswahl-Button für die Bilder
+    wahl = st.radio("Foto auswählen:", range(1, len(meine_bilder) + 1), horizontal=True)
     
-    # 3. Das Bild anzeigen (wir greifen auf die Liste zu)
-    st.image(meine_bilder[wahl - 1], use_container_width=True) 
+    # Das gewählte Bild anzeigen
+    try:
+        st.image(meine_bilder[wahl - 1], use_container_width=True)
+    except Exception as e:
+        st.error(f"Bild konnte nicht geladen werden: {meine_bilder[wahl - 1]}")
+        st.write("Prüfe bitte die Groß-/Kleinschreibung der Dateiendung.")
 
 with col2:
     st.write("### Meine Kontaktdaten")
