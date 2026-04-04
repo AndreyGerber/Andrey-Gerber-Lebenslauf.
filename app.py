@@ -29,6 +29,9 @@ with col2:
 
 st.divider()
 
+# ... hier geht es weiter mit deinem "Mein Weg" (Flaggen) und der Timeline
+
+
 
 
 # 3. Hobby-Timeline mit Plotly
