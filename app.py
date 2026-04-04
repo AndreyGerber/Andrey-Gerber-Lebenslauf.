@@ -3,57 +3,55 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 
+import streamlit as st
 import os
-
-# Diagnose-Check: Was sieht der Server?
-st.write("### 📂 Server-Check (Fehlersuche)")
-st.write(f"Aktuelles Verzeichnis: `{os.getcwd()}`")
-if os.path.exists("images"):
-    st.write("✅ Ordner 'images' gefunden!")
-    st.write(f"Inhalt von 'images': `{os.listdir('images')}`")
-else:
-    st.error("❌ Ordner 'images' wurde nicht gefunden!")
-
 
 # Seiteneinstellungen
 st.set_page_config(page_title="Lebenslauf Andrey Gerber", layout="wide")
 
-# 1. Titel ganz oben (in zwei Zeilen)
+# 1. Titel (zentriert und zwei Zeilen)
 st.markdown("<h1 style='text-align: center;'>Willkommen auf der Seite</h1>", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: center;'>Lebenslauf von Andrey Gerber</h2>", unsafe_allow_html=True)
 
+st.divider()
 
-st.divider() # Eine Trennlinie für die Optik
-
+# 2. Slideshow-Logik (Session State)
 if 'bild_index' not in st.session_state:
     st.session_state.bild_index = 0
 
 meine_bilder = ["images/ich1.JPG", "images/ich_pass.png"]
 
-# 2. Layout: 3 Spalten (Bilder | Text | Daten)
-col_bild, col_mitte, col_daten = st.columns([1.5, 0.5, 1.5])
+# 3. Layout: 3 Spalten (Bilder | Deine Zeichnung | Daten)
+col_bild, col_mitte, col_daten = st.columns([1.5, 1.0, 1.5])
 
 with col_bild:
-    # Das aktuelle Bild anzeigen
+    # Aktuelles Foto anzeigen
     st.image(meine_bilder[st.session_state.bild_index], width=280)
     
-    # Pfeile direkt unter das Bild setzen
-    pfeil_links, pfeil_rechts = st.columns(2)
-    with pfeil_links:
+    # Pfeile direkt unter das Foto
+    p1, p2 = st.columns(2)
+    with p1:
         if st.button("⬅️"):
             st.session_state.bild_index = (st.session_state.bild_index - 1) % len(meine_bilder)
             st.rerun()
-    with pfeil_rechts:
+    with p2:
         if st.button("➡️"):
             st.session_state.bild_index = (st.session_state.bild_index + 1) % len(meine_bilder)
             st.rerun()
 
 with col_mitte:
-    # "it's me" vertikal mittig platzieren
-    st.write("") # Platzhalter für die Höhe
-    st.write("")
-    st.markdown("### it's me")
-    st.markdown("## ←") # Ein Pfeil, der auf das Bild zeigt
+    # Hier laden wir deine Zeichnung statt nur Text
+    st.markdown("<p style='text-align: center; font-weight: bold;'>it's me</p>", unsafe_allow_html=True)
+    
+    # Pfad zu deiner selbstgemalten Datei (anpassen, wenn der Name anders ist!)
+    pfad_zeichnung = "images/zeichnung.png" 
+    
+    if os.path.exists(pfad_zeichnung):
+        st.image(pfad_zeichnung, use_container_width=True)
+    else:
+        st.info("Hier erscheint bald meine Zeichnung...")
+    
+    st.markdown("<h2 style='text-align: center;'>←</h2>", unsafe_allow_html=True)
 
 with col_daten:
     st.subheader("Meine Kontaktdaten")
