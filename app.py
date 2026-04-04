@@ -17,9 +17,17 @@ st.divider() # Eine Trennlinie für die Optik
 col1, col2 = st.columns([1, 1]) # Erstellt zwei gleich breite Spalten
 
 with col1:
-    # Hier kannst du später echte Bilder einfügen
     st.subheader("Slideshow: it's me")
-    st.image("https://placeholder.com", caption=['images/ich1.jpg', 'ich_pass']) 
+    
+    # 1. Erstelle eine Liste mit DEINEN echten Dateipfaden
+    # Wichtig: Achte auf .JPG (groß) bei ich1
+    meine_bilder = ["images/ich1.JPG", "images/ich_pass.png"]
+    
+    # 2. Ein einfacher Button/Radio zum Wechseln der Bilder
+    wahl = st.radio("Bild wählen:", [1, 2], horizontal=True)
+    
+    # 3. Das Bild anzeigen (wir greifen auf die Liste zu)
+    st.image(meine_bilder[wahl - 1], use_container_width=True) 
 
 with col2:
     st.write("### Meine Kontaktdaten")
