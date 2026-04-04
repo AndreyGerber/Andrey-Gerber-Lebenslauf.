@@ -1,60 +1,68 @@
-
-import streamlit as st
-import plotly.express as px
-import pandas as pd
-
 import streamlit as st
 import os
+from PIL import Image, ImageOps
 
-# Seiteneinstellungen
-st.set_page_config(page_title="Lebenslauf Andrey Gerber", layout="wide")
+# --- 1. FUNKTION FÜR STABILE BILDGRÖSSE ---
+def lade_formatiertes_bild(name, target_size=(400, 300)):
+    base_path = os.path.dirname(__file__)
+    pfad = os.path.join(base_path, "images", name)
+    if os.path.exists(pfad):
+        img = Image.open(pfad)
+        # Erstellt ein Bild mit festem Format, ohne es zu verzerren (Padding)
+        img.thumbnail(target_size, Image.Resampling.LANCZOS)
+        # Erzeugt einen transparenten Hintergrund in der Zielgröße
+        new_img = Image.new("RGBA", target_size, (255, 255, 255, 0))
+        # Zentriert das Bild auf dem Hintergrund
+        new_img.paste(img, ((target_size[0] - img.size[0]) // 2, 
+                            (target_size[1] - img.size[1]) // 2))
+        return new_img
+    return None
 
-# 1. Titel (zentriert und zwei Zeilen)
-st.markdown("<h1 style='text-align: center;'>Willkommen auf der Seite</h1>", unsafe_allow_html=True)
-st.markdown("<h2 style='text-align: center;'>Lebenslauf von Andrey Gerber</h2>", unsafe_allow_html=True)
-
-st.divider()
-
-# 2. Slideshow-Logik (Session State)
+# --- 2. DATEN & LOGIK ---
 if 'bild_index' not in st.session_state:
     st.session_state.bild_index = 0
 
-meine_bilder = ["images/ich1.JPG", "images/ich_pass.png"]
+slideshow_bilder = ["ich1.JPG", "ich_pass.png"]
+zeichnung_name = "itsme2.png"
 
-# 3. Layout: 3 Spalten (Bilder | Deine Zeichnung | Daten)
+# --- 3. LAYOUT: 3 SPALTEN ---
 col_bild, col_mitte, col_daten = st.columns([1.5, 1.0, 1.5])
 
 with col_bild:
-    # Aktuelles Foto anzeigen
-    st.image(meine_bilder[st.session_state.bild_index], width=280)
-    
+    # Stabiles Bild laden
+    aktuelles_foto = lade_formatiertes_bild(slideshow_bilder[st.session_state.bild_index])
+    if aktuelles_foto:
+        st.image(aktuelles_foto, use_container_width=True)
+    else:
+        st.error(f"Datei fehlt: {slideshow_bilder[st.session_state.bild_index]}")
+
+    st.write("<p style='color: blue; font-size: 0.9em;'>ich kann auch Seriosität zeigen</p>", unsafe_allow_html=True)
+
     # Pfeile direkt unter das Foto
     p1, p2 = st.columns(2)
     with p1:
         if st.button("⬅️"):
-            st.session_state.bild_index = (st.session_state.bild_index - 1) % len(meine_bilder)
+            st.session_state.bild_index = (st.session_state.bild_index - 1) % len(slideshow_bilder)
             st.rerun()
     with p2:
         if st.button("➡️"):
-            st.session_state.bild_index = (st.session_state.bild_index + 1) % len(meine_bilder)
+            st.session_state.bild_index = (st.session_state.bild_index + 1) % len(slideshow_bilder)
             st.rerun()
 
 with col_mitte:
-    # Wir entfernen st.markdown("### it's me") und den Pfeil-Text unten
-    
-    pfad_zeichnung = "images/itsme2.png" 
-    
-    if os.path.exists(pfad_zeichnung):
-        # Zeigt nur dein selbstgemaltes Bild an
-        st.image(pfad_zeichnung, use_container_width=True)
+    # Deine Zeichnung laden (ebenfalls formatiert für Stabilität)
+    zeichnung = lade_formatiertes_bild(zeichnung_name, target_size=(300, 300))
+    if zeichnung:
+        st.image(zeichnung, use_container_width=True)
     else:
-        st.info("Hier erscheint bald meine Zeichnung...")
+        st.info("Hier erscheint bald deine Zeichnung...")
 
 with col_daten:
     st.subheader("Meine Kontaktdaten")
     st.write(f"**Name:** Andrey Gerber")
-    st.write("📞 0176 43 733 099")
-    st.write("📧 andrey.gerber.88@gmail.com")
+    st.markdown("📞 **0176 43 733 099**")
+    st.markdown("📧 [andrey.gerber.88@gmail.com](mailto:andrey.gerber.88@gmail.com)")
+    st.write("---")
     st.write("**Wohnadresse:** Brauchst du nicht, ruf an oder @")
 
 st.divider()
