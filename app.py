@@ -1,5 +1,20 @@
+
 import streamlit as st
+import plotly.express as px
+import pandas as pd
+
 import os
+
+# Seiteneinstellungen
+st.set_page_config(page_title="Lebenslauf Andrey Gerber", layout="wide")
+
+# 1. Titel (zentriert und zwei Zeilen)
+st.markdown("<h1 style='text-align: center;'>Willkommen auf der Seite</h1>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>Lebenslauf von Andrey Gerber</h2>", unsafe_allow_html=True)
+
+st.divider()
+
+
 from PIL import Image, ImageOps
 
 # --- 1. FUNKTION FÜR STABILE BILDGRÖSSE ---
@@ -36,7 +51,6 @@ with col_bild:
     else:
         st.error(f"Datei fehlt: {slideshow_bilder[st.session_state.bild_index]}")
 
-    st.write("<p style='color: blue; font-size: 0.9em;'>ich kann auch Seriosität zeigen</p>", unsafe_allow_html=True)
 
     # Pfeile direkt unter das Foto
     p1, p2 = st.columns(2)
