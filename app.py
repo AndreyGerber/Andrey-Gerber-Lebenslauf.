@@ -52,13 +52,14 @@ with col_bild:
         st.error(f"Datei fehlt: {slideshow_bilder[st.session_state.bild_index]}")
 
 
-    # Pfeile direkt unter das Foto
-    p1, p2 = st.columns(2)
-    with p1:
+    p_links, p_mitte, p_rechts = st.columns([1, 4, 1]) 
+    
+    with p_links:
         if st.button("⬅️"):
             st.session_state.bild_index = (st.session_state.bild_index - 1) % len(slideshow_bilder)
             st.rerun()
-    with p2:
+            
+    with p_rechts:
         if st.button("➡️"):
             st.session_state.bild_index = (st.session_state.bild_index + 1) % len(slideshow_bilder)
             st.rerun()
@@ -76,7 +77,6 @@ with col_daten:
     st.write(f"**Name:** Andrey Gerber")
     st.markdown("📞 **0176 43 733 099**")
     st.markdown("📧 [andrey.gerber.88@gmail.com](mailto:andrey.gerber.88@gmail.com)")
-    st.write("---")
     st.write("**Wohnadresse:** Brauchst du nicht, ruf an oder @")
 
 st.divider()
