@@ -10,7 +10,7 @@ st.set_page_config(page_title="Lebenslauf Andrey Gerber", layout="wide")
 
 # 1. Titel (zentriert und zwei Zeilen)
 st.markdown("<h1 style='text-align: center;'>Willkommen auf der Seite</h1>", unsafe_allow_html=True)
-st.markdown("<h2 style='text-align: center;'>Lebenslauf von Andrey Gerber</h2>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Lebenslauf von Andrey Gerber</h2>", unsafe_allow_html=True)
 
 st.divider()
 
