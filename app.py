@@ -44,7 +44,7 @@ with col_mitte:
     st.markdown("<p style='text-align: center; font-weight: bold;'>it's me</p>", unsafe_allow_html=True)
     
     # Pfad zu deiner selbstgemalten Datei (anpassen, wenn der Name anders ist!)
-    pfad_zeichnung = "images/zeichnung.png" 
+    pfad_zeichnung = "images/itsme.png" 
     
     if os.path.exists(pfad_zeichnung):
         st.image(pfad_zeichnung, use_container_width=True)
