@@ -40,18 +40,15 @@ with col_bild:
             st.rerun()
 
 with col_mitte:
-    # Hier laden wir deine Zeichnung statt nur Text
-    st.markdown("<p style='text-align: center; font-weight: bold;'>it's me</p>", unsafe_allow_html=True)
+    # Wir entfernen st.markdown("### it's me") und den Pfeil-Text unten
     
-    # Pfad zu deiner selbstgemalten Datei (anpassen, wenn der Name anders ist!)
-    pfad_zeichnung = "images/itsme.png" 
+    pfad_zeichnung = "images/zeichnung.png" 
     
     if os.path.exists(pfad_zeichnung):
+        # Zeigt nur dein selbstgemaltes Bild an
         st.image(pfad_zeichnung, use_container_width=True)
     else:
         st.info("Hier erscheint bald meine Zeichnung...")
-    
-    st.markdown("<h2 style='text-align: center;'>←</h2>", unsafe_allow_html=True)
 
 with col_daten:
     st.subheader("Meine Kontaktdaten")
