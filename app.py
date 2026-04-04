@@ -21,17 +21,22 @@ col1, col2 = st.columns([1, 1.2])
 with col1:
     st.subheader("it's me")
     
-    # Pfade zu deinen Bildern (achte auf exakte Schreibweise .JPG / .png)
-    meine_bilder = ["images/ich1.JPG", "images/ich_pass.png"]
+    # 1. Definieren der Pfade (Probiere es mal mit ./ am Anfang)
+    meine_bilder = ["./images/ich1.JPG", "./images/ich_pass.png"]
     
-    # Auswahl-Buttons über dem Bild (klein und kompakt)
     wahl = st.radio("Foto auswählen:", range(1, len(meine_bilder) + 1), horizontal=True, label_visibility="collapsed")
     
-    # Das Bild mit fester Breite anzeigen (nicht mehr über die ganze Seite!)
-    try:
-        st.image(meine_bilder[wahl - 1], width=280)
-    except:
-        st.error("Bilddatei nicht gefunden.")
+    # 2. Das Bild anzeigen mit Fehler-Check
+    bild_pfad = meine_bilder[wahl - 1]
+    
+    import os
+    if os.path.exists(bild_pfad):
+        st.image(bild_pfad, width=280)
+    else:
+        st.error(f"Datei nicht gefunden: {bild_pfad}")
+        # Zeigt dir an, welche Dateien Streamlit ÜBERHAUPT im Ordner sieht:
+        st.write("Vorhandene Dateien im Ordner 'images':", os.listdir("./images") if os.path.exists("./images") else "Ordner nicht gefunden")
+
 
 with col2:
     st.subheader("Meine Kontaktdaten")
