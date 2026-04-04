@@ -19,7 +19,7 @@ col1, col2 = st.columns([1, 1]) # Erstellt zwei gleich breite Spalten
 with col1:
     # Hier kannst du später echte Bilder einfügen
     st.subheader("Slideshow: it's me")
-    st.image("https://placeholder.com", caption="Hier kommen deine Fotos hin") 
+    st.image("https://placeholder.com", caption=['images/ich1.jpg']) 
 
 with col2:
     st.write("### Meine Kontaktdaten")
