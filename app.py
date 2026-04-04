@@ -16,27 +16,27 @@ st.divider() # Eine Trennlinie für die Optik
 # 2. Bereich darunter: Links Slideshow, Rechts Daten
 col1, col2 = st.columns([1, 1]) # Erstellt zwei gleich breite Spalten
 
+col1, col2 = st.columns([1, 1.2]) 
+
 with col1:
-    st.subheader("Slideshow: it's me")
+    st.subheader("it's me")
     
-    # Die Pfade MÜSSEN exakt so geschrieben sein wie im Ordner 'images'
-    # Achte auf .JPG (groß) bei ich1 und .png (klein) bei ich_pass!
+    # Pfade zu deinen Bildern (achte auf exakte Schreibweise .JPG / .png)
     meine_bilder = ["images/ich1.JPG", "images/ich_pass.png"]
     
-    # Auswahl-Button für die Bilder
-    wahl = st.radio("Foto auswählen:", range(1, len(meine_bilder) + 1), horizontal=True)
+    # Auswahl-Buttons über dem Bild (klein und kompakt)
+    wahl = st.radio("Foto auswählen:", range(1, len(meine_bilder) + 1), horizontal=True, label_visibility="collapsed")
     
-    # Das gewählte Bild anzeigen
+    # Das Bild mit fester Breite anzeigen (nicht mehr über die ganze Seite!)
     try:
-        st.image(meine_bilder[wahl - 1], use_container_width=True)
-    except Exception as e:
-        st.error(f"Bild konnte nicht geladen werden: {meine_bilder[wahl - 1]}")
-        st.write("Prüfe bitte die Groß-/Kleinschreibung der Dateiendung.")
+        st.image(meine_bilder[wahl - 1], width=280)
+    except:
+        st.error("Bilddatei nicht gefunden.")
 
 with col2:
-    st.write("### Meine Kontaktdaten")
-    st.write("**Name:** Andrey Gerber")
-    st.write("**Wohnadresse:** Brauchst du nicht, ruf an oder @")
+    st.subheader("Meine Kontaktdaten")
+    st.write(f"**Name:** Andrey Gerber")
+    st.write(f"**Wohnadresse:** Brauchst du nicht, ruf an oder @")
     st.write("📞 0176 43 733 099")
     st.write("📧 andrey.gerber.88@gmail.com")
 
