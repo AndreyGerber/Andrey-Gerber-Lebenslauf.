@@ -13,37 +13,42 @@ st.markdown("<h2 style='text-align: center;'>Lebenslauf von Andrey Gerber</h2>",
 
 st.divider() # Eine Trennlinie für die Optik
 
-# 2. Bereich darunter: Links Slideshow, Rechts Daten
-col1, col2 = st.columns([1, 1]) # Erstellt zwei gleich breite Spalten
+if 'bild_index' not in st.session_state:
+    st.session_state.bild_index = 0
 
-col1, col2 = st.columns([1, 1.2]) 
+meine_bilder = ["images/ich1.JPG", "images/ich_pass.png"]
 
-with col1:
-    st.subheader("it's me")
-    
-    # 1. Definieren der Pfade (Probiere es mal mit ./ am Anfang)
-    meine_bilder = ["./images/ich1.JPG", "./images/ich_pass.png"]
-    
-    wahl = st.radio("Foto auswählen:", range(1, len(meine_bilder) + 1), horizontal=True, label_visibility="collapsed")
-    
-    # 2. Das Bild anzeigen mit Fehler-Check
-    bild_pfad = meine_bilder[wahl - 1]
-    
-    import os
-    if os.path.exists(bild_pfad):
-        st.image(bild_pfad, width=280)
-    else:
-        st.error(f"Datei nicht gefunden: {bild_pfad}")
-        # Zeigt dir an, welche Dateien Streamlit ÜBERHAUPT im Ordner sieht:
-        st.write("Vorhandene Dateien im Ordner 'images':", os.listdir("./images") if os.path.exists("./images") else "Ordner nicht gefunden")
+# 2. Layout: 3 Spalten (Bilder | Text | Daten)
+col_bild, col_mitte, col_daten = st.columns([1.5, 0.5, 1.5])
 
+with col_bild:
+    # Das aktuelle Bild anzeigen
+    st.image(meine_bilder[st.session_state.bild_index], width=280)
+    
+    # Pfeile direkt unter das Bild setzen
+    pfeil_links, pfeil_rechts = st.columns(2)
+    with pfeil_links:
+        if st.button("⬅️"):
+            st.session_state.bild_index = (st.session_state.bild_index - 1) % len(meine_bilder)
+            st.rerun()
+    with pfeil_rechts:
+        if st.button("➡️"):
+            st.session_state.bild_index = (st.session_state.bild_index + 1) % len(meine_bilder)
+            st.rerun()
 
-with col2:
+with col_mitte:
+    # "it's me" vertikal mittig platzieren
+    st.write("") # Platzhalter für die Höhe
+    st.write("")
+    st.markdown("### it's me")
+    st.markdown("## ←") # Ein Pfeil, der auf das Bild zeigt
+
+with col_daten:
     st.subheader("Meine Kontaktdaten")
     st.write(f"**Name:** Andrey Gerber")
-    st.write(f"**Wohnadresse:** Brauchst du nicht, ruf an oder @")
     st.write("📞 0176 43 733 099")
     st.write("📧 andrey.gerber.88@gmail.com")
+    st.write("**Wohnadresse:** Brauchst du nicht, ruf an oder @")
 
 st.divider()
 
