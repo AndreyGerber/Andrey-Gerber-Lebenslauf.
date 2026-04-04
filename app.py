@@ -5,15 +5,29 @@ import pandas as pd
 # Seiteneinstellungen
 st.set_page_config(page_title="Lebenslauf Andrey Gerber", layout="wide")
 
-# 1. Header & Kontakt
-col1, col2 = st.columns([1, 2])
+import streamlit as st
+import plotly.express as px
+import pandas as pd
+
+# Seiteneinstellungen
+st.set_page_config(page_title="Lebenslauf Andrey Gerber", layout="wide")
+
+# 1. Titel ganz oben (in zwei Zeilen)
+st.markdown("<h1 style='text-align: center;'>Willkommen auf der Seite</h1>", unsafe_allow_text_勉強=True)
+st.markdown("<h2 style='text-align: center;'>Lebenslauf von Andrey Gerber</h2>", unsafe_allow_html=True)
+
+st.divider() # Eine Trennlinie für die Optik
+
+# 2. Bereich darunter: Links Slideshow, Rechts Daten
+col1, col2 = st.columns([1, 1]) # Erstellt zwei gleich breite Spalten
 
 with col1:
-    st.image("https://placeholder.com", caption="Slideshow: it's me") # Hier später dein Bild-Pfad
+    # Hier kannst du später echte Bilder einfügen
+    st.subheader("Slideshow: it's me")
+    st.image("https://placeholder.com", caption="Hier kommen deine Fotos hin") 
 
 with col2:
-    st.title("Willkommen auf der Seite")
-    st.header("Lebenslauf von Andrey Gerber")
+    st.write("### Meine Kontaktdaten")
     st.write("**Name:** Andrey Gerber")
     st.write("**Wohnadresse:** Brauchst du nicht, ruf an oder @")
     st.write("📞 0176 43 733 099")
@@ -21,16 +35,7 @@ with col2:
 
 st.divider()
 
-# 2. Wohnort-Fahnen (UdSSR -> Russland -> Deutschland)
-st.subheader("Mein Weg")
-f1, p1, f2, p2, f3 = st.columns([1, 0.5, 1, 0.5, 1])
-with f1: st.metric("1988", "UdSSR ☭")
-with p1: st.markdown("## ➔")
-with f2: st.metric("1991", "Russland 🇷🇺")
-with p2: st.markdown("## ➔")
-with f3: st.metric("2006", "Deutschland 🇩🇪")
 
-st.divider()
 
 # 3. Hobby-Timeline mit Plotly
 st.subheader("Hobbys & Aktivitäten")
