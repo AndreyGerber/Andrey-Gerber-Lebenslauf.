@@ -3,6 +3,18 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 
+import os
+
+# Diagnose-Check: Was sieht der Server?
+st.write("### 📂 Server-Check (Fehlersuche)")
+st.write(f"Aktuelles Verzeichnis: `{os.getcwd()}`")
+if os.path.exists("images"):
+    st.write("✅ Ordner 'images' gefunden!")
+    st.write(f"Inhalt von 'images': `{os.listdir('images')}`")
+else:
+    st.error("❌ Ordner 'images' wurde nicht gefunden!")
+
+
 # Seiteneinstellungen
 st.set_page_config(page_title="Lebenslauf Andrey Gerber", layout="wide")
 
