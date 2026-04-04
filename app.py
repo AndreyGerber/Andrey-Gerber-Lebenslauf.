@@ -42,7 +42,7 @@ with col_bild:
 with col_mitte:
     # Wir entfernen st.markdown("### it's me") und den Pfeil-Text unten
     
-    pfad_zeichnung = "images/zeichnung.png" 
+    pfad_zeichnung = "images/itsme.png" 
     
     if os.path.exists(pfad_zeichnung):
         # Zeigt nur dein selbstgemaltes Bild an
