@@ -93,64 +93,54 @@ st.divider()
 
 # 3. Hobby-Timeline mit Plotly
 import plotly.graph_objects as go
+import streamlit as st
 
-st.subheader("Mein Weg")
+st.subheader("Mein Weg: Stationen & Flaggen")
 
-# 1. Daten für deine Meilensteine festlegen
-meilensteine = [
-    {"jahr": 1988, "event": "Geburt", "ort": "UdSSR"},
-    {"jahr": 1995, "event": "Einschulung", "ort": "Russland"},
-    {"jahr": 2004, "event": "Umzug", "ort": "Deutschland"},
-    {"jahr": 2024, "event": "Heute", "ort": "Portfolio"}
-]
+# 1. Deine Daten definieren
+# 'x' ist das Jahr, 'text' die Beschreibung
+events =
 
-jahre = [m["jahr"] for m in meilensteine]
-texte = [f"<b>{m['jahr']}</b><br>{m['event']}<br>{m['ort']}" for m in meilensteine]
+fig = go.Figure()
 
-# 2. Den Zeitstrahl-Pfeil erstellen
-fig_weg = go.Figure()
+# --- DER HAUPTPFEIL ---
+fig.add_annotation(
+    x=2028, y=0, ax=1987, ay=0,
+    xref="x", yref="y", axref="x", ayref="y",
+    showarrow=True, arrowhead=3, arrowsize=1, arrowwidth=3, arrowcolor="black"
+)
 
-# Die Hauptlinie (der Schaft des Pfeils)
-fig_weg.add_trace(go.Scatter(
-    x=[1987, 2026], 
-    y=[0, 0],
-    mode="lines",
-    line=dict(color="#4B0082", width=6),
-    hoverinfo="skip"
-))
-
-# Die Meilensteine als Punkte auf der Linie
-fig_weg.add_trace(go.Scatter(
-    x=jahre,
-    y=[0] * len(jahre),
+# --- MEILENSTEINE (Die Rauten aus deiner Skizze) ---
+fig.add_trace(go.Scatter(
+    x=[e["x"] for e in events],
+    y=[0] * len(events),
     mode="markers+text",
-    marker=dict(size=12, color="#4B0082", symbol="diamond"),
-    text=texte,
-    textposition="top center",
+    marker=dict(symbol="diamond", size=12, color="white", line=dict(width=2, color="black")),
+    text= for e in events],
+    textposition="bottom center",
     hoverinfo="none"
 ))
 
-# 3. Die Pfeilspitze hinzufügen
-fig_weg.add_annotation(
-    x=2026, y=0,
-    ax=2025, ay=0,
-    xref="x", yref="y",
-    axref="x", ayref="y",
-    showarrow=True,
-    arrowhead=2,
-    arrowsize=1,
-    arrowwidth=6,
-    arrowcolor="#4B0082"
-)
+# --- PHASEN-TRENNER (Vertikale Linien aus deiner Skizze) ---
+# Beispiel: Trennung UdSSR/Russland (~1991) und Russland/Deutschland (2004)
+phasen = [
+    {"jahr": 1991.5, "label": "UdSSR | RU"},
+    {"jahr": 2004.5, "label": "RU | DE"}
+]
 
-# Layout-Einstellungen (Achsen verstecken)
-fig_weg.update_layout(
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1985, 2028]),
+for p in phasen:
+    fig.add_shape(type="line", x0=p["jahr"], y0=-0.5, x1=p["jahr"], y1=0.5,
+                  line=dict(color="black", width=2, dash="dash"))
+    fig.add_annotation(x=p["jahr"], y=0.6, text=p["label"], showarrow=False, font=dict(bold=True))
+
+# --- DESIGN ANPASSEN ---
+fig.update_layout(
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=True, range=[1985, 2030]),
     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1, 1]),
-    margin=dict(l=20, r=20, t=50, b=20),
-    height=250,
+    height=300,
     plot_bgcolor="rgba(0,0,0,0)",
-    paper_bgcolor="rgba(0,0,0,0)"
+    paper_bgcolor="rgba(0,0,0,0)",
+    margin=dict(l=10, r=10, t=50, b=10)
 )
 
-st.plotly_chart(fig_weg, use_container_width=True)
+st.plotly_chart(fig, use_container_width=True)
