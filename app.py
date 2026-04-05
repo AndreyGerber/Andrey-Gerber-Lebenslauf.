@@ -352,18 +352,18 @@ with st.container(height=BLOCK_HOEHE, border=True):
             hoverinfo = 'none'
         ))
 
-        # 3. DAS EINE LANDENDE FLUGZEUG (Annotation für die Drehung)
-        # Wir setzen es kurz vor Berlin auf die Linie
+        # 3. DAS LANDENDE FLUGZEUG (An das Ende der Linie geschoben)
+        # Wir setzen x (Längengrad) auf 16.5, um es kurz vor Berlin (13.4) zu platzieren
         fig_flight.add_annotation(
-            x=22.0, y=54.2, # Position auf der Karte
+            x=16.5, y=53.0, 
             text="✈️",
             showarrow=False,
             font=dict(size=45),
-            textangle=-155, # Nase zeigt nach links unten Richtung Berlin
+            textangle=-145, # Nase zeigt jetzt steil nach links unten auf Berlin
             xref="x", yref="y"
         )
 
-        # 4. LAYOUT (Eurasien Fokus)
+        # 4. LAYOUT
         fig_flight.update_layout(
             height=550,
             margin=dict(l=0, r=0, t=10, b=0),
@@ -372,14 +372,16 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 showland = True, landcolor = "#F0F2F6",
                 showocean = True, oceancolor = "#E8F4F9",
                 showcountries = True, countrycolor = "white",
-                lataxis = dict(range=[45, 65]),
-                lonaxis = dict(range=[10, 80]),
+                # Fokus-Bereich angepasst, damit Berlin nicht am Rand klebt
+                lataxis = dict(range=[45, 60]),
+                lonaxis = dict(range=[5, 80]),
                 resolution = 50
             ),
             showlegend = False
         )
 
-        st.plotly_chart(fig_flight, use_container_width=True, key="flight_landing_single")
+        st.plotly_chart(fig_flight, use_container_width=True, key="flight_landing_final")
+
 
 
 
