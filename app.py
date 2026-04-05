@@ -243,70 +243,67 @@ import pydeck as pdk
 
 #Oben ist der Abschnitt mit "meinem Werdegang" und dem Pfeil. Unten die "Erklärung dazu"
 
-# --- 1. EIGENE LOGIK FÜR DIESEN ABSCHNITT (KEIN BEZUG NACH OBEN) ---
-# Wir definieren hier eine völlig neue Liste, nur für diesen Block
-meine_stationen = [1988, 1996] 
+BLOCK_HOEHE = 750
+BILD_BREITE = 350
+INFO_FONT_SIZE = "24px" # Etwas größer, da der Block jetzt massiver ist
 
-if 'abschnitt_index' not in st.session_state:
-    st.session_state.abschnitt_index = 0
+# 1. Navigation (absolut unabhängig)
+highlights = [1988, 1996]
+if 'info_idx' not in st.session_state:
+    st.session_state.info_idx = 0
 
-# Navigation
-n_col1, n_col2, n_col3 = st.columns([1, 8, 1])
-with n_col1:
-    if st.button("⬅️", key="abschnitt_back", disabled=(st.session_state.abschnitt_index == 0)):
-        st.session_state.abschnitt_index -= 1
+# Buttons oben
+c_nav1, c_nav2, c_nav3 = st.columns([1, 4, 1])
+with c_nav1:
+    if st.button("⬅️", key="nav_prev", disabled=(st.session_state.info_idx == 0)):
+        st.session_state.info_idx -= 1
         st.rerun()
-with n_col3:
-    if st.button("➡️", key="abschnitt_next", disabled=(st.session_state.abschnitt_index == len(meine_stationen) - 1)):
-        st.session_state.abschnitt_index += 1
+with c_nav3:
+    if st.button("➡️", key="nav_next", disabled=(st.session_state.info_idx == len(highlights) - 1)):
+        st.session_state.info_idx += 1
         st.rerun()
 
-# --- 2. DER ISOLIERTE BLOCK (FESTE GRÖSSE) ---
-# Hier kannst du die Schriftgröße für den Infotext einstellen
-INFO_FONT_SIZE = "22px"
-
-with st.container(height=750, border=True):
-    aktuelles_jahr = meine_stationen[st.session_state.abschnitt_index]
-
-    if aktuelles_jahr == 1988:
-        st.subheader("📍 1988: Geburtsort Tscherlak")
-        col_links, col_rechts = st.columns([1, 1.5])
+# 2. Der 750px Block
+with st.container(height=BLOCK_HOEHE, border=True):
+    jahr_aktiv = highlights[st.session_state.info_idx]
+    
+    if jahr_aktiv == 1988:
+        st.subheader(f"📍 {jahr_aktiv}: Geburtsort Tscherlak")
+        
+        # Spalten-Verhältnis für 750px optimiert
+        col_links, col_rechts = st.columns([1.2, 2])
         
         with col_links:
-            # Bild tscherlak.png (Größe hier anpassbar)
-            img_path = "images/tscherlak.png" # Pfad anpassen falls nötig
-            try:
-                st.image(img_path, width=300)
-            except:
-                st.warning("Bild 'tscherlak.png' nicht gefunden")
+            # Bildgröße anpassen
+            img = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
+            if img:
+                st.image(img, width=BILD_BREITE)
             
-            # Infotext mit eigener Schriftgröße
+            # Info-Box mit mehr Padding für den großen Block
             st.markdown(f"""
-                <div style="background-color: #e8f4f9; padding: 15px; border-left: 5px solid #0072b2; border-radius: 5px;">
-                    <p style="color: #004466; font-size: {INFO_FONT_SIZE}; margin: 0;">
+                <div style="background-color: #e8f4f9; padding: 25px; border-left: 6px solid #0072b2; border-radius: 8px; margin-top: 20px;">
+                    <p style="color: #004466; font-size: {INFO_FONT_SIZE}; margin: 0; line-height: 1.5;">
                         Hier begann meine Reise in der UdSSR.
                     </p>
                 </div>
             """, unsafe_allow_html=True)
 
         with col_rechts:
-            # Farbige Karte
-            df_map = pd.DataFrame({'lat': [54.12], 'lon': [74.80]})
-            st.map(df_map, zoom=7, use_container_width=True)
+            # Damit die Karte bei 750px Blockhöhe nicht "verloren" wirkt, 
+            # nutzen wir hier ein DataFrame für eine größere Darstellung
+            df_map = pd.DataFrame({'lat': [54.1221], 'lon': [74.8056]})
+            # st.map passt sich automatisch an, aber wir können Text darunter setzen
+            st.map(df_map, zoom=8, use_container_width=True)
+            st.caption("Geografische Lage von Tscherlak am Irtysch")
 
-    elif aktuelles_jahr == 1996:
-        st.subheader("🎒 1996: Schulzeit in Russland")
+    elif jahr_aktiv == 1996:
+        st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
+        # Hier kannst du jetzt viel größere Bilder nutzen, da du 750px Platz hast!
         c1, c2 = st.columns(2)
-        
-        # Zwei Bilder nebeneinander
-        try:
+        with c1:
             st.image("images/itsme.png", use_container_width=True)
-            with c2:
-                st.image("images/itsme2.png", use_container_width=True)
-        except:
-            st.warning("Bilder 'itsme.png' oder 'itsme2.png' fehlen")
-        
-        st.write("Informationen zu meiner Schulzeit...")
+        with c2:
+            st.image("images/itsme2.png", use_container_width=True)
 
 
 
