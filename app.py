@@ -95,52 +95,74 @@ st.divider()
 import plotly.graph_objects as go
 import streamlit as st
 
-st.subheader("Mein Weg: Stationen & Flaggen")
+st.subheader("Mein Lebensweg")
 
-# 1. Deine Daten definieren
-# 'x' ist das Jahr, 'text' die Beschreibung
+# 1. Deine Daten (Jahre und Ereignisse)
 events =
 
 fig = go.Figure()
 
-# --- DER HAUPTPFEIL ---
+# --- DER HAUPTPFEIL (Die Linie von links nach rechts) ---
 fig.add_annotation(
     x=2028, y=0, ax=1987, ay=0,
     xref="x", yref="y", axref="x", ayref="y",
     showarrow=True, arrowhead=3, arrowsize=1, arrowwidth=3, arrowcolor="black"
 )
 
-# --- MEILENSTEINE (KORRIGIERT) ---
+# --- DIE RAUTEN (Meilensteine auf dem Pfeil) ---
 fig.add_trace(go.Scatter(
     x=[e["x"] for e in events],
     y=[0] * len(events),
     mode="markers+text",
-    marker=dict(symbol="diamond", size=12, color="white", line=dict(width=2, color="black")),
-    text= for e in events],  # <-- ACHTE AUF DIESE ZEILE
+    marker=dict(symbol="diamond", size=15, color="white", line=dict(width=2, color="#4B0082")),
+    text=[f"<b>{e['x']}</b><br>{e}" for e in events],
     textposition="bottom center",
-    hoverinfo="none"
+    hoverinfo="none",
+    showlegend=False
 ))
 
-# --- PHASEN-TRENNER (Vertikale Linien aus deiner Skizze) ---
-# Beispiel: Trennung UdSSR/Russland (~1991) und Russland/Deutschland (2004)
-phasen = [
-    {"jahr": 1991.5, "label": "UdSSR | RU"},
-    {"jahr": 2004.5, "label": "RU | DE"}
+# --- DIE ABSCHNITTE (UdSSR | Russland | Deutschland) ---
+# Wir ziehen vertikale Linien (Trenner) und setzen Text darüber
+abschnitte = [
+    {"x": 1989.5, "label": "Sowjetunion"},
+    {"x": 1997.5, "label": "Russland"},
+    {"x": 2015, "label": "Deutschland"}
 ]
 
-for p in phasen:
-    fig.add_shape(type="line", x0=p["jahr"], y0=-0.5, x1=p["jahr"], y1=0.5,
-                  line=dict(color="black", width=2, dash="dash"))
-    fig.add_annotation(x=p["jahr"], y=0.6, text=p["label"], showarrow=False, font=dict(bold=True))
+# Trennlinien (Gestrichelt wie in deiner Skizze)
+trenner = [1991.5, 2004.5]
+for t in trenner:
+    fig.add_shape(type="line", x0=t, y0=-0.4, x1=t, y1=0.4,
+                  line=dict(color="gray", width=2, dash="dash"))
 
-# --- DESIGN ANPASSEN ---
+# Länder-Beschriftung oben drüber
+for a in abschnitte:
+    fig.add_annotation(
+        x=a["x"], y=0.6,
+        text=f"<b>{a['label']}</b>",
+        showarrow=False,
+        font=dict(size=16, color="black")
+    )
+
+# --- LAYOUT-EINSTELLUNGEN ---
 fig.update_layout(
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=True, range=[1985, 2030]),
-    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1, 1]),
-    height=300,
+    xaxis=dict(
+        showgrid=False, 
+        zeroline=False, 
+        showticklabels=False, # Wir haben die Jahre schon an den Rauten
+        range=[1986, 2030]
+    ),
+    yaxis=dict(
+        showgrid=False, 
+        zeroline=False, 
+        showticklabels=False, 
+        range=[-1, 1]
+    ),
+    height=350,
+    margin=dict(l=0, r=0, t=20, b=0),
     plot_bgcolor="rgba(0,0,0,0)",
-    paper_bgcolor="rgba(0,0,0,0)",
-    margin=dict(l=10, r=10, t=50, b=10)
+    paper_bgcolor="rgba(0,0,0,0)"
 )
 
-st.plotly_chart(fig, use_container_width=True)
+# Anzeige in Streamlit
+st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
