@@ -242,8 +242,6 @@ st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'disp
 import pydeck as pdk
 
 #Oben ist der Abschnitt mit "meinem Werdegang" und dem Pfeil. Unten die "Erklärung dazu"
-import streamlit as st
-import pandas as pd
 
 # --- 1. EIGENE LOGIK FÜR DIESEN ABSCHNITT (KEIN BEZUG NACH OBEN) ---
 # Wir definieren hier eine völlig neue Liste, nur für diesen Block
@@ -267,7 +265,7 @@ with n_col3:
 # Hier kannst du die Schriftgröße für den Infotext einstellen
 INFO_FONT_SIZE = "22px"
 
-with st.container(height=550, border=True):
+with st.container(height=750, border=True):
     aktuelles_jahr = meine_stationen[st.session_state.abschnitt_index]
 
     if aktuelles_jahr == 1988:
