@@ -99,23 +99,23 @@ jahre = [1988, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 # --- 2. GRAFIK ERSTELLEN ---
 fig = go.Figure()
 
-# Hauptlinie (Startet bei 1988)
+# Durchgehende Hauptlinie (von 1988 bis zur Pfeilspitze bei 2033)
 fig.add_trace(go.Scatter(
-    x=[1988, 2030], y=[0, 0],
+    x=[1988, 2033], y=[0, 0],
     mode='lines',
     line=dict(color='black', width=2),
     hoverinfo='none',
     showlegend=False
 ))
 
-# KÜRZERER Startstrich bei 1988
+# Senkrechter Startstrich bei 1988
 fig.add_shape(
     type="line",
     x0=1988, y0=-0.08, x1=1988, y1=0.08,
     line=dict(color="black", width=3)
 )
 
-# Die weißen Rauten (OHNE Text)
+# Die weißen Rauten
 fig.add_trace(go.Scatter(
     x=jahre, y=[0] * len(jahre),
     mode='markers',
@@ -129,10 +129,10 @@ fig.add_trace(go.Scatter(
     showlegend=False
 ))
 
-# Die Jahreszahlen als separate Ebene (TIEFER gesetzt bei y=-0.15)
+# Jahreszahlen (noch etwas tiefer gesetzt bei y=-0.22)
 fig.add_trace(go.Scatter(
     x=jahre, 
-    y=[-0.15] * len(jahre), # Hier wird der Abstand nach unten erzeugt
+    y=[-0.22] * len(jahre), 
     mode='text',
     text=jahre,
     textposition="bottom center",
@@ -141,28 +141,34 @@ fig.add_trace(go.Scatter(
     showlegend=False
 ))
 
-# Pfeilspitze nach Rechts
+# Pfeilspitze (Exakt am Ende der Linie angedockt)
 fig.add_annotation(
-    x=2034, y=0, ax=2031, ay=0,
-    xref="x", yref="y", axref="x", ayref="y",
-    showarrow=True, arrowhead=2, arrowsize=1.2, arrowwidth=2, arrowcolor="black"
+    x=2034, y=0,           # Spitze
+    ax=2032, ay=0,         # Schaft
+    xref="x", yref="y",
+    axref="x", ayref="y",
+    showarrow=True,
+    arrowhead=2, 
+    arrowsize=1.2, 
+    arrowwidth=2, 
+    arrowcolor="black"
 )
 
-# Layout-Feinschliff
+# Layout-Anpassung
 fig.update_layout(
     height=180,
-    margin=dict(l=20, r=20, t=10, b=50), # b=50 gibt dem Text unten Platz
+    margin=dict(l=20, r=20, t=10, b=60), # Mehr Platz unten für tiefere Jahre
     xaxis=dict(
         showgrid=False, 
         zeroline=False, 
         showticklabels=False, 
-        range=[1985, 2036] 
+        range=[1985, 2038] # Bereich groß genug für die Spitze
     ),
     yaxis=dict(
         showgrid=False, 
         zeroline=False, 
         showticklabels=False, 
-        range=[-0.5, 0.3] # Fokus nach unten verschoben für den Text
+        range=[-0.6, 0.3] # Fokus weiter nach unten geschoben
     ),
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)"
@@ -170,6 +176,7 @@ fig.update_layout(
 
 # Anzeige
 st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
+
 
 
 
