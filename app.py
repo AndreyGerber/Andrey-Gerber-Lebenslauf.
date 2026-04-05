@@ -97,7 +97,7 @@ import streamlit as st
 st.subheader("Mein Lebensweg")
 
 # Deine Meilensteine
-events =
+events = [{"x": 2022, "text": "Hausbau"}]
 
 fig = go.Figure()
 
