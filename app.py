@@ -270,23 +270,51 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     if jahr_aktiv == 1988:
         st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
-        
-        # 1. Info-Box oben drüber
-        st.info("Geburtsort Tscherlak in Sibirien (nahe Omsk). Die Distanz verdeutlicht den weiten Weg nach Deutschland.")
 
-        # 2. Die Karte mittig im 750px Block platzieren
-        # Wir nutzen Spalten, um das Bild in der Mitte zu halten
-        _, col_karte, _ = st.columns([0.1, 8, 0.1])
-        
-        with col_karte:
-            # Hier lädst du einfach den Screenshot hoch, den du mir gerade geschickt hast
-            # Speichere ihn z.B. als 'karte_tscherlak.jpg' in deinem Repository
-            st.image("karte_tscherlak.jpg", 
-                    caption="Geografische Lage von Tscherlak im Vergleich zu Europa",
-                    use_container_width=True)
+        # Wir nutzen ein wenig HTML/CSS, um den Pin präzise auf dem Bild zu platzieren
+        import base64
+
+        # Funktion zum Laden des lokalen Bildes für HTML
+        def get_image_base64(path):
+            with open(path, "rb") as f:
+                return base64.b64encode(f.read()).decode()
+
+        try:
+            img_base64 = get_image_base64("tscherlak_map.png") # Pfad eventuell anpassen: "bilder/tscherlak_map.png"
             
-        # 3. Optional: Ein kleiner Text-Abstandshalter nach unten
-        st.markdown("<br><br>", unsafe_allow_html=True)
+            st.markdown(f"""
+                <div style="position: relative; width: 100%; max-width: 900px; margin: auto;">
+                    <!-- Das Kartenbild -->
+                    <img src="data:image/png;base64,{img_base64}" style="width: 100%; border-radius: 10px; box-shadow: 0px 4px 15px rgba(0,0,0,0.3);">
+                    
+                    <!-- Der Pin bei Tscherlak (Südöstlich von Omsk) -->
+                    <div style="
+                        position: absolute;
+                        top: 23%;     /* Vertikale Position */
+                        left: 90%;    /* Horizontale Position (rechts von Omsk) */
+                        transform: translate(-50%, -100%);
+                        font-size: 40px;
+                        filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
+                        cursor: pointer;
+                    " title="Tscherlak">📍</div>
+                    
+                    <!-- Optional: Zweiter Pin bei Berlin zum Vergleich -->
+                    <div style="
+                        position: absolute;
+                        top: 60%; 
+                        left: 9%; 
+                        transform: translate(-50%, -100%);
+                        font-size: 30px;
+                        opacity: 0.8;
+                    " title="Berlin">🇩🇪</div>
+                </div>
+            """, unsafe_allow_html=True)
+        
+        except FileNotFoundError:
+            st.error("Bild 'tscherlak_map.png' wurde nicht gefunden. Bitte Pfad prüfen!")
+
+        st.info("Tscherlak liegt im Gebiet Omsk, direkt am Fluss Irtysch nahe der Grenze zu Kasachstan.")
+
 
 
     # --- INNERHALB DEINES 750px CONTAINERS ---
