@@ -163,8 +163,8 @@ fig.add_trace(go.Scatter(
 for i, jahr in enumerate(jahre_alle):
     # Logik: Nur die Jahre 1991, 2010, 2019 und 2026 werden tiefer gesetzt
     # Das schafft Platz für die langen Texte der Nachbarn.
-    if jahr in []:
-        y_offset = -0.75  # Deutlich tiefer für maximale Freiheit
+    if jahr in [1991, 2017, 2019, 2022]:
+        y_offset = -0.15  # Deutlich tiefer für maximale Freiheit
     else:
         y_offset = -0.20  # Standardhöhe
     
