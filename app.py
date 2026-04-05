@@ -98,7 +98,7 @@ import streamlit as st
 st.subheader("Mein Lebensweg")
 
 # 1. Deine Daten (Jahre und Ereignisse)
-events =
+events = {"x": 2022, "text": "Hausbau"}
 
 fig = go.Figure()
 
