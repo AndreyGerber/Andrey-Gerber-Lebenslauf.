@@ -94,8 +94,8 @@ import streamlit as st
 import plotly.graph_objects as go
 
 # --- 1. EINSTELLUNGEN ---
-jahre_alle = 
-jahre_mit_raute =   # 1988 ohne Raute
+jahre_alle = [1988, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
+jahre_mit_raute =   [1996, 2006, 2010, 2017, 2019, 2022, 2026]
 LINIEN_DICKE = 3
 STARTSTRICH_LAENGE = 0.25
 JAHR_SCHRIFTGROESSE = 16
