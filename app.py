@@ -269,16 +269,9 @@ with c_nav3:
 # 2. Der 750px Block
 with st.container(height=BLOCK_HOEHE, border=True):
     jahr_aktiv = highlights[st.session_state.info_idx]
-    
+
     if jahr_aktiv == 1988:
         st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
-        
-        # 1. Bild zentrieren
-        _, col_img, _ = st.columns([1, 2, 1])
-        with col_img:
-            img = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
-            if img:
-                st.image(img, width=BILD_BREITE)
 
         # 2. Daten für den Pin vorbereiten
         # Streamlit braucht ein DataFrame mit 'lat' und 'lon'
