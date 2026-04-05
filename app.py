@@ -255,21 +255,18 @@ with p_col2:
     # (Der Code mit fig = go.Figure() und st.plotly_chart)
     st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
 
-# --- 3. DEIN BESTEHENDER CODE (Navigation & Info-Block) ---
-# (Ab hier kopierst du deinen Block ein)
+
 BLOCK_HOEHE = 750
 BILD_BREITE = 350
-INFO_FONT_SIZE = "24px"
+INFO_FONT_SIZE = "24px" # Etwas größer, da der Block jetzt massiver ist
 
-# 1. Navigation
+# 1. Navigation (absolut unabhängig)
 highlights = [1988, 1996]
 if 'info_idx' not in st.session_state:
     st.session_state.info_idx = 0
 
-# Buttons oben (Raster 1, 4, 1 sorgt für bündigen Abschluss mit dem Pfeil)
+# Buttons oben
 c_nav1, c_nav2, c_nav3 = st.columns([1, 4, 1])
-# ... (dein restlicher Code für Buttons und Container)
-
 with c_nav1:
     if st.button("⬅️", key="nav_prev", disabled=(st.session_state.info_idx == 0)):
         st.session_state.info_idx -= 1
