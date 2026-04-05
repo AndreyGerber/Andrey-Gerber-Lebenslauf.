@@ -265,49 +265,59 @@ with c3:
         st.rerun()
 
 # --- DER ZENTRALE INFO-BLOCK ---
-BLOCK_HOEHE = "550px"  # Feste Höhe
-BILD_BREITE = 300      # Bildgröße
+BLOCK_HOEHE = 550  # Höhe in Pixeln
+BILD_BREITE = 300
 
-# Wir definieren das CSS so, dass es weniger Innenabstand (padding) hat
+# CSS: Wir zielen direkt auf den Streamlit-Container ab
 st.markdown(f"""
     <style>
-    .fixed-container {{
-        height: {BLOCK_HOEHE};
+    [data-testid="stVerticalBlock"] > div:has(div.fixed-block) {{
+        height: {BLOCK_HOEHE}px;
         overflow-y: auto;
-        border: 2px solid #f0f2f6;
-        padding: 15px; /* Kleinerer Abstand oben */
+        background-color: white;
         border-radius: 10px;
-        background-color: #ffffff;
+        padding: 10px;
     }}
     </style>
 """, unsafe_allow_html=True)
 
-# ALLES in den CSS-Block packen
-st.markdown('<div class="fixed-container">', unsafe_allow_html=True)
-
-if jahr == 1988:
-    # Die Überschrift MUSS hier drin sein, damit sie oben am Rand steht
-    st.subheader(f"📍 {jahr}: Geburtsort Tscherlak")
+# Wir erstellen einen Container und geben ihm eine CSS-Klasse zur Identifizierung
+with st.container(border=True):
+    # Ein unsichtbarer Marker für unser CSS
+    st.markdown('<div class="fixed-block"></div>', unsafe_allow_html=True)
     
-    col_content, col_map = st.columns([1, 1.5])
-    
-    with col_content:
-        img_tscherlak = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
-        if img_tscherlak:
-            st.image(img_tscherlak, width=BILD_BREITE)
-        st.write("Hier begann meine Reise in der UdSSR.")
-        st.info("Tscherlak liegt am Fluss Irtysch in der Oblast Omsk.")
+    jahr = st.session_state.selected_year
 
-    with col_map:
-        map_data = pd.DataFrame({'lat': [54.12], 'lon': [74.80]})
-        st.map(map_data, zoom=7, use_container_width=True)
+    if jahr == 1988:
+        st.subheader(f"📍 {jahr}: Geburtsort Tscherlak")
+        col_content, col_map = st.columns([1, 1.5])
+        
+        with col_content:
+            img_tscherlak = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
+            if img_tscherlak:
+                st.image(img_tscherlak, width=BILD_BREITE)
+            st.write("Hier begann meine Reise in der UdSSR.")
+            st.info("Tscherlak liegt am Fluss Irtysch in der Oblast Omsk.")
 
-elif jahr == 1996:
-    st.subheader(f"🎒 {jahr}: Schulzeit in Russland")
-    # ... dein restlicher Code für 1996 ...
+        with col_map:
+            map_data = pd.DataFrame({'lat': [54.12], 'lon': [74.80]})
+            st.map(map_data, zoom=7, use_container_width=True)
 
-# Den div-Container am Ende wieder schließen
-st.markdown('</div>', unsafe_allow_html=True)
+    elif jahr == 1996:
+        st.subheader(f"🎒 {jahr}: Schulzeit in Russland")
+        col_img1, col_img2 = st.columns(2)
+        img1 = lade_formatiertes_bild("itsme.png", target_size=(BILD_BREITE, BILD_BREITE))
+        img2 = lade_formatiertes_bild("itsme2.png", target_size=(BILD_BREITE, BILD_BREITE))
+        
+        with col_img1:
+            if img1: st.image(img1, width=BILD_BREITE, caption="Ich in 1996")
+        with col_img2:
+            if img2: st.image(img2, width=BILD_BREITE, caption="Schulzeit Impressionen")
+
+    else:
+        st.subheader(f"📅 {jahr}: {texte[jahr].replace('<br>', ' ')}")
+        st.write("Hier werde ich bald weitere spezifische Informationen einfügen.")
+        st.info("Dieser Block wird noch individuell gestaltet.")
 
 
 
