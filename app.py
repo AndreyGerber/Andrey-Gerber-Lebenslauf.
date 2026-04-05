@@ -99,14 +99,21 @@ jahre = [1988, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 # --- 2. GRAFIK ERSTELLEN ---
 fig = go.Figure()
 
-# Schwarze Linie (Hauptstrang)
+# Hauptlinie: Startet exakt bei 1988 und geht bis nach 2026
 fig.add_trace(go.Scatter(
-    x=[min(jahre)-10, max(jahre)+10], y=[0, 0],
+    x=[1988, 2030], y=[0, 0],
     mode='lines',
     line=dict(color='black', width=2),
     hoverinfo='none',
     showlegend=False
 ))
+
+# Senkrechter Startstrich bei 1988
+fig.add_shape(
+    type="line",
+    x0=1988, y0=-0.15, x1=1988, y1=0.15,
+    line=dict(color="black", width=3)
+)
 
 # Weiße Rauten und Jahre
 fig.add_trace(go.Scatter(
@@ -125,11 +132,10 @@ fig.add_trace(go.Scatter(
     showlegend=False
 ))
 
-# KORREKTUR: PFEILSPITZE NACH RECHTS
-# x/y ist die Spitze, ax/ay ist das Ende des Pfeilstücks
+# Pfeilspitze am Ende (nach rechts)
 fig.add_annotation(
-    x=max(jahre)+12, y=0,      # Hier ist die Spitze
-    ax=max(jahre)+8, ay=0,     # Hier kommt die Linie her
+    x=2032, y=0,           # Spitze des Pfeils
+    ax=2030, ay=0,         # Schaft-Ende
     xref="x", yref="y",
     axref="x", ayref="y",
     showarrow=True,
@@ -139,11 +145,17 @@ fig.add_annotation(
     arrowcolor="black"
 )
 
-# Layout-Cleanup
+# Layout-Anpassung
 fig.update_layout(
     height=200,
     margin=dict(l=0, r=0, t=0, b=0),
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[min(jahre)-15, max(jahre)+20]),
+    xaxis=dict(
+        showgrid=False, 
+        zeroline=False, 
+        showticklabels=False, 
+        # Range startet kurz vor 1988, damit der Strich gut sichtbar ist
+        range=[1985, 2035] 
+    ),
     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, 0.5]),
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)"
@@ -151,5 +163,6 @@ fig.update_layout(
 
 # Anzeige in Streamlit
 st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
+
 
 
