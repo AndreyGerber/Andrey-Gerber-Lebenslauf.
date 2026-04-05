@@ -96,50 +96,60 @@ import plotly.graph_objects as go
 # --- 1. DATEN ---
 jahre = [1988, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 
-# --- 2. GRAFIK ---
+# --- 2. GRAFIK ERSTELLEN ---
 fig = go.Figure()
 
-# Schwarze Linie (Hauptschaft)
+# Schwarze Linie (Hauptstrang)
 fig.add_trace(go.Scatter(
-    x=[min(jahre)-5, max(jahre)+5], y=[0, 0],
+    x=[min(jahre)-10, max(jahre)+10], y=[0, 0],
     mode='lines',
-    line=dict(color='black', width=3),
+    line=dict(color='black', width=2),
     hoverinfo='none',
-    showlegend=False # Legende entfernen
+    showlegend=False
 ))
 
-# Rauten und Jahre
+# Weiße Rauten und Jahre
 fig.add_trace(go.Scatter(
     x=jahre, y=[0] * len(jahre),
     mode='markers+text',
-    marker=dict(symbol='diamond', size=22, color='white', line=dict(color='black', width=2)),
+    marker=dict(
+        symbol='diamond', 
+        size=18, 
+        color='white', 
+        line=dict(color='black', width=1.5)
+    ),
     text=jahre,
     textposition="bottom center",
-    textfont=dict(size=16, color="black"),
+    textfont=dict(size=12, color="black"),
     hoverinfo='none',
-    showlegend=False # Legende entfernen
+    showlegend=False
 ))
 
-# KORRIGIERTE PFEILSPITZE (Nach rechts zeigend)
+# KORREKTUR: PFEILSPITZE NACH RECHTS
+# x/y ist die Spitze, ax/ay ist das Ende des Pfeilstücks
 fig.add_annotation(
-    x=max(jahre)+6, y=0,      # Spitze des Pfeils (Ziel)
-    ax=max(jahre)+4, ay=0,    # Ende des Pfeils (Startpunkt der Spitze)
+    x=max(jahre)+12, y=0,      # Hier ist die Spitze
+    ax=max(jahre)+8, ay=0,     # Hier kommt die Linie her
     xref="x", yref="y",
+    axref="x", ayref="y",
     showarrow=True,
-    arrowhead=2, arrowsize=1.5, arrowwidth=3, arrowcolor="black"
+    arrowhead=2, 
+    arrowsize=1.2, 
+    arrowwidth=2, 
+    arrowcolor="black"
 )
 
 # Layout-Cleanup
 fig.update_layout(
     height=200,
-    margin=dict(l=10, r=10, t=10, b=10),
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[min(jahre)-8, max(jahre)+10]),
+    margin=dict(l=0, r=0, t=0, b=0),
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[min(jahre)-15, max(jahre)+20]),
     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, 0.5]),
     plot_bgcolor="rgba(0,0,0,0)",
-    paper_bgcolor="rgba(0,0,0,0)",
-    showlegend=False # Sicherstellen, dass keine Legende erscheint
+    paper_bgcolor="rgba(0,0,0,0)"
 )
 
-# Anzeige
+# Anzeige in Streamlit
 st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
+
 
