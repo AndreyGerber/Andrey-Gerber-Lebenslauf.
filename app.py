@@ -299,7 +299,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
     # --- INNERHALB DEINES 750px CONTAINERS ---
 
     elif jahr_aktiv == 1996:
-        BILD_GROESSE_1996 = 950 
+        BILD_GROESSE_1996 = 650 
 
         st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
         
