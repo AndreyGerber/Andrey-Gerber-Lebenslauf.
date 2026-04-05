@@ -242,36 +242,75 @@ st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'disp
 import pydeck as pdk
 
 #Oben ist der Abschnitt mit "meinem Werdegang" und dem Pfeil. Unten die "Erklärung dazu"
-# --- 1. EIGENE DATEN FÜR DIESEN BLOCK ---
-# Hier definierst du NUR die Jahre, die im Info-Block erscheinen sollen
-info_jahre = [1988, 1996] # Nur diese zwei Jahre sind jetzt über die Pfeile erreichbar
+import streamlit as st
+import pandas as pd
 
-if 'nav_jahr' not in st.session_state:
-    st.session_state.nav_jahr = 1988
+# --- 1. EIGENE LOGIK FÜR DIESEN ABSCHNITT (KEIN BEZUG NACH OBEN) ---
+# Wir definieren hier eine völlig neue Liste, nur für diesen Block
+meine_stationen = [1988, 1996] 
 
-# Berechne den Index basierend auf deiner NEUEN Liste
-akt_idx = info_jahre.index(st.session_state.nav_jahr)
+if 'abschnitt_index' not in st.session_state:
+    st.session_state.abschnitt_index = 0
 
-# Pfeile zur Steuerung (nutzen jetzt nur noch 'info_jahre')
-p1, p2, p3 = st.columns([1, 10, 1]) # Schmalere Pfeile an den Rändern
-with p1:
-    if st.button("⬅️", disabled=(akt_idx == 0), key="nav_zurueck"):
-        st.session_state.nav_jahr = info_jahre[akt_idx - 1]
+# Navigation
+n_col1, n_col2, n_col3 = st.columns([1, 8, 1])
+with n_col1:
+    if st.button("⬅️", key="abschnitt_back", disabled=(st.session_state.abschnitt_index == 0)):
+        st.session_state.abschnitt_index -= 1
         st.rerun()
-with p3:
-    if st.button("➡️", disabled=(akt_idx == len(info_jahre)-1), key="nav_weiter"):
-        st.session_state.nav_jahr = info_jahre[akt_idx + 1]
+with n_col3:
+    if st.button("➡️", key="abschnitt_next", disabled=(st.session_state.abschnitt_index == len(meine_stationen) - 1)):
+        st.session_state.abschnitt_index += 1
         st.rerun()
 
-# --- 2. DER INFO-BLOCK ---
+# --- 2. DER ISOLIERTE BLOCK (FESTE GRÖSSE) ---
+# Hier kannst du die Schriftgröße für den Infotext einstellen
+INFO_FONT_SIZE = "22px"
+
 with st.container(height=550, border=True):
-    jahr = st.session_state.nav_jahr
-    
-    if jahr == 1988:
-        st.subheader("📍 1988: Geburtsort Tscherlak")
-        # ... dein Code für Karte und Bild ...
+    aktuelles_jahr = meine_stationen[st.session_state.abschnitt_index]
 
-    elif jahr == 1996:
+    if aktuelles_jahr == 1988:
+        st.subheader("📍 1988: Geburtsort Tscherlak")
+        col_links, col_rechts = st.columns([1, 1.5])
+        
+        with col_links:
+            # Bild tscherlak.png (Größe hier anpassbar)
+            img_path = "images/tscherlak.png" # Pfad anpassen falls nötig
+            try:
+                st.image(img_path, width=300)
+            except:
+                st.warning("Bild 'tscherlak.png' nicht gefunden")
+            
+            # Infotext mit eigener Schriftgröße
+            st.markdown(f"""
+                <div style="background-color: #e8f4f9; padding: 15px; border-left: 5px solid #0072b2; border-radius: 5px;">
+                    <p style="color: #004466; font-size: {INFO_FONT_SIZE}; margin: 0;">
+                        Hier begann meine Reise in der UdSSR.
+                    </p>
+                </div>
+            """, unsafe_allow_html=True)
+
+        with col_rechts:
+            # Farbige Karte
+            df_map = pd.DataFrame({'lat': [54.12], 'lon': [74.80]})
+            st.map(df_map, zoom=7, use_container_width=True)
+
+    elif aktuelles_jahr == 1996:
         st.subheader("🎒 1996: Schulzeit in Russland")
+        c1, c2 = st.columns(2)
+        
+        # Zwei Bilder nebeneinander
+        try:
+            st.image("images/itsme.png", use_container_width=True)
+            with c2:
+                st.image("images/itsme2.png", use_container_width=True)
+        except:
+            st.warning("Bilder 'itsme.png' oder 'itsme2.png' fehlen")
+        
+        st.write("Informationen zu meiner Schulzeit...")
+
+
+
 
 
