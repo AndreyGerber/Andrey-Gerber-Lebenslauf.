@@ -120,7 +120,7 @@ fig.add_shape(type="line", x0=1988, y0=-STARTSTRICH_LAENGE, x1=1988, y1=STARTSTR
 
 # Rauten (NUR für Jahre ab 1996)
 fig.add_trace(go.Scatter(
-    x=jahre_mit_raute, y= * len(jahre_mit_raute),
+    x=jahre_mit_raute, y= [0]* len(jahre_mit_raute),
     mode='markers',
     marker=dict(symbol='diamond', size=22, color='white', line=dict(color='black', width=2)),
     showlegend=False, hoverinfo='none'
