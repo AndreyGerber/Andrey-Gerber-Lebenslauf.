@@ -299,11 +299,15 @@ with st.container(height=BLOCK_HOEHE, border=True):
     # --- INNERHALB DEINES 750px CONTAINERS ---
 
     elif jahr_aktiv == 1996:
+        # --- PARAMETER FÜR DIE BILDGRÖSSE ---
+        # Verkleinere diesen Wert (z.B. auf 400 oder 350), falls du immer noch scrollen musst
+        BILD_GROESSE_1996 = 450 
+
         st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
         
-        # Textbereich oben (wie im Bild)
+        # Textbereich
         st.markdown(f"""
-            <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4; margin-bottom: 20px;'>
+            <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4;'>
                 Meine Schulzeit.<br>
                 So schnell vergehen 10 Jahre.
             </p>
@@ -311,19 +315,19 @@ with st.container(height=BLOCK_HOEHE, border=True):
         
         st.divider()
 
-        # Ein einzelnes, zentriertes Bild
-        # Wir nutzen 3 Spalten und lassen die äußeren leer, um das Bild in der Mitte zu fixieren
-        col_l, col_mid, col_r = st.columns([0.5, 2, 0.5])
+        # Bild-Bereich (Zentriert)
+        # Wir nutzen Spalten, um das Bild mittig zu platzieren
+        col_l, col_mid, col_r = st.columns([1, 2, 1])
         
         with col_mid:
-            # Wir laden 'schule2.png' und machen es für den 750px Block schön groß
-            img_schule = lade_formatiertes_bild("schule2.png", target_size=(700, 500))
+            # Wir laden nur noch 'schule2.png'
+            img_schule = lade_formatiertes_bild("schule2.png", target_size=(BILD_GROESSE_1996, BILD_GROESSE_1996))
             
             if img_schule:
-                st.image(img_schule, use_container_width=True, caption="Impressionen aus meiner Schulzeit")
+                # Wir geben eine feste Breite an, um das Scrollen zu verhindern
+                st.image(img_schule, width=BILD_GROESSE_1996, caption="Eindrücke aus Russland")
             else:
-                st.error("Bild 'schule2.png' wurde im Ordner 'images' nicht gefunden.")
-
+                st.error("Bild 'schule2.png' nicht gefunden.")
 
 
 
