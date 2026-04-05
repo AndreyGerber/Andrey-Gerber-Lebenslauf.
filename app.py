@@ -199,7 +199,7 @@ fig.update_layout(
         showgrid=False, 
         zeroline=False, 
         showticklabels=False, 
-        range=[1980, 2045] # Genug Platz links und rechts
+        range=[1987, 2035] # Genug Platz links und rechts
     ),
     yaxis=dict(
         showgrid=False, 
