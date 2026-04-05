@@ -288,7 +288,7 @@ with st.container(height=550, border=True):
                     margin-bottom: 20px;">
                     <p style="
                         color: #004466; 
-                        font-size: 22; 
+                        font-size: 40; 
                         margin: 0;
                         line-height: 1.4;">
                         Hier begann meine Reise in der UdSSR.
