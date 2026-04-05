@@ -102,7 +102,7 @@ jahre_mit_raute = [1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 # Hier kannst du deine Texte für die Blöcke definieren
 texte = {
     1988: "Born in UdSSR",
-    1991: "Moved to Russian Federation without moving"
+    1991: "Moved to Russian Federation without moving",
     1996: "School (not cool)",
     2006: "Emigration to GE ",
     2010: "Studiing aircraft design (B.Eng. & Ms.Sc.)",
