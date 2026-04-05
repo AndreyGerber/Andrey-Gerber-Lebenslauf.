@@ -111,7 +111,7 @@ texte = {
     2010: "Studying aircraft design<br>(B.Eng. & Ms.Sc.)",
     2017: "TÜV Rheinland<br>(Expert in the lab +",
     2019: " <br>Quality Expert)",
-    2022: "Ferchau<br>(Expert in production control)",
+    2022: "Ferchau (at Siemens)<br>(Quality Systems Engineering)",
     2026: "Liora<br>(Data Science & ML)"
 }
 
