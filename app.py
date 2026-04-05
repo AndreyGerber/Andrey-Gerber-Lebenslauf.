@@ -391,9 +391,10 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
 
     elif jahr_aktiv == 2010:
-            OBEN_ABSTAND = "150px" # Zentriert den Inhalt vertikal im Block
+            # --- DEINE PARAMETER FÜR DIESEN ABSCHNITT ---
+            MASSSTAB_STUDIUM = 0.8  # 1.0 = 100%, 0.8 = 80% der Originalgröße
+            OBEN_ABSTAND = "180px"  # Vertikale Zentrierung für den Text
 
-            # Zwei Spalten (Text links, Bild rechts)
             col_text, col_foto = st.columns([1, 2.5])
 
             with col_text:
@@ -407,13 +408,17 @@ with st.container(height=BLOCK_HOEHE, border=True):
                     """, unsafe_allow_html=True)
 
             with col_foto:
-                # Nutzt deine vorhandene Funktion zum Laden
-                img_haw = lade_formatiertes_bild("haw.png") 
+                img_haw = lade_formatiertes_bild("haw.png")
                 if img_haw:
-                    st.markdown(f"<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
-                    st.image(img_haw, use_container_width=True)
+                    # Berechne die neue Breite basierend auf dem Maßstab
+                    original_breite = img_haw.size[0]
+                    neue_breite = int(original_breite * MASSSTAB_STUDIUM)
+                    
+                    # Zentriert das Bild etwas im hohen Block
+                    st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
+                    st.image(img_haw, width=neue_breite)
                 else:
-                    st.error("Bild 'images/haw.png' nicht gefunden.")
+                    st.error("Bild 'haw.png' konnte nicht geladen werden.")
 
 
 
