@@ -298,31 +298,31 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     # --- INNERHALB DEINES 750px CONTAINERS ---
 
-elif jahr_aktiv == 1996:
-    st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
-    
-    # Textbereich oben (wie im Bild)
-    st.markdown(f"""
-        <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4; margin-bottom: 20px;'>
-            Meine Schulzeit in Russland war eine prägende Phase.<br>
-            Hier fing die Begeisterung für Technik und Design an.
-        </p>
-    """, unsafe_allow_html=True)
-    
-    st.divider()
-
-    # Ein einzelnes, zentriertes Bild
-    # Wir nutzen 3 Spalten und lassen die äußeren leer, um das Bild in der Mitte zu fixieren
-    col_l, col_mid, col_r = st.columns([0.5, 2, 0.5])
-    
-    with col_mid:
-        # Wir laden 'schule2.png' und machen es für den 750px Block schön groß
-        img_schule = lade_formatiertes_bild("schule2.png", target_size=(700, 500))
+    elif jahr_aktiv == 1996:
+        st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
         
-        if img_schule:
-            st.image(img_schule, use_container_width=True, caption="Impressionen aus meiner Schulzeit")
-        else:
-            st.error("Bild 'schule2.png' wurde im Ordner 'images' nicht gefunden.")
+        # Textbereich oben (wie im Bild)
+        st.markdown(f"""
+            <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4; margin-bottom: 20px;'>
+                Meine Schulzeit in Russland war eine prägende Phase.<br>
+                Hier fing die Begeisterung für Technik und Design an.
+            </p>
+        """, unsafe_allow_html=True)
+        
+        st.divider()
+
+        # Ein einzelnes, zentriertes Bild
+        # Wir nutzen 3 Spalten und lassen die äußeren leer, um das Bild in der Mitte zu fixieren
+        col_l, col_mid, col_r = st.columns([0.5, 2, 0.5])
+        
+        with col_mid:
+            # Wir laden 'schule2.png' und machen es für den 750px Block schön groß
+            img_schule = lade_formatiertes_bild("schule2.png", target_size=(700, 500))
+            
+            if img_schule:
+                st.image(img_schule, use_container_width=True, caption="Impressionen aus meiner Schulzeit")
+            else:
+                st.error("Bild 'schule2.png' wurde im Ordner 'images' nicht gefunden.")
 
 
 
