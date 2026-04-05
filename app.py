@@ -278,25 +278,18 @@ with st.container(height=550, border=True):
         col_content, col_map = st.columns([1, 1.5])
         
         with col_content:
-            # Der Ersatz für st.info mit anpassbarer Schriftgröße
             st.markdown(f"""
                 <div style="
-                    background-color: #e8f4f9; 
-                    padding: 15px; 
+                    background-color: #d4ebf2; 
+                    adding: 15px; 
                     border-radius: 5px; 
-                    border-left: 5px solid #0072b2;
+                    border-left: 5.5px solid #05668d;
                     margin-bottom: 20px;">
-                    <p style="
-                        color: #004466; 
-                        font-size: 80; 
-                        margin: 0;
-                        line-height: 1.4;">
+                    <span style="color: #05668d; font-size: 22; font-weight: 500;">
                         Hier begann meine Reise in der UdSSR.
-                    </p>
+                    </span>
                 </div>
             """, unsafe_allow_html=True)
-
-            # Dein Bild-Code bleibt wie er ist
             img_tscherlak = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
             if img_tscherlak:
                 st.image(img_tscherlak, width=BILD_BREITE)
