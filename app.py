@@ -242,83 +242,64 @@ st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'disp
 import pydeck as pdk
 
 #Oben ist der Abschnitt mit "meinem Werdegang" und dem Pfeil. Unten die "Erklärung dazu"
+# --- EINSTELLUNGEN FÜR DIESEN ABSCHNITT ---
+INFO_BLOCK_HOEHE = 550
+BILD_BREITE_1988 = 350
+SCHRIFT_GROESSE_INFO = "22px"  # Hier die Größe der "Info-Box" anpassen
 
-st.divider()
-st.markdown("<h2 style='text-align: center;'>Details zu meinem Weg</h2>", unsafe_allow_html=True)
-
-# Navigation vorbereiten
+# 1. Navigation (Unabhängig vom Zeitstrahl oben)
 jahre_liste = sorted(texte.keys())
-if 'selected_year' not in st.session_state:
-    st.session_state.selected_year = 1988
+if 'detail_jahr' not in st.session_state:
+    st.session_state.detail_jahr = 1988
 
-aktueller_index = jahre_liste.index(st.session_state.selected_year)
+aktueller_idx = jahre_liste.index(st.session_state.detail_jahr)
 
-# Navigations-Pfeile (Zentriert über dem Block)
-c1, c2, c3 = st.columns([1, 2, 1])
-with c1:
-    if st.button("⬅️ Zurück", disabled=(aktueller_index == 0), use_container_width=True):
-        st.session_state.selected_year = jahre_liste[aktueller_index - 1]
+# Pfeil-Navigation
+n_col1, n_col2, n_col3 = st.columns([1, 3, 1])
+with n_col1:
+    if st.button("⬅️ Zurück", disabled=(aktueller_idx == 0), key="btn_back"):
+        st.session_state.detail_jahr = jahre_liste[aktueller_idx - 1]
         st.rerun()
-with c3:
-    if st.button("Weiter ➡️", disabled=(aktueller_index == len(jahre_liste) - 1), use_container_width=True):
-        st.session_state.selected_year = jahre_liste[aktueller_index + 1]
+with n_col3:
+    if st.button("Weiter ➡️", disabled=(aktueller_idx == len(jahre_liste)-1), key="btn_next"):
+        st.session_state.detail_jahr = jahre_liste[aktueller_idx + 1]
         st.rerun()
 
-# --- DER ZENTRALE INFO-BLOCK ---
-BILD_BREITE = 300
-
-# Wir nutzen den nativen Streamlit-Container mit fester Höhe
-# 'height' sorgt dafür, dass der Block immer gleich groß bleibt (mit Scrollbar falls nötig)
-with st.container(height=550, border=True):
+# 2. Der Zentrale Block (Feste Größe)
+with st.container(height=INFO_BLOCK_HOEHE, border=True):
+    jahr = st.session_state.detail_jahr
     
-    jahr = st.session_state.get('selected_year', 1988)
-
     if jahr == 1988:
         st.subheader(f"📍 {jahr}: Geburtsort Tscherlak")
-        col_content, col_map = st.columns([1, 1.5])
+        col_text, col_map = st.columns([1, 1.5])
         
-        with col_content:
+        with col_text:
+            # Der "nachgebaute" Info-Kasten mit anpassbarer Schriftgröße
             st.markdown(f"""
-                <div style="
-                    background-color: #d4ebf2; 
-                    adding: 15px; 
-                    border-radius: 5px; 
-                    border-left: 5.5px solid #05668d;
-                    margin-bottom: 20px;">
-                    <span style="color: #05668d; font-size: 30px; font-weight: 500;">
-                        Hier begann meine Reise.
-                    </span>
+                <div style="background-color: #e8f4f9; padding: 15px; border-radius: 5px; 
+                            border-left: 6px solid #0072b2; margin-bottom: 20px;">
+                    <p style="color: #004466; font-size: {SCHRIFT_GROESSE_INFO}; margin: 0; line-height: 1.4;">
+                        Hier begann meine Reise in der UdSSR.
+                    </p>
                 </div>
             """, unsafe_allow_html=True)
-            img_tscherlak = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
-            if img_tscherlak:
-                st.image(img_tscherlak, width=BILD_BREITE)
             
-            
+            img = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE_1988, BILD_BREITE_1988))
+            if img: st.image(img, width=BILD_BREITE_1988)
 
         with col_map:
-            map_data = pd.DataFrame({'lat': [54.12], 'lon': [74.80]})
-            st.map(map_data, zoom=7, use_container_width=True)
+            # Farbige Karte von Tscherlak
+            st.map(pd.DataFrame({'lat': [54.12], 'lon': [74.80]}), zoom=7)
 
     elif jahr == 1996:
         st.subheader(f"🎒 {jahr}: Schulzeit in Russland")
-        col_img1, col_img2 = st.columns(2)
-        img1 = lade_formatiertes_bild("itsme.png", target_size=(BILD_BREITE, BILD_BREITE))
-        img2 = lade_formatiertes_bild("itsme2.png", target_size=(BILD_BREITE, BILD_BREITE))
-        
-        with col_img1:
-            if img1: st.image(img1, width=BILD_BREITE, caption="Ich in 1996")
-        with col_img2:
-            if img2: st.image(img2, width=BILD_BREITE, caption="Schulzeit Impressionen")
+        # Dein Code für die zwei Bilder (itsme.png / itsme2.png)
+        st.write("Inhalte für 1996...")
 
     else:
-        # Standard-Platzhalter für die restlichen Jahre
-        # Wir entfernen <br> für die Überschrift im Info-Fenster
-        titel_clean = texte.get(jahr, "").replace("<br>", " ")
-        st.subheader(f"📅 {jahr}: {titel_clean}")
-        st.write("Hier werde ich bald weitere spezifische Informationen einfügen.")
-        st.info("Dieser Block wird noch individuell gestaltet.")
-
+        # Minimalistischer Standard für alle anderen Jahre (Keine blaue Box mehr!)
+        st.subheader(f"📅 {jahr}: {texte.get(jahr, '').replace('<br>', ' ')}")
+        st.write("Weitere Details folgen...")
 
 
 
