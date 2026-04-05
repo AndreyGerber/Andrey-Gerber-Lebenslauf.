@@ -270,50 +270,23 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     if jahr_aktiv == 1988:
         st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
-
-        # 1. Koordinaten festlegen
-        BERLIN = [13.4050, 52.5200]
-        TSCHERLAK = [74.8056, 54.1221]
-
-        # 2. Daten für den Bogen und die Punkte
-        chart_data = pd.DataFrame([{
-            "from_lon": BERLIN[0], "from_lat": BERLIN[1],
-            "to_lon": TSCHERLAK[0], "to_lat": TSCHERLAK[1],
-            "label": "Distanz: ca. 4.000 km"
-        }])
-
-        # 3. Die Karte mit Pydeck erstellen
-        st.pydeck_chart(pdk.Deck(
-            map_style='mapbox://styles/mapbox/light-v9',
-            initial_view_state=pdk.ViewState(
-                latitude=53.0,
-                longitude=44.0,
-                zoom=2.8,
-                pitch=45, # Neigung für 3D-Effekt des Bogens
-            ),
-            layers=[
-                # Der Bogen zwischen den Städten
-                pdk.Layer(
-                    "ArcLayer",
-                    data=chart_data,
-                    get_source_position="[from_lon, from_lat]",
-                    get_target_position="[to_lon, to_lat]",
-                    get_source_color=[0, 114, 178, 160], # Blau
-                    get_target_color=[255, 0, 0, 200],   # Rot
-                    get_width=5,
-                ),
-                # Punkt für Tscherlak
-                pdk.Layer(
-                    "ScatterplotLayer",
-                    data=pd.DataFrame([{"lon": TSCHERLAK[0], "lat": TSCHERLAK[1]}]),
-                    get_position="[lon, lat]",
-                    get_color=[255, 0, 0],
-                    get_radius=50000,
-                ),
-            ],
-        ))
         
-        st.info("Die Karte zeigt die enorme Distanz zwischen Deutschland und meinem Geburtsort Tscherlak in Sibirien.")
+        # 1. Info-Box oben drüber
+        st.info("Geburtsort Tscherlak in Sibirien (nahe Omsk). Die Distanz verdeutlicht den weiten Weg nach Deutschland.")
+
+        # 2. Die Karte mittig im 750px Block platzieren
+        # Wir nutzen Spalten, um das Bild in der Mitte zu halten
+        _, col_karte, _ = st.columns([0.1, 8, 0.1])
+        
+        with col_karte:
+            # Hier lädst du einfach den Screenshot hoch, den du mir gerade geschickt hast
+            # Speichere ihn z.B. als 'karte_tscherlak.jpg' in deinem Repository
+            st.image("karte_tscherlak.jpg", 
+                    caption="Geografische Lage von Tscherlak im Vergleich zu Europa",
+                    use_container_width=True)
+            
+        # 3. Optional: Ein kleiner Text-Abstandshalter nach unten
+        st.markdown("<br><br>", unsafe_allow_html=True)
 
 
     # --- INNERHALB DEINES 750px CONTAINERS ---
