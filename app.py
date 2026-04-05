@@ -92,39 +92,35 @@ st.divider()
 
 import plotly.graph_objects as go
 import streamlit as st
-from PIL import Image
 import base64
-from io import BytesIO
+import os
 
-# --- HILFSFUNKTION: Bild für Plotly vorbereiten ---
-def get_base64_image(img_path):
-    if os.path.exists(img_path):
-        img = Image.open(img_path)
-        buffered = BytesIO()
-        img.save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode()
-        return f"data:image/png;base64,{img_str}"
+# --- HILFSFUNKTION: Macht Bilder für Plotly lesbar ---
+def get_base64_img(pfad):
+    if os.path.exists(pfad):
+        with open(pfad, "rb") as f:
+            data = base64.b64encode(f.read()).decode()
+            return f"data:image/png;base64,{data}"
     return None
 
 st.subheader("Mein Lebensweg")
 
-# 1. Daten (Achte auf die eckigen Klammern!)
+# 1. Daten (Mit eckigen Klammern!)
 events = [{"x": 2022, "text": "Hausbau"}]  # hier Zeitperioden angeben
 
 fig = go.Figure()
 
-# 2. Bilder aus deinem 'images' Ordner laden
-# Passe die Dateinamen hier an deine echten Dateien an!
-img_udssr = get_base64_image("images/udssr_flag.png") 
-img_ru = get_base64_image("images/russia_flag.png")
-img_de = get_base64_image("images/germany_flag.png")
+# 2. Flaggen laden (Pfade anpassen!)
+img_udssr = get_base64_img("images/udssr.png") # Heißt die Datei so?
+img_ru = get_base64_img("images/russland.png")
+img_de = get_base64_img("images/deutschland.png")
 
-# 3. Bilder als Band platzieren
-def add_flag(fig, x_start, x_end, img_data):
-    if img_data:
+# 3. Flaggen als Hintergrund-Bilder setzen
+def add_flag(fig, x0, x1, img):
+    if img:
         fig.add_layout_image(dict(
-            source=img_data, xref="x", yref="y",
-            x=x_start, y=0.6, sizex=x_end - x_start, sizey=0.6,
+            source=img, xref="x", yref="y",
+            x=x0, y=0.6, sizex=x1-x0, sizey=0.6,
             sizing="stretch", layer="below"
         ))
 
@@ -132,7 +128,7 @@ add_flag(fig, 1988, 1991, img_udssr)
 add_flag(fig, 1991, 2004, img_ru)
 add_flag(fig, 2004, 2026, img_de)
 
-# 4. Rauten & Pfeilspitze (Mitte bei 0.3)
+# 4. Rauten (Auf mittlerer Höhe 0.3)
 fig.add_trace(go.Scatter(
     x=[e["x"] for e in events], y=[0.3] * len(events),
     mode="markers+text",
@@ -141,10 +137,10 @@ fig.add_trace(go.Scatter(
     textposition="bottom center", showlegend=False
 ))
 
+# 5. Pfeilspitze & Startstrich
 fig.add_annotation(x=2028, y=0.3, ax=2026, ay=0.3, xref="x", yref="y", axref="x", ayref="y",
                    showarrow=True, arrowhead=3, arrowsize=4, arrowwidth=2, arrowcolor="#FFCC00")
 
-# 5. Startmarkierung 1988
 fig.add_shape(type="line", x0=1988, x1=1988, y0=0, y1=0.6, line=dict(color="black", width=4))
 fig.add_annotation(x=1988, y=-0.2, text="<b>1988</b>", showarrow=False)
 
@@ -156,6 +152,7 @@ fig.update_layout(
 )
 
 st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+
 
 
 
