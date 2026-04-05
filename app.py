@@ -239,7 +239,7 @@ st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'disp
 
 
 
-
+import pydeck as pdk
 #Oben ist der Abschnitt mit "meinem Werdegang" und dem Pfeil. Unten die "Erklärung dazu"
 
 st.divider()
@@ -270,14 +270,42 @@ with st.container(border=True):
     
     if jahr == 1988:
         st.subheader(f"📍 {jahr}: Geburtsort Tscherlak")
-        col_map_text, col_map_vis = st.columns([1, 2])
-        with col_map_text:
+        col_content, col_map = st.columns([1, 1.5]) # Spaltenverhältnis angepasst
+        
+        with col_content:
+            # Bild aus dem images-Ordner laden
+            img_tscherlak = lade_formatiertes_bild("tscherlak.png", target_size=(500, 350))
+            if img_tscherlak:
+                st.image(img_tscherlak, use_container_width=True)
+            else:
+                st.warning("Bild 'tscherlak.png' fehlt im Ordner images")
+                
             st.write("Hier begann meine Reise in der UdSSR.")
             st.info("Tscherlak liegt am Fluss Irtysch in der Oblast Omsk.")
-        with col_map_vis:
-            # Karte von Tscherlak
-            map_data = pd.DataFrame({'lat': [54.12], 'lon': [74.80]})
-            st.map(map_data, zoom=6, use_container_width=True)
+
+        with col_map:
+            # Farbige, interaktive Karte mit pydeck
+            view_state = pdk.ViewState(
+                latitude=54.12,
+                longitude=74.80,
+                zoom=8,
+                pitch=0
+            )
+            
+            # Ein roter Punkt für den Ort
+            layer = pdk.Layer(
+                "ScatterplotLayer",
+                data=pd.DataFrame([{'lat': 54.12, 'lon': 74.80}]),
+                get_position='[lon, lat]',
+                get_color='',
+                get_radius=2000,
+            )
+
+            st.pydeck_chart(pdk.Deck(
+                map_style='mapbox://styles/mapbox/streets-v11', # Farbiges Street-Design
+                initial_view_state=view_state,
+                layers=[layer]
+            ))
 
     elif jahr == 1991:
         st.subheader(f"🇷🇺 {jahr}: Politische Wende")
