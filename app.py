@@ -285,7 +285,7 @@ with st.container(height=550, border=True):
                     border-radius: 5px; 
                     border-left: 5.5px solid #05668d;
                     margin-bottom: 20px;">
-                    <span style="color: #05668d; font-size: 20px; font-weight: 500;">
+                    <span style="color: #05668d; font-size: 30px; font-weight: 500;">
                         Hier begann meine Reise.
                     </span>
                 </div>
