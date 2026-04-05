@@ -265,28 +265,13 @@ with c3:
         st.rerun()
 
 # --- DER ZENTRALE INFO-BLOCK ---
-BLOCK_HOEHE = 550  # Höhe in Pixeln
 BILD_BREITE = 300
 
-# CSS: Wir zielen direkt auf den Streamlit-Container ab
-st.markdown(f"""
-    <style>
-    [data-testid="stVerticalBlock"] > div:has(div.fixed-block) {{
-        height: {BLOCK_HOEHE}px;
-        overflow-y: auto;
-        background-color: white;
-        border-radius: 10px;
-        padding: 10px;
-    }}
-    </style>
-""", unsafe_allow_html=True)
-
-# Wir erstellen einen Container und geben ihm eine CSS-Klasse zur Identifizierung
-with st.container(border=True):
-    # Ein unsichtbarer Marker für unser CSS
-    st.markdown('<div class="fixed-block"></div>', unsafe_allow_html=True)
+# Wir nutzen den nativen Streamlit-Container mit fester Höhe
+# 'height' sorgt dafür, dass der Block immer gleich groß bleibt (mit Scrollbar falls nötig)
+with st.container(height=550, border=True):
     
-    jahr = st.session_state.selected_year
+    jahr = st.session_state.get('selected_year', 1988)
 
     if jahr == 1988:
         st.subheader(f"📍 {jahr}: Geburtsort Tscherlak")
@@ -315,7 +300,10 @@ with st.container(border=True):
             if img2: st.image(img2, width=BILD_BREITE, caption="Schulzeit Impressionen")
 
     else:
-        st.subheader(f"📅 {jahr}: {texte[jahr].replace('<br>', ' ')}")
+        # Standard-Platzhalter für die restlichen Jahre
+        # Wir entfernen <br> für die Überschrift im Info-Fenster
+        titel_clean = texte.get(jahr, "").replace("<br>", " ")
+        st.subheader(f"📅 {jahr}: {titel_clean}")
         st.write("Hier werde ich bald weitere spezifische Informationen einfügen.")
         st.info("Dieser Block wird noch individuell gestaltet.")
 
