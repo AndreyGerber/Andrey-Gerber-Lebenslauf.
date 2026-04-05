@@ -288,7 +288,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
                     <div style="
                         position: absolute;
                         top: 45.5%;
-                        left: 81.5%;
+                        left: 81.7%;
                         transform: translate(-50%, -100%);
                         font-size: 40px;
                         filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
