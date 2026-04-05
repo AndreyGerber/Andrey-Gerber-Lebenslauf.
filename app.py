@@ -111,50 +111,58 @@ fig.add_trace(go.Scatter(
 # KÜRZERER Startstrich bei 1988
 fig.add_shape(
     type="line",
-    x0=1988, y0=-0.08, x1=1988, y1=0.08, # Länge auf +/- 0.08 gekürzt
+    x0=1988, y0=-0.08, x1=1988, y1=0.08,
     line=dict(color="black", width=3)
 )
 
-# Weiße Rauten und Jahre (TIEFER angeordnet)
+# Die weißen Rauten (OHNE Text)
 fig.add_trace(go.Scatter(
     x=jahre, y=[0] * len(jahre),
-    mode='markers+text',
+    mode='markers',
     marker=dict(
         symbol='diamond', 
-        size=18, 
+        size=20, 
         color='white', 
         line=dict(color='black', width=1.5)
     ),
+    hoverinfo='none',
+    showlegend=False
+))
+
+# Die Jahreszahlen als separate Ebene (TIEFER gesetzt bei y=-0.15)
+fig.add_trace(go.Scatter(
+    x=jahre, 
+    y=[-0.15] * len(jahre), # Hier wird der Abstand nach unten erzeugt
+    mode='text',
     text=jahre,
     textposition="bottom center",
-    # 'cliponaxis=False' und extra Margin im Layout sorgen für Platz nach unten
-    textfont=dict(size=13, color="black"),
+    textfont=dict(size=14, color="black"),
     hoverinfo='none',
     showlegend=False
 ))
 
 # Pfeilspitze nach Rechts
 fig.add_annotation(
-    x=2032, y=0, ax=2030, ay=0,
+    x=2034, y=0, ax=2031, ay=0,
     xref="x", yref="y", axref="x", ayref="y",
     showarrow=True, arrowhead=2, arrowsize=1.2, arrowwidth=2, arrowcolor="black"
 )
 
 # Layout-Feinschliff
 fig.update_layout(
-    height=180, # Kompaktere Höhe
-    margin=dict(l=20, r=20, t=20, b=40), # Mehr Platz unten (b=40) für die Jahreszahlen
+    height=180,
+    margin=dict(l=20, r=20, t=10, b=50), # b=50 gibt dem Text unten Platz
     xaxis=dict(
         showgrid=False, 
         zeroline=False, 
         showticklabels=False, 
-        range=[1985, 2035] 
+        range=[1985, 2036] 
     ),
     yaxis=dict(
         showgrid=False, 
         zeroline=False, 
         showticklabels=False, 
-        range=[-0.4, 0.4] # Bereich verschoben, um Text unter 0 mehr Platz zu geben
+        range=[-0.5, 0.3] # Fokus nach unten verschoben für den Text
     ),
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)"
@@ -162,6 +170,7 @@ fig.update_layout(
 
 # Anzeige
 st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
+
 
 
 
