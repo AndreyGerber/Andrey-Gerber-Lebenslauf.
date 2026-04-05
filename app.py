@@ -299,7 +299,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
     # --- INNERHALB DEINES 750px CONTAINERS ---
     elif jahr_aktiv == 1996:
         # --- DEINE PARAMETER ---
-        MASSSTAB = 0.7  # Verkleinere dies, falls du scrollen musst
+        MASSSTAB = 1.0  # Verkleinere dies, falls du scrollen musst
         
         # 1. Wir teilen den 750px Block in zwei Spalten
         # [1, 2.5] gibt dem Bild rechts deutlich mehr Platz
