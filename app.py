@@ -272,13 +272,6 @@ with st.container(height=BLOCK_HOEHE, border=True):
             # 1. Überschrift
             st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
             
-            # 2. Bild zentriert oder linksbündig (ohne Spalten)
-            img = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
-            if img:
-                st.image(img, width=BILD_BREITE)
-            
-            # Info-Text (jetzt als einfaches Infofeld unter dem Bild)
-            st.info("Geburtsort Tscherlak")
 
             # 3. Die Karte über die volle Breite
             # Wir setzen einen Punkt für Tscherlak
