@@ -272,7 +272,7 @@ with st.container(border=True):
     if jahr == 1988:
         st.subheader(f"📍 {jahr}: Geburtsort Tscherlak")
         
-        col_content, col_map = st.columns([1, 1.5])
+        col_content, col_map = st.columns([1, 1.2]) # Spaltenbreite angepasst
         
         with col_content:
             # Bild links laden
@@ -280,35 +280,17 @@ with st.container(border=True):
             if img_tscherlak:
                 st.image(img_tscherlak, use_container_width=True)
             else:
-                st.warning("Bild 'tscherlak.png' fehlt im Ordner 'images'")
+                st.warning("Bild 'tscherlak.png' fehlt")
                 
             st.write("Hier begann meine Reise in der UdSSR.")
             st.info("Tscherlak liegt am Fluss Irtysch in der Oblast Omsk.")
 
         with col_map:
-            # 1. Daten als DataFrame vorbereiten (WICHTIG)
-            map_data = pd.DataFrame([{'lat': 54.12, 'lon': 74.80}])
+            # Daten für den Punkt
+            map_data = pd.DataFrame({'lat': [54.12], 'lon': [74.80]})
             
-            # 2. Pydeck Karte (Streets-Stil ist farbig)
-            st.pydeck_chart(pdk.Deck(
-                map_style='mapbox://styles/mapbox/streets-v11', 
-                initial_view_state=pdk.ViewState(
-                    latitude=54.12,
-                    longitude=74.80,
-                    zoom=8,
-                    pitch=0
-                ),
-                layers=[
-                    pdk.Layer(
-                        "ScatterplotLayer",
-                        data=map_data,
-                        get_position='[lon, lat]',
-                        # Farbe als Liste [R, G, B, A] übergeben - das verhindert den IndexError
-                        get_color='[200, 30, 0, 160]', 
-                        get_radius=3000,
-                    ),
-                ],
-            ))
+            # Native Streamlit Map (Farbig, robust, kein Token nötig)
+            st.map(map_data, zoom=7, use_container_width=True)
 
     elif jahr == 1991:
         st.subheader(f"🇷🇺 {jahr}: Politische Wende")
