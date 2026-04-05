@@ -116,7 +116,7 @@ fig.add_trace(go.Scatter(
     y=[0] * len(events),
     mode="markers+text",
     marker=dict(symbol="diamond", size=12, color="white", line=dict(width=2, color="black")),
-    text= for e in events],
+    text= for e in events],  # <-- ACHTE AUF DIESE ZEILE
     textposition="bottom center",
     hoverinfo="none"
 ))
