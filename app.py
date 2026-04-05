@@ -283,7 +283,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             st.markdown(f"""
                 <div style="background-color: #e8f4f9; padding: 25px; border-left: 6px solid #0072b2; border-radius: 8px; margin-top: 20px;">
                     <p style="color: #004466; font-size: {INFO_FONT_SIZE}; margin: 0; line-height: 1.5;">
-                        Hier begann meine Reise in der UdSSR.
+                        Hier begann meine Reise.
                     </p>
                 </div>
             """, unsafe_allow_html=True)
@@ -298,12 +298,42 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     elif jahr_aktiv == 1996:
         st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
-        # Hier kannst du jetzt viel größere Bilder nutzen, da du 750px Platz hast!
-        c1, c2 = st.columns(2)
+        
+        # Wir teilen den 750px Block in zwei Bereiche: Oben Text/Info, Unten Bilder
+        col_text, col_info = st.columns([1, 1])
+        
+        with col_text:
+            st.markdown(f"""
+                <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4;'>
+                    Meine Schulzeit in Russland war eine prägende Phase.<br>
+                    Hier fing die Begeisterung für Technik und Design an.
+                </p>
+            """, unsafe_allow_html=True)
+        
+        st.divider() # Trennung für eine bessere Optik im großen Block
+
+        # BILDER-BEREICH: Wir nutzen 3 Spalten, um die Bilder nicht zu riesig werden zu lassen
+        c1, c2, c3 = st.columns([1, 1, 1])
+        
         with c1:
-            st.image("images/itsme.png", use_container_width=True)
+            # Dein erstes Bild (z.B. ein Porträt)
+            img1 = lade_formatiertes_bild("itsme.png", target_size=(400, 500))
+            if img1:
+                st.image(img1, use_container_width=True, caption="Ich (1996)")
+                
         with c2:
-            st.image("images/itsme2.png", use_container_width=True)
+            # Dein NEUES Bild 'schule2.png'
+            img2 = lade_formatiertes_bild("schule2.png", target_size=(400, 500))
+            if img2:
+                st.image(img2, use_container_width=True, caption="Meine Schule")
+            else:
+                st.warning("Bild 'schule2.png' nicht gefunden")
+                
+        with c3:
+            # Dein drittes Bild
+            img3 = lade_formatiertes_bild("itsme2.png", target_size=(400, 500))
+            if img3:
+                st.image(img3, use_container_width=True, caption="Impressionen")
 
 
 
