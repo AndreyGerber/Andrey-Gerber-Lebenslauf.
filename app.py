@@ -297,38 +297,38 @@ with st.container(height=BLOCK_HOEHE, border=True):
             st.caption("Geografische Lage von Tscherlak am Irtysch")
 
     # --- INNERHALB DEINES 750px CONTAINERS ---
-    
+
     elif jahr_aktiv == 1996:
         # --- DEINE PARAMETER ---
-        MASSSTAB = 0.8  # 1.0 = 100%. Passe dies an, um das Scrollen im 750px Block zu verhindern.
+        MASSSTAB = 0.7  # 1.0 = 100%. Passe dies an für die 750px Höhe.
 
-        # 1. Das Layout in zwei Spalten teilen (Text links, Bild rechts)
-        col_text, col_foto = st.columns([1, 2]) # Verhältnis 1:2 gibt dem Bild mehr Raum
+        # 1. Drei Spalten: Die äußeren dienen als Puffer für die Zentrierung
+        # [0.5, 3, 0.5] drückt den Inhalt in die Mitte
+        c_links, c_mitte, c_rechts = st.columns([0.5, 3, 0.5])
 
-        with col_text:
+        with c_mitte:
+            # Alles in dieser Spalte wird nun als Block zentriert wahrgenommen
             st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
             
-            # Text linksbündig unter der Überschrift
+            # Text unter der Überschrift
             st.markdown(f"""
-                <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4;'>
+                <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4; margin-bottom: 10px;'>
                     Meine Schulzeit.<br>
                     So schnell vergehen 10 Jahre.
                 </p>
             """, unsafe_allow_html=True)
             
-            # Eine kurze Trennlinie nur für die Textspalte (optional)
-            st.markdown("<hr style='margin: 10px 0; border: 0.5px solid #ddd; width: 50%;'>", unsafe_allow_html=True)
+            # Kompakte Trennlinie
+            st.markdown("<hr style='margin: 10px 0; border: 0.5px solid #ddd; width: 100%;'>", unsafe_allow_html=True)
 
-        with col_foto:
-            # Bild laden
+            # Bild laden und skalieren
             img_schule = lade_formatiertes_bild("schule2.png")
             
             if img_schule:
-                # Berechnung der Breite basierend auf dem Maßstab
                 original_breite = img_schule.size[0]
                 neue_breite = int(original_breite * MASSSTAB)
                 
-                # Bild wird jetzt direkt rechts neben dem Text angezeigt
+                # Bild innerhalb der mittleren Spalte anzeigen
                 st.image(img_schule, width=neue_breite)
             else:
                 st.error("Bild 'schule2.png' nicht gefunden.")
