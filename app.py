@@ -95,17 +95,17 @@ import streamlit as st
 
 st.subheader("Mein Lebensweg")
 
-# 1. Daten (Deine Ereignisse)
+# 1. DATEN (Korrekt als Liste)
 events = [{"x": 2022, "text": "Hausbau"}]  # hier Zeitperioden angeben
 
-# 2. ECHTE Flaggen-URLs (Wichtig: Die direkten Bild-Links nutzen!)
+# 2. ECHTE BILD-LINKS (Damit das Band nicht leer bleibt)
 url_udssr = "https://wikimedia.org"
 url_ru = "https://wikimedia.org"
 url_de = "https://wikimedia.org"
 
 fig = go.Figure()
 
-# 3. Hilfsfunktion (Die du schon hast)
+# 3. DIE HILFSFUNKTION
 def zeichne_flagge(fig, x_start, x_end, bild_url):
     fig.add_layout_image(dict(
         source=bild_url,
@@ -117,23 +117,24 @@ def zeichne_flagge(fig, x_start, x_end, bild_url):
         layer="below"                 
     ))
 
-# 4. Die drei Phasen auf den Pfeil ZEICHNEN
+# 4. DIE FLAGGEN AUF DEN PFEIL ZEICHNEN
 zeichne_flagge(fig, 1988, 1991, url_udssr)
 zeichne_flagge(fig, 1991, 2006, url_ru)
 zeichne_flagge(fig, 2006, 2026, url_de)
 
-# 5. Rauten & Texte (Die Punkte auf dem Band)
+# 5. RAUTEN & TEXTE (Korrektur der Beschriftung)
 fig.add_trace(go.Scatter(
     x=[e["x"] for e in events],
-    y=[0.3] * len(events), # Mittig im 0.6 hohen Band
+    y=[0.3] * len(events), 
     mode="markers+text",
     marker=dict(symbol="diamond", size=18, color="white", line=dict(width=2, color="black")),
+    # Hier wird nur Jahr und Text angezeigt, kein technischer Code:
     text=[f"<b>{e['x']}</b><br>{e}" for e in events],
     textposition="bottom center",
     showlegend=False
 ))
 
-# 6. Startstrich & Pfeilspitze
+# 6. STARTSTRICH & PFEILSPITZE
 fig.add_shape(type="line", x0=1988, x1=1988, y0=0, y1=0.6, line=dict(color="black", width=4))
 fig.add_annotation(x=1988, y=-0.2, text="<b>1988</b>", showarrow=False)
 
@@ -143,7 +144,7 @@ fig.add_annotation(
     showarrow=True, arrowhead=3, arrowsize=4, arrowwidth=2, arrowcolor="#FFCC00"
 )
 
-# 7. Layout-Einstellungen (Damit alles sichtbar ist)
+# 7. LAYOUT
 fig.update_layout(
     xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1985, 2030]),
     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, 1.2]),
@@ -153,8 +154,8 @@ fig.update_layout(
     margin=dict(l=10, r=10, t=10, b=10)
 )
 
-# 8. ANZEIGEN
 st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+
 
 
 
