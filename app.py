@@ -110,7 +110,7 @@ texte = {
     2006: "Emigration to GE <br>🇩🇪",
     2010: "Studying aircraft design<br>(B.Eng. & Ms.Sc.)",
     2017: "TÜV Rheinland<br>(Expert in the lab)",
-    2019: " <br>(Quality Expert)",
+    2019: " + Quality Expert)",
     2022: "Ferchau<br>(Expert in production control)",
     2026: "Liora<br>(Data Science & ML)"
 }
@@ -175,7 +175,7 @@ for i, jahr in enumerate(jahre_alle):
         showarrow=False, 
         textangle=-25,
         font=dict(size=GROESSE_JAHRE, color="black"),
-        xanchor="right", 
+        xanchor="center", 
         yanchor="top"
     )
     
@@ -186,7 +186,7 @@ for i, jahr in enumerate(jahre_alle):
         showarrow=False, 
         textangle=-25,
         font=dict(size=GROESSE_TEXTE, color="#4B0082"),
-        xanchor="right", 
+        xanchor="center", 
         yanchor="top"
     )
 
