@@ -93,89 +93,79 @@ st.divider()
 import streamlit as st
 import plotly.graph_objects as go
 
-# --- 1. DATEN ---
+# --- 1. DEINE EINSTELLUNGEN (Hier kannst du die Größen anpassen) ---
 jahre = [1988, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
+
+LINIEN_DICKE = 4          # Dicke des Hauptpfeils
+STARTSTRICH_LAENGE = 0.25 # Länge des vertikalen Strichs (0.25 ist länger als die Raute)
+JAHR_SCHRIFTGROESSE = 20  # Größe der Jahreszahlen
+JAHR_ABSTAND = -0.30      # Wie tief die Jahre unter den Rauten sitzen
 
 # --- 2. GRAFIK ERSTELLEN ---
 fig = go.Figure()
 
-# Durchgehende Hauptlinie (von 1988 bis zur Pfeilspitze bei 2033)
+# Hauptlinie (Dicker und durchgehend)
 fig.add_trace(go.Scatter(
-    x=[1988, 2033], y=[0, 0],
+    x=[1988, 2034], y=[0, 0],
     mode='lines',
-    line=dict(color='black', width=2),
+    line=dict(color='black', width=LINIEN_DICKE),
     hoverinfo='none',
     showlegend=False
 ))
 
-# Senkrechter Startstrich bei 1988
+# Senkrechter Startstrich bei 1988 (Länger als Rautengröße)
 fig.add_shape(
     type="line",
-    x0=1988, y0=-0.08, x1=1988, y1=0.08,
-    line=dict(color="black", width=3)
+    x0=1988, y0=-STARTSTRICH_LAENGE, x1=1988, y1=STARTSTRICH_LAENGE,
+    line=dict(color="black", width=LINIEN_DICKE + 1)
 )
 
-# Die weißen Rauten
+# Weiße Rauten
 fig.add_trace(go.Scatter(
     x=jahre, y=[0] * len(jahre),
     mode='markers',
     marker=dict(
         symbol='diamond', 
-        size=20, 
+        size=24, 
         color='white', 
-        line=dict(color='black', width=1.5)
+        line=dict(color='black', width=2)
     ),
     hoverinfo='none',
     showlegend=False
 ))
 
-# Jahreszahlen (noch etwas tiefer gesetzt bei y=-0.22)
+# Jahreszahlen (Größe und Abstand einstellbar)
 fig.add_trace(go.Scatter(
     x=jahre, 
-    y=[-0.22] * len(jahre), 
+    y=[JAHR_ABSTAND] * len(jahre), 
     mode='text',
     text=jahre,
     textposition="bottom center",
-    textfont=dict(size=14, color="black"),
+    textfont=dict(size=JAHR_SCHRIFTGROESSE, color="black", family="Arial Black"),
     hoverinfo='none',
     showlegend=False
 ))
 
-# Pfeilspitze (Exakt am Ende der Linie angedockt)
+# Pfeilspitze am Ende (Nach Rechts)
 fig.add_annotation(
-    x=2034, y=0,           # Spitze
-    ax=2032, ay=0,         # Schaft
-    xref="x", yref="y",
-    axref="x", ayref="y",
-    showarrow=True,
-    arrowhead=2, 
-    arrowsize=1.2, 
-    arrowwidth=2, 
-    arrowcolor="black"
+    x=2036, y=0, ax=2033, ay=0,
+    xref="x", yref="y", axref="x", ayref="y",
+    showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=LINIEN_DICKE, arrowcolor="black"
 )
 
-# Layout-Anpassung
+# Layout-Anpassung für die größeren Elemente
 fig.update_layout(
-    height=180,
-    margin=dict(l=20, r=20, t=10, b=60), # Mehr Platz unten für tiefere Jahre
-    xaxis=dict(
-        showgrid=False, 
-        zeroline=False, 
-        showticklabels=False, 
-        range=[1985, 2038] # Bereich groß genug für die Spitze
-    ),
-    yaxis=dict(
-        showgrid=False, 
-        zeroline=False, 
-        showticklabels=False, 
-        range=[-0.6, 0.3] # Fokus weiter nach unten geschoben
-    ),
+    height=250, # Etwas mehr Höhe für die größeren Zahlen
+    margin=dict(l=20, r=20, t=10, b=80), 
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1984, 2040]),
+    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.8, 0.5]),
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)"
 )
 
-# Anzeige
+# Anzeige in Streamlit
 st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
+
 
 
 
