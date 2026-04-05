@@ -99,8 +99,8 @@ jahre_alle = [1988, 1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 # Jahre, die eine Raute auf der Linie erhalten (alle außer 1988)
 jahre_mit_raute = [1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 
-GROESSE_JAHRE = 18       # Schriftgröße der Jahreszahlen (fett)
-GROESSE_TEXTE = 16       # Schriftgröße der Beschreibungen
+GROESSE_JAHRE = 20       # Schriftgröße der Jahreszahlen (fett)
+GROESSE_TEXTE = 18       # Schriftgröße der Beschreibungen
 
 # Hier kannst du deine Texte für die Blöcke definieren
 texte = {
@@ -151,7 +151,7 @@ fig.add_trace(go.Scatter(
     mode='markers',
     marker=dict(
         symbol='diamond', 
-        size=18, 
+        size=16, 
         color='white', 
         line=dict(color='black', width=2)
     ),
