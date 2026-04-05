@@ -168,18 +168,18 @@ for i, jahr in enumerate(jahre_alle):
     fig.add_annotation(
         x=jahr, y=-0.1, 
         text=f"<b>{jahr}</b>",
-        showarrow=False, textangle=-45,
+        showarrow=False, textangle=-25,
         font=dict(size=GROESSE_JAHRE, color="black"),
-        xanchor="right", yanchor="top"
+        xanchor="center", yanchor="top"
     )
     
     # 2. Der Textblock (mit dem neuen y_offset)
     fig.add_annotation(
         x=jahr, y=y_offset, 
         text=texte.get(jahr, ""),
-        showarrow=False, textangle=-45,
-        font=dict(size=GROESSE_TEXTE, color="gray"),
-        xanchor="right", yanchor="top"
+        showarrow=False, textangle=-25,
+        font=dict(size=GROESSE_TEXTE, color="#4B0082"),
+        xanchor="center", yanchor="top"
     )
 
 
