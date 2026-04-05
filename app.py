@@ -269,32 +269,23 @@ with st.container(height=BLOCK_HOEHE, border=True):
     jahr_aktiv = highlights[st.session_state.info_idx]
     
     if jahr_aktiv == 1988:
-        # 1. Überschrift angepasst
-        st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
-        
-        col_links, col_rechts = st.columns([1.2, 2])
-        
-        with col_links:
+            # 1. Überschrift
+            st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
+            
+            # 2. Bild zentriert oder linksbündig (ohne Spalten)
             img = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
             if img:
                 st.image(img, width=BILD_BREITE)
             
-            # Info-Box (Text hier optional anpassbar, falls er doppelt wirkt)
-            st.markdown(f"""
-                <div style="background-color: #e8f4f9; padding: 25px; border-left: 6px solid #0072b2; border-radius: 8px; margin-top: 20px;">
-                    <p style="color: #004466; font-size: {INFO_FONT_SIZE}; margin: 0; line-height: 1.5;">
-                        Geburtsort Tscherlak
-                    </p>
-                </div>
-            """, unsafe_allow_html=True)
+            # Info-Text (jetzt als einfaches Infofeld unter dem Bild)
+            st.info("Geburtsort Tscherlak")
 
-        with col_rechts:
-            # Daten für Tscherlak
+            # 3. Die Karte über die volle Breite
+            # Wir setzen einen Punkt für Tscherlak
             df_map = pd.DataFrame({'lat': [54.1221], 'lon': [74.8056]})
             
-            # 2. Karte von Russland: Zoom verringert (ca. 2-3 zeigt das ganze Land)
-            # 'use_container_width' sorgt dafür, dass sie den Platz ausfüllt
-            st.map(df_map, zoom=2, use_container_width=True)
+            # Zoom 3 zeigt Russland sehr gut im Ganzen
+            st.map(df_map, zoom=3, use_container_width=True)
             st.caption("Geografische Lage von Tscherlak in Russland")
 
 
