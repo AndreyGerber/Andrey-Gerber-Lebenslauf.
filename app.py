@@ -273,13 +273,6 @@ with st.container(height=BLOCK_HOEHE, border=True):
     if jahr_aktiv == 1988:
         st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
         
-        # 1. Bild (ohne Spalten, volle Breite oder feste Breite)
-        img = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
-        if img:
-            st.image(img, width=BILD_BREITE)
-        
-        st.info("Geburtsort Tscherlak")
-
         # 2. Folium Karte erstellen
         # Koordinaten für Tscherlak
         lat_tscherlak, lon_tscherlak = 54.1221, 74.8056
