@@ -95,20 +95,21 @@ import plotly.graph_objects as go
 
 # --- 1. DATENKONFIGURATION ---
 # Alle Jahre für die Beschriftung
-jahre_alle = [1988, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
+jahre_alle = [1988, 1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 # Jahre, die eine Raute auf der Linie erhalten (alle außer 1988)
-jahre_mit_raute = [1996, 2006, 2010, 2017, 2019, 2022, 2026]
+jahre_mit_raute = [1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 
 # Hier kannst du deine Texte für die Blöcke definieren
 texte = {
-    1988: "Geburt in UdSSR",
-    1996: "Schulzeit Russland",
-    2006: "Emigration DE",
-    2010: "mein Text",
-    2017: "mein Text",
-    2019: "mein Text",
-    2022: "Hausbau",
-    2026: "Zukunft"
+    1988: "Born in UdSSR",
+    1991: "Moved to Russian Federation without moving"
+    1996: "School (not cool)",
+    2006: "Emigration to GE ",
+    2010: "Studiing aircraft design (B.Eng. & Ms.Sc.)",
+    2017: "TÜV Rheinland (Expert in the lab)",
+    2019: "TÜV Rheinland (Quality Expert)",
+    2022: "Ferchau (Expert in production control)",
+    2026: "Liora (Expert in Data Science & Machine Learning)"
 }
 
 # Design-Einstellungen
