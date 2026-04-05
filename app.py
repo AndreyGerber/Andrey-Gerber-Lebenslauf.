@@ -93,31 +93,32 @@ st.divider()
 import streamlit as st
 import plotly.graph_objects as go
 
-# --- 1. DEINE EINSTELLUNGEN (Hier kannst du die Größen anpassen) ---
+# --- 1. EINSTELLUNGEN ---
 jahre = [1988, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
+LINIEN_DICKE = 4
+STARTSTRICH_LAENGE = 0.3
+JAHR_SCHRIFTGROESSE = 18
+JAHR_ABSTAND_Y = -0.15 # Abstand von der Raute nach unten zum Textbeginn
 
-LINIEN_DICKE = 4          # Dicke des Hauptpfeils
-STARTSTRICH_LAENGE = 0.25 # Länge des vertikalen Strichs (0.25 ist länger als die Raute)
-JAHR_SCHRIFTGROESSE = 20  # Größe der Jahreszahlen
-JAHR_ABSTAND = -0.30      # Wie tief die Jahre unter den Rauten sitzen
+st.markdown(f"<h2 style='text-align: center;'>Mein Werdegang</h2>", unsafe_allow_html=True)
 
 # --- 2. GRAFIK ERSTELLEN ---
 fig = go.Figure()
 
-# Hauptlinie (Dicker und durchgehend)
+# Hauptlinie (Proportionaler Zeitstrahl)
 fig.add_trace(go.Scatter(
-    x=[1988, 2034], y=[0, 0],
+    x=[1988, 2033], y=[0, 0],
     mode='lines',
     line=dict(color='black', width=LINIEN_DICKE),
     hoverinfo='none',
     showlegend=False
 ))
 
-# Senkrechter Startstrich bei 1988 (Länger als Rautengröße)
+# Senkrechter Startstrich bei 1988
 fig.add_shape(
     type="line",
     x0=1988, y0=-STARTSTRICH_LAENGE, x1=1988, y1=STARTSTRICH_LAENGE,
-    line=dict(color="black", width=LINIEN_DICKE + 1)
+    line=dict(color="black", width=LINIEN_DICKE + 2)
 )
 
 # Weiße Rauten
@@ -134,37 +135,41 @@ fig.add_trace(go.Scatter(
     showlegend=False
 ))
 
-# Jahreszahlen (Größe und Abstand einstellbar)
-fig.add_trace(go.Scatter(
-    x=jahre, 
-    y=[JAHR_ABSTAND] * len(jahre), 
-    mode='text',
-    text=jahre,
-    textposition="bottom center",
-    textfont=dict(size=JAHR_SCHRIFTGROESSE, color="black", family="Arial Black"),
-    hoverinfo='none',
-    showlegend=False
-))
+# Jahreszahlen (UM 45 GRAD GEDREHT)
+for jahr in jahre:
+    fig.add_annotation(
+        x=jahr,
+        y=JAHR_ABSTAND_Y,
+        text=str(jahr),
+        showarrow=False,
+        textangle=-45, # Drehung um 45 Grad
+        font=dict(size=JAHR_SCHRIFTGROESSE, color="black", family="Arial Black"),
+        align="right",
+        # Verschiebt den Textanker so, dass er sauber unter der Raute beginnt
+        xanchor="right", 
+        yanchor="top"
+    )
 
-# Pfeilspitze am Ende (Nach Rechts)
+# Massive Pfeilspitze nach Rechts
 fig.add_annotation(
-    x=2036, y=0, ax=2033, ay=0,
+    x=2037, y=0, ax=2033, ay=0,
     xref="x", yref="y", axref="x", ayref="y",
-    showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=LINIEN_DICKE, arrowcolor="black"
+    showarrow=True, arrowhead=2, arrowsize=1.8, arrowwidth=LINIEN_DICKE, arrowcolor="black"
 )
 
-# Layout-Anpassung für die größeren Elemente
+# Layout-Anpassung (Mehr Platz unten für gedrehte Texte)
 fig.update_layout(
-    height=250, # Etwas mehr Höhe für die größeren Zahlen
-    margin=dict(l=20, r=20, t=10, b=80), 
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1984, 2040]),
-    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.8, 0.5]),
+    height=300,
+    margin=dict(l=20, r=20, t=10, b=100), # b=100 gibt Platz für die Drehung
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1984, 2042]),
+    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1.0, 0.6]),
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)"
 )
 
 # Anzeige in Streamlit
 st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
+
 
 
 
