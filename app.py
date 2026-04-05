@@ -151,7 +151,7 @@ fig.add_trace(go.Scatter(
     mode='markers',
     marker=dict(
         symbol='diamond', 
-        size=22, 
+        size=18, 
         color='white', 
         line=dict(color='black', width=2)
     ),
