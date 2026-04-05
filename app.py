@@ -300,7 +300,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     elif jahr_aktiv == 1996:
         # --- DEINE PARAMETER ---
-        MASSSTAB = 0.7  # Passe diesen Wert an, falls das Bild zu groß ist
+        MASSSTAB = 1.2  # Passe diesen Wert an, falls das Bild zu groß ist
 
         # Wir erstellen zwei Spalten
         col_text, col_foto = st.columns([1, 2])
