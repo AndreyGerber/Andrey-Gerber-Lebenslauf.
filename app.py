@@ -127,7 +127,7 @@ fig.add_annotation(
 # --- 5. RAUTEN & TEXTE ---
 fig.add_trace(go.Scatter(
     x=[e["x"] for e in events],
-    y= * len(events), # Mittig auf dem Band
+     y=[0.3] * len(events), # Mittig auf dem Band
     mode="markers+text",
     marker=dict(symbol="diamond", size=18, color="white", line=dict(width=2, color="black")),
     text=[f"<b>{e['x']}</b><br>{e}" for e in events],
