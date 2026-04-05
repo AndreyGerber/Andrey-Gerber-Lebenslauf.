@@ -232,7 +232,7 @@ fig.update_layout(
 )
 
 # Anzeige in Streamlit
-#st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
+st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
 
 
 
@@ -242,18 +242,6 @@ fig.update_layout(
 import pydeck as pdk
 
 #Oben ist der Abschnitt mit "meinem Werdegang" und dem Pfeil. Unten die "Erklärung dazu"
-
-# --- 1. TITEL (Links angeordnet) ---
-st.markdown("<h2 style='text-align: left;'>Mein Werdegang</h2>", unsafe_allow_html=True)
-
-# --- 2. DER PFEIL-ABSCHNITT (Genau über dem Info-Block ausrichten) ---
-# Wir nutzen das gleiche Raster [1, 4, 1] wie bei deiner Navigation unten
-p_col1, p_col2, p_col3 = st.columns([1, 4, 1])
-
-with p_col2:
-    # Hier kommt dein Plotly-Code für den Pfeil hin
-    # (Der Code mit fig = go.Figure() und st.plotly_chart)
-    st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
 
 
 BLOCK_HOEHE = 750
