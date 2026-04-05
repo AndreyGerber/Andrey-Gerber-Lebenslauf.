@@ -240,55 +240,68 @@ st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'disp
 
 
 
+#Oben ist der Abschnitt mit "meinem Werdegang" und dem Pfeil. Unten die "Erklärung dazu"
 
-
-# --- 3. INTERAKTIVES DETAIL-FENSTER ---
 st.divider()
+st.markdown("<h2 style='text-align: center;'>Details zu meinem Weg</h2>", unsafe_allow_html=True)
 
-# Index des aktuell gewählten Jahres finden
+# Navigation vorbereiten
 jahre_liste = sorted(texte.keys())
-if st.session_state.selected_year not in jahre_liste:
-    st.session_state.selected_year = jahre_liste[0]
+if 'selected_year' not in st.session_state:
+    st.session_state.selected_year = 1988
 
 aktueller_index = jahre_liste.index(st.session_state.selected_year)
 
-# Navigation Buttons (Zentriert)
-bn_col1, bn_col2, bn_col3 = st.columns([1, 2, 1])
-
-with bn_col1:
-    # Zurück-Button (deaktiviert beim ersten Jahr)
+# Navigations-Pfeile (Zentriert über dem Block)
+c1, c2, c3 = st.columns([1, 2, 1])
+with c1:
     if st.button("⬅️ Zurück", disabled=(aktueller_index == 0), use_container_width=True):
         st.session_state.selected_year = jahre_liste[aktueller_index - 1]
         st.rerun()
-
-with bn_col3:
-    # Weiter-Button (deaktiviert beim letzten Jahr)
+with c3:
     if st.button("Weiter ➡️", disabled=(aktueller_index == len(jahre_liste) - 1), use_container_width=True):
         st.session_state.selected_year = jahre_liste[aktueller_index + 1]
         st.rerun()
 
-# Das Info-Fenster (Styling mit Info-Box oder Container)
+# --- DER ZENTRALE INFO-BLOCK ---
 with st.container(border=True):
-    col_info, col_media = st.columns([2, 1])
+    # Dynamische Inhalte je nach ausgewähltem Jahr
+    jahr = st.session_state.selected_year
     
-    with col_info:
-        st.subheader(f"📍 Station: {st.session_state.selected_year}")
-        # Hier holen wir den Text aus deinem 'texte' Dictionary
-        info_text = texte[st.session_state.selected_year].replace("<br>", " ")
-        st.markdown(f"**{info_text}**")
-        
-        # Hier kannst du jetzt ausführlichere Beschreibungen hinzufügen
-        details = {
-            1988: "In Sibirien geboren, verbrachte ich die ersten Jahre in der UdSSR...",
-            2010: "Das Studium des Flugzeugbaus war eine prägende Zeit. Fokus auf Strukturmechanik...",
-            2026: "Fokus auf die Implementierung von ML-Modellen zur Prozessoptimierung..."
-        }
-        st.write(details.get(st.session_state.selected_year, "Hier folgen bald weitere Details zu dieser Station..."))
+    if jahr == 1988:
+        st.subheader(f"📍 {jahr}: Geburtsort Tscherlak")
+        col_map_text, col_map_vis = st.columns([1, 2])
+        with col_map_text:
+            st.write("Hier begann meine Reise in der UdSSR.")
+            st.info("Tscherlak liegt am Fluss Irtysch in der Oblast Omsk.")
+        with col_map_vis:
+            # Karte von Tscherlak
+            map_data = pd.DataFrame({'lat': [54.12], 'lon': [74.80]})
+            st.map(map_data, zoom=6, use_container_width=True)
 
-    with col_media:
-        # Platzhalter für ein Bild passend zum Jahr
-        st.write("🖼️ **Visualisierung**")
-        st.info("Hier kannst du Fotos oder Icons einfügen.")
+    elif jahr == 1991:
+        st.subheader(f"🇷🇺 {jahr}: Politische Wende")
+        st.write("Die Sowjetunion zerfällt, ohne dass ich umziehen musste.")
+
+    elif jahr == 1996:
+        st.subheader(f"🎒 {jahr}: Schulzeit in Russland")
+        col_img1, col_img2 = st.columns(2)
+        # Bilder aus deinem 'images' Ordner laden
+        img1 = lade_formatiertes_bild("itsme.png", target_size=(400, 400))
+        img2 = lade_formatiertes_bild("itsme2.png", target_size=(400, 400))
+        
+        with col_img1:
+            if img1: st.image(img1, caption="Ich in 1996")
+            else: st.warning("Bild 'itsme.png' nicht gefunden")
+        with col_img2:
+            if img2: st.image(img2, caption="Schulzeit Impressionen")
+            else: st.warning("Bild 'itsme2.png' nicht gefunden")
+
+    else:
+        # Standard-Platzhalter für die restlichen Jahre
+        st.subheader(f"📅 {jahr}: {texte[jahr].replace('<br>', ' ')}")
+        st.write("Hier werde ich bald weitere spezifische Informationen einfügen.")
+        st.info("Dieser Block wird noch individuell gestaltet.")
 
 
 
