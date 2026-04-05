@@ -243,17 +243,33 @@ import pydeck as pdk
 
 #Oben ist der Abschnitt mit "meinem Werdegang" und dem Pfeil. Unten die "Erklärung dazu"
 
+# --- 1. TITEL (Links angeordnet) ---
+st.markdown("<h2 style='text-align: left;'>Mein Werdegang</h2>", unsafe_allow_html=True)
+
+# --- 2. DER PFEIL-ABSCHNITT (Genau über dem Info-Block ausrichten) ---
+# Wir nutzen das gleiche Raster [1, 4, 1] wie bei deiner Navigation unten
+p_col1, p_col2, p_col3 = st.columns([1, 4, 1])
+
+with p_col2:
+    # Hier kommt dein Plotly-Code für den Pfeil hin
+    # (Der Code mit fig = go.Figure() und st.plotly_chart)
+    st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
+
+# --- 3. DEIN BESTEHENDER CODE (Navigation & Info-Block) ---
+# (Ab hier kopierst du deinen Block ein)
 BLOCK_HOEHE = 750
 BILD_BREITE = 350
-INFO_FONT_SIZE = "24px" # Etwas größer, da der Block jetzt massiver ist
+INFO_FONT_SIZE = "24px"
 
-# 1. Navigation (absolut unabhängig)
+# 1. Navigation
 highlights = [1988, 1996]
 if 'info_idx' not in st.session_state:
     st.session_state.info_idx = 0
 
-# Buttons oben
+# Buttons oben (Raster 1, 4, 1 sorgt für bündigen Abschluss mit dem Pfeil)
 c_nav1, c_nav2, c_nav3 = st.columns([1, 4, 1])
+# ... (dein restlicher Code für Buttons und Container)
+
 with c_nav1:
     if st.button("⬅️", key="nav_prev", disabled=(st.session_state.info_idx == 0)):
         st.session_state.info_idx -= 1
