@@ -104,10 +104,10 @@ GROESSE_TEXTE = 16       # Schriftgröße der Beschreibungen
 
 # Hier kannst du deine Texte für die Blöcke definieren
 texte = {
-    1988: "Born in<br>UdSSR",
-    1991: "Moved to Russian Federation<br>without moving",
+    1988: "Born in UdSSR <br>☭",
+    1991: "Moved to Russian Federation<br>without moving 🇷🇺",
     1996: "School<br>(not cool)",
-    2006: "Emigration<br>to GE",
+    2006: "Emigration<br>to GE 🇩🇪",
     2010: "Studying aircraft design<br>(B.Eng. & Ms.Sc.)",
     2017: "TÜV Rheinland<br>(Expert in the lab)",
     2019: "TÜV Rheinland<br>(Quality Expert)",
@@ -163,7 +163,7 @@ fig.add_trace(go.Scatter(
 for i, jahr in enumerate(jahre_alle):
     # Logik: Nur die Jahre 1991, 2010, 2019 und 2026 werden tiefer gesetzt
     # Das schafft Platz für die langen Texte der Nachbarn.
-    if jahr in [2019]:
+    if jahr in []:
         y_offset = -0.75  # Deutlich tiefer für maximale Freiheit
     else:
         y_offset = -0.35  # Standardhöhe
