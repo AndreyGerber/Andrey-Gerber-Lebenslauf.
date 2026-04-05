@@ -97,8 +97,12 @@ import streamlit as st
 
 st.subheader("Mein Lebensweg in Farben")
 
+
+
 # 1. Daten definieren (Beispiel)
-events =
+events = [{"x": 2022, "text": "Hausbau"}]  # hier Zeitperioden angeben
+
+
 
 fig = go.Figure()
 
