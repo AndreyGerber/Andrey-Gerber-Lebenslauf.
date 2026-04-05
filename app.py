@@ -271,49 +271,39 @@ with st.container(height=BLOCK_HOEHE, border=True):
     if jahr_aktiv == 1988:
         st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
 
-        # Wir nutzen ein wenig HTML/CSS, um den Pin präzise auf dem Bild zu platzieren
         import base64
 
-        # Funktion zum Laden des lokalen Bildes für HTML
+        # Hilfsfunktion zum Laden aus dem Unterordner 'images'
         def get_image_base64(path):
             with open(path, "rb") as f:
                 return base64.b64encode(f.read()).decode()
 
         try:
-            img_base64 = get_image_base64("tscherlak_map.png") # Pfad eventuell anpassen: "bilder/tscherlak_map.png"
+            # WICHTIG: Hier steht jetzt 'images/...' vor dem Dateinamen
+            img_base64 = get_image_base64("images/tscherlak_map.png")
             
             st.markdown(f"""
                 <div style="position: relative; width: 100%; max-width: 900px; margin: auto;">
                     <!-- Das Kartenbild -->
                     <img src="data:image/png;base64,{img_base64}" style="width: 100%; border-radius: 10px; box-shadow: 0px 4px 15px rgba(0,0,0,0.3);">
                     
-                    <!-- Der Pin bei Tscherlak (Südöstlich von Omsk) -->
+                    <!-- Der Pin bei Tscherlak (Rechts im Bild, südöstlich von Omsk) -->
                     <div style="
                         position: absolute;
-                        top: 23%;     /* Vertikale Position */
-                        left: 90%;    /* Horizontale Position (rechts von Omsk) */
+                        top: 25%;     /* Höhe anpassen, falls nötig */
+                        left: 88%;    /* Weit rechts im Bild */
                         transform: translate(-50%, -100%);
-                        font-size: 40px;
-                        filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
-                        cursor: pointer;
-                    " title="Tscherlak">📍</div>
-                    
-                    <!-- Optional: Zweiter Pin bei Berlin zum Vergleich -->
-                    <div style="
-                        position: absolute;
-                        top: 60%; 
-                        left: 9%; 
-                        transform: translate(-50%, -100%);
-                        font-size: 30px;
-                        opacity: 0.8;
-                    " title="Berlin">🇩🇪</div>
+                        font-size: 45px;
+                        filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.6));
+                        cursor: default;
+                    ">📍</div>
                 </div>
             """, unsafe_allow_html=True)
-        
+            
         except FileNotFoundError:
-            st.error("Bild 'tscherlak_map.png' wurde nicht gefunden. Bitte Pfad prüfen!")
+            st.error("Bild nicht gefunden! Pfad 'images/tscherlak_map.png' prüfen.")
 
-        st.info("Tscherlak liegt im Gebiet Omsk, direkt am Fluss Irtysch nahe der Grenze zu Kasachstan.")
+        st.info("Tscherlak liegt im Gebiet Omsk am Irtysch – über 4.000 km von Deutschland entfernt.")
 
 
 
