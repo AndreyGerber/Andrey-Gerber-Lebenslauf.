@@ -326,60 +326,51 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 st.error("Bild 'schule2.png' nicht gefunden.")
 
     elif jahr_aktiv == 2006:
-        st.subheader(f"✈️ {jahr_aktiv}: Emigration (Omsk -> Deutschland)")
+        st.subheader(f"✈️ {jahr_aktiv}: Emigration (Omsk → Deutschland)")
         
-        # 1. TEXTBEREICH (wie bei den anderen Jahren)
-        st.markdown(f"""
-            <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4;'>
-                Der große Umzug. Ein Flug in ein neues Leben.
-            </p>
-        """, unsafe_allow_html=True)
-        
+        st.markdown(f"<p style='font-size: {INFO_FONT_SIZE}; color: #4B0082;'>Der große Umzug. Ein Flug in ein neues Leben.</p>", unsafe_allow_html=True)
         st.divider()
 
-        # 2. DEINE FLUGROUTE (Interaktive Karte)
-        import plotly.graph_objects as go
-
+        # --- PROFESSIONELLE FLUGKARTE ---
         fig_flight = go.Figure()
 
-        # Rote Fluglinie (Bogen)
+        # 1. Die Flugroute als gebogene Linie (Great Circle)
         fig_flight.add_trace(go.Scattergeo(
-            locationmode = 'ISO-3',
             lon = [73.32, 13.40],
             lat = [54.98, 52.52],
-            mode = 'lines',
-            line = dict(width = 3, color = 'red'),
+            mode = 'lines+markers',
+            line = dict(width = 3, color = '#FF4B4B'), # Streamlit-Rot
+            marker = dict(size = [10, 0], color = '#FF4B4B'),
+            hoverinfo = 'none'
         ))
 
-        # Flugzeug-Icon
+        # 2. Flugzeug-Icon an der Ankunft
         fig_flight.add_trace(go.Scattergeo(
-            lon = [13.40],
-            lat = [52.52],
-            mode = 'markers+text',
-            text = "🛬",
-            textfont = dict(size=25),
-            marker = dict(size = 10, color = 'black'),
+            lon = [13.40], lat = [52.52],
+            mode = 'text',
+            text = "✈️", textfont = dict(size=30),
+            hoverinfo = 'none'
         ))
 
-        # Layout für Europa/Asien Fokus optimiert
+        # 3. Layout für Vollbild-Optik im Block
         fig_flight.update_layout(
-            height=450,
-            margin=dict(l=10, r=10, t=10, b=10),
+            height=500,
+            margin=dict(l=0, r=0, t=0, b=0),
             geo = dict(
-                scope = 'world',
-                projection_type = 'orthographic', # Globus-Ansicht
-                showland = True,
-                landcolor = "rgb(243, 243, 243)",
-                countrycolor = "rgb(204, 204, 204)",
-                # Fokus auf die Route setzen
-                center = dict(lat=53, lon=43),
-                projection_scale = 3
+                projection_type = 'equirectangular', # Flache Weltkarte
+                showland = True, landcolor = "#F0F2F6", # Hellgrau
+                showocean = True, oceancolor = "#E8F4F9", # Hellblau
+                showcountries = True, countrycolor = "white",
+                # Fokus auf Eurasien (Omsk bis Berlin)
+                lataxis = dict(range=[40, 65]),
+                lonaxis = dict(range=[10, 80]),
+                resolution = 50
             ),
             showlegend = False
         )
 
-        # WICHTIG: In Streamlit anzeigen
-        st.plotly_chart(fig_flight, use_container_width=True, key="flight_2006")
+        st.plotly_chart(fig_flight, use_container_width=True, key="flight_map_2006")
+
 
 
 
