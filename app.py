@@ -110,13 +110,13 @@ fig.add_annotation(
     showarrow=True, arrowhead=3, arrowsize=1, arrowwidth=3, arrowcolor="black"
 )
 
-# --- MEILENSTEINE (Die Rauten aus deiner Skizze) ---
-# --- MEILENSTEINE (Die Rauten aus deiner Skizze) ---
+# --- MEILENSTEINE (KORRIGIERT) ---
 fig.add_trace(go.Scatter(
     x=[e["x"] for e in events],
     y=[0] * len(events),
     mode="markers+text",
     marker=dict(symbol="diamond", size=12, color="white", line=dict(width=2, color="black")),
+    # Hier muss stehen: [WAS_SOLL_REIN for VARIABLE in LISTE]
     text= for e in events], 
     textposition="bottom center",
     hoverinfo="none"
