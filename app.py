@@ -299,13 +299,11 @@ with st.container(height=BLOCK_HOEHE, border=True):
     # --- INNERHALB DEINES 750px CONTAINERS ---
 
     elif jahr_aktiv == 1996:
-        # --- PARAMETER FÜR DEN MASSSTAB ---
-        # 1.0 = 100%, 0.8 = 80%, 1.2 = 120% etc.
-        MASSSTAB = 0.8 
-        
+        # --- DEINE PARAMETER ---
+        MASSSTAB = 0.5  # 0.5 = 50% der Originalgröße. Verkleinere dies, um das Scrollen zu stoppen.
+
         st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
         
-        # Dein Text (bleibt wie er ist)
         st.markdown(f"""
             <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.2;'>
                 Meine Schulzeit. So schnell vergehen 10 Jahre.
@@ -318,19 +316,16 @@ with st.container(height=BLOCK_HOEHE, border=True):
         img_schule = lade_formatiertes_bild("schule2.png")
         
         if img_schule:
-            # Berechnung der neuen Breite basierend auf dem Original und dem Maßstab
-            original_breite = img_schule.size[0]
+            # 1. Berechnung der neuen Breite basierend auf dem Maßstab
+            original_breite = img_schule.size[0] # [0] ist die Breite
             neue_breite = int(original_breite * MASSSTAB)
             
-            # Zentrierte Darstellung mit HTML
-            st.markdown(f"""
-                <div style="display: flex; justify-content: center;">
-                    <img src="data:image/png;base64,{st.image(img_schule, width=neue_breite)}" style="display:none;">
-                </div>
-            """, unsafe_allow_html=True)
+            # 2. Zentrierung über 3 Spalten (die äußeren '_' werden ignoriert)
+            _, col_mitte, _ = st.columns([1, 2, 1])
             
-            # Das eigentliche Bild anzeigen
-            st.image(img_schule, width=neue_breite)
+            with col_mitte:
+                # Nur EINMAL st.image aufrufen
+                st.image(img_schule, width=neue_breite)
         else:
             st.error("Bild 'schule2.png' nicht gefunden.")
 
