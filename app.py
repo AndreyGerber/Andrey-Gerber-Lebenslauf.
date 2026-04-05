@@ -311,16 +311,20 @@ with st.container(height=BLOCK_HOEHE, border=True):
         
         st.divider()
 
-        col_l, col_mid, col_r = st.columns([1, 2, 1])
+        # Bild laden
+        img_schule = lade_formatiertes_bild("schule2.png", target_size=(BILD_GROESSE_1996, BILD_GROESSE_1996))
         
-        with col_mid:
-            img_schule = lade_formatiertes_bild("schule2.png", target_size=(BILD_GROESSE_1996, BILD_GROESSE_1996))
-            
-            if img_schule:
-                # Hier wurde 'caption' entfernt, damit der Text unten verschwindet
-                st.image(img_schule, width=BILD_GROESSE_1996)
-            else:
-                st.error("Bild 'schule2.png' nicht gefunden.")
+        if img_schule:
+            # CSS-Trick: Das Bild in einen Div mit 'text-align: center' packen, um es mittig zu platzieren
+            st.markdown(f"""
+                <div style="display: flex; justify-content: center;">
+                    <img src="data:image/png;base64,{st.image(img_schule, width=BILD_GROESSE_1996)}" style="display:none;">
+                </div>
+            """, unsafe_allow_html=True)
+            # In Streamlit reicht oft auch einfach der direkte Aufruf, wenn keine Spalten da sind:
+            st.image(img_schule, width=BILD_GROESSE_1996)
+        else:
+            st.error("Bild 'schule2.png' nicht gefunden.")
 
 
 
