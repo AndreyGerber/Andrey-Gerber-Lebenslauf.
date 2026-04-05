@@ -164,7 +164,7 @@ for jahr in jahre_alle:
         showarrow=False, 
         textangle=-25,
         font=dict(size=JAHR_SCHRIFTGROESSE, color="black"),
-        xanchor="right", 
+        xanchor="center", 
         yanchor="top"
     )
     # Der individuelle Textblock darunter
@@ -174,7 +174,7 @@ for jahr in jahre_alle:
         showarrow=False, 
         textangle=-25,
         font=dict(size=12, color="gray"),
-        xanchor="right", 
+        xanchor="center", 
         yanchor="top"
     )
 
