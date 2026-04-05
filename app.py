@@ -310,7 +310,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             # Vertikaler Abstand für den Text
             st.markdown(f"<div style='margin-top: {OBEN_ABSTAND};'></div>", unsafe_allow_html=True)
             st.subheader(f"🎒 {jahr_aktiv}: Schulzeit")
-            st.markdown(f"<p style='font-size: {INFO_FONT_SIZE}; color: #4B0082;'>Meine Schulzeit.<br>So schnell vergehen 10 Jahre.</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='font-size: {INFO_FONT_SIZE}; color: #4B0082;'>Schulzeit.<br>So schnell vergehen 10 Jahre.</p>", unsafe_allow_html=True)
 
         with col_foto:
             img_schule = lade_formatiertes_bild("schule2.png")
