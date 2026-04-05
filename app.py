@@ -326,50 +326,61 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 st.error("Bild 'schule2.png' nicht gefunden.")
 
     elif jahr_aktiv == 2006:
-        st.subheader(f"✈️ {jahr_aktiv}: Emigration (Omsk → Deutschland)")
-        
-        st.markdown(f"<p style='font-size: {INFO_FONT_SIZE}; color: #4B0082;'>Der große Umzug. Ein Flug in ein neues Leben.</p>", unsafe_allow_html=True)
+        # 1. NEUE ÜBERSCHRIFT (Ohne Lila-Text darunter)
+        st.subheader("✈️ 2006: Der neue Lebensabschnitt beginnt")
         st.divider()
 
-        # --- PROFESSIONELLE FLUGKARTE ---
+        # --- PROFESSIONELLE FLUGKARTE MIT BESCHRIFTUNG ---
         fig_flight = go.Figure()
 
-        # 1. Die Flugroute als gebogene Linie (Great Circle)
+        # 2. Die Orte (Omsk & Berlin) mit Text und Markern
         fig_flight.add_trace(go.Scattergeo(
             lon = [73.32, 13.40],
             lat = [54.98, 52.52],
-            mode = 'lines+markers',
-            line = dict(width = 3, color = '#FF4B4B'), # Streamlit-Rot
-            marker = dict(size = [10, 0], color = '#FF4B4B'),
+            mode = 'markers+text',
+            text = ["Omsk", "Berlin"],
+            textposition = ["top right", "top left"],
+            textfont = dict(size=14, color="black", family="Arial Black"),
+            marker = dict(size=12, color='#FF4B4B', symbol='circle', line=dict(width=2, color='white')),
             hoverinfo = 'none'
         ))
 
-        # 2. Flugzeug-Icon an der Ankunft
+        # 3. Die Flugroute (Gebogene Linie)
         fig_flight.add_trace(go.Scattergeo(
-            lon = [13.40], lat = [52.52],
-            mode = 'text',
-            text = "✈️", textfont = dict(size=30),
+            lon = [73.32, 13.40],
+            lat = [54.98, 52.52],
+            mode = 'lines',
+            line = dict(width=3, color='#FF4B4B'),
             hoverinfo = 'none'
         ))
 
-        # 3. Layout für Vollbild-Optik im Block
+        # 4. Flugzeug-Icon (leicht versetzt für bessere Optik)
+        fig_flight.add_trace(go.Scattergeo(
+            lon = [15.5], lat = [53.5], # Position kurz vor Berlin
+            mode = 'text',
+            text = "✈️", 
+            textfont = dict(size=35),
+            hoverinfo = 'none'
+        ))
+
+        # 5. Layout (Fokus auf Eurasien)
         fig_flight.update_layout(
-            height=500,
-            margin=dict(l=0, r=0, t=0, b=0),
+            height=550, # Erhöht für den 750px Block
+            margin=dict(l=0, r=0, t=10, b=0),
             geo = dict(
-                projection_type = 'equirectangular', # Flache Weltkarte
-                showland = True, landcolor = "#F0F2F6", # Hellgrau
-                showocean = True, oceancolor = "#E8F4F9", # Hellblau
+                projection_type = 'equirectangular',
+                showland = True, landcolor = "#F0F2F6",
+                showocean = True, oceancolor = "#E8F4F9",
                 showcountries = True, countrycolor = "white",
-                # Fokus auf Eurasien (Omsk bis Berlin)
-                lataxis = dict(range=[40, 65]),
+                lataxis = dict(range=[45, 65]),
                 lonaxis = dict(range=[10, 80]),
                 resolution = 50
             ),
             showlegend = False
         )
 
-        st.plotly_chart(fig_flight, use_container_width=True, key="flight_map_2006")
+        st.plotly_chart(fig_flight, use_container_width=True, key="flight_2006_v2")
+
 
 
 
