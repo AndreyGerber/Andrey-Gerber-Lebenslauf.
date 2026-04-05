@@ -285,8 +285,8 @@ with st.container(height=550, border=True):
                     border-radius: 5px; 
                     border-left: 5.5px solid #05668d;
                     margin-bottom: 20px;">
-                    <span style="color: #05668d; font-size: 122; font-weight: 500;">
-                        Hier begann meine Reise in der UdSSR.
+                    <span style="color: #05668d; font-size: 82; font-weight: 500;">
+                        Hier begann meine Reise.
                     </span>
                 </div>
             """, unsafe_allow_html=True)
