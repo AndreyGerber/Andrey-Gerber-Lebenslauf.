@@ -301,7 +301,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
     elif jahr_aktiv == 1996:
         # --- PARAMETER FÜR DIE BILDGRÖSSE ---
         # Verkleinere diesen Wert (z.B. auf 400 oder 350), falls du immer noch scrollen musst
-        BILD_GROESSE_1996 = 450 
+        BILD_GROESSE_1996 = 650 
 
         st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
         
