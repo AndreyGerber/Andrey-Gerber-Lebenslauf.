@@ -84,88 +84,71 @@ st.divider()
 
 # ... hier geht es weiter mit deinem "Mein Weg" (Flaggen) und der Timeline
 
+#events = [{"x": 2022, "text": "Hausbau"}]  # hier Zeitperioden angeben
 
 
 
 
 
 
-
-# 3. Hobby-Timeline mit Plotly
 import plotly.graph_objects as go
 import streamlit as st
 
-st.subheader("Mein Lebensweg in Farben")
+st.subheader("Mein Lebensweg")
 
-
-
-# 1. Daten definieren (Beispiel)
-events = [{"x": 2022, "text": "Hausbau"}]  # hier Zeitperioden angeben
-
-
+# Deine Meilensteine
+events =
 
 fig = go.Figure()
 
-# --- 2. DER FARBIGE PFEIL (3 SEGMENTE) ---
-# UdSSR (Rot)
-fig.add_trace(go.Scatter(
-    x=[1988, 1991], y=[0, 0], mode="lines",
-    line=dict(color="#CC0000", width=6), showlegend=False, hoverinfo="skip"
-))
-# Russland (Blau - stellvertretend für die Trikolore)
-fig.add_trace(go.Scatter(
-    x=[1991, 2006], y=[0, 0], mode="lines",
-    line=dict(color="#003399", width=6), showlegend=False, hoverinfo="skip"
-))
-# Deutschland (Gold/Gelb)
-fig.add_trace(go.Scatter(
-    x=[2006, 2026], y=[0, 0], mode="lines",
-    line=dict(color="#FFCC00", width=6), showlegend=False, hoverinfo="skip"
-))
+# --- FUNKTION FÜR FARBBLÖCKE ---
+def add_flag_rect(fig, x_start, x_end, colors):
+    height = 0.2
+    for i, color in enumerate(colors[::-1]): # Umkehren für richtige Schichtung
+        fig.add_shape(type="rect", x0=x_start, x1=x_end, y0=i*height, y1=(i+1)*height,
+                      fillcolor=color, line=dict(width=0))
 
-# --- 3. DIE PFEILSPITZE AM ENDE ---
+# --- 1. UDSSR (Nur Rot) ---
+add_flag_rect(fig, 1988, 1991, ["#CC0000", "#CC0000", "#CC0000"])
+
+# --- 2. RUSSLAND (Weiß, Blau, Rot) ---
+add_flag_rect(fig, 1991, 2004, ["#FFFFFF", "#003399", "#CC0000"])
+
+# --- 3. DEUTSCHLAND (Schwarz, Rot, Gold) ---
+add_flag_rect(fig, 2004, 2026, ["#000000", "#FF0000", "#FFCC00"])
+
+# --- 4. DIE PFEILSPITZE (Rechts am Ende) ---
 fig.add_annotation(
-    x=2027, y=0, ax=2026, ay=0,
+    x=2028, y=0.3, ax=2026, ay=0.3,
     xref="x", yref="y", axref="x", ayref="y",
-    showarrow=True, arrowhead=3, arrowsize=1, arrowwidth=6, arrowcolor="#FFCC00"
+    showarrow=True, arrowhead=3, arrowsize=4, arrowwidth=2, arrowcolor="#FFCC00"
 )
 
-# --- 4. RAUTEN & TEXTE ---
+# --- 5. RAUTEN & TEXTE ---
 fig.add_trace(go.Scatter(
     x=[e["x"] for e in events],
-    y=[0] * len(events),
+    y= * len(events), # Mittig auf dem Band
     mode="markers+text",
-    marker=dict(symbol="diamond", size=15, color="white", line=dict(width=2, color="black")),
+    marker=dict(symbol="diamond", size=18, color="white", line=dict(width=2, color="black")),
     text=[f"<b>{e['x']}</b><br>{e}" for e in events],
     textposition="bottom center",
-    hoverinfo="none",
     showlegend=False
 ))
 
-# --- 5. BESCHRIFTUNG UNTER DEM START (1988) ---
-fig.add_annotation(
-    x=1988, y=-0.2, text="<b>1988</b>",
-    showarrow=False, font=dict(size=14, color="black")
-)
+# --- 6. DER STARTSTRICH (1988) ---
+fig.add_shape(type="line", x0=1988, x1=1988, y0=-0.1, y1=0.7, line=dict(color="black", width=4))
+fig.add_annotation(x=1988, y=-0.3, text="<b>1988</b>", showarrow=False, font=dict(size=16))
 
-# --- 6. LÄNDER-ÜBERSCHRIFTEN ---
-laender = [
-    {"x": 1989.5, "label": "Sowjetunion"},
-    {"x": 1998.5, "label": "Russland"},
-    {"x": 2016, "label": "Deutschland"}
-]
-for l in laender:
-    fig.add_annotation(x=l["x"], y=0.3, text=f"<b>{l['label']}</b>", showarrow=False)
-
-# Layout-Feinschliff
+# --- LAYOUT ---
 fig.update_layout(
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1987, 2028]),
-    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.8, 0.8]),
-    height=300,
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=),
+    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1, 1.5]),
+    height=400,
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)",
-    margin=dict(l=0, r=0, t=0, b=0)
+    margin=dict(l=10, r=10, t=10, b=10)
 )
 
 st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+
 
