@@ -270,44 +270,45 @@ with st.container(border=True):
     jahr = st.session_state.selected_year
     
     if jahr == 1988:
-    st.subheader(f"📍 {jahr}: Geburtsort Tscherlak")
-    
-    col_content, col_map = st.columns([1, 1.5])
-    
-    with col_content:
-        # Bild links laden
-        img_tscherlak = lade_formatiertes_bild("tscherlak.png", target_size=(500, 400))
-        if img_tscherlak:
-            st.image(img_tscherlak, use_container_width=True)
-        else:
-            st.warning("Bild 'tscherlak.png' fehlt")
-            
-        st.write("Hier begann meine Reise in der UdSSR.")
-        st.info("Tscherlak liegt am Fluss Irtysch in der Oblast Omsk.")
-
-    with col_map:
-        # Daten für den Punkt (Tscherlak)
-        map_data = pd.DataFrame([{'lat': 54.12, 'lon': 74.80}])
+        st.subheader(f"📍 {jahr}: Geburtsort Tscherlak")
         
-        # Farbige Karte mit Pydeck (Robust konfiguriert)
-        st.pydeck_chart(pdk.Deck(
-            map_style='mapbox://styles/mapbox/streets-v11', # Farbiges Street-Design
-            initial_view_state=pdk.ViewState(
-                latitude=54.12,
-                longitude=74.80,
-                zoom=8,
-                pitch=0
-            ),
-            layers=[
-                pdk.Layer(
-                    "ScatterplotLayer",
-                    data=map_data,
-                    get_position='[lon, lat]',
-                    get_color='[255, 0, 0, 160]', # Rot mit leichter Transparenz
-                    get_radius=3000,
+        col_content, col_map = st.columns([1, 1.5])
+        
+        with col_content:
+            # Bild links laden
+            img_tscherlak = lade_formatiertes_bild("tscherlak.png", target_size=(500, 400))
+            if img_tscherlak:
+                st.image(img_tscherlak, use_container_width=True)
+            else:
+                st.warning("Bild 'tscherlak.png' fehlt im Ordner 'images'")
+                
+            st.write("Hier begann meine Reise in der UdSSR.")
+            st.info("Tscherlak liegt am Fluss Irtysch in der Oblast Omsk.")
+
+        with col_map:
+            # 1. Daten als DataFrame vorbereiten (WICHTIG)
+            map_data = pd.DataFrame([{'lat': 54.12, 'lon': 74.80}])
+            
+            # 2. Pydeck Karte (Streets-Stil ist farbig)
+            st.pydeck_chart(pdk.Deck(
+                map_style='mapbox://styles/mapbox/streets-v11', 
+                initial_view_state=pdk.ViewState(
+                    latitude=54.12,
+                    longitude=74.80,
+                    zoom=8,
+                    pitch=0
                 ),
-            ],
-        ))
+                layers=[
+                    pdk.Layer(
+                        "ScatterplotLayer",
+                        data=map_data,
+                        get_position='[lon, lat]',
+                        # Farbe als Liste [R, G, B, A] übergeben - das verhindert den IndexError
+                        get_color='[200, 30, 0, 160]', 
+                        get_radius=3000,
+                    ),
+                ],
+            ))
 
     elif jahr == 1991:
         st.subheader(f"🇷🇺 {jahr}: Politische Wende")
