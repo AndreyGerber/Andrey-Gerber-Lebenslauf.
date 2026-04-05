@@ -278,27 +278,27 @@ with st.container(height=550, border=True):
         col_content, col_map = st.columns([1, 1.5])
         
         with col_content:
-        # Anpassbarer Info-Text (ersetzt st.info)
-        st.markdown(f"""
-            <div style="
-                background-color: #e8f4f9; 
-                padding: 15px; 
-                border-radius: 5px; 
-                border-left: 5px solid #0072b2;
-                margin-bottom: 20px;">
-                <p style="
-                    color: #004466; 
-                    font-size: {INFO_SCHRIFTGROESSE}; 
-                    margin: 0;">
-                    Hier begann meine Reise in der UdSSR.
-                </p>
-            </div>
-        """, unsafe_allow_html=True)
+            # Anpassbarer Info-Text (ersetzt st.info)
+            st.markdown(f"""
+                <div style="
+                    background-color: #e8f4f9; 
+                    padding: 15px; 
+                    border-radius: 5px; 
+                    border-left: 5px solid #0072b2;
+                    margin-bottom: 20px;">
+                    <p style="
+                        color: #004466; 
+                        font-size: {INFO_SCHRIFTGROESSE}; 
+                        margin: 0;">
+                        Hier begann meine Reise in der UdSSR.
+                    </p>
+                </div>
+            """, unsafe_allow_html=True)
 
-        # Bild laden
-        img_tscherlak = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
-        if img_tscherlak:
-            st.image(img_tscherlak, width=BILD_BREITE)
+            # Bild laden
+            img_tscherlak = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
+            if img_tscherlak:
+                st.image(img_tscherlak, width=BILD_BREITE)
             
             
 
