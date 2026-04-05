@@ -89,75 +89,64 @@ st.divider()
 
 
 
-import plotly.graph_objects as go
-from streamlit_plotly_events import plotly_events
-
-# --- 1. DATEN FÜR DEN PFEIL ---
-events_data = [
-    {"jahr": 1988, "land": "Sowjetunion", "farbe": "#d32f2f", "name": "Geburt"},
-    {"jahr": 1991, "land": "Russland", "farbe": "#1976d2", "name": "Russland"},
-    {"jahr": 1996, "land": "Russland", "farbe": "#1976d2", "name": "Schule"},
-    {"jahr": 2006, "land": "Deutschland", "farbe": "#fbc02d", "name": "Emigration"},
-    {"jahr": 2022, "land": "Deutschland", "farbe": "#fbc02d", "name": "Hausbau"},
-    {"jahr": 2024, "land": "Deutschland", "farbe": "#fbc02d", "name": "Heute"}
+# --- 1. DATEN DEFINIEREN ---
+stationen = [
+    {"jahr": 1988, "event": "Geburt", "land": "UdSSR", "farbe": "#d32f2f"}, # Rot
+    {"jahr": 1991, "event": "Russland", "land": "Russland", "farbe": "#1976d2"}, # Blau
+    {"jahr": 1996, "event": "Schule", "land": "Russland", "farbe": "#1976d2"},
+    {"jahr": 2006, "event": "Emigration", "land": "Deutschland", "farbe": "#fbc02d"}, # Gold
+    {"jahr": 2022, "event": "Hausbau", "land": "Deutschland", "farbe": "#fbc02d"},
+    {"jahr": 2024, "event": "Heute", "land": "Deutschland", "farbe": "#fbc02d"}
 ]
-df_timeline = pd.DataFrame(events_data)
 
-# --- 2. GRAFIK ERSTELLEN ---
-fig = go.Figure()
+if 'selected_year' not in st.session_state:
+    st.session_state.selected_year = 1988
 
-# Hintergrund-Segmente (Die dicken farbigen Balken)
-segments = [(1988, 1991, "#d32f2f"), (1991, 2006, "#1976d2"), (2006, 2024, "#fbc02d")]
-for start, end, color in segments:
-    fig.add_trace(go.Scatter(
-        x=[start, end], y=[0, 0], mode='lines',
-        line=dict(color=color, width=12), hoverinfo='none'
-    ))
+# --- 2. DEN PFEIL BAUEN (Layout) ---
+st.write("### 🌍 Klicke auf ein Ereignis:")
 
-# Die Marker (Weiße Rauten wie in deiner Zeichnung)
-fig.add_trace(go.Scatter(
-    x=df_timeline['jahr'], y=[0]*len(df_timeline),
-    mode='markers+text',
-    marker=dict(symbol='diamond', size=18, color='white', line=dict(width=2, color='black')),
-    text=df_timeline['jahr'], textposition="bottom center",
-    hovertext=df_timeline['name'], hoverinfo="text"
-))
+# Wir erstellen 6 Spalten für die 6 Ereignisse
+cols = st.columns(len(stationen))
 
-# Pfeilspitze am Ende
-fig.add_annotation(x=2024.5, y=0, ax=2023.5, ay=0, xref="x", yref="y",
-                   showarrow=True, arrowhead=2, arrowsize=1, arrowwidth=3, arrowcolor="black")
+for i, s in enumerate(stationen):
+    with cols[i]:
+        # Der farbige Balken über dem Button (verbindet die Stationen)
+        st.markdown(f"""
+            <div style="
+                background-color: {s['farbe']}; 
+                height: 10px; 
+                margin-bottom: 5px;
+                border-radius: 2px;
+                width: 100%;
+            "></div>
+        """, unsafe_allow_html=True)
+        
+        # Der Button als "Raute" (Highlight wenn ausgewählt)
+        label = f"◆ {s['jahr']}" if s['jahr'] == st.session_state.selected_year else f"◇ {s['jahr']}"
+        if st.button(label, key=f"btn_{s['jahr']}", use_container_width=True):
+            st.session_state.selected_year = s['jahr']
+            st.rerun()
 
-# Layout aufräumen
-fig.update_layout(
-    height=180, margin=dict(l=40, r=40, t=20, b=20),
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1987, 2026]),
-    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, 0.5]),
-    showlegend=False, plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
-)
-
-# --- 3. INTERAKTION ---
-st.markdown("### Klicke auf ein Ereignis (Raute):")
-selected_point = plotly_events(fig, click_event=True, hover_event=False)
-
-# Wenn geklickt wird, Jahr im Session State speichern
-if selected_point:
-    st.session_state.selected_year = selected_point[0]['x']
-
-# --- 4. ANZEIGE DER STATION (Animation oder Bild) ---
+# --- 3. INHALTE ANZEIGEN ---
 st.divider()
-jahr = st.session_state.get('selected_year', 1988)
-station = df_timeline[df_timeline['jahr'] == jahr].iloc[0]
+aktuelle_wahl = next(item for item in stationen if item["jahr"] == st.session_state.selected_year)
 
-c1, c2 = st.columns([1, 1])
-with c1:
-    st.header(f"Station: {jahr}")
-    st.subheader(station['name'])
-    # Hier kannst du deine Bilder für 1996 oder 2006 laden
-    st.write(f"Hier öffnen wir jetzt die Animation oder das Bild für {station['land']}.")
+col_text, col_visual = st.columns([1, 2])
 
-with c2:
-    # Hier kommt deine Karte (wie im vorherigen Schritt besprochen)
-    st.info("🗺️ Karte wird auf den Ort zentriert...")
+with col_text:
+    st.header(f"Station: {aktuelle_wahl['jahr']}")
+    st.subheader(aktuelle_wahl['event'])
+    st.write(f"Land: {aktuelle_wahl['land']}")
+    
+    # Hier kannst du deine Bilder/Logik einfügen
+    if aktuelle_wahl['jahr'] == 1996:
+        st.info("📸 Hier öffnen wir jetzt dein Schulbild...")
+    elif aktuelle_wahl['jahr'] == 2006:
+        st.success("✈️ Animation: Flug von Omsk nach Neustrelitz startet!")
+
+with col_visual:
+    # Platzhalter für Karte oder Animation
+    st.write("*(Hier erscheint deine Karte oder Animation)*")
 
 
 
