@@ -297,20 +297,17 @@ with st.container(height=BLOCK_HOEHE, border=True):
             st.caption("Geografische Lage von Tscherlak am Irtysch")
 
     # --- INNERHALB DEINES 750px CONTAINERS ---
-
     elif jahr_aktiv == 1996:
         # --- DEINE PARAMETER ---
-        MASSSTAB = 1  # Passe diesen Wert an, falls das Bild zu groß ist
-
-        # Wir erstellen zwei Spalten
-        col_text, col_foto = st.columns([1, 2])
+        MASSSTAB = 0.7  # Verkleinere dies, falls du scrollen musst
+        
+        # 1. Wir teilen den 750px Block in zwei Spalten
+        # [1, 2.5] gibt dem Bild rechts deutlich mehr Platz
+        col_text, col_foto = st.columns([1, 2.5])
 
         with col_text:
-            # --- VERTIKALE ZENTRIERUNG LINKS ---
-            # Wir fügen oben Platz ein, um den Text mittig zur Blockhöhe zu schieben
-            st.write("###")
-            st.write("###")
-            st.write("###")
+            # VERTIKALER ABSTAND: Schiebt den Text nach unten in die Mitte
+            st.markdown("<br><br><br><br><br><br>", unsafe_allow_html=True)
             
             st.subheader(f"🎒 {jahr_aktiv}: Schulzeit")
             st.markdown(f"""
@@ -325,16 +322,16 @@ with st.container(height=BLOCK_HOEHE, border=True):
             img_schule = lade_formatiertes_bild("schule2.png")
             
             if img_schule:
-                original_breite = img_schule.size[0]
+                original_breite = img_schule.size
                 neue_breite = int(original_breite * MASSSTAB)
                 
-                # --- VERTIKALE ZENTRIERUNG RECHTS ---
-                # Auch hier Platz oben einfügen, damit das Bild mittig schwebt
-                st.write("###")
+                # VERTIKALER ABSTAND: Schiebt das Bild in die Mitte des 750px Blocks
+                st.markdown("<br><br>", unsafe_allow_html=True)
+                
+                # Das Bild wird in der rechten Spalte angezeigt
                 st.image(img_schule, width=neue_breite)
             else:
-                st.error("Bild 'schule2.png' fehlt.")
-
+                st.error("Bild 'schule2.png' fehlt im Ordner images.")
 
 
 
