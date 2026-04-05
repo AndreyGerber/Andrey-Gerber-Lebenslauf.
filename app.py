@@ -299,39 +299,31 @@ with st.container(height=BLOCK_HOEHE, border=True):
     # --- INNERHALB DEINES 750px CONTAINERS ---
     elif jahr_aktiv == 1996:
         # --- DEINE PARAMETER ---
-        MASSSTAB = 1.0  # Verkleinere dies, falls du scrollen musst
-        
-        # 1. Wir teilen den 750px Block in zwei Spalten
-        # [1, 2.5] gibt dem Bild rechts deutlich mehr Platz
+        MASSSTAB = 0.5  # 1.0 = 100%. Verringere dies, falls der Scrollbalken erscheint.
+        OBEN_ABSTAND = "200px" # Schiebt den Inhalt in die Mitte der 750px Höhe
+
+        # Zwei Spalten (Text links, Bild rechts)
         col_text, col_foto = st.columns([1, 2.5])
 
         with col_text:
-            # VERTIKALER ABSTAND: Schiebt den Text nach unten in die Mitte
-            st.markdown("<br><br><br><br><br><br>", unsafe_allow_html=True)
-            
+            # Vertikaler Abstand für den Text
+            st.markdown(f"<div style='margin-top: {OBEN_ABSTAND};'></div>", unsafe_allow_html=True)
             st.subheader(f"🎒 {jahr_aktiv}: Schulzeit")
-            st.markdown(f"""
-                <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4;'>
-                    Meine Schulzeit.<br>
-                    So schnell vergehen 10 Jahre.
-                </p>
-            """, unsafe_allow_html=True)
+            st.markdown(f"<p style='font-size: {INFO_FONT_SIZE}; color: #4B0082;'>Meine Schulzeit.<br>So schnell vergehen 10 Jahre.</p>", unsafe_allow_html=True)
 
         with col_foto:
-            # Bild laden
             img_schule = lade_formatiertes_bild("schule2.png")
-            
             if img_schule:
-                original_breite = img_schule.size
+                # FIX: Wir nehmen nur den ersten Wert (Index 0) des Tupels
+                original_breite = img_schule.size[0] 
                 neue_breite = int(original_breite * MASSSTAB)
                 
-                # VERTIKALER ABSTAND: Schiebt das Bild in die Mitte des 750px Blocks
-                st.markdown("<br><br>", unsafe_allow_html=True)
-                
-                # Das Bild wird in der rechten Spalte angezeigt
+                # Vertikaler Abstand für das Bild (etwas weniger als beim Text für optische Mitte)
+                st.markdown(f"<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
                 st.image(img_schule, width=neue_breite)
             else:
-                st.error("Bild 'schule2.png' fehlt im Ordner images.")
+                st.error("Bild 'schule2.png' nicht gefunden.")
+
 
 
 
