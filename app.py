@@ -124,7 +124,7 @@ fig = go.Figure()
 
 # Lebenslinie: Durchgehend von 1988 bis kurz vor die Pfeilspitze (2034)
 fig.add_trace(go.Scatter(
-    x=[1988, 2034], 
+    x=[1988, 2028], 
     y=[0, 0],
     mode='lines',
     line=dict(color='black', width=LINIEN_DICKE),
@@ -162,7 +162,7 @@ for jahr in jahre_alle:
         x=jahr, y=-0.1, 
         text=f"<b>{jahr}</b>",
         showarrow=False, 
-        textangle=-45,
+        textangle=-25,
         font=dict(size=JAHR_SCHRIFTGROESSE, color="black"),
         xanchor="right", 
         yanchor="top"
@@ -180,8 +180,8 @@ for jahr in jahre_alle:
 
 # Pfeilspitze am rechten Ende
 fig.add_annotation(
-    x=2037, y=0,           # Spitze
-    ax=2034, ay=0,         # Ende der Linie
+    x=2030, y=0,           # Spitze
+    ax=2028, ay=0,         # Ende der Linie
     xref="x", yref="y", 
     axref="x", ayref="y",
     showarrow=True, 
