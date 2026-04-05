@@ -299,33 +299,29 @@ with st.container(height=BLOCK_HOEHE, border=True):
     # --- INNERHALB DEINES 750px CONTAINERS ---
 
     elif jahr_aktiv == 1996:
-        BILD_GROESSE_1996 = 650 
+    BILD_GROESSE_1996 = 650 
 
-        st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
-        
-        st.markdown(f"""
-            <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4;'>
-                Meine Schulzeit. So schnell vergehen 10 Jahre.
-            </p>
-        """, unsafe_allow_html=True)
-        
-        st.divider()
+    st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
+    
+    st.markdown(f"""
+        <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4;'>
+            Meine Schulzeit. So schnell vergehen 10 Jahre.
+        </p>
+    """, unsafe_allow_html=True)
+    
+    st.divider()
 
-        # Bild laden
-        img_schule = lade_formatiertes_bild("schule2.png", target_size=(BILD_GROESSE_1996, BILD_GROESSE_1996))
-        
-        if img_schule:
-            # CSS-Trick: Das Bild in einen Div mit 'text-align: center' packen, um es mittig zu platzieren
-            st.markdown(f"""
-                <div style="display: flex; justify-content: center;">
-                    <img src="data:image/png;base64,{st.image(img_schule, width=BILD_GROESSE_1996)}" style="display:none;">
-                </div>
-            """, unsafe_allow_html=True)
-            # In Streamlit reicht oft auch einfach der direkte Aufruf, wenn keine Spalten da sind:
+    # Bild laden
+    img_schule = lade_formatiertes_bild("schule2.png", target_size=(BILD_GROESSE_1996, BILD_GROESSE_1996))
+    
+    if img_schule:
+        # --- ZENTRIERUNG OHNE SPALTEN-VARIABLEN ---
+        # Wir erstellen 3 Spalten "on the fly", nutzen sie aber nur für die Ausrichtung
+        _, col_mid, _ = st.columns([1, 4, 1]) 
+        with col_mid:
             st.image(img_schule, width=BILD_GROESSE_1996)
-        else:
-            st.error("Bild 'schule2.png' nicht gefunden.")
-
+    else:
+        st.error("Bild 'schule2.png' nicht gefunden.")
 
 
 
