@@ -161,26 +161,41 @@ fig.add_trace(go.Scatter(
 
 # Jahreszahlen und Textblöcke (45° gedreht)
 for i, jahr in enumerate(jahre_alle):
-    # Wechselt zwischen zwei Höhen: -0.35 und -0.65
-    y_offset = -0.35 if i % 2 == 0 else -0.65 
+    # Logik: Nur die Jahre 1991, 2010, 2019 und 2026 werden tiefer gesetzt
+    # Das schafft Platz für die langen Texte der Nachbarn.
+    if jahr in [1991, 2010, 2019, 2026]:
+        y_offset = -0.75  # Deutlich tiefer für maximale Freiheit
+    else:
+        y_offset = -0.35  # Standardhöhe
     
     # 1. Das Jahr
     fig.add_annotation(
         x=jahr, y=-0.1, 
         text=f"<b>{jahr}</b>",
-        showarrow=False, textangle=-25,
+        showarrow=False, 
+        textangle=-25,
         font=dict(size=GROESSE_JAHRE, color="black"),
-        xanchor="center", yanchor="top"
+        xanchor="center", 
+        yanchor="top"
     )
     
-    # 2. Der Textblock (mit dem neuen y_offset)
+    # 2. Der Textblock (mit gezieltem Versatz)
     fig.add_annotation(
         x=jahr, y=y_offset, 
         text=texte.get(jahr, ""),
-        showarrow=False, textangle=-25,
+        showarrow=False, 
+        textangle=-25,
         font=dict(size=GROESSE_TEXTE, color="#4B0082"),
-        xanchor="center", yanchor="top"
+        xanchor="center", 
+        yanchor="top"
     )
+
+# WICHTIG: Das Layout braucht mehr Platz nach unten für den tiefen Text (-0.75)
+fig.update_layout(
+    height=500,
+    margin=dict(l=50, r=50, t=20, b=220), 
+    yaxis=dict(range=[-1.8, 0.5]) 
+)
 
 
 # Pfeilspitze am rechten Ende
