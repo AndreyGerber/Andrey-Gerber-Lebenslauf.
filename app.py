@@ -268,34 +268,34 @@ with c_nav3:
 with st.container(height=BLOCK_HOEHE, border=True):
     jahr_aktiv = highlights[st.session_state.info_idx]
     
-    if jahr_aktiv == 1988:
-        st.subheader(f"📍 {jahr_aktiv}: Geburtsort Tscherlak")
+   if jahr_aktiv == 1988:
+        # 1. Überschrift angepasst
+        st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
         
-        # Spalten-Verhältnis für 750px optimiert
         col_links, col_rechts = st.columns([1.2, 2])
         
         with col_links:
-            # Bildgröße anpassen
             img = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
             if img:
                 st.image(img, width=BILD_BREITE)
             
-            # Info-Box mit mehr Padding für den großen Block
+            # Info-Box (Text hier optional anpassbar, falls er doppelt wirkt)
             st.markdown(f"""
                 <div style="background-color: #e8f4f9; padding: 25px; border-left: 6px solid #0072b2; border-radius: 8px; margin-top: 20px;">
                     <p style="color: #004466; font-size: {INFO_FONT_SIZE}; margin: 0; line-height: 1.5;">
-                        Hier begann meine Reise.
+                        Geburtsort Tscherlak
                     </p>
                 </div>
             """, unsafe_allow_html=True)
 
         with col_rechts:
-            # Damit die Karte bei 750px Blockhöhe nicht "verloren" wirkt, 
-            # nutzen wir hier ein DataFrame für eine größere Darstellung
+            # Daten für Tscherlak
             df_map = pd.DataFrame({'lat': [54.1221], 'lon': [74.8056]})
-            # st.map passt sich automatisch an, aber wir können Text darunter setzen
-            st.map(df_map, zoom=8, use_container_width=True)
-            st.caption("Geografische Lage von Tscherlak am Irtysch")
+            
+            # 2. Karte von Russland: Zoom verringert (ca. 2-3 zeigt das ganze Land)
+            # 'use_container_width' sorgt dafür, dass sie den Platz ausfüllt
+            st.map(df_map, zoom=2, use_container_width=True)
+            st.caption("Geografische Lage von Tscherlak in Russland")
 
     # --- INNERHALB DEINES 750px CONTAINERS ---
     elif jahr_aktiv == 1996:
