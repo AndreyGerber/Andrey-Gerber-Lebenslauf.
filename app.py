@@ -175,7 +175,7 @@ for i, jahr in enumerate(jahre_alle):
         showarrow=False, 
         textangle=-25,
         font=dict(size=GROESSE_JAHRE, color="black"),
-        xanchor="center", 
+        xanchor="right", 
         yanchor="top"
     )
     
