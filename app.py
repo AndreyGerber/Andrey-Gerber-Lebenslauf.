@@ -109,8 +109,8 @@ texte = {
     1996: "School (not cool)",
     2006: "Emigration to GE <br>🇩🇪",
     2010: "Studying aircraft design<br>(B.Eng. & Ms.Sc.)",
-    2017: "TÜV Rheinland<br>(Expert in the lab +                   ",
-    2019: "               Quality Expert)",
+    2017: "TÜV Rheinland<br>(Expert in the lab +                      ",
+    2019: "                  Quality Expert)",
     2022: "Ferchau (at Siemens)<br>(Quality Systems Engineering)",
     2026: "Liora<br>(Data Science & ML)"
 }
@@ -173,7 +173,7 @@ for i, jahr in enumerate(jahre_alle):
         x=jahr, y=-0.1, 
         text=f"<b>{jahr}</b>",
         showarrow=False, 
-        textangle=-25,
+        textangle=-30,
         font=dict(size=GROESSE_JAHRE, color="black"),
         xanchor="center", 
         yanchor="top"
@@ -184,7 +184,7 @@ for i, jahr in enumerate(jahre_alle):
         x=jahr, y=y_offset, 
         text=texte.get(jahr, ""),
         showarrow=False, 
-        textangle=-25,
+        textangle=-30,
         font=dict(size=GROESSE_TEXTE, color="#4B0082"),
         xanchor="center", 
         yanchor="top"
