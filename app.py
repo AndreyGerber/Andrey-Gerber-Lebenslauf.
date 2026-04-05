@@ -299,29 +299,31 @@ with st.container(height=BLOCK_HOEHE, border=True):
     # --- INNERHALB DEINES 750px CONTAINERS ---
 
     elif jahr_aktiv == 1996:
-        BILD_GROESSE_1996 = 650 
+        BILD_GROESSE_1996 = 450 # Etwas kleiner, um Platz für Text + Header zu lassen
 
         st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
         
         st.markdown(f"""
-            <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4;'>
+            <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.2; margin-bottom: 0px;'>
                 Meine Schulzeit. So schnell vergehen 10 Jahre.
             </p>
         """, unsafe_allow_html=True)
         
         st.divider()
 
-        # Bild laden
-        img_schule = lade_formatiertes_bild("schule2.png", target_size=(BILD_GROESSE_1996, BILD_GROESSE_1996))
+        # --- DIE LÖSUNG FÜR ECHTE ZENTRIERUNG OHNE SCROLLEN ---
+        # Wir nutzen 3 Spalten mit einem speziellen Verhältnis: [1, 2, 1]
+        # Das Bild in der Mitte bekommt 50% der Gesamtbreite
+        c1, c2, c3 = st.columns([1, 2, 1])
         
-        if img_schule:
-            # --- ZENTRIERUNG OHNE SPALTEN-VARIABLEN ---
-            # Wir erstellen 3 Spalten "on the fly", nutzen sie aber nur für die Ausrichtung
-            _, col_mid, _ = st.columns([1, 4, 1]) 
-            with col_mid:
-                st.image(img_schule, width=BILD_GROESSE_1996)
-        else:
-            st.error("Bild 'schule2.png' nicht gefunden.")
+        with c2:
+            img_schule = lade_formatiertes_bild("schule2.png", target_size=(BILD_GROESSE_1996, BILD_GROESSE_1996))
+            
+            if img_schule:
+                # Wir nutzen use_container_width=True, damit es die mittlere Spalte ausfüllt
+                st.image(img_schule, use_container_width=True)
+            else:
+                st.error("Bild 'schule2.png' nicht gefunden.")
 
 
 
