@@ -84,80 +84,69 @@ st.divider()
 
 # ... hier geht es weiter mit deinem "Mein Weg" (Flaggen) und der Timeline
 
-#events = [{"x": 2022, "text": "Hausbau"}]  # hier Zeitperioden angeben
 
 
 
 
 
-import plotly.graph_objects as go
-import streamlit as st
+# --- 4. DATEN FÜR DIE STORY-NAVIGATION ---
+if 'selected_year' not in st.session_state:
+    st.session_state.selected_year = 1988
 
-st.subheader("Mein Lebensweg")
+# Hier definierst du deine Stationen und Koordinaten
+STATIONEN = {
+    1988: {"titel": "Geburt in der UdSSR", "ort": "Tscherlak", "lat": 54.15, "lon": 74.80, "text": "In Tscherlak geboren, kurz vor dem Zerfall der Sowjetunion."},
+    1996: {"titel": "Schulzeit", "ort": "Omsk", "lat": 54.98, "lon": 73.37, "text": "Einschulung und Kindheit in Sibirien."},
+    2006: {"titel": "Emigration", "ort": "Neustrelitz", "lat": 53.36, "lon": 13.06, "text": "Neustart in Deutschland. Ein großer Flug in ein neues Leben."},
+    2022: {"titel": "Hausbau", "ort": "Deutschland", "lat": 52.52, "lon": 13.40, "text": "Ein wichtiger Meilenstein in der neuen Heimat."}
+}
 
-# 1. DATEN (Korrekt als Liste)
-events = [{"x": 2022, "text": "Hausbau"}]  # hier Zeitperioden angeben
+# --- 5. VISUELLER ZEITSTRAHL (HORIZONTALE NAVIGATION) ---
+st.markdown("<h3 style='text-align: center;'>Meine Reise</h3>", unsafe_allow_html=True)
 
-# 2. ECHTE BILD-LINKS (Damit das Band nicht leer bleibt)
-url_udssr = "https://wikimedia.org"
-url_ru = "https://wikimedia.org"
-url_de = "https://wikimedia.org"
+# Spalten für die Jahre (proportional oder gleichmäßig)
+zeit_cols = st.columns(len(STATIONEN))
+jahre = sorted(STATIONEN.keys())
 
-fig = go.Figure()
+for i, jahr in enumerate(jahre):
+    with zeit_cols[i]:
+        # Button-Farbe hervorheben, wenn ausgewählt
+        label = f"📍 {jahr}" if jahr == st.session_state.selected_year else str(jahr)
+        if st.button(label, use_container_width=True, key=f"btn_{jahr}"):
+            st.session_state.selected_year = jahr
+            st.rerun()
 
-# 3. DIE HILFSFUNKTION
-def zeichne_flagge(fig, x_start, x_end, bild_url):
-    fig.add_layout_image(dict(
-        source=bild_url,
-        xref="x", yref="y",
-        x=x_start, y=0.6,             
-        sizex=x_end - x_start,        
-        sizey=0.6,                    
-        sizing="stretch",             
-        layer="below"                 
-    ))
+# --- 6. INTERAKTIVE KARTE & DETAILS ---
+st.divider()
+c1, c2 = st.columns([1, 2])
 
-# 4. DIE FLAGGEN AUF DEN PFEIL ZEICHNEN
-zeichne_flagge(fig, 1988, 1991, url_udssr)
-zeichne_flagge(fig, 1991, 2006, url_ru)
-zeichne_flagge(fig, 2006, 2026, url_de)
+aktuelle_station = STATIONEN[st.session_state.selected_year]
 
-# 5. RAUTEN & TEXTE (Korrektur der Beschriftung)
-fig.add_trace(go.Scatter(
-    x=[e["x"] for e in events],
-    y=[0.3] * len(events), 
-    mode="markers+text",
-    marker=dict(symbol="diamond", size=18, color="white", line=dict(width=2, color="black")),
-    # Hier wird nur Jahr und Text angezeigt, kein technischer Code:
-    text=[f"<b>{e['x']}</b><br>{e}" for e in events],
-    textposition="bottom center",
-    showlegend=False
-))
+with c1:
+    st.markdown(f"### {aktuelle_station['titel']}")
+    st.markdown(f"**Ort:** {aktuelle_station['ort']}")
+    st.write(aktuelle_station)
+    
+    # Dynamischer Bild-Platzhalter für die jeweilige Station
+    bild_name = f"station_{st.session_state.selected_year}.jpg"
+    station_bild = lade_formatiertes_bild(bild_name, target_size=(400, 300))
+    if station_bild:
+        st.image(station_bild, caption=f"Eindruck aus {st.session_state.selected_year}")
+    else:
+        st.info(f"📸 Hier kannst du später ein Foto von '{aktuelle_station['ort']}' einfügen.")
 
-# 6. STARTSTRICH & PFEILSPITZE
-fig.add_shape(type="line", x0=1988, x1=1988, y0=0, y1=0.6, line=dict(color="black", width=4))
-fig.add_annotation(x=1988, y=-0.2, text="<b>1988</b>", showarrow=False)
-
-fig.add_annotation(
-    x=2028, y=0.3, ax=2026, ay=0.3,
-    xref="x", yref="y", axref="x", ayref="y",
-    showarrow=True, arrowhead=3, arrowsize=4, arrowwidth=2, arrowcolor="#FFCC00"
-)
-
-# 7. LAYOUT
-fig.update_layout(
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1985, 2030]),
-    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, 1.2]),
-    height=400,
-    plot_bgcolor="rgba(0,0,0,0)",
-    paper_bgcolor="rgba(0,0,0,0)",
-    margin=dict(l=10, r=10, t=10, b=10)
-)
-
-st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
-
-
-
+with c2:
+    # Einfache Karte mit Plotly (da du es oben schon importiert hast)
+    map_data = pd.DataFrame([aktuelle_station])
+    fig = px.scatter_mapbox(
+        map_data, 
+        lat="lat", lon="lon", 
+        zoom=4, 
+        height=400,
+        text="ort"
+    )
+    fig.update_layout(mapbox_style="open-street-map", margin={"r":0,"t":0,"l":0,"b":0})
+    st.plotly_chart(fig, use_container_width=True)
 
 
 
