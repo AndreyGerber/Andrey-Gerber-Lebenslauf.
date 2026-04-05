@@ -400,10 +400,13 @@ with st.container(height=BLOCK_HOEHE, border=True):
             with col_text:
                 st.markdown(f"<div style='margin-top: {OBEN_ABSTAND};'></div>", unsafe_allow_html=True)
                 st.subheader(f"🎓 {jahr_aktiv}: Studium")
+                
+                # Hier ist dein Text, schick formatiert
                 st.markdown(f"""
-                    <p style='font-size: {INFO_FONT_SIZE}; color: #1E90FF;'>
-                    Beginn des Studiums an der HAW Hamburg.<br>
-                    Ein neuer Fokus und tiefere Einblicke.
+                    <p style='font-size: {INFO_FONT_SIZE}; color: #1E90FF; line-height: 1.4;'>
+                    <strong>Bachelor of Engineering</strong><br>
+                    & <strong>Master of Science</strong>.<br><br>
+                    <i>"Pass auf, Wissenschaft – ich komme!"</i>
                     </p>
                     """, unsafe_allow_html=True)
 
