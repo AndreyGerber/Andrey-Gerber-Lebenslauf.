@@ -297,48 +297,41 @@ with st.container(height=BLOCK_HOEHE, border=True):
             st.caption("Geografische Lage von Tscherlak am Irtysch")
 
     # --- INNERHALB DEINES 750px CONTAINERS ---
-
+    
     elif jahr_aktiv == 1996:
         # --- DEINE PARAMETER ---
-        MASSSTAB = 1.1  # 1.0 = 100%, 0.5 = 50% etc. Verkleinere dies bei Scrollen.
-        
-        # CSS: Entfernt die Standard-Abstände (Gaps) von Streamlit in diesem Block
-        st.markdown("""
-            <style>
-            [data-testid="stVerticalBlock"] > div {
-                gap: 0rem !important;
-            }
-            </style>
-        """, unsafe_allow_html=True)
+        MASSSTAB = 0.8  # 1.0 = 100%. Passe dies an, um das Scrollen im 750px Block zu verhindern.
 
-        st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
-        
-        # Text mit minimalem Abstand nach unten
-        st.markdown(f"""
-            <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.2; margin-bottom: 5px;'>
-                Meine Schulzeit. So schnell vergehen 10 Jahre.
-            </p>
-        """, unsafe_allow_html=True)
-        
-        # Kompakte Trennlinie statt st.divider()
-        st.markdown("<hr style='margin: 5px 0; border: 0.5px solid #ddd;'>", unsafe_allow_html=True)
+        # 1. Das Layout in zwei Spalten teilen (Text links, Bild rechts)
+        col_text, col_foto = st.columns([1, 2]) # Verhältnis 1:2 gibt dem Bild mehr Raum
 
-        # Bild laden
-        img_schule = lade_formatiertes_bild("schule2.png")
-        
-        if img_schule:
-            # 1. Berechnung der neuen Breite basierend auf dem Maßstab
-            original_breite = img_schule.size[0] # [0] ist die Breite in Pixeln
-            neue_breite = int(original_breite * MASSSTAB)
+        with col_text:
+            st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
             
-            # 2. Echte Zentrierung über Spalten (äußere werden ignoriert)
-            _, col_mitte, _ = st.columns([1, 4, 1])
+            # Text linksbündig unter der Überschrift
+            st.markdown(f"""
+                <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4;'>
+                    Meine Schulzeit.<br>
+                    So schnell vergehen 10 Jahre.
+                </p>
+            """, unsafe_allow_html=True)
             
-            with col_mitte:
-                # Das Bild wird jetzt ohne großen Abstand direkt unter der Linie gerendert
+            # Eine kurze Trennlinie nur für die Textspalte (optional)
+            st.markdown("<hr style='margin: 10px 0; border: 0.5px solid #ddd; width: 50%;'>", unsafe_allow_html=True)
+
+        with col_foto:
+            # Bild laden
+            img_schule = lade_formatiertes_bild("schule2.png")
+            
+            if img_schule:
+                # Berechnung der Breite basierend auf dem Maßstab
+                original_breite = img_schule.size[0]
+                neue_breite = int(original_breite * MASSSTAB)
+                
+                # Bild wird jetzt direkt rechts neben dem Text angezeigt
                 st.image(img_schule, width=neue_breite)
-        else:
-            st.error("Bild 'schule2.png' nicht gefunden.")
+            else:
+                st.error("Bild 'schule2.png' nicht gefunden.")
 
 
 
