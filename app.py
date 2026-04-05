@@ -353,13 +353,13 @@ with st.container(height=BLOCK_HOEHE, border=True):
         ))
 
         # 3. DAS LANDENDE FLUGZEUG (An das Ende der Linie geschoben)
-        # Wir setzen x (Längengrad) auf 16.5, um es kurz vor Berlin (13.4) zu platzieren
+        # x=14.5 setzt es fast direkt auf den Punkt Berlin (13.4)
         fig_flight.add_annotation(
-            x=16.5, y=53.0, 
+            x=14.8, y=52.7, 
             text="✈️",
             showarrow=False,
-            font=dict(size=45),
-            textangle=-145, # Nase zeigt jetzt steil nach links unten auf Berlin
+            font=dict(size=50), # Etwas größer für bessere Sichtbarkeit
+            textangle=-140,     # Nase zeigt steil nach links unten auf Berlin
             xref="x", yref="y"
         )
 
@@ -372,15 +372,16 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 showland = True, landcolor = "#F0F2F6",
                 showocean = True, oceancolor = "#E8F4F9",
                 showcountries = True, countrycolor = "white",
-                # Fokus-Bereich angepasst, damit Berlin nicht am Rand klebt
-                lataxis = dict(range=[45, 60]),
-                lonaxis = dict(range=[5, 80]),
+                # Fokus-Bereich angepasst, damit Berlin links genug Platz hat
+                lataxis = dict(range=[45, 65]),
+                lonaxis = dict(range=[5, 85]),
                 resolution = 50
             ),
             showlegend = False
         )
 
-        st.plotly_chart(fig_flight, use_container_width=True, key="flight_landing_final")
+        st.plotly_chart(fig_flight, use_container_width=True, key="flight_landing_final_fix")
+
 
 
 
