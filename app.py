@@ -169,7 +169,7 @@ for jahr in jahre_alle:
     )
     # Der individuelle Textblock darunter
     fig.add_annotation(
-        x=jahr, y=-0.2, 
+        x=jahr, y=-0.4, 
         text=texte.get(jahr, "mein Text"),
         showarrow=False, 
         textangle=-25,
