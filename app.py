@@ -107,7 +107,7 @@ texte = {
     1988: "Born in UdSSR ☭",
     1991: "Moved to Russian Federation<br>without moving 🇷🇺",
     1996: "School (not cool)",
-    2006: "Emigration to GE <br>🇩🇪",
+    2006: "Emigration to GE 🇩🇪",
     2010: "Studying aircraft design<br>(B.Eng. & Ms.Sc.)",
     2017: "TÜV Rheinland<br>(Expert in the lab +                      ",
     2019: "                  Quality Expert)",
@@ -164,7 +164,7 @@ for i, jahr in enumerate(jahre_alle):
     # Logik: Nur die Jahre 1991, 2010, 2019 und 2026 werden tiefer gesetzt
     # Das schafft Platz für die langen Texte der Nachbarn.
     if jahr in [1991, 2017, 2019, 2022]:
-        y_offset = -0.15  # Deutlich tiefer für maximale Freiheit
+        y_offset = -0.1  # Deutlich tiefer für maximale Freiheit
     else:
         y_offset = -0.20  # Standardhöhe
     
