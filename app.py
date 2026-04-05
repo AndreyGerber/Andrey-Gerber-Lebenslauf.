@@ -273,28 +273,36 @@ with st.container(height=BLOCK_HOEHE, border=True):
     if jahr_aktiv == 1988:
         st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
         
-        # 2. Folium Karte erstellen
-        # Koordinaten für Tscherlak
+
+        # 2. Folium Karte ohne Verweise erstellen
         lat_tscherlak, lon_tscherlak = 54.1221, 74.8056
         
-        # Karte initialisieren (Zentriert auf Russland/Sibirien)
         m = folium.Map(
-            location=[55.0, 80.0], # Etwas versetzt, damit Russland gut sichtbar ist
-            zoom_start=3, 
-            tiles="CartoDB positron" # Ein sauberer, heller Kartenstil
+            location=[55.0, 75.0], 
+            zoom_start=2, 
+            tiles="CartoDB positron",
+            attr=' ', # Entfernt den Text unten rechts weitestgehend
+            control_scale=False,
+            zoom_control=False # Entfernt die +/- Buttons für einen cleaner Look
         )
 
-        # Den roten Pin (Pushpin) setzen
         folium.Marker(
             location=[lat_tscherlak, lon_tscherlak],
-            popup="Tscherlak",
-            tooltip="Hier begann meine Reise",
             icon=folium.Icon(color="red", icon="pushpin", prefix="fa")
         ).add_to(m)
 
-        # 3. Karte in Streamlit anzeigen
-        st_folium(m, width=700, height=400, returned_objects=[])
-        st.caption("Geografische Lage von Tscherlak in Russland")
+        # 3. Mittige Anordnung via Spalten (Columns)
+        _, col_mitte, _ = st.columns([1, 5, 1]) # Das Verhältnis 1:5:1 schiebt die Karte in die Mitte
+        
+        with col_mitte:
+            st_folium(
+                m, 
+                width=700, 
+                height=450, 
+                returned_objects=[],
+                use_container_width=True # Sorgt dafür, dass sie die Spalte ausfüllt
+            )
+            st.caption("Geografische Lage von Tscherlak in Russland")
 
 
     # --- INNERHALB DEINES 750px CONTAINERS ---
