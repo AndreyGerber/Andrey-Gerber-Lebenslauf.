@@ -153,7 +153,7 @@ fig.add_annotation(
 # Layout-Anpassung
 fig.update_layout(
     height=400, margin=dict(l=0, r=0, t=10, b=150),
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=),
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1988, 2028]),
     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1.5, 0.6]),
     plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
 )
