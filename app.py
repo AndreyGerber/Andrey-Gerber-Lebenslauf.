@@ -232,7 +232,7 @@ fig.update_layout(
 )
 
 # Anzeige in Streamlit
-st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
+#st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
 
 
 
