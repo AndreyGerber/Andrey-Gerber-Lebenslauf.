@@ -242,64 +242,36 @@ st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'disp
 import pydeck as pdk
 
 #Oben ist der Abschnitt mit "meinem Werdegang" und dem Pfeil. Unten die "Erklärung dazu"
-# --- EINSTELLUNGEN FÜR DIESEN ABSCHNITT ---
-INFO_BLOCK_HOEHE = 550
-BILD_BREITE_1988 = 350
-SCHRIFT_GROESSE_INFO = "22px"  # Hier die Größe der "Info-Box" anpassen
+# --- 1. EIGENE DATEN FÜR DIESEN BLOCK ---
+# Hier definierst du NUR die Jahre, die im Info-Block erscheinen sollen
+info_jahre = [1988, 1996] # Nur diese zwei Jahre sind jetzt über die Pfeile erreichbar
 
-# 1. Navigation (Unabhängig vom Zeitstrahl oben)
-jahre_liste = sorted(texte.keys())
-if 'detail_jahr' not in st.session_state:
-    st.session_state.detail_jahr = 1988
+if 'nav_jahr' not in st.session_state:
+    st.session_state.nav_jahr = 1988
 
-aktueller_idx = jahre_liste.index(st.session_state.detail_jahr)
+# Berechne den Index basierend auf deiner NEUEN Liste
+akt_idx = info_jahre.index(st.session_state.nav_jahr)
 
-# Pfeil-Navigation
-n_col1, n_col2, n_col3 = st.columns([1, 3, 1])
-with n_col1:
-    if st.button("⬅️ Zurück", disabled=(aktueller_idx == 0), key="btn_back"):
-        st.session_state.detail_jahr = jahre_liste[aktueller_idx - 1]
+# Pfeile zur Steuerung (nutzen jetzt nur noch 'info_jahre')
+p1, p2, p3 = st.columns([1, 10, 1]) # Schmalere Pfeile an den Rändern
+with p1:
+    if st.button("⬅️", disabled=(akt_idx == 0), key="nav_zurueck"):
+        st.session_state.nav_jahr = info_jahre[akt_idx - 1]
         st.rerun()
-with n_col3:
-    if st.button("Weiter ➡️", disabled=(aktueller_idx == len(jahre_liste)-1), key="btn_next"):
-        st.session_state.detail_jahr = jahre_liste[aktueller_idx + 1]
+with p3:
+    if st.button("➡️", disabled=(akt_idx == len(info_jahre)-1), key="nav_weiter"):
+        st.session_state.nav_jahr = info_jahre[akt_idx + 1]
         st.rerun()
 
-# 2. Der Zentrale Block (Feste Größe)
-with st.container(height=INFO_BLOCK_HOEHE, border=True):
-    jahr = st.session_state.detail_jahr
+# --- 2. DER INFO-BLOCK ---
+with st.container(height=550, border=True):
+    jahr = st.session_state.nav_jahr
     
     if jahr == 1988:
-        st.subheader(f"📍 {jahr}: Geburtsort Tscherlak")
-        col_text, col_map = st.columns([1, 1.5])
-        
-        with col_text:
-            # Der "nachgebaute" Info-Kasten mit anpassbarer Schriftgröße
-            st.markdown(f"""
-                <div style="background-color: #e8f4f9; padding: 15px; border-radius: 5px; 
-                            border-left: 6px solid #0072b2; margin-bottom: 20px;">
-                    <p style="color: #004466; font-size: {SCHRIFT_GROESSE_INFO}; margin: 0; line-height: 1.4;">
-                        Hier begann meine Reise in der UdSSR.
-                    </p>
-                </div>
-            """, unsafe_allow_html=True)
-            
-            img = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE_1988, BILD_BREITE_1988))
-            if img: st.image(img, width=BILD_BREITE_1988)
-
-        with col_map:
-            # Farbige Karte von Tscherlak
-            st.map(pd.DataFrame({'lat': [54.12], 'lon': [74.80]}), zoom=7)
+        st.subheader("📍 1988: Geburtsort Tscherlak")
+        # ... dein Code für Karte und Bild ...
 
     elif jahr == 1996:
-        st.subheader(f"🎒 {jahr}: Schulzeit in Russland")
-        # Dein Code für die zwei Bilder (itsme.png / itsme2.png)
-        st.write("Inhalte für 1996...")
-
-    else:
-        # Minimalistischer Standard für alle anderen Jahre (Keine blaue Box mehr!)
-        st.subheader(f"📅 {jahr}: {texte.get(jahr, '').replace('<br>', ' ')}")
-        st.write("Weitere Details folgen...")
-
+        st.subheader("🎒 1996: Schulzeit in Russland")
 
 
