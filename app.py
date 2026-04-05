@@ -89,74 +89,75 @@ st.divider()
 
 
 
-# --- 4. DATEN FÜR DIE STORY-NAVIGATION ---
 import plotly.graph_objects as go
+from streamlit_plotly_events import plotly_events
 
 # --- 1. DATEN FÜR DEN PFEIL ---
-df_timeline = pd.DataFrame([
-    {"jahr": 1988, "event": "Geburt", "farbe": "red", "symbol": "diamond"},
-    {"jahr": 1991, "event": "Russland", "farbe": "blue", "symbol": "diamond"},
-    {"jahr": 1996, "event": "Schule", "farbe": "blue", "symbol": "diamond"},
-    {"jahr": 2006, "event": "Emigration", "farbe": "gold", "symbol": "diamond"},
-    {"jahr": 2022, "event": "Hausbau", "farbe": "gold", "symbol": "diamond"},
-    {"jahr": 2024, "event": "Heute", "farbe": "gold", "symbol": "arrow-right"}
-])
-
-# --- 2. DEN PFEIL ZEICHNEN ---
-fig_arrow = go.Figure()
-
-# Die Linie (dein Pfeil)
-fig_arrow.add_trace(go.Scatter(
-    x=[1988, 1991, 2006, 2024], 
-    y=[0, 0, 0, 0],
-    mode='lines',
-    line=dict(color='black', width=3),
-    hoverinfo='none'
-))
-
-# Die farbigen Segmente (UdSSR, Russland, Deutschland)
-segments = [
-    (1988, 1991, 'red'), (1991, 2006, 'blue'), (2006, 2024, 'gold')
+events_data = [
+    {"jahr": 1988, "land": "Sowjetunion", "farbe": "#d32f2f", "name": "Geburt"},
+    {"jahr": 1991, "land": "Russland", "farbe": "#1976d2", "name": "Russland"},
+    {"jahr": 1996, "land": "Russland", "farbe": "#1976d2", "name": "Schule"},
+    {"jahr": 2006, "land": "Deutschland", "farbe": "#fbc02d", "name": "Emigration"},
+    {"jahr": 2022, "land": "Deutschland", "farbe": "#fbc02d", "name": "Hausbau"},
+    {"jahr": 2024, "land": "Deutschland", "farbe": "#fbc02d", "name": "Heute"}
 ]
+df_timeline = pd.DataFrame(events_data)
+
+# --- 2. GRAFIK ERSTELLEN ---
+fig = go.Figure()
+
+# Hintergrund-Segmente (Die dicken farbigen Balken)
+segments = [(1988, 1991, "#d32f2f"), (1991, 2006, "#1976d2"), (2006, 2024, "#fbc02d")]
 for start, end, color in segments:
-    fig_arrow.add_trace(go.Scatter(
-        x=[start, end], y=[0, 0],
-        mode='lines',
-        line=dict(color=color, width=8),
-        hoverinfo='none'
+    fig.add_trace(go.Scatter(
+        x=[start, end], y=[0, 0], mode='lines',
+        line=dict(color=color, width=12), hoverinfo='none'
     ))
 
-# Die klickbaren Ereignisse (Rauten)
-fig_arrow.add_trace(go.Scatter(
-    x=df_timeline['jahr'],
-    y=[0] * len(df_timeline),
+# Die Marker (Weiße Rauten wie in deiner Zeichnung)
+fig.add_trace(go.Scatter(
+    x=df_timeline['jahr'], y=[0]*len(df_timeline),
     mode='markers+text',
-    marker=dict(symbol='diamond', size=15, color='white', line=dict(width=2, color='black')),
-    text=df_timeline['jahr'],
-    textposition="bottom center",
-    customdata=df_timeline['event'],
-    hovertemplate="<b>%{text}</b>: %{customdata}<extra></extra>"
+    marker=dict(symbol='diamond', size=18, color='white', line=dict(width=2, color='black')),
+    text=df_timeline['jahr'], textposition="bottom center",
+    hovertext=df_timeline['name'], hoverinfo="text"
 ))
 
-# Layout-Anpassungen für "sauberen" Look
-fig_arrow.update_layout(
-    height=150, margin=dict(l=20, r=20, t=20, b=20),
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1987, 2025]),
+# Pfeilspitze am Ende
+fig.add_annotation(x=2024.5, y=0, ax=2023.5, ay=0, xref="x", yref="y",
+                   showarrow=True, arrowhead=2, arrowsize=1, arrowwidth=3, arrowcolor="black")
+
+# Layout aufräumen
+fig.update_layout(
+    height=180, margin=dict(l=40, r=40, t=20, b=20),
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1987, 2026]),
     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, 0.5]),
-    showlegend=False,
-    clickmode='event+select'
+    showlegend=False, plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
 )
 
-# --- 3. INTERAKTION AUSWERTEN ---
-# Hier nutzen wir st_plotly_events (muss evtl. mit 'pip install streamlit-plotly-events' installiert werden)
-# ODER wir nutzen einfache Radio-Buttons als Fallback, die wie der Zeitstrahl gestylt sind.
+# --- 3. INTERAKTION ---
+st.markdown("### Klicke auf ein Ereignis (Raute):")
+selected_point = plotly_events(fig, click_event=True, hover_event=False)
 
-st.markdown("### Klicke auf ein Ereignis auf dem Zeitstrahl:")
-selected_event = st.selectbox("Wähle ein Jahr:", df_timeline['jahr'], label_visibility="collapsed")
+# Wenn geklickt wird, Jahr im Session State speichern
+if selected_point:
+    st.session_state.selected_year = selected_point[0]['x']
 
-# --- 4. ANZEIGE DER INHALTE (Wie vorher) ---
-st.session_state.selected_year = selected_event
-# Hier folgt dein Code für Karte, Bilder oder Animationen...
+# --- 4. ANZEIGE DER STATION (Animation oder Bild) ---
+st.divider()
+jahr = st.session_state.get('selected_year', 1988)
+station = df_timeline[df_timeline['jahr'] == jahr].iloc[0]
+
+c1, c2 = st.columns([1, 1])
+with c1:
+    st.header(f"Station: {jahr}")
+    st.subheader(station['name'])
+    # Hier kannst du deine Bilder für 1996 oder 2006 laden
+    st.write(f"Hier öffnen wir jetzt die Animation oder das Bild für {station['land']}.")
+
+with c2:
+    # Hier kommt deine Karte (wie im vorherigen Schritt besprochen)
+    st.info("🗺️ Karte wird auf den Ort zentriert...")
 
 
 
