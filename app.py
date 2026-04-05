@@ -298,6 +298,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             st.caption("Geografische Lage von Tscherlak in Russland")
 
 
+
     # --- INNERHALB DEINES 750px CONTAINERS ---
     elif jahr_aktiv == 1996:
         # --- DEINE PARAMETER ---
