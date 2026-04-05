@@ -273,34 +273,32 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
         import base64
 
-        def get_image_base64(path):
+        def get_base64(path):
             with open(path, "rb") as f:
                 return base64.b64encode(f.read()).decode()
 
         try:
-            img_base64 = get_image_base64("images/tscherlak_map.png")
+            # Bild laden
+            img_b64 = get_base64("images/tscherlak_map.png")
             
-            # Alles in EINEM st.markdown-Aufruf, damit der Pin über dem Bild liegt
+            # ALLES in einem einzigen Markdown-Block ohne Kommentare
             st.markdown(f"""
-                <div style="position: relative; width: 100%; max-width: 900px; margin: auto;">
-                    <!-- Das Kartenbild -->
-                    <img src="data:image/png;base64,{img_base64}" style="width: 100%; border-radius: 10px; box-shadow: 0px 4px 15px rgba(0,0,0,0.3);">
-                    
-                    <!-- Der rote Pin (Position angepasst für Tscherlak rechts von Omsk) -->
+                <div style="position: relative; width: 100%;">
+                    <img src="data:image/png;base64,{img_b64}" style="width: 100%; border-radius: 10px;">
                     <div style="
                         position: absolute;
-                        top: 42%;     /* Vertikale Position auf der Karte */
-                        left: 92%;    /* Ganz rechts bei Omsk/Tscherlak */
+                        top: 28%;
+                        left: 84%;
                         transform: translate(-50%, -100%);
                         font-size: 40px;
                         filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
-                        z-index: 10;
+                        z-index: 999;
                     ">📍</div>
                 </div>
             """, unsafe_allow_html=True)
             
-        except FileNotFoundError:
-            st.error("Bild nicht gefunden! Pfad 'images/tscherlak_map.png' prüfen.")
+        except Exception as e:
+            st.error(f"Fehler: {e}")
 
   
 
