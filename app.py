@@ -273,29 +273,28 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
         import base64
 
-        # Hilfsfunktion zum Laden aus dem Unterordner 'images'
         def get_image_base64(path):
             with open(path, "rb") as f:
                 return base64.b64encode(f.read()).decode()
 
         try:
-            # WICHTIG: Hier steht jetzt 'images/...' vor dem Dateinamen
             img_base64 = get_image_base64("images/tscherlak_map.png")
             
+            # Alles in EINEM st.markdown-Aufruf, damit der Pin über dem Bild liegt
             st.markdown(f"""
                 <div style="position: relative; width: 100%; max-width: 900px; margin: auto;">
                     <!-- Das Kartenbild -->
                     <img src="data:image/png;base64,{img_base64}" style="width: 100%; border-radius: 10px; box-shadow: 0px 4px 15px rgba(0,0,0,0.3);">
                     
-                    <!-- Der Pin bei Tscherlak (Rechts im Bild, südöstlich von Omsk) -->
+                    <!-- Der rote Pin (Position angepasst für Tscherlak rechts von Omsk) -->
                     <div style="
                         position: absolute;
-                        top: 25%;     /* Höhe anpassen, falls nötig */
-                        left: 88%;    /* Weit rechts im Bild */
+                        top: 42%;     /* Vertikale Position auf der Karte */
+                        left: 92%;    /* Ganz rechts bei Omsk/Tscherlak */
                         transform: translate(-50%, -100%);
-                        font-size: 45px;
-                        filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.6));
-                        cursor: default;
+                        font-size: 40px;
+                        filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
+                        z-index: 10;
                     ">📍</div>
                 </div>
             """, unsafe_allow_html=True)
@@ -303,7 +302,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
         except FileNotFoundError:
             st.error("Bild nicht gefunden! Pfad 'images/tscherlak_map.png' prüfen.")
 
-        st.info("Tscherlak liegt im Gebiet Omsk am Irtysch – über 4.000 km von Deutschland entfernt.")
+  
 
 
 
