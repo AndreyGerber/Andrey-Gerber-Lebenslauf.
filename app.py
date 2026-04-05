@@ -86,11 +86,15 @@ st.divider()
 
 
 
+
+
+
+
 import streamlit as st
 import plotly.graph_objects as go
 
 # --- 1. DATEN FÜR DEN PFEIL ---
-# Jahre aus deiner Zeichnung
+# Deine Jahre aus der Zeichnung
 jahre = [1988, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 
 # --- 2. DEN SCHWARZEN PFEIL ERSTELLEN ---
@@ -105,7 +109,7 @@ fig.add_trace(go.Scatter(
     hoverinfo='none'
 ))
 
-# Die Rauten und die Jahre (Text direkt unter den Rauten)
+# Die Rauten und die Jahre (Jahre direkt unter den Rauten)
 fig.add_trace(go.Scatter(
     x=jahre,
     y=[0] * len(jahre),
@@ -117,28 +121,28 @@ fig.add_trace(go.Scatter(
         line=dict(color='black', width=2)
     ),
     text=jahre,
-    textposition="bottom center", # Jahre direkt unter die Rauten setzen
-    textfont=dict(size=20, color="black", family="Arial Black"),
+    textposition="bottom center", # Jahre unter die Rauten setzen
+    textfont=dict(size=18, color="black"),
     hoverinfo='none'
 ))
 
-# Die Pfeilspitze (Rechts am Ende)
+# Die Pfeilspitze am rechten Ende
 fig.add_annotation(
-    x=max(jahre)+3, y=0, ax=max(jahre)+1.5, ay=0,
+    x=max(jahre)+3, y=0, ax=max(jahre)+1, ay=0,
     xref="x", yref="y", showarrow=True,
     arrowhead=2, arrowsize=1.5, arrowwidth=3, arrowcolor="black"
 )
 
-# Layout-Einstellungen für maximale Sauberkeit (kein Gitter, keine Achsen)
+# Layout aufräumen (Kein Gitter, keine Achsen)
 fig.update_layout(
     height=200,
     margin=dict(l=10, r=10, t=10, b=10),
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[min(jahre)-4, max(jahre)+5]),
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[min(jahre)-4, max(jahre)+6]),
     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, 0.5]),
     plot_bgcolor="rgba(0,0,0,0)",
-    paper_bgcolor="rgba(0,0,0,0)",
-    staticPlot=True # Macht die Grafik komplett statisch (nicht verschiebbar)
+    paper_bgcolor="rgba(0,0,0,0)"
 )
 
 # --- 3. ANZEIGE IN STREAMLIT ---
-st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+# 'staticPlot': True verhindert das Verschieben/Zoomen durch den Nutzer
+st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
