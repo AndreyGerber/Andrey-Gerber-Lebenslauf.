@@ -240,8 +240,6 @@ st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'disp
 
 
 import pydeck as pdk
-import folium
-from streamlit_folium import st_folium 
 
 #Oben ist der Abschnitt mit "meinem Werdegang" und dem Pfeil. Unten die "Erklärung dazu"
 
@@ -273,24 +271,49 @@ with st.container(height=BLOCK_HOEHE, border=True):
     if jahr_aktiv == 1988:
         st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
 
-        # 2. Daten für den Pin vorbereiten
-        # Streamlit braucht ein DataFrame mit 'lat' und 'lon'
-        df_pin = pd.DataFrame({'lat': [54.1221], 'lon': [74.8056]})
+        # 1. Koordinaten festlegen
+        BERLIN = [13.4050, 52.5200]
+        TSCHERLAK = [74.8056, 54.1221]
 
-        # 3. Karte mittig platzieren
-        _, col_map, _ = st.columns([0.1, 4, 0.1])
-        with col_map:
-            # CSS-Hack: Entfernt die Attribution (Hinweise) unten rechts so gut wie möglich
-            st.markdown("""
-                <style>
-                    .mapboxgl-ctrl-bottom-right { display: none !important; }
-                    .mapboxgl-ctrl-bottom-left { display: none !important; }
-                </style>
-            """, unsafe_allow_html=True)
-            
-            # Die Karte (Zoom 2-3 zeigt ganz Russland)
-            st.map(df_pin, zoom=2, use_container_width=True, color='#FF0000')
-            st.caption("Geografische Lage von Tscherlak")
+        # 2. Daten für den Bogen und die Punkte
+        chart_data = pd.DataFrame([{
+            "from_lon": BERLIN[0], "from_lat": BERLIN[1],
+            "to_lon": TSCHERLAK[0], "to_lat": TSCHERLAK[1],
+            "label": "Distanz: ca. 4.000 km"
+        }])
+
+        # 3. Die Karte mit Pydeck erstellen
+        st.pydeck_chart(pdk.Deck(
+            map_style='mapbox://styles/mapbox/light-v9',
+            initial_view_state=pdk.ViewState(
+                latitude=53.0,
+                longitude=44.0,
+                zoom=2.8,
+                pitch=45, # Neigung für 3D-Effekt des Bogens
+            ),
+            layers=[
+                # Der Bogen zwischen den Städten
+                pdk.Layer(
+                    "ArcLayer",
+                    data=chart_data,
+                    get_source_position="[from_lon, from_lat]",
+                    get_target_position="[to_lon, to_lat]",
+                    get_source_color=[0, 114, 178, 160], # Blau
+                    get_target_color=[255, 0, 0, 200],   # Rot
+                    get_width=5,
+                ),
+                # Punkt für Tscherlak
+                pdk.Layer(
+                    "ScatterplotLayer",
+                    data=pd.DataFrame([{"lon": TSCHERLAK[0], "lat": TSCHERLAK[1]}]),
+                    get_position="[lon, lat]",
+                    get_color=[255, 0, 0],
+                    get_radius=50000,
+                ),
+            ],
+        ))
+        
+        st.info("Die Karte zeigt die enorme Distanz zwischen Deutschland und meinem Geburtsort Tscherlak in Sibirien.")
 
 
     # --- INNERHALB DEINES 750px CONTAINERS ---
