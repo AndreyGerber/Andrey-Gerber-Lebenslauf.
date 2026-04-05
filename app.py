@@ -300,7 +300,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     elif jahr_aktiv == 1996:
         # --- DEINE PARAMETER ---
-        MASSSTAB = 1.3  # 0.5 = 50% der Originalgröße. Verkleinere dies, um das Scrollen zu stoppen.
+        MASSSTAB = 1.2  # 0.5 = 50% der Originalgröße. Verkleinere dies, um das Scrollen zu stoppen.
 
         st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
         
