@@ -87,90 +87,94 @@ st.divider()
 
 
 
+import streamlit as st
+import plotly.graph_objects as go
+from streamlit_plotly_events import plotly_events
+import pandas as pd
 
-# --- 1. DATEN & SESSION STATE ---
-if 'selected_year' not in st.session_state:
-    st.session_state.selected_year = 2006
-
-stationen = [
-    {"jahr": 1988, "event": "Geburt", "land": "UdSSR", "farbe": "#d32f2f"},
-    {"jahr": 1991, "event": "Russland Start", "land": "Russland", "farbe": "#1976d2"},
-    {"jahr": 1996, "event": "Schule", "land": "Russland", "farbe": "#1976d2"},
-    {"jahr": 2006, "event": "Emigration", "land": "Deutschland", "farbe": "#fbc02d"},
-    {"jahr": 2022, "event": "Hausbau", "land": "Deutschland", "farbe": "#fbc02d"},
-    {"jahr": 2024, "event": "Heute", "land": "Deutschland", "farbe": "#fbc02d"}
+# 1. DATEN DER STATIONEN (Deine Jahre aus der Zeichnung)
+stations_data = [
+    {"jahr": 1988, "event": "Geburt", "info": "Start in der UdSSR"},
+    {"jahr": 1996, "event": "Schule", "info": "Kindheit in Russland"},
+    {"jahr": 2006, "event": "Emigration", "info": "Flug Omsk -> Neustrelitz"},
+    {"jahr": 2010, "event": "Studium/Arbeit", "info": "Erste Schritte in DE"},
+    {"jahr": 2017, "event": "Meilenstein", "info": "Weitere Entwicklung"},
+    {"jahr": 2019, "event": "Karriere", "info": "Beruflicher Weg"},
+    {"jahr": 2022, "event": "Hausbau", "info": "Wurzeln schlagen"},
+    {"jahr": 2026, "event": "Zukunft", "info": "Ausblick"}
 ]
+df = pd.DataFrame(stations_data)
 
-# --- 2. DER SCHWARZE PFEIL (CSS & HTML) ---
-st.markdown("""
-    <style>
-    .timeline-container {
-        position: relative;
-        width: 100%;
-        height: 80px;
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-    .main-arrow {
-        position: absolute;
-        height: 4px;
-        background-color: black;
-        width: 95%;
-        left: 0;
-    }
-    .arrow-head {
-        position: absolute;
-        right: 4%;
-        width: 0; 
-        height: 0; 
-        border-top: 10px solid transparent;
-        border-bottom: 10px solid transparent;
-        border-left: 15px solid black;
-    }
-    </style>
-    <div class="timeline-container">
-        <div class="main-arrow"></div>
-        <div class="arrow-head"></div>
-    </div>
-""", unsafe_allow_html=True)
+if 'selected_year' not in st.session_state:
+    st.session_state.selected_year = 1988
 
-# --- 3. DIE RAUTEN-NAVIGATION (Buttons direkt unter dem Pfeil) ---
-# Wir nutzen columns, damit die Buttons genau unter der Linie sitzen
-cols = st.columns(len(stationen))
+# 2. DEN SCHWARZEN PFEIL ZEICHNEN
+fig = go.Figure()
 
-for i, s in enumerate(stationen):
-    with cols[i]:
-        # Symbol ändern: Volle Raute wenn ausgewählt
-        if s['jahr'] == st.session_state.selected_year:
-            btn_label = f"◆\n{s['jahr']}"
-            btn_type = "primary"
-        else:
-            btn_label = f"◇\n{s['jahr']}"
-            btn_type = "secondary"
-            
-        if st.button(btn_label, key=f"btn_{s['jahr']}", use_container_width=True, type=btn_type):
-            st.session_state.selected_year = s['jahr']
-            st.rerun()
+# Die Hauptlinie (Pfeilschaft)
+fig.add_trace(go.Scatter(
+    x=[1985, 2027], y=[0, 0],
+    mode='lines',
+    line=dict(color='black', width=3),
+    hoverinfo='none'
+))
 
-# --- 4. DETAILS ANZEIGEN ---
+# Die Rauten (Events)
+fig.add_trace(go.Scatter(
+    x=df['jahr'],
+    y=[0] * len(df),
+    mode='markers+text',
+    marker=dict(
+        symbol='diamond',
+        size=18,
+        color='white',
+        line=dict(color='black', width=2)
+    ),
+    text=df['jahr'],
+    textposition="top center",
+    textfont=dict(size=16, color="black"),
+    hovertext=df['event'],
+    hoverinfo="text"
+))
+
+# Die Pfeilspitze
+fig.add_annotation(
+    x=2028, y=0, ax=2027, ay=0,
+    xref="x", yref="y", showarrow=True,
+    arrowhead=2, arrowsize=1.5, arrowwidth=3, arrowcolor="black"
+)
+
+# Layout-Einstellungen für maximale Sauberkeit
+fig.update_layout(
+    height=200,
+    margin=dict(l=10, r=10, t=50, b=10),
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1985, 2030]),
+    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, 0.5]),
+    plot_bgcolor="rgba(0,0,0,0)",
+    paper_bgcolor="rgba(0,0,0,0)",
+    clickmode='event+select'
+)
+
+# 3. INTERAKTION (Klick auf Raute)
+st.write("### 📍 Wähle eine Station auf meinem Lebensweg:")
+selected_point = plotly_events(fig, click_event=True, hover_event=False)
+
+if selected_point:
+    st.session_state.selected_year = selected_point[0]['x']
+
+# 4. ANZEIGE DES INHALTS UNTER DEM PFEIL
 st.divider()
-aktuelle_wahl = next(item for item in stationen if item["jahr"] == st.session_state.selected_year)
+wahl = df[df['jahr'] == st.session_state.selected_year].iloc[0]
 
-col_text, col_visual = st.columns([1, 1.5])
+c1, c2 = st.columns([1, 2])
+with c1:
+    st.markdown(f"## {wahl['jahr']}")
+    st.subheader(wahl['event'])
+    st.info(wahl['info'])
 
-with col_text:
-    st.markdown(f"<h2 style='color: {aktuelle_wahl['farbe']};'>{aktuelle_wahl['jahr']}</h2>", unsafe_allow_html=True)
-    st.subheader(aktuelle_wahl['event'])
-    st.write(f"**Land:** {aktuelle_wahl['land']}")
-    
-    # Text-Inhalte je nach Jahr
-    if aktuelle_wahl['jahr'] == 2006:
-        st.info("✈️ Flug von Omsk nach Neustrelitz. Start in ein neues Kapitel.")
-    elif aktuelle_wahl['jahr'] == 1988:
-        st.write("Geboren in Tscherlak, UdSSR.")
-
-with col_visual:
-    # Hier kannst du deine Karte oder Bilder einbinden
-    st.write(f"*(Platzhalter für Visualisierung von {aktuelle_wahl['jahr']})*")
-
+with c2:
+    # Hier kommt deine Visualisierung rein (Karte/Bild)
+    if wahl['jahr'] == 2006:
+        st.success("✈️ Hier startet jetzt die Flug-Animation von Omsk nach Neustrelitz!")
+    else:
+        st.write(f"*(Platzhalter für Visualisierung von {wahl['jahr']})*")
