@@ -249,7 +249,7 @@ BILD_BREITE = 350
 INFO_FONT_SIZE = "24px" # Etwas größer, da der Block jetzt massiver ist
 
 # 1. Navigation (absolut unabhängig)
-highlights = [1988, 1996]
+highlights = [1988, 1996, 2006]
 if 'info_idx' not in st.session_state:
     st.session_state.info_idx = 0
 
@@ -324,6 +324,62 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 st.image(img_schule, width=neue_breite)
             else:
                 st.error("Bild 'schule2.png' nicht gefunden.")
+
+    elif jahr_aktiv == 2006:
+        st.subheader(f"✈️ {jahr_aktiv}: Emigration (Omsk -> Deutschland)")
+        
+        # 1. TEXTBEREICH (wie bei den anderen Jahren)
+        st.markdown(f"""
+            <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4;'>
+                Der große Umzug. Ein Flug in ein neues Leben.
+            </p>
+        """, unsafe_allow_html=True)
+        
+        st.divider()
+
+        # 2. DEINE FLUGROUTE (Interaktive Karte)
+        import plotly.graph_objects as go
+
+        fig_flight = go.Figure()
+
+        # Rote Fluglinie (Bogen)
+        fig_flight.add_trace(go.Scattergeo(
+            locationmode = 'ISO-3',
+            lon = [73.32, 13.40],
+            lat = [54.98, 52.52],
+            mode = 'lines',
+            line = dict(width = 3, color = 'red'),
+        ))
+
+        # Flugzeug-Icon
+        fig_flight.add_trace(go.Scattergeo(
+            lon = [13.40],
+            lat = [52.52],
+            mode = 'markers+text',
+            text = "🛬",
+            textfont = dict(size=25),
+            marker = dict(size = 10, color = 'black'),
+        ))
+
+        # Layout für Europa/Asien Fokus optimiert
+        fig_flight.update_layout(
+            height=450,
+            margin=dict(l=10, r=10, t=10, b=10),
+            geo = dict(
+                scope = 'world',
+                projection_type = 'orthographic', # Globus-Ansicht
+                showland = True,
+                landcolor = "rgb(243, 243, 243)",
+                countrycolor = "rgb(204, 204, 204)",
+                # Fokus auf die Route setzen
+                center = dict(lat=53, lon=43),
+                projection_scale = 3
+            ),
+            showlegend = False
+        )
+
+        # WICHTIG: In Streamlit anzeigen
+        st.plotly_chart(fig_flight, use_container_width=True, key="flight_2006")
 
 
 
