@@ -300,7 +300,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     elif jahr_aktiv == 1996:
         # --- DEINE PARAMETER ---
-        MASSSTAB = 1.2  # 1.0 = 100%, 0.5 = 50% etc. Verkleinere dies bei Scrollen.
+        MASSSTAB = 1.1  # 1.0 = 100%, 0.5 = 50% etc. Verkleinere dies bei Scrollen.
         
         # CSS: Entfernt die Standard-Abstände (Gaps) von Streamlit in diesem Block
         st.markdown("""
