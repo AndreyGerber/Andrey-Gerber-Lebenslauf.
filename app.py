@@ -141,8 +141,18 @@ fig.add_annotation(x=1988, y=-0.3, text="<b>1988</b>", showarrow=False, font=dic
 
 # --- LAYOUT ---
 fig.update_layout(
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=),
-    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1, 1.5]),
+    xaxis=dict(
+        showgrid=False, 
+        zeroline=False, 
+        showticklabels=False, 
+        range=[1985, 2030]  # HIER war der Fehler: Die Zahlen haben gefehlt!
+    ),
+    yaxis=dict(
+        showgrid=False, 
+        zeroline=False, 
+        showticklabels=False, 
+        range=[-1, 1.5]
+    ),
     height=400,
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)",
