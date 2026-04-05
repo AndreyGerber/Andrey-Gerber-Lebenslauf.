@@ -160,27 +160,26 @@ fig.add_trace(go.Scatter(
 ))
 
 # Jahreszahlen und Textblöcke (45° gedreht)
-for jahr in jahre_alle:
-    # 1. Das Jahr (fett)
+for i, jahr in enumerate(jahre_alle):
+    # Wechselt zwischen zwei Höhen: -0.35 und -0.65
+    y_offset = -0.35 if i % 2 == 0 else -0.65 
+    
+    # 1. Das Jahr
     fig.add_annotation(
         x=jahr, y=-0.1, 
         text=f"<b>{jahr}</b>",
-        showarrow=False, 
-        textangle=-25,
-        font=dict(size=GROESSE_JAHRE, color="black", family="Arial Black"),
-        xanchor="center", 
-        yanchor="top"
+        showarrow=False, textangle=-45,
+        font=dict(size=GROESSE_JAHRE, color="black"),
+        xanchor="right", yanchor="top"
     )
     
-    # 2. Der Textblock darunter (Zweizeilig möglich durch <br>)
+    # 2. Der Textblock (mit dem neuen y_offset)
     fig.add_annotation(
-        x=jahr, y=-0.35, # Etwas tiefer als das Jahr
-        text=texte.get(jahr, "mein Text"),
-        showarrow=False, 
-        textangle=-25,
+        x=jahr, y=y_offset, 
+        text=texte.get(jahr, ""),
+        showarrow=False, textangle=-45,
         font=dict(size=GROESSE_TEXTE, color="gray"),
-        xanchor="center", 
-        yanchor="top"
+        xanchor="right", yanchor="top"
     )
 
 
