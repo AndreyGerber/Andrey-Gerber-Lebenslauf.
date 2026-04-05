@@ -300,38 +300,41 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     elif jahr_aktiv == 1996:
         # --- DEINE PARAMETER ---
-        MASSSTAB = 0.7  # 1.0 = 100%. Passe dies an für die 750px Höhe.
+        MASSSTAB = 0.7  # Passe diesen Wert an, falls das Bild zu groß ist
 
-        # 1. Drei Spalten: Die äußeren dienen als Puffer für die Zentrierung
-        # [0.5, 3, 0.5] drückt den Inhalt in die Mitte
-        c_links, c_mitte, c_rechts = st.columns([0.5, 3, 0.5])
+        # Wir erstellen zwei Spalten
+        col_text, col_foto = st.columns([1, 2])
 
-        with c_mitte:
-            # Alles in dieser Spalte wird nun als Block zentriert wahrgenommen
-            st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
+        with col_text:
+            # --- VERTIKALE ZENTRIERUNG LINKS ---
+            # Wir fügen oben Platz ein, um den Text mittig zur Blockhöhe zu schieben
+            st.write("###")
+            st.write("###")
+            st.write("###")
             
-            # Text unter der Überschrift
+            st.subheader(f"🎒 {jahr_aktiv}: Schulzeit")
             st.markdown(f"""
-                <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4; margin-bottom: 10px;'>
+                <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4;'>
                     Meine Schulzeit.<br>
                     So schnell vergehen 10 Jahre.
                 </p>
             """, unsafe_allow_html=True)
-            
-            # Kompakte Trennlinie
-            st.markdown("<hr style='margin: 10px 0; border: 0.5px solid #ddd; width: 100%;'>", unsafe_allow_html=True)
 
-            # Bild laden und skalieren
+        with col_foto:
+            # Bild laden
             img_schule = lade_formatiertes_bild("schule2.png")
             
             if img_schule:
                 original_breite = img_schule.size[0]
                 neue_breite = int(original_breite * MASSSTAB)
                 
-                # Bild innerhalb der mittleren Spalte anzeigen
+                # --- VERTIKALE ZENTRIERUNG RECHTS ---
+                # Auch hier Platz oben einfügen, damit das Bild mittig schwebt
+                st.write("###")
                 st.image(img_schule, width=neue_breite)
             else:
-                st.error("Bild 'schule2.png' nicht gefunden.")
+                st.error("Bild 'schule2.png' fehlt.")
+
 
 
 
