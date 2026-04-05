@@ -99,17 +99,20 @@ jahre_alle = [1988, 1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 # Jahre, die eine Raute auf der Linie erhalten (alle außer 1988)
 jahre_mit_raute = [1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 
+GROESSE_JAHRE = 18       # Schriftgröße der Jahreszahlen (fett)
+GROESSE_TEXTE = 12       # Schriftgröße der Beschreibungen
+
 # Hier kannst du deine Texte für die Blöcke definieren
 texte = {
-    1988: "Born in UdSSR",
-    1991: "Moved to Russian Federation without moving",
-    1996: "School (not cool)",
-    2006: "Emigration to GE ",
-    2010: "Studiing aircraft design (B.Eng. & Ms.Sc.)",
-    2017: "TÜV Rheinland (Expert in the lab)",
-    2019: "TÜV Rheinland (Quality Expert)",
-    2022: "Ferchau (Expert in production control)",
-    2026: "Liora (Expert in Data Science & Machine Learning)"
+    1988: "Born in<br>UdSSR",
+    1991: "Moved to Russian Federation<br>without moving",
+    1996: "School<br>(not cool)",
+    2006: "Emigration<br>to GE",
+    2010: "Studying aircraft design<br>(B.Eng. & Ms.Sc.)",
+    2017: "TÜV Rheinland<br>(Expert in the lab)",
+    2019: "TÜV Rheinland<br>(Quality Expert)",
+    2022: "Ferchau<br>(Expert in production control)",
+    2026: "Liora<br>(Data Science & ML)"
 }
 
 # Design-Einstellungen
@@ -158,26 +161,28 @@ fig.add_trace(go.Scatter(
 
 # Jahreszahlen und Textblöcke (45° gedreht)
 for jahr in jahre_alle:
-    # Das Jahr (fett)
+    # 1. Das Jahr (fett)
     fig.add_annotation(
         x=jahr, y=-0.1, 
         text=f"<b>{jahr}</b>",
         showarrow=False, 
         textangle=-25,
-        font=dict(size=JAHR_SCHRIFTGROESSE, color="black"),
+        font=dict(size=GROESSE_JAHRE, color="black", family="Arial Black"),
         xanchor="center", 
         yanchor="top"
     )
-    # Der individuelle Textblock darunter
+    
+    # 2. Der Textblock darunter (Zweizeilig möglich durch <br>)
     fig.add_annotation(
-        x=jahr, y=-0.4, 
+        x=jahr, y=-0.35, # Etwas tiefer als das Jahr
         text=texte.get(jahr, "mein Text"),
         showarrow=False, 
         textangle=-25,
-        font=dict(size=12, color="gray"),
+        font=dict(size=GROESSE_TEXTE, color="gray"),
         xanchor="center", 
         yanchor="top"
     )
+
 
 # Pfeilspitze am rechten Ende
 fig.add_annotation(
