@@ -278,11 +278,12 @@ with st.container(height=550, border=True):
         col_content, col_map = st.columns([1, 1.5])
         
         with col_content:
+            st.info("Hier begann meine Reise in der UdSSR.")
             img_tscherlak = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
             if img_tscherlak:
                 st.image(img_tscherlak, width=BILD_BREITE)
-            st.write("Hier begann meine Reise in der UdSSR.")
-            st.info("Tscherlak liegt am Fluss Irtysch in der Oblast Omsk.")
+            
+            
 
         with col_map:
             map_data = pd.DataFrame({'lat': [54.12], 'lon': [74.80]})
