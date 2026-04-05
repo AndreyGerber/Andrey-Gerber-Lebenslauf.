@@ -128,7 +128,7 @@ fig = go.Figure()
 
 # Lebenslinie: Durchgehend von 1988 bis kurz vor die Pfeilspitze (2034)
 fig.add_trace(go.Scatter(
-    x=[1988, 2028], 
+    x=[1988, 2029], 
     y=[0, 0],
     mode='lines',
     line=dict(color='black', width=LINIEN_DICKE),
