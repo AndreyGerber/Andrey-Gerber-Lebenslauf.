@@ -87,31 +87,70 @@ st.divider()
 
 
 
-# 3. Hobby-Timeline mit Plotly
-st.subheader("Hobbys & Aktivitäten")
 
-# Daten für die Zeitachse aufbereiten
-data = [
-    dict(Hobby="Schach", Start='1996-01-01', Ende='2026-01-01', Typ="Kontinuierlich"),
-    dict(Hobby="Eishockey", Start='1998-01-01', Ende='2006-01-01', Typ="Kontinuierlich"),
-    dict(Hobby="Yoga", Start='2018-01-01', Ende='2026-01-01', Typ="Kontinuierlich"),
-    # Fußball mit Pause
-    dict(Hobby="Fussball", Start='1997-01-01', Ende='2008-01-01', Typ="Aktiv"),
-    dict(Hobby="Fussball", Start='2008-01-01', Ende='2020-01-01', Typ="Pause (Striche)"),
-    dict(Hobby="Fussball", Start='2020-01-01', Ende='2026-01-01', Typ="Wieder aktiv")
+
+
+
+# 3. Hobby-Timeline mit Plotly
+import plotly.graph_objects as go
+
+st.subheader("Mein Weg")
+
+# 1. Daten für deine Meilensteine festlegen
+meilensteine = [
+    {"jahr": 1988, "event": "Geburt", "ort": "UdSSR"},
+    {"jahr": 1995, "event": "Einschulung", "ort": "Russland"},
+    {"jahr": 2004, "event": "Umzug", "ort": "Deutschland"},
+    {"jahr": 2024, "event": "Heute", "ort": "Portfolio"}
 ]
 
-df = pd.DataFrame(data)
+jahre = [m["jahr"] for m in meilensteine]
+texte = [f"<b>{m['jahr']}</b><br>{m['event']}<br>{m['ort']}" for m in meilensteine]
 
-# Farben definieren
-colors = {"Kontinuierlich": "#31333F", "Aktiv": "#0068C9", "Pause (Striche)": "#D3D3D3", "Wieder aktiv": "#0068C9"}
+# 2. Den Zeitstrahl-Pfeil erstellen
+fig_weg = go.Figure()
 
-fig = px.timeline(df, x_start="Start", x_end="Ende", y="Hobby", color="Typ", 
-                  color_discrete_map=colors, template="plotly_white")
+# Die Hauptlinie (der Schaft des Pfeils)
+fig_weg.add_trace(go.Scatter(
+    x=[1987, 2026], 
+    y=[0, 0],
+    mode="lines",
+    line=dict(color="#4B0082", width=6),
+    hoverinfo="skip"
+))
 
-fig.update_yaxes(autorange="reversed") # Damit Schach oben steht
-fig.update_layout(showlegend=False, height=300)
+# Die Meilensteine als Punkte auf der Linie
+fig_weg.add_trace(go.Scatter(
+    x=jahre,
+    y=[0] * len(jahre),
+    mode="markers+text",
+    marker=dict(size=12, color="#4B0082", symbol="diamond"),
+    text=texte,
+    textposition="top center",
+    hoverinfo="none"
+))
 
-st.plotly_chart(fig, use_container_width=True)
+# 3. Die Pfeilspitze hinzufügen
+fig_weg.add_annotation(
+    x=2026, y=0,
+    ax=2025, ay=0,
+    xref="x", yref="y",
+    axref="x", ayref="y",
+    showarrow=True,
+    arrowhead=2,
+    arrowsize=1,
+    arrowwidth=6,
+    arrowcolor="#4B0082"
+)
 
-st.info("💡 Fussball: play (not drink in stadium)")
+# Layout-Einstellungen (Achsen verstecken)
+fig_weg.update_layout(
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1985, 2028]),
+    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1, 1]),
+    margin=dict(l=20, r=20, t=50, b=20),
+    height=250,
+    plot_bgcolor="rgba(0,0,0,0)",
+    paper_bgcolor="rgba(0,0,0,0)"
+)
+
+st.plotly_chart(fig_weg, use_container_width=True)
