@@ -3,3 +3,5 @@ pandas
 plotly
 streamlit-plotly-events
 Pillow
+folium
+streamlit-folium
