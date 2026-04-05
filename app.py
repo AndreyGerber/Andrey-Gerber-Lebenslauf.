@@ -299,13 +299,10 @@ with st.container(height=BLOCK_HOEHE, border=True):
     # --- INNERHALB DEINES 750px CONTAINERS ---
 
     elif jahr_aktiv == 1996:
-        # --- PARAMETER FÜR DIE BILDGRÖSSE ---
-        # Verkleinere diesen Wert (z.B. auf 400 oder 350), falls du immer noch scrollen musst
-        BILD_GROESSE_1996 = 650 
+        BILD_GROESSE_1996 = 450 
 
         st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
         
-        # Textbereich
         st.markdown(f"""
             <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4;'>
                 Meine Schulzeit.<br>
@@ -315,17 +312,14 @@ with st.container(height=BLOCK_HOEHE, border=True):
         
         st.divider()
 
-        # Bild-Bereich (Zentriert)
-        # Wir nutzen Spalten, um das Bild mittig zu platzieren
         col_l, col_mid, col_r = st.columns([1, 2, 1])
         
         with col_mid:
-            # Wir laden nur noch 'schule2.png'
-            img_schule = lade_formatiertes_bild("schule2.png", target_size=(BILD_GROESSE_1996, BILD_GROESSE_1996))
+            img_schule = lade_formatiertes_bild("schule2.png", target_size=(BILD_GROESSE_1996+200, BILD_GROESSE_1996))
             
             if img_schule:
-                # Wir geben eine feste Breite an, um das Scrollen zu verhindern
-                st.image(img_schule, width=BILD_GROESSE_1996, caption="Eindrücke aus Russland")
+                # Hier wurde 'caption' entfernt, damit der Text unten verschwindet
+                st.image(img_schule, width=BILD_GROESSE_1996)
             else:
                 st.error("Bild 'schule2.png' nicht gefunden.")
 
