@@ -240,6 +240,8 @@ st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'disp
 
 
 import pydeck as pdk
+import folium
+from streamlit_folium import st_folium 
 
 #Oben ist der Abschnitt mit "meinem Werdegang" und dem Pfeil. Unten die "Erklärung dazu"
 
@@ -269,18 +271,37 @@ with st.container(height=BLOCK_HOEHE, border=True):
     jahr_aktiv = highlights[st.session_state.info_idx]
     
     if jahr_aktiv == 1988:
-            # 1. Überschrift
-            st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
-            
+        st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
+        
+        # 1. Bild (ohne Spalten, volle Breite oder feste Breite)
+        img = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
+        if img:
+            st.image(img, width=BILD_BREITE)
+        
+        st.info("Geburtsort Tscherlak")
 
-            # 3. Die Karte über die volle Breite
-            # Wir setzen einen Punkt für Tscherlak
-            df_map = pd.DataFrame({'lat': [54.1221], 'lon': [74.8056]})
-            
-            # Zoom 3 zeigt Russland sehr gut im Ganzen
-            st.map(df_map, zoom=3, use_container_width=True)
-            st.caption("Geografische Lage von Tscherlak in Russland")
+        # 2. Folium Karte erstellen
+        # Koordinaten für Tscherlak
+        lat_tscherlak, lon_tscherlak = 54.1221, 74.8056
+        
+        # Karte initialisieren (Zentriert auf Russland/Sibirien)
+        m = folium.Map(
+            location=[55.0, 80.0], # Etwas versetzt, damit Russland gut sichtbar ist
+            zoom_start=3, 
+            tiles="CartoDB positron" # Ein sauberer, heller Kartenstil
+        )
 
+        # Den roten Pin (Pushpin) setzen
+        folium.Marker(
+            location=[lat_tscherlak, lon_tscherlak],
+            popup="Tscherlak",
+            tooltip="Hier begann meine Reise",
+            icon=folium.Icon(color="red", icon="pushpin", prefix="fa")
+        ).add_to(m)
+
+        # 3. Karte in Streamlit anzeigen
+        st_folium(m, width=700, height=400, returned_objects=[])
+        st.caption("Geografische Lage von Tscherlak in Russland")
 
 
     # --- INNERHALB DEINES 750px CONTAINERS ---
