@@ -96,38 +96,35 @@ import streamlit as st
 
 st.subheader("Mein Lebensweg")
 
-# Deine Meilensteine
-events = [{"x": 2022, "text": "Hausbau"}]
+# 1. Deine Meilensteine
+events = [{"x": 2022, "text": "Hausbau"}]  # hier Zeitperioden angeben
 
 fig = go.Figure()
 
-# --- FUNKTION FÜR FARBBLÖCKE ---
-def add_flag_rect(fig, x_start, x_end, colors):
-    height = 0.2
-    for i, color in enumerate(colors[::-1]): # Umkehren für richtige Schichtung
-        fig.add_shape(type="rect", x0=x_start, x1=x_end, y0=i*height, y1=(i+1)*height,
-                      fillcolor=color, line=dict(width=0))
+# --- 2. FUNKTION FÜR ECHTE FLAGGEN-BILDER ---
+def add_flag_image(fig, x_start, x_end, img_url):
+    fig.add_layout_image(
+        dict(
+            source=img_url,
+            xref="x", yref="y",
+            x=x_start, y=0.6, # Obere linke Ecke des Bildes
+            sizex=x_end - x_start, sizey=0.6, # Breite und Höhe des Bildes
+            sizing="stretch", # Bild wird genau in den Bereich eingepasst
+            opacity=1.0,
+            layer="below"
+        )
+    )
 
-# --- 1. UDSSR (Nur Rot) ---
-add_flag_rect(fig, 1988, 1991, ["#CC0000", "#CC0000", "#CC0000"])
+# --- 3. DIE FLAGGEN PLATZIEREN ---
+# Hier Pfade zu deinen Bildern im 'images' Ordner oder URLs einfügen
+add_flag_image(fig, 1988, 1991, "https://wikimedia.org")
+add_flag_image(fig, 1991, 2004, "https://wikimedia.org")
+add_flag_image(fig, 2004, 2026, "https://wikimedia.org")
 
-# --- 2. RUSSLAND (Weiß, Blau, Rot) ---
-add_flag_rect(fig, 1991, 2004, ["#FFFFFF", "#003399", "#CC0000"])
-
-# --- 3. DEUTSCHLAND (Schwarz, Rot, Gold) ---
-add_flag_rect(fig, 2004, 2026, ["#000000", "#FF0000", "#FFCC00"])
-
-# --- 4. DIE PFEILSPITZE (Rechts am Ende) ---
-fig.add_annotation(
-    x=2028, y=0.3, ax=2026, ay=0.3,
-    xref="x", yref="y", axref="x", ayref="y",
-    showarrow=True, arrowhead=3, arrowsize=4, arrowwidth=2, arrowcolor="#FFCC00"
-)
-
-# --- 5. RAUTEN & TEXTE ---
+# --- 4. RAUTEN & TEXTE (Auf mittlerer Höhe 0.3) ---
 fig.add_trace(go.Scatter(
     x=[e["x"] for e in events],
-     y=[0.3] * len(events), # Mittig auf dem Band
+    y=[0.3] * len(events),
     mode="markers+text",
     marker=dict(symbol="diamond", size=18, color="white", line=dict(width=2, color="black")),
     text=[f"<b>{e['x']}</b><br>{e}" for e in events],
@@ -135,24 +132,21 @@ fig.add_trace(go.Scatter(
     showlegend=False
 ))
 
-# --- 6. DER STARTSTRICH (1988) ---
-fig.add_shape(type="line", x0=1988, x1=1988, y0=-0.1, y1=0.7, line=dict(color="black", width=4))
-fig.add_annotation(x=1988, y=-0.3, text="<b>1988</b>", showarrow=False, font=dict(size=16))
+# --- 5. PFEILSPITZE & STARTSTRICH ---
+# Die Pfeilspitze bekommt die Farbe der letzten Flagge (Gold)
+fig.add_annotation(
+    x=2028, y=0.3, ax=2026, ay=0.3,
+    xref="x", yref="y", axref="x", ayref="y",
+    showarrow=True, arrowhead=3, arrowsize=4, arrowwidth=2, arrowcolor="#FFCC00"
+)
 
-# --- LAYOUT ---
+fig.add_shape(type="line", x0=1988, x1=1988, y0=0, y1=0.6, line=dict(color="black", width=4))
+fig.add_annotation(x=1988, y=-0.2, text="<b>1988</b>", showarrow=False, font=dict(size=16))
+
+# --- 6. LAYOUT ---
 fig.update_layout(
-    xaxis=dict(
-        showgrid=False, 
-        zeroline=False, 
-        showticklabels=False, 
-        range=[1985, 2030]  # HIER war der Fehler: Die Zahlen haben gefehlt!
-    ),
-    yaxis=dict(
-        showgrid=False, 
-        zeroline=False, 
-        showticklabels=False, 
-        range=[-1, 1.5]
-    ),
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1985, 2030]),
+    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, 1.2]),
     height=400,
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)",
