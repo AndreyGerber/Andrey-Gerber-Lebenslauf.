@@ -116,8 +116,7 @@ fig.add_trace(go.Scatter(
     y=[0] * len(events),
     mode="markers+text",
     marker=dict(symbol="diamond", size=12, color="white", line=dict(width=2, color="black")),
-    # Hier muss stehen: [WAS_SOLL_REIN for VARIABLE in LISTE]
-    text= for e in events], 
+    text= for e in events],
     textposition="bottom center",
     hoverinfo="none"
 ))
