@@ -249,7 +249,7 @@ BILD_BREITE = 350
 INFO_FONT_SIZE = "24px" # Etwas größer, da der Block jetzt massiver ist
 
 # 1. Navigation (absolut unabhängig)
-highlights = [1988, 1996, 2006]
+highlights = [1988, 1996, 2006, 2010]
 if 'info_idx' not in st.session_state:
     st.session_state.info_idx = 0
 
@@ -390,7 +390,30 @@ with st.container(height=BLOCK_HOEHE, border=True):
         st.plotly_chart(fig_flight, use_container_width=True, key="flight_landing_final_fix")
 
 
+    elif jahr_aktiv == 2010:
+            OBEN_ABSTAND = "150px" # Zentriert den Inhalt vertikal im Block
 
+            # Zwei Spalten (Text links, Bild rechts)
+            col_text, col_foto = st.columns([1, 2.5])
+
+            with col_text:
+                st.markdown(f"<div style='margin-top: {OBEN_ABSTAND};'></div>", unsafe_allow_html=True)
+                st.subheader(f"🎓 {jahr_aktiv}: Studium")
+                st.markdown(f"""
+                    <p style='font-size: {INFO_FONT_SIZE}; color: #1E90FF;'>
+                    Beginn des Studiums an der HAW Hamburg.<br>
+                    Ein neuer Fokus und tiefere Einblicke.
+                    </p>
+                    """, unsafe_allow_html=True)
+
+            with col_foto:
+                # Nutzt deine vorhandene Funktion zum Laden
+                img_haw = lade_formatiertes_bild("haw.png") 
+                if img_haw:
+                    st.markdown(f"<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
+                    st.image(img_haw, use_container_width=True)
+                else:
+                    st.error("Bild 'images/haw.png' nicht gefunden.")
 
 
 
