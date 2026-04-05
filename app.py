@@ -113,7 +113,7 @@ texte = {
 
 # Design-Einstellungen
 LINIEN_DICKE = 3
-STARTSTRICH_LAENGE = 0.25
+STARTSTRICH_LAENGE = 0.2
 JAHR_SCHRIFTGROESSE = 16
 
 # Titel linksbündig
