@@ -166,7 +166,7 @@ for i, jahr in enumerate(jahre_alle):
     if jahr in []:
         y_offset = -0.75  # Deutlich tiefer für maximale Freiheit
     else:
-        y_offset = -0.35  # Standardhöhe
+        y_offset = -0.20  # Standardhöhe
     
     # 1. Das Jahr
     fig.add_annotation(
