@@ -299,7 +299,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
     # --- INNERHALB DEINES 750px CONTAINERS ---
     elif jahr_aktiv == 1996:
         # --- DEINE PARAMETER ---
-        MASSSTAB = 0.5  # 1.0 = 100%. Verringere dies, falls der Scrollbalken erscheint.
+        MASSSTAB = 1.5  # 1.0 = 100%. Verringere dies, falls der Scrollbalken erscheint.
         OBEN_ABSTAND = "200px" # Schiebt den Inhalt in die Mitte der 750px Höhe
 
         # Zwei Spalten (Text links, Bild rechts)
