@@ -109,8 +109,8 @@ texte = {
     1996: "School (not cool)",
     2006: "Emigration to GE <br>🇩🇪",
     2010: "Studying aircraft design<br>(B.Eng. & Ms.Sc.)",
-    2017: "TÜV Rheinland<br>(Expert in the lab +              ",
-    2019: "          Quality Expert)",
+    2017: "TÜV Rheinland<br>(Expert in the lab +                   ",
+    2019: "               Quality Expert)",
     2022: "Ferchau (at Siemens)<br>(Quality Systems Engineering)",
     2026: "Liora<br>(Data Science & ML)"
 }
