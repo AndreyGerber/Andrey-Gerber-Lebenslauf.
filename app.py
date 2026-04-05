@@ -89,69 +89,65 @@ st.divider()
 
 
 
-
 import plotly.graph_objects as go
 import streamlit as st
-import base64
-import os
-
-# --- HILFSFUNKTION: Macht Bilder für Plotly lesbar ---
-def get_base64_img(pfad):
-    if os.path.exists(pfad):
-        with open(pfad, "rb") as f:
-            data = base64.b64encode(f.read()).decode()
-            return f"data:image/png;base64,{data}"
-    return None
 
 st.subheader("Mein Lebensweg")
 
-# 1. Daten (Mit eckigen Klammern!)
-events = [{"x": 2022, "text": "Hausbau"}]  # hier Zeitperioden angeben
+# 1. Deine Daten (Achte auf die Liste mit [ ])
+events =[{"x": 2022, "text": "Hausbau"}]  # hier Zeitperioden angeben
 
 fig = go.Figure()
 
-# 2. Flaggen laden (Pfade anpassen!)
-img_udssr = get_base64_img("images/udssr.png") # Heißt die Datei so?
-img_ru = get_base64_img("images/russland.png")
-img_de = get_base64_img("images/deutschland.png")
+# 2. Hilfsfunktion für die Flaggen (Nutzt Wikipedia-Links für Stabilität)
+def add_flag(fig, x_start, x_end, url):
+    fig.add_layout_image(dict(
+        source=url,
+        xref="x", yref="y",
+        x=x_start, y=0.6, 
+        sizex=x_end - x_start, sizey=0.6,
+        sizing="stretch", 
+        layer="below"
+    ))
 
-# 3. Flaggen als Hintergrund-Bilder setzen
-def add_flag(fig, x0, x1, img):
-    if img:
-        fig.add_layout_image(dict(
-            source=img, xref="x", yref="y",
-            x=x0, y=0.6, sizex=x1-x0, sizey=0.6,
-            sizing="stretch", layer="below"
-        ))
+# 3. Die drei Flaggen-Bereiche platzieren
+add_flag(fig, 1988, 1991, "https://wikimedia.org")
+add_flag(fig, 1991, 2004, "https://wikimedia.org")
+add_flag(fig, 2004, 2026, "https://wikimedia.org")
 
-add_flag(fig, 1988, 1991, img_udssr)
-add_flag(fig, 1991, 2004, img_ru)
-add_flag(fig, 2004, 2026, img_de)
-
-# 4. Rauten (Auf mittlerer Höhe 0.3)
+# 4. Die Rauten & Texte (Mittig auf Höhe 0.3)
 fig.add_trace(go.Scatter(
-    x=[e["x"] for e in events], y=[0.3] * len(events),
+    x=[e["x"] for e in events],
+    y=[0.3] * len(events),
     mode="markers+text",
     marker=dict(symbol="diamond", size=18, color="white", line=dict(width=2, color="black")),
     text=[f"<b>{e['x']}</b><br>{e}" for e in events],
-    textposition="bottom center", showlegend=False
+    textposition="bottom center",
+    showlegend=False
 ))
 
-# 5. Pfeilspitze & Startstrich
-fig.add_annotation(x=2028, y=0.3, ax=2026, ay=0.3, xref="x", yref="y", axref="x", ayref="y",
-                   showarrow=True, arrowhead=3, arrowsize=4, arrowwidth=2, arrowcolor="#FFCC00")
-
+# 5. Startmarkierung (1988) & Pfeilspitze
 fig.add_shape(type="line", x0=1988, x1=1988, y0=0, y1=0.6, line=dict(color="black", width=4))
-fig.add_annotation(x=1988, y=-0.2, text="<b>1988</b>", showarrow=False)
+fig.add_annotation(x=1988, y=-0.2, text="<b>1988</b>", showarrow=False, font=dict(size=14))
 
-# 6. Layout
+fig.add_annotation(
+    x=2028, y=0.3, ax=2026, ay=0.3,
+    xref="x", yref="y", axref="x", ayref="y",
+    showarrow=True, arrowhead=3, arrowsize=4, arrowwidth=2, arrowcolor="#FFCC00"
+)
+
+# 6. Layout-Einstellungen
 fig.update_layout(
     xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1985, 2030]),
     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, 1.2]),
-    height=400, plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
+    height=400,
+    plot_bgcolor="rgba(0,0,0,0)",
+    paper_bgcolor="rgba(0,0,0,0)",
+    margin=dict(l=10, r=10, t=10, b=10)
 )
 
 st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+
 
 
 
