@@ -265,77 +265,49 @@ with c3:
         st.rerun()
 
 # --- DER ZENTRALE INFO-BLOCK ---
-with st.container(border=True):
-    # Dynamische Inhalte je nach ausgewähltem Jahr
-    jahr = st.session_state.selected_year
-    BLOCK_HOEHE = "500px"  # Hier kannst du die feste Höhe für alle Blöcke einstellen
-    BILD_BREITE = 350      # Hier kannst du die Breite des Bildes in Pixeln anpassen
+BLOCK_HOEHE = "550px"  # Feste Höhe
+BILD_BREITE = 300      # Bildgröße
 
-    if jahr == 1988:
-        # 1. CSS für eine feste Container-Höhe (mit Scrollbar, falls nötig)
-        st.markdown(f"""
-            <style>
-            .fixed-container {{
-                height: {BLOCK_HOEHE};
-                overflow-y: auto;
-                border: 1px solid #e6e9ef;
-                padding: 20px;
-                border-radius: 10px;
-                background-color: white;
-            }}
-            </style>
-        """, unsafe_allow_html=True)
+# Wir definieren das CSS so, dass es weniger Innenabstand (padding) hat
+st.markdown(f"""
+    <style>
+    .fixed-container {{
+        height: {BLOCK_HOEHE};
+        overflow-y: auto;
+        border: 2px solid #f0f2f6;
+        padding: 15px; /* Kleinerer Abstand oben */
+        border-radius: 10px;
+        background-color: #ffffff;
+    }}
+    </style>
+""", unsafe_allow_html=True)
 
-        # Den Inhalt in den festen Container packen
-        with st.container():
-            st.markdown('<div class="fixed-container">', unsafe_allow_html=True)
-            
-            st.subheader(f"📍 {jahr}: Geburtsort Tscherlak")
-            
-            col_content, col_map = st.columns([1, 1.5])
-            
-            with col_content:
-                # Bild laden mit deiner Funktion
-                img_tscherlak = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
-                if img_tscherlak:
-                    # Hier steuern wir die Breite direkt im st.image
-                    st.image(img_tscherlak, width=BILD_BREITE)
-                else:
-                    st.warning("Bild fehlt")
-                    
-                st.write("Hier begann meine Reise in der UdSSR.")
-                st.info("Tscherlak liegt am Fluss Irtysch in der Oblast Omsk.")
+# ALLES in den CSS-Block packen
+st.markdown('<div class="fixed-container">', unsafe_allow_html=True)
 
-            with col_map:
-                # Karte bleibt stabil daneben
-                map_data = pd.DataFrame({'lat': [54.12], 'lon': [74.80]})
-                st.map(map_data, zoom=7, use_container_width=True)
-                
-            st.markdown('</div>', unsafe_allow_html=True)
+if jahr == 1988:
+    # Die Überschrift MUSS hier drin sein, damit sie oben am Rand steht
+    st.subheader(f"📍 {jahr}: Geburtsort Tscherlak")
+    
+    col_content, col_map = st.columns([1, 1.5])
+    
+    with col_content:
+        img_tscherlak = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
+        if img_tscherlak:
+            st.image(img_tscherlak, width=BILD_BREITE)
+        st.write("Hier begann meine Reise in der UdSSR.")
+        st.info("Tscherlak liegt am Fluss Irtysch in der Oblast Omsk.")
 
-    elif jahr == 1991:
-        st.subheader(f"🇷🇺 {jahr}: Politische Wende")
-        st.write("Die Sowjetunion zerfällt, ohne dass ich umziehen musste.")
+    with col_map:
+        map_data = pd.DataFrame({'lat': [54.12], 'lon': [74.80]})
+        st.map(map_data, zoom=7, use_container_width=True)
 
-    elif jahr == 1996:
-        st.subheader(f"🎒 {jahr}: Schulzeit in Russland")
-        col_img1, col_img2 = st.columns(2)
-        # Bilder aus deinem 'images' Ordner laden
-        img1 = lade_formatiertes_bild("itsme.png", target_size=(400, 400))
-        img2 = lade_formatiertes_bild("itsme2.png", target_size=(400, 400))
-        
-        with col_img1:
-            if img1: st.image(img1, caption="Ich in 1996")
-            else: st.warning("Bild 'itsme.png' nicht gefunden")
-        with col_img2:
-            if img2: st.image(img2, caption="Schulzeit Impressionen")
-            else: st.warning("Bild 'itsme2.png' nicht gefunden")
+elif jahr == 1996:
+    st.subheader(f"🎒 {jahr}: Schulzeit in Russland")
+    # ... dein restlicher Code für 1996 ...
 
-    else:
-        # Standard-Platzhalter für die restlichen Jahre
-        st.subheader(f"📅 {jahr}: {texte[jahr].replace('<br>', ' ')}")
-        st.write("Hier werde ich bald weitere spezifische Informationen einfügen.")
-        st.info("Dieser Block wird noch individuell gestaltet.")
+# Den div-Container am Ende wieder schließen
+st.markdown('</div>', unsafe_allow_html=True)
 
 
 
