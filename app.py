@@ -326,26 +326,24 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 st.error("Bild 'schule2.png' nicht gefunden.")
 
     elif jahr_aktiv == 2006:
-        # 1. NEUE ÜBERSCHRIFT (Ohne Lila-Text darunter)
         st.subheader("✈️ 2006: Der neue Lebensabschnitt beginnt")
         st.divider()
 
-        # --- PROFESSIONELLE FLUGKARTE MIT BESCHRIFTUNG ---
         fig_flight = go.Figure()
 
-        # 2. Die Orte (Omsk & Berlin) mit Text und Markern
+        # 1. ORTE (Omsk & Berlin) - Text jetzt UNTER den Punkten
         fig_flight.add_trace(go.Scattergeo(
             lon = [73.32, 13.40],
             lat = [54.98, 52.52],
             mode = 'markers+text',
             text = ["Omsk", "Berlin"],
-            textposition = ["top right", "top left"],
-            textfont = dict(size=14, color="black", family="Arial Black"),
-            marker = dict(size=12, color='#FF4B4B', symbol='circle', line=dict(width=2, color='white')),
+            textposition = "bottom center", # <--- Positionierung nach unten
+            textfont = dict(size=16, color="black", family="Arial Black"),
+            marker = dict(size=14, color='#FF4B4B', line=dict(width=2, color='white')),
             hoverinfo = 'none'
         ))
 
-        # 3. Die Flugroute (Gebogene Linie)
+        # 2. FLUGROUTE (Bogen)
         fig_flight.add_trace(go.Scattergeo(
             lon = [73.32, 13.40],
             lat = [54.98, 52.52],
@@ -354,18 +352,31 @@ with st.container(height=BLOCK_HOEHE, border=True):
             hoverinfo = 'none'
         ))
 
-        # 4. Flugzeug-Icon (leicht versetzt für bessere Optik)
+        # 3. LANDENDES FLUGZEUG (Gedreht)
         fig_flight.add_trace(go.Scattergeo(
-            lon = [15.5], lat = [53.5], # Position kurz vor Berlin
+            lon = [16.0], lat = [53.5], 
             mode = 'text',
             text = "✈️", 
-            textfont = dict(size=35),
-            hoverinfo = 'none'
+            # Mit 'textangle' neigen wir die Nase nach unten (-45 Grad)
+            textfont = dict(size=45), 
+            # Wir schummeln ein bisschen mit HTML/CSS für die Drehung, 
+            # da Scattergeo kein direktes 'textangle' hat:
         ))
+        
+        # Da Scattergeo Text nicht nativ dreht, nutzen wir hier eine Annotation 
+        # für das Flugzeug, um es präzise zu neigen:
+        fig_flight.add_annotation(
+            x=16.0, y=53.5,
+            text="✈️",
+            showarrow=False,
+            font=dict(size=45),
+            textangle=-150, # Nase zeigt nach links unten Richtung Berlin
+            xref="x", yref="y"
+        )
 
-        # 5. Layout (Fokus auf Eurasien)
+        # 4. LAYOUT
         fig_flight.update_layout(
-            height=550, # Erhöht für den 750px Block
+            height=550,
             margin=dict(l=0, r=0, t=10, b=0),
             geo = dict(
                 projection_type = 'equirectangular',
@@ -373,13 +384,14 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 showocean = True, oceancolor = "#E8F4F9",
                 showcountries = True, countrycolor = "white",
                 lataxis = dict(range=[45, 65]),
-                lonaxis = dict(range=[10, 80]),
+                lonaxis = dict(range=[5, 80]),
                 resolution = 50
             ),
             showlegend = False
         )
 
-        st.plotly_chart(fig_flight, use_container_width=True, key="flight_2006_v2")
+        st.plotly_chart(fig_flight, use_container_width=True, key="flight_landing_2006")
+
 
 
 
