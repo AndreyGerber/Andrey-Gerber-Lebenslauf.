@@ -99,7 +99,7 @@ jahre = [1988, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 # --- 2. GRAFIK ERSTELLEN ---
 fig = go.Figure()
 
-# Hauptlinie: Startet exakt bei 1988 und geht bis nach 2026
+# Hauptlinie (Startet bei 1988)
 fig.add_trace(go.Scatter(
     x=[1988, 2030], y=[0, 0],
     mode='lines',
@@ -108,14 +108,14 @@ fig.add_trace(go.Scatter(
     showlegend=False
 ))
 
-# Senkrechter Startstrich bei 1988
+# KÜRZERER Startstrich bei 1988
 fig.add_shape(
     type="line",
-    x0=1988, y0=-0.15, x1=1988, y1=0.15,
+    x0=1988, y0=-0.08, x1=1988, y1=0.08, # Länge auf +/- 0.08 gekürzt
     line=dict(color="black", width=3)
 )
 
-# Weiße Rauten und Jahre
+# Weiße Rauten und Jahre (TIEFER angeordnet)
 fig.add_trace(go.Scatter(
     x=jahre, y=[0] * len(jahre),
     mode='markers+text',
@@ -127,42 +127,42 @@ fig.add_trace(go.Scatter(
     ),
     text=jahre,
     textposition="bottom center",
-    textfont=dict(size=12, color="black"),
+    # 'cliponaxis=False' und extra Margin im Layout sorgen für Platz nach unten
+    textfont=dict(size=13, color="black"),
     hoverinfo='none',
     showlegend=False
 ))
 
-# Pfeilspitze am Ende (nach rechts)
+# Pfeilspitze nach Rechts
 fig.add_annotation(
-    x=2032, y=0,           # Spitze des Pfeils
-    ax=2030, ay=0,         # Schaft-Ende
-    xref="x", yref="y",
-    axref="x", ayref="y",
-    showarrow=True,
-    arrowhead=2, 
-    arrowsize=1.2, 
-    arrowwidth=2, 
-    arrowcolor="black"
+    x=2032, y=0, ax=2030, ay=0,
+    xref="x", yref="y", axref="x", ayref="y",
+    showarrow=True, arrowhead=2, arrowsize=1.2, arrowwidth=2, arrowcolor="black"
 )
 
-# Layout-Anpassung
+# Layout-Feinschliff
 fig.update_layout(
-    height=200,
-    margin=dict(l=0, r=0, t=0, b=0),
+    height=180, # Kompaktere Höhe
+    margin=dict(l=20, r=20, t=20, b=40), # Mehr Platz unten (b=40) für die Jahreszahlen
     xaxis=dict(
         showgrid=False, 
         zeroline=False, 
         showticklabels=False, 
-        # Range startet kurz vor 1988, damit der Strich gut sichtbar ist
         range=[1985, 2035] 
     ),
-    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, 0.5]),
+    yaxis=dict(
+        showgrid=False, 
+        zeroline=False, 
+        showticklabels=False, 
+        range=[-0.4, 0.4] # Bereich verschoben, um Text unter 0 mehr Platz zu geben
+    ),
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)"
 )
 
-# Anzeige in Streamlit
+# Anzeige
 st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
+
 
 
 
