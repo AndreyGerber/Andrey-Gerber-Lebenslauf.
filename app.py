@@ -100,7 +100,7 @@ jahre_alle = [1988, 1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 jahre_mit_raute = [1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 
 GROESSE_JAHRE = 18       # Schriftgröße der Jahreszahlen (fett)
-GROESSE_TEXTE = 12       # Schriftgröße der Beschreibungen
+GROESSE_TEXTE = 16       # Schriftgröße der Beschreibungen
 
 # Hier kannst du deine Texte für die Blöcke definieren
 texte = {
