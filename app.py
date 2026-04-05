@@ -106,8 +106,8 @@ GROESSE_TEXTE = 16       # Schriftgröße der Beschreibungen
 texte = {
     1988: "Born in UdSSR <br>☭",
     1991: "Moved to Russian Federation<br>without moving 🇷🇺",
-    1996: "School<br>(not cool)",
-    2006: "Emigration<br>to GE 🇩🇪",
+    1996: "School (not cool)",
+    2006: "Emigration to GE <br>🇩🇪",
     2010: "Studying aircraft design<br>(B.Eng. & Ms.Sc.)",
     2017: "TÜV Rheinland<br>(Expert in the lab)",
     2019: " <br>(Quality Expert)",
@@ -166,7 +166,7 @@ for i, jahr in enumerate(jahre_alle):
     if jahr in []:
         y_offset = -0.75  # Deutlich tiefer für maximale Freiheit
     else:
-        y_offset = -0.35  # Standardhöhe
+        y_offset = -0.30  # Standardhöhe
     
     # 1. Das Jahr
     fig.add_annotation(
