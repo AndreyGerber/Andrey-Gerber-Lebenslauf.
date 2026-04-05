@@ -193,7 +193,7 @@ for i, jahr in enumerate(jahre_alle):
 # WICHTIG: Das Layout braucht mehr Platz nach unten für den tiefen Text (-0.75)
 fig.update_layout(
     height=500,
-    margin=dict(l=50, r=50, t=20, b=220), 
+    margin=dict(l=50, r=50, t=20, b=250), 
     yaxis=dict(range=[-1.8, 0.5]) 
 )
 
