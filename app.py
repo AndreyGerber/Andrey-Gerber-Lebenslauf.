@@ -99,8 +99,8 @@ jahre_alle = [1988, 1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 # Jahre, die eine Raute auf der Linie erhalten (alle außer 1988)
 jahre_mit_raute = [1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 
-GROESSE_JAHRE = 20       # Schriftgröße der Jahreszahlen (fett)
-GROESSE_TEXTE = 18       # Schriftgröße der Beschreibungen
+GROESSE_JAHRE = 19       # Schriftgröße der Jahreszahlen (fett)
+GROESSE_TEXTE = 17       # Schriftgröße der Beschreibungen
 
 # Hier kannst du deine Texte für die Blöcke definieren
 texte = {
@@ -164,7 +164,7 @@ for i, jahr in enumerate(jahre_alle):
     # Logik: Nur die Jahre 1991, 2010, 2019 und 2026 werden tiefer gesetzt
     # Das schafft Platz für die langen Texte der Nachbarn.
     if jahr in [1991, 2017, 2019, 2022]:
-        y_offset = -0.1  # Deutlich tiefer für maximale Freiheit
+        y_offset = -0.05  # Deutlich tiefer für maximale Freiheit
     else:
         y_offset = -0.20  # Standardhöhe
     
