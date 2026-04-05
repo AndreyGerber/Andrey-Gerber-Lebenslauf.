@@ -86,95 +86,59 @@ st.divider()
 
 
 
-
 import streamlit as st
 import plotly.graph_objects as go
-from streamlit_plotly_events import plotly_events
-import pandas as pd
 
-# 1. DATEN DER STATIONEN (Deine Jahre aus der Zeichnung)
-stations_data = [
-    {"jahr": 1988, "event": "Geburt", "info": "Start in der UdSSR"},
-    {"jahr": 1996, "event": "Schule", "info": "Kindheit in Russland"},
-    {"jahr": 2006, "event": "Emigration", "info": "Flug Omsk -> Neustrelitz"},
-    {"jahr": 2010, "event": "Studium/Arbeit", "info": "Erste Schritte in DE"},
-    {"jahr": 2017, "event": "Meilenstein", "info": "Weitere Entwicklung"},
-    {"jahr": 2019, "event": "Karriere", "info": "Beruflicher Weg"},
-    {"jahr": 2022, "event": "Hausbau", "info": "Wurzeln schlagen"},
-    {"jahr": 2026, "event": "Zukunft", "info": "Ausblick"}
-]
-df = pd.DataFrame(stations_data)
+# --- 1. DATEN FÜR DEN PFEIL ---
+# Jahre aus deiner Zeichnung
+jahre = [1988, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 
-if 'selected_year' not in st.session_state:
-    st.session_state.selected_year = 1988
-
-# 2. DEN SCHWARZEN PFEIL ZEICHNEN
+# --- 2. DEN SCHWARZEN PFEIL ERSTELLEN ---
 fig = go.Figure()
 
-# Die Hauptlinie (Pfeilschaft)
+# Der Pfeilschaft (Schwarze Linie)
 fig.add_trace(go.Scatter(
-    x=[1985, 2027], y=[0, 0],
+    x=[min(jahre)-2, max(jahre)+2], 
+    y=[0, 0],
     mode='lines',
     line=dict(color='black', width=3),
     hoverinfo='none'
 ))
 
-# Die Rauten (Events)
+# Die Rauten und die Jahre (Text direkt unter den Rauten)
 fig.add_trace(go.Scatter(
-    x=df['jahr'],
-    y=[0] * len(df),
+    x=jahre,
+    y=[0] * len(jahre),
     mode='markers+text',
     marker=dict(
         symbol='diamond',
-        size=18,
+        size=22,
         color='white',
         line=dict(color='black', width=2)
     ),
-    text=df['jahr'],
-    textposition="top center",
-    textfont=dict(size=16, color="black"),
-    hovertext=df['event'],
-    hoverinfo="text"
+    text=jahre,
+    textposition="bottom center", # Jahre direkt unter die Rauten setzen
+    textfont=dict(size=20, color="black", family="Arial Black"),
+    hoverinfo='none'
 ))
 
-# Die Pfeilspitze
+# Die Pfeilspitze (Rechts am Ende)
 fig.add_annotation(
-    x=2028, y=0, ax=2027, ay=0,
+    x=max(jahre)+3, y=0, ax=max(jahre)+1.5, ay=0,
     xref="x", yref="y", showarrow=True,
     arrowhead=2, arrowsize=1.5, arrowwidth=3, arrowcolor="black"
 )
 
-# Layout-Einstellungen für maximale Sauberkeit
+# Layout-Einstellungen für maximale Sauberkeit (kein Gitter, keine Achsen)
 fig.update_layout(
     height=200,
-    margin=dict(l=10, r=10, t=50, b=10),
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1985, 2030]),
+    margin=dict(l=10, r=10, t=10, b=10),
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[min(jahre)-4, max(jahre)+5]),
     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, 0.5]),
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)",
-    clickmode='event+select'
+    staticPlot=True # Macht die Grafik komplett statisch (nicht verschiebbar)
 )
 
-# 3. INTERAKTION (Klick auf Raute)
-st.write("### 📍 Wähle eine Station auf meinem Lebensweg:")
-selected_point = plotly_events(fig, click_event=True, hover_event=False)
-
-if selected_point:
-    st.session_state.selected_year = selected_point[0]['x']
-
-# 4. ANZEIGE DES INHALTS UNTER DEM PFEIL
-st.divider()
-wahl = df[df['jahr'] == st.session_state.selected_year].iloc[0]
-
-c1, c2 = st.columns([1, 2])
-with c1:
-    st.markdown(f"## {wahl['jahr']}")
-    st.subheader(wahl['event'])
-    st.info(wahl['info'])
-
-with c2:
-    # Hier kommt deine Visualisierung rein (Karte/Bild)
-    if wahl['jahr'] == 2006:
-        st.success("✈️ Hier startet jetzt die Flug-Animation von Omsk nach Neustrelitz!")
-    else:
-        st.write(f"*(Platzhalter für Visualisierung von {wahl['jahr']})*")
+# --- 3. ANZEIGE IN STREAMLIT ---
+st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
