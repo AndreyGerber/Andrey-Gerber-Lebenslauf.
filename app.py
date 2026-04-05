@@ -242,5 +242,54 @@ st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'disp
 
 
 
+# --- 3. INTERAKTIVES DETAIL-FENSTER ---
+st.divider()
+
+# Index des aktuell gewählten Jahres finden
+jahre_liste = sorted(texte.keys())
+if st.session_state.selected_year not in jahre_liste:
+    st.session_state.selected_year = jahre_liste[0]
+
+aktueller_index = jahre_liste.index(st.session_state.selected_year)
+
+# Navigation Buttons (Zentriert)
+bn_col1, bn_col2, bn_col3 = st.columns([1, 2, 1])
+
+with bn_col1:
+    # Zurück-Button (deaktiviert beim ersten Jahr)
+    if st.button("⬅️ Zurück", disabled=(aktueller_index == 0), use_container_width=True):
+        st.session_state.selected_year = jahre_liste[aktueller_index - 1]
+        st.rerun()
+
+with bn_col3:
+    # Weiter-Button (deaktiviert beim letzten Jahr)
+    if st.button("Weiter ➡️", disabled=(aktueller_index == len(jahre_liste) - 1), use_container_width=True):
+        st.session_state.selected_year = jahre_liste[aktueller_index + 1]
+        st.rerun()
+
+# Das Info-Fenster (Styling mit Info-Box oder Container)
+with st.container(border=True):
+    col_info, col_media = st.columns([2, 1])
+    
+    with col_info:
+        st.subheader(f"📍 Station: {st.session_state.selected_year}")
+        # Hier holen wir den Text aus deinem 'texte' Dictionary
+        info_text = texte[st.session_state.selected_year].replace("<br>", " ")
+        st.markdown(f"**{info_text}**")
+        
+        # Hier kannst du jetzt ausführlichere Beschreibungen hinzufügen
+        details = {
+            1988: "In Sibirien geboren, verbrachte ich die ersten Jahre in der UdSSR...",
+            2010: "Das Studium des Flugzeugbaus war eine prägende Zeit. Fokus auf Strukturmechanik...",
+            2026: "Fokus auf die Implementierung von ML-Modellen zur Prozessoptimierung..."
+        }
+        st.write(details.get(st.session_state.selected_year, "Hier folgen bald weitere Details zu dieser Station..."))
+
+    with col_media:
+        # Platzhalter für ein Bild passend zum Jahr
+        st.write("🖼️ **Visualisierung**")
+        st.info("Hier kannst du Fotos oder Icons einfügen.")
+
+
 
 
