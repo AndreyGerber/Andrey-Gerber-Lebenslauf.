@@ -268,29 +268,50 @@ with c3:
 with st.container(border=True):
     # Dynamische Inhalte je nach ausgewähltem Jahr
     jahr = st.session_state.selected_year
-    
-    if jahr == 1988:
-        st.subheader(f"📍 {jahr}: Geburtsort Tscherlak")
-        
-        col_content, col_map = st.columns([1, 1.2]) # Spaltenbreite angepasst
-        
-        with col_content:
-            # Bild links laden
-            img_tscherlak = lade_formatiertes_bild("tscherlak.png", target_size=(500, 400))
-            if img_tscherlak:
-                st.image(img_tscherlak, use_container_width=True)
-            else:
-                st.warning("Bild 'tscherlak.png' fehlt")
-                
-            st.write("Hier begann meine Reise in der UdSSR.")
-            st.info("Tscherlak liegt am Fluss Irtysch in der Oblast Omsk.")
+    BLOCK_HOEHE = "500px"  # Hier kannst du die feste Höhe für alle Blöcke einstellen
+    BILD_BREITE = 350      # Hier kannst du die Breite des Bildes in Pixeln anpassen
 
-        with col_map:
-            # Daten für den Punkt
-            map_data = pd.DataFrame({'lat': [54.12], 'lon': [74.80]})
+    if jahr == 1988:
+        # 1. CSS für eine feste Container-Höhe (mit Scrollbar, falls nötig)
+        st.markdown(f"""
+            <style>
+            .fixed-container {{
+                height: {BLOCK_HOEHE};
+                overflow-y: auto;
+                border: 1px solid #e6e9ef;
+                padding: 20px;
+                border-radius: 10px;
+                background-color: white;
+            }}
+            </style>
+        """, unsafe_allow_html=True)
+
+        # Den Inhalt in den festen Container packen
+        with st.container():
+            st.markdown('<div class="fixed-container">', unsafe_allow_html=True)
             
-            # Native Streamlit Map (Farbig, robust, kein Token nötig)
-            st.map(map_data, zoom=7, use_container_width=True)
+            st.subheader(f"📍 {jahr}: Geburtsort Tscherlak")
+            
+            col_content, col_map = st.columns([1, 1.5])
+            
+            with col_content:
+                # Bild laden mit deiner Funktion
+                img_tscherlak = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
+                if img_tscherlak:
+                    # Hier steuern wir die Breite direkt im st.image
+                    st.image(img_tscherlak, width=BILD_BREITE)
+                else:
+                    st.warning("Bild fehlt")
+                    
+                st.write("Hier begann meine Reise in der UdSSR.")
+                st.info("Tscherlak liegt am Fluss Irtysch in der Oblast Omsk.")
+
+            with col_map:
+                # Karte bleibt stabil daneben
+                map_data = pd.DataFrame({'lat': [54.12], 'lon': [74.80]})
+                st.map(map_data, zoom=7, use_container_width=True)
+                
+            st.markdown('</div>', unsafe_allow_html=True)
 
     elif jahr == 1991:
         st.subheader(f"🇷🇺 {jahr}: Politische Wende")
