@@ -93,73 +93,127 @@ st.divider()
 import streamlit as st
 import plotly.graph_objects as go
 
-# --- 1. EINSTELLUNGEN ---
+# --- 1. DATENKONFIGURATION ---
+# Alle Jahre für die Beschriftung
 jahre_alle = [1988, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
-jahre_mit_raute =   [1996, 2006, 2010, 2017, 2019, 2022, 2026]
+# Jahre, die eine Raute auf der Linie erhalten (alle außer 1988)
+jahre_mit_raute = [1996, 2006, 2010, 2017, 2019, 2022, 2026]
+
+# Hier kannst du deine Texte für die Blöcke definieren
+texte = {
+    1988: "Geburt in UdSSR",
+    1996: "Schulzeit Russland",
+    2006: "Emigration DE",
+    2010: "mein Text",
+    2017: "mein Text",
+    2019: "mein Text",
+    2022: "Hausbau",
+    2026: "Zukunft"
+}
+
+# Design-Einstellungen
 LINIEN_DICKE = 3
 STARTSTRICH_LAENGE = 0.25
 JAHR_SCHRIFTGROESSE = 16
 
 # Titel linksbündig
-st.markdown(f"<h2 style='text-align: left;'>Mein Werdegang</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: left;'>Mein Werdegang</h2>", unsafe_allow_html=True)
 
 # --- 2. GRAFIK ERSTELLEN ---
 fig = go.Figure()
 
-# Lebenslinie (Durchgehend von 1988 bis zur Spitze)
+# Lebenslinie: Durchgehend von 1988 bis kurz vor die Pfeilspitze (2034)
 fig.add_trace(go.Scatter(
-     x=[1988, 2033], y=[0, 0],
+    x=[1988, 2034], 
+    y=[0, 0],
     mode='lines',
     line=dict(color='black', width=LINIEN_DICKE),
-    showlegend=False, hoverinfo='none'
+    showlegend=False, 
+    hoverinfo='none'
 ))
 
-# Senkrechter Startstrich bei 1988 (Beginn der Reise)
-fig.add_shape(type="line", x0=1988, y0=-STARTSTRICH_LAENGE, x1=1988, y1=STARTSTRICH_LAENGE,
-              line=dict(color="black", width=LINIEN_DICKE+1))
-
-# Rauten (NUR für Jahre ab 1996)
-fig.add_trace(go.Scatter(
-    x=jahre_mit_raute, y= [0]* len(jahre_mit_raute),
-    mode='markers',
-    marker=dict(symbol='diamond', size=22, color='white', line=dict(color='black', width=2)),
-    showlegend=False, hoverinfo='none'
-))
-
-# Jahreszahlen und Textblöcke (Alle Jahre inkl. 1988)
-for jahr in jahre_alle:
-    # Das Jahr (fett, 45° gedreht)
-    fig.add_annotation(
-        x=jahr, y=-0.1, text=f"<b>{jahr}</b>",
-        showarrow=False, textangle=-45,
-        font=dict(size=JAHR_SCHRIFTGROESSE, color="black"),
-        xanchor="right", yanchor="top"
-    )
-    # Der Textblock (45° gedreht)
-    fig.add_annotation(
-        x=jahr, y=-0.4, text="mein Text",
-        showarrow=False, textangle=-25,
-        font=dict(size=12, color="gray"),
-        xanchor="right", yanchor="top"
-    )
-
-# Pfeilspitze (Rechtsbündig)
-fig.add_annotation(
-    x=2037, y=0, ax=2034, ay=0,
-    xref="x", yref="y", axref="x", ayref="y",
-    showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=LINIEN_DICKE, arrowcolor="black"
+# Senkrechter Startstrich bei 1988
+fig.add_shape(
+    type="line", 
+    x0=1988, y0=-STARTSTRICH_LAENGE, 
+    x1=1988, y1=STARTSTRICH_LAENGE,
+    line=dict(color="black", width=LINIEN_DICKE + 1)
 )
 
-# Layout-Anpassung
+# Weiße Rauten (NUR ab 1996), mittig auf der Linie
+fig.add_trace(go.Scatter(
+    x=jahre_mit_raute, 
+    y=[0] * len(jahre_mit_raute),
+    mode='markers',
+    marker=dict(
+        symbol='diamond', 
+        size=22, 
+        color='white', 
+        line=dict(color='black', width=2)
+    ),
+    showlegend=False, 
+    hoverinfo='none'
+))
+
+# Jahreszahlen und Textblöcke (45° gedreht)
+for jahr in jahre_alle:
+    # Das Jahr (fett)
+    fig.add_annotation(
+        x=jahr, y=-0.1, 
+        text=f"<b>{jahr}</b>",
+        showarrow=False, 
+        textangle=-45,
+        font=dict(size=JAHR_SCHRIFTGROESSE, color="black"),
+        xanchor="right", 
+        yanchor="top"
+    )
+    # Der individuelle Textblock darunter
+    fig.add_annotation(
+        x=jahr, y=-0.4, 
+        text=texte.get(jahr, "mein Text"),
+        showarrow=False, 
+        textangle=-45,
+        font=dict(size=12, color="gray"),
+        xanchor="right", 
+        yanchor="top"
+    )
+
+# Pfeilspitze am rechten Ende
+fig.add_annotation(
+    x=2037, y=0,           # Spitze
+    ax=2034, ay=0,         # Ende der Linie
+    xref="x", yref="y", 
+    axref="x", ayref="y",
+    showarrow=True, 
+    arrowhead=2, 
+    arrowsize=1.5, 
+    arrowwidth=LINIEN_DICKE, 
+    arrowcolor="black"
+)
+
+# Layout-Anpassung für die schrägen Texte
 fig.update_layout(
-    height=400, margin=dict(l=0, r=0, t=10, b=150),
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1988, 2028]),
-    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1.5, 0.6]),
-    plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
+    height=450, 
+    margin=dict(l=0, r=0, t=10, b=150),
+    xaxis=dict(
+        showgrid=False, 
+        zeroline=False, 
+        showticklabels=False, 
+        range=[1980, 2045] # Genug Platz links und rechts
+    ),
+    yaxis=dict(
+        showgrid=False, 
+        zeroline=False, 
+        showticklabels=False, 
+        range=[-1.8, 0.6] # Platz für die schrägen Texte nach unten
+    ),
+    plot_bgcolor="rgba(0,0,0,0)", 
+    paper_bgcolor="rgba(0,0,0,0)"
 )
 
 # Anzeige in Streamlit
 st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
+
 
 
 
