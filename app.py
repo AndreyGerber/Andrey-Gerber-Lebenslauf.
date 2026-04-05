@@ -88,65 +88,89 @@ st.divider()
 
 
 
+# --- 1. DATEN & SESSION STATE ---
+if 'selected_year' not in st.session_state:
+    st.session_state.selected_year = 2006
 
-# --- 1. DATEN DEFINIEREN ---
 stationen = [
-    {"jahr": 1988, "event": "Geburt", "land": "UdSSR", "farbe": "#d32f2f"}, # Rot
-    {"jahr": 1991, "event": "Russland", "land": "Russland", "farbe": "#1976d2"}, # Blau
+    {"jahr": 1988, "event": "Geburt", "land": "UdSSR", "farbe": "#d32f2f"},
+    {"jahr": 1991, "event": "Russland Start", "land": "Russland", "farbe": "#1976d2"},
     {"jahr": 1996, "event": "Schule", "land": "Russland", "farbe": "#1976d2"},
-    {"jahr": 2006, "event": "Emigration", "land": "Deutschland", "farbe": "#fbc02d"}, # Gold
+    {"jahr": 2006, "event": "Emigration", "land": "Deutschland", "farbe": "#fbc02d"},
     {"jahr": 2022, "event": "Hausbau", "land": "Deutschland", "farbe": "#fbc02d"},
     {"jahr": 2024, "event": "Heute", "land": "Deutschland", "farbe": "#fbc02d"}
 ]
 
-if 'selected_year' not in st.session_state:
-    st.session_state.selected_year = 1988
+# --- 2. DER SCHWARZE PFEIL (CSS & HTML) ---
+st.markdown("""
+    <style>
+    .timeline-container {
+        position: relative;
+        width: 100%;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .main-arrow {
+        position: absolute;
+        height: 4px;
+        background-color: black;
+        width: 95%;
+        left: 0;
+    }
+    .arrow-head {
+        position: absolute;
+        right: 4%;
+        width: 0; 
+        height: 0; 
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 15px solid black;
+    }
+    </style>
+    <div class="timeline-container">
+        <div class="main-arrow"></div>
+        <div class="arrow-head"></div>
+    </div>
+""", unsafe_allow_html=True)
 
-# --- 2. DEN PFEIL BAUEN (Layout) ---
-st.write("### 🌍 Klicke auf ein Ereignis:")
-
-# Wir erstellen 6 Spalten für die 6 Ereignisse
+# --- 3. DIE RAUTEN-NAVIGATION (Buttons direkt unter dem Pfeil) ---
+# Wir nutzen columns, damit die Buttons genau unter der Linie sitzen
 cols = st.columns(len(stationen))
 
 for i, s in enumerate(stationen):
     with cols[i]:
-        # Der farbige Balken über dem Button (verbindet die Stationen)
-        st.markdown(f"""
-            <div style="
-                background-color: {s['farbe']}; 
-                height: 10px; 
-                margin-bottom: 5px;
-                border-radius: 2px;
-                width: 100%;
-            "></div>
-        """, unsafe_allow_html=True)
-        
-        # Der Button als "Raute" (Highlight wenn ausgewählt)
-        label = f"◆ {s['jahr']}" if s['jahr'] == st.session_state.selected_year else f"◇ {s['jahr']}"
-        if st.button(label, key=f"btn_{s['jahr']}", use_container_width=True):
+        # Symbol ändern: Volle Raute wenn ausgewählt
+        if s['jahr'] == st.session_state.selected_year:
+            btn_label = f"◆\n{s['jahr']}"
+            btn_type = "primary"
+        else:
+            btn_label = f"◇\n{s['jahr']}"
+            btn_type = "secondary"
+            
+        if st.button(btn_label, key=f"btn_{s['jahr']}", use_container_width=True, type=btn_type):
             st.session_state.selected_year = s['jahr']
             st.rerun()
 
-# --- 3. INHALTE ANZEIGEN ---
+# --- 4. DETAILS ANZEIGEN ---
 st.divider()
 aktuelle_wahl = next(item for item in stationen if item["jahr"] == st.session_state.selected_year)
 
-col_text, col_visual = st.columns([1, 2])
+col_text, col_visual = st.columns([1, 1.5])
 
 with col_text:
-    st.header(f"Station: {aktuelle_wahl['jahr']}")
+    st.markdown(f"<h2 style='color: {aktuelle_wahl['farbe']};'>{aktuelle_wahl['jahr']}</h2>", unsafe_allow_html=True)
     st.subheader(aktuelle_wahl['event'])
-    st.write(f"Land: {aktuelle_wahl['land']}")
+    st.write(f"**Land:** {aktuelle_wahl['land']}")
     
-    # Hier kannst du deine Bilder/Logik einfügen
-    if aktuelle_wahl['jahr'] == 1996:
-        st.info("📸 Hier öffnen wir jetzt dein Schulbild...")
-    elif aktuelle_wahl['jahr'] == 2006:
-        st.success("✈️ Animation: Flug von Omsk nach Neustrelitz startet!")
+    # Text-Inhalte je nach Jahr
+    if aktuelle_wahl['jahr'] == 2006:
+        st.info("✈️ Flug von Omsk nach Neustrelitz. Start in ein neues Kapitel.")
+    elif aktuelle_wahl['jahr'] == 1988:
+        st.write("Geboren in Tscherlak, UdSSR.")
 
 with col_visual:
-    # Platzhalter für Karte oder Animation
-    st.write("*(Hier erscheint deine Karte oder Animation)*")
-
-
+    # Hier kannst du deine Karte oder Bilder einbinden
+    st.write(f"*(Platzhalter für Visualisierung von {aktuelle_wahl['jahr']})*")
 
