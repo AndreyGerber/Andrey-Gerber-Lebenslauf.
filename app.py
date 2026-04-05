@@ -392,8 +392,8 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     elif jahr_aktiv == 2010:
             # --- DEINE PARAMETER FÜR DIESEN ABSCHNITT ---
-            MASSSTAB_STUDIUM = 0.8  # 1.0 = 100%, 0.8 = 80% der Originalgröße
-            OBEN_ABSTAND = "180px"  # Vertikale Zentrierung für den Text
+            MASSSTAB_STUDIUM = 1.0 # 1.0 = 100%, 0.8 = 80% der Originalgröße
+            OBEN_ABSTAND = "50px"  # Vertikale Zentrierung für den Text
 
             col_text, col_foto = st.columns([1, 2.5])
 
