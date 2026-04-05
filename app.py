@@ -104,7 +104,7 @@ GROESSE_TEXTE = 16       # Schriftgröße der Beschreibungen
 
 # Hier kannst du deine Texte für die Blöcke definieren
 texte = {
-    1988: "Born in UdSSR <br>☭",
+    1988: "Born in UdSSR ☭",
     1991: "Moved to Russian Federation<br>without moving 🇷🇺",
     1996: "School (not cool)",
     2006: "Emigration to GE <br>🇩🇪",
