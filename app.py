@@ -305,8 +305,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
         
         st.markdown(f"""
             <p style='font-size: {INFO_FONT_SIZE}; color: #4B0082; line-height: 1.4;'>
-                Meine Schulzeit.<br>
-                So schnell vergehen 10 Jahre.
+                Meine Schulzeit. So schnell vergehen 10 Jahre.
             </p>
         """, unsafe_allow_html=True)
         
