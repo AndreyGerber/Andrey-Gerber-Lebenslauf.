@@ -299,7 +299,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
     # --- INNERHALB DEINES 750px CONTAINERS ---
 
     elif jahr_aktiv == 1996:
-        BILD_GROESSE_1996 = 650 
+        BILD_GROESSE_1996 = 950 
 
         st.subheader(f"🎒 {jahr_aktiv}: Schulzeit in Russland")
         
@@ -314,7 +314,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
         col_l, col_mid, col_r = st.columns([1, 2, 1])
         
         with col_mid:
-            img_schule = lade_formatiertes_bild("schule2.png", target_size=(BILD_GROESSE_1996+200, BILD_GROESSE_1996))
+            img_schule = lade_formatiertes_bild("schule2.png", target_size=(BILD_GROESSE_1996, BILD_GROESSE_1996))
             
             if img_schule:
                 # Hier wurde 'caption' entfernt, damit der Text unten verschwindet
