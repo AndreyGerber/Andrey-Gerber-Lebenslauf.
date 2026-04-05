@@ -268,7 +268,7 @@ with c_nav3:
 with st.container(height=BLOCK_HOEHE, border=True):
     jahr_aktiv = highlights[st.session_state.info_idx]
     
-   if jahr_aktiv == 1988:
+    if jahr_aktiv == 1988:
         # 1. Überschrift angepasst
         st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
         
@@ -296,6 +296,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             # 'use_container_width' sorgt dafür, dass sie den Platz ausfüllt
             st.map(df_map, zoom=2, use_container_width=True)
             st.caption("Geografische Lage von Tscherlak in Russland")
+
 
     # --- INNERHALB DEINES 750px CONTAINERS ---
     elif jahr_aktiv == 1996:
