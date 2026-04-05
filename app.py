@@ -172,7 +172,7 @@ for jahr in jahre_alle:
         x=jahr, y=-0.4, 
         text=texte.get(jahr, "mein Text"),
         showarrow=False, 
-        textangle=-45,
+        textangle=-25,
         font=dict(size=12, color="gray"),
         xanchor="right", 
         yanchor="top"
