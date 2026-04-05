@@ -111,15 +111,16 @@ fig.add_annotation(
 )
 
 # --- MEILENSTEINE (Die Rauten aus deiner Skizze) ---
+# --- MEILENSTEINE (Die Rauten aus deiner Skizze) ---
 fig.add_trace(go.Scatter(
     x=[e["x"] for e in events],
-    y=[0] * len(events),  # Hier war wahrscheinlich der Fehler (eckige Klammern für die Liste)
+    y=[0] * len(events),
     mode="markers+text",
     marker=dict(symbol="diamond", size=12, color="white", line=dict(width=2, color="black")),
-    text= for e in events],
+    text= for e in events], 
     textposition="bottom center",
     hoverinfo="none"
-)) # Hier muss eine runde Klammer stehen, um add_trace zu schließen
+))
 
 # --- PHASEN-TRENNER (Vertikale Linien aus deiner Skizze) ---
 # Beispiel: Trennung UdSSR/Russland (~1991) und Russland/Deutschland (2004)
