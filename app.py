@@ -90,64 +90,73 @@ st.divider()
 
 
 # --- 4. DATEN FÜR DIE STORY-NAVIGATION ---
-if 'selected_year' not in st.session_state:
-    st.session_state.selected_year = 1988
+import plotly.graph_objects as go
 
-# Hier definierst du deine Stationen und Koordinaten
-STATIONEN = {
-    1988: {"titel": "Geburt in der UdSSR", "ort": "Tscherlak", "lat": 54.15, "lon": 74.80, "text": "In Tscherlak geboren, kurz vor dem Zerfall der Sowjetunion."},
-    1996: {"titel": "Schulzeit", "ort": "Omsk", "lat": 54.98, "lon": 73.37, "text": "Einschulung und Kindheit in Sibirien."},
-    2006: {"titel": "Emigration", "ort": "Neustrelitz", "lat": 53.36, "lon": 13.06, "text": "Neustart in Deutschland. Ein großer Flug in ein neues Leben."},
-    2022: {"titel": "Hausbau", "ort": "Deutschland", "lat": 52.52, "lon": 13.40, "text": "Ein wichtiger Meilenstein in der neuen Heimat."}
-}
+# --- 1. DATEN FÜR DEN PFEIL ---
+df_timeline = pd.DataFrame([
+    {"jahr": 1988, "event": "Geburt", "farbe": "red", "symbol": "diamond"},
+    {"jahr": 1991, "event": "Russland", "farbe": "blue", "symbol": "diamond"},
+    {"jahr": 1996, "event": "Schule", "farbe": "blue", "symbol": "diamond"},
+    {"jahr": 2006, "event": "Emigration", "farbe": "gold", "symbol": "diamond"},
+    {"jahr": 2022, "event": "Hausbau", "farbe": "gold", "symbol": "diamond"},
+    {"jahr": 2024, "event": "Heute", "farbe": "gold", "symbol": "arrow-right"}
+])
 
-# --- 5. VISUELLER ZEITSTRAHL (HORIZONTALE NAVIGATION) ---
-st.markdown("<h3 style='text-align: center;'>Meine Reise</h3>", unsafe_allow_html=True)
+# --- 2. DEN PFEIL ZEICHNEN ---
+fig_arrow = go.Figure()
 
-# Spalten für die Jahre (proportional oder gleichmäßig)
-zeit_cols = st.columns(len(STATIONEN))
-jahre = sorted(STATIONEN.keys())
+# Die Linie (dein Pfeil)
+fig_arrow.add_trace(go.Scatter(
+    x=[1988, 1991, 2006, 2024], 
+    y=[0, 0, 0, 0],
+    mode='lines',
+    line=dict(color='black', width=3),
+    hoverinfo='none'
+))
 
-for i, jahr in enumerate(jahre):
-    with zeit_cols[i]:
-        # Button-Farbe hervorheben, wenn ausgewählt
-        label = f"📍 {jahr}" if jahr == st.session_state.selected_year else str(jahr)
-        if st.button(label, use_container_width=True, key=f"btn_{jahr}"):
-            st.session_state.selected_year = jahr
-            st.rerun()
+# Die farbigen Segmente (UdSSR, Russland, Deutschland)
+segments = [
+    (1988, 1991, 'red'), (1991, 2006, 'blue'), (2006, 2024, 'gold')
+]
+for start, end, color in segments:
+    fig_arrow.add_trace(go.Scatter(
+        x=[start, end], y=[0, 0],
+        mode='lines',
+        line=dict(color=color, width=8),
+        hoverinfo='none'
+    ))
 
-# --- 6. INTERAKTIVE KARTE & DETAILS ---
-st.divider()
-c1, c2 = st.columns([1, 2])
+# Die klickbaren Ereignisse (Rauten)
+fig_arrow.add_trace(go.Scatter(
+    x=df_timeline['jahr'],
+    y=[0] * len(df_timeline),
+    mode='markers+text',
+    marker=dict(symbol='diamond', size=15, color='white', line=dict(width=2, color='black')),
+    text=df_timeline['jahr'],
+    textposition="bottom center",
+    customdata=df_timeline['event'],
+    hovertemplate="<b>%{text}</b>: %{customdata}<extra></extra>"
+))
 
-aktuelle_station = STATIONEN[st.session_state.selected_year]
+# Layout-Anpassungen für "sauberen" Look
+fig_arrow.update_layout(
+    height=150, margin=dict(l=20, r=20, t=20, b=20),
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1987, 2025]),
+    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, 0.5]),
+    showlegend=False,
+    clickmode='event+select'
+)
 
-with c1:
-    st.markdown(f"### {aktuelle_station['titel']}")
-    st.markdown(f"**Ort:** {aktuelle_station['ort']}")
-    st.write(aktuelle_station)
-    
-    # Dynamischer Bild-Platzhalter für die jeweilige Station
-    bild_name = f"station_{st.session_state.selected_year}.jpg"
-    station_bild = lade_formatiertes_bild(bild_name, target_size=(400, 300))
-    if station_bild:
-        st.image(station_bild, caption=f"Eindruck aus {st.session_state.selected_year}")
-    else:
-        st.info(f"📸 Hier kannst du später ein Foto von '{aktuelle_station['ort']}' einfügen.")
+# --- 3. INTERAKTION AUSWERTEN ---
+# Hier nutzen wir st_plotly_events (muss evtl. mit 'pip install streamlit-plotly-events' installiert werden)
+# ODER wir nutzen einfache Radio-Buttons als Fallback, die wie der Zeitstrahl gestylt sind.
 
-with c2:
-    # Einfache Karte mit Plotly (da du es oben schon importiert hast)
-    map_data = pd.DataFrame([aktuelle_station])
-    fig = px.scatter_mapbox(
-        map_data, 
-        lat="lat", lon="lon", 
-        zoom=4, 
-        height=400,
-        text="ort"
-    )
-    fig.update_layout(mapbox_style="open-street-map", margin={"r":0,"t":0,"l":0,"b":0})
-    st.plotly_chart(fig, use_container_width=True)
+st.markdown("### Klicke auf ein Ereignis auf dem Zeitstrahl:")
+selected_event = st.selectbox("Wähle ein Jahr:", df_timeline['jahr'], label_visibility="collapsed")
 
+# --- 4. ANZEIGE DER INHALTE (Wie vorher) ---
+st.session_state.selected_year = selected_event
+# Hier folgt dein Code für Karte, Bilder oder Animationen...
 
 
 
