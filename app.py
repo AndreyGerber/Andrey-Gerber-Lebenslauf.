@@ -331,19 +331,19 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
         fig_flight = go.Figure()
 
-        # 1. ORTE (Omsk & Berlin) - Text jetzt UNTER den Punkten
+        # 1. ORTE (Omsk & Berlin) - Texte UNTER den Punkten
         fig_flight.add_trace(go.Scattergeo(
             lon = [73.32, 13.40],
             lat = [54.98, 52.52],
             mode = 'markers+text',
             text = ["Omsk", "Berlin"],
-            textposition = "bottom center", # <--- Positionierung nach unten
+            textposition = "bottom center",
             textfont = dict(size=16, color="black", family="Arial Black"),
             marker = dict(size=14, color='#FF4B4B', line=dict(width=2, color='white')),
             hoverinfo = 'none'
         ))
 
-        # 2. FLUGROUTE (Bogen)
+        # 2. FLUGROUTE (Die rote Linie)
         fig_flight.add_trace(go.Scattergeo(
             lon = [73.32, 13.40],
             lat = [54.98, 52.52],
@@ -352,29 +352,18 @@ with st.container(height=BLOCK_HOEHE, border=True):
             hoverinfo = 'none'
         ))
 
-        # 3. LANDENDES FLUGZEUG (Gedreht)
-        fig_flight.add_trace(go.Scattergeo(
-            lon = [16.0], lat = [53.5], 
-            mode = 'text',
-            text = "✈️", 
-            # Mit 'textangle' neigen wir die Nase nach unten (-45 Grad)
-            textfont = dict(size=45), 
-            # Wir schummeln ein bisschen mit HTML/CSS für die Drehung, 
-            # da Scattergeo kein direktes 'textangle' hat:
-        ))
-        
-        # Da Scattergeo Text nicht nativ dreht, nutzen wir hier eine Annotation 
-        # für das Flugzeug, um es präzise zu neigen:
+        # 3. DAS EINE LANDENDE FLUGZEUG (Annotation für die Drehung)
+        # Wir setzen es kurz vor Berlin auf die Linie
         fig_flight.add_annotation(
-            x=16.0, y=53.5,
+            x=22.0, y=54.2, # Position auf der Karte
             text="✈️",
             showarrow=False,
             font=dict(size=45),
-            textangle=-150, # Nase zeigt nach links unten Richtung Berlin
+            textangle=-155, # Nase zeigt nach links unten Richtung Berlin
             xref="x", yref="y"
         )
 
-        # 4. LAYOUT
+        # 4. LAYOUT (Eurasien Fokus)
         fig_flight.update_layout(
             height=550,
             margin=dict(l=0, r=0, t=10, b=0),
@@ -384,13 +373,14 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 showocean = True, oceancolor = "#E8F4F9",
                 showcountries = True, countrycolor = "white",
                 lataxis = dict(range=[45, 65]),
-                lonaxis = dict(range=[5, 80]),
+                lonaxis = dict(range=[10, 80]),
                 resolution = 50
             ),
             showlegend = False
         )
 
-        st.plotly_chart(fig_flight, use_container_width=True, key="flight_landing_2006")
+        st.plotly_chart(fig_flight, use_container_width=True, key="flight_landing_single")
+
 
 
 
