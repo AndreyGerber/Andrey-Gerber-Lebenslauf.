@@ -273,36 +273,31 @@ with st.container(height=BLOCK_HOEHE, border=True):
     if jahr_aktiv == 1988:
         st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
         
+        # 1. Bild zentrieren
+        _, col_img, _ = st.columns([1, 2, 1])
+        with col_img:
+            img = lade_formatiertes_bild("tscherlak.png", target_size=(BILD_BREITE, BILD_BREITE))
+            if img:
+                st.image(img, width=BILD_BREITE)
 
-        # 2. Folium Karte ohne Verweise erstellen
-        lat_tscherlak, lon_tscherlak = 54.1221, 74.8056
-        
-        m = folium.Map(
-            location=[55.0, 75.0], 
-            zoom_start=2, 
-            tiles="CartoDB positron",
-            attr=' ', # Entfernt den Text unten rechts weitestgehend
-            control_scale=False,
-            zoom_control=False # Entfernt die +/- Buttons für einen cleaner Look
-        )
+        # 2. Daten für den Pin vorbereiten
+        # Streamlit braucht ein DataFrame mit 'lat' und 'lon'
+        df_pin = pd.DataFrame({'lat': [54.1221], 'lon': [74.8056]})
 
-        folium.Marker(
-            location=[lat_tscherlak, lon_tscherlak],
-            icon=folium.Icon(color="red", icon="pushpin", prefix="fa")
-        ).add_to(m)
-
-        # 3. Mittige Anordnung via Spalten (Columns)
-        _, col_mitte, _ = st.columns([1, 5, 1]) # Das Verhältnis 1:5:1 schiebt die Karte in die Mitte
-        
-        with col_mitte:
-            st_folium(
-                m, 
-                width=700, 
-                height=450, 
-                returned_objects=[],
-                use_container_width=True # Sorgt dafür, dass sie die Spalte ausfüllt
-            )
-            st.caption("Geografische Lage von Tscherlak in Russland")
+        # 3. Karte mittig platzieren
+        _, col_map, _ = st.columns([0.1, 4, 0.1])
+        with col_map:
+            # CSS-Hack: Entfernt die Attribution (Hinweise) unten rechts so gut wie möglich
+            st.markdown("""
+                <style>
+                    .mapboxgl-ctrl-bottom-right { display: none !important; }
+                    .mapboxgl-ctrl-bottom-left { display: none !important; }
+                </style>
+            """, unsafe_allow_html=True)
+            
+            # Die Karte (Zoom 2-3 zeigt ganz Russland)
+            st.map(df_pin, zoom=2, use_container_width=True, color='#FF0000')
+            st.caption("Geografische Lage von Tscherlak")
 
 
     # --- INNERHALB DEINES 750px CONTAINERS ---
