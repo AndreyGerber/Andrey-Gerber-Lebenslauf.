@@ -93,56 +93,53 @@ st.divider()
 import streamlit as st
 import plotly.graph_objects as go
 
-# --- 1. DATEN FÜR DEN PFEIL ---
-# Deine Jahre aus der Zeichnung
+# --- 1. DATEN ---
 jahre = [1988, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 
-# --- 2. DEN SCHWARZEN PFEIL ERSTELLEN ---
+# --- 2. GRAFIK ---
 fig = go.Figure()
 
-# Der Pfeilschaft (Schwarze Linie)
+# Schwarze Linie (Hauptschaft)
 fig.add_trace(go.Scatter(
-    x=[min(jahre)-2, max(jahre)+2], 
-    y=[0, 0],
+    x=[min(jahre)-5, max(jahre)+5], y=[0, 0],
     mode='lines',
     line=dict(color='black', width=3),
-    hoverinfo='none'
+    hoverinfo='none',
+    showlegend=False # Legende entfernen
 ))
 
-# Die Rauten und die Jahre (Jahre direkt unter den Rauten)
+# Rauten und Jahre
 fig.add_trace(go.Scatter(
-    x=jahre,
-    y=[0] * len(jahre),
+    x=jahre, y=[0] * len(jahre),
     mode='markers+text',
-    marker=dict(
-        symbol='diamond',
-        size=22,
-        color='white',
-        line=dict(color='black', width=2)
-    ),
+    marker=dict(symbol='diamond', size=22, color='white', line=dict(color='black', width=2)),
     text=jahre,
-    textposition="bottom center", # Jahre unter die Rauten setzen
-    textfont=dict(size=18, color="black"),
-    hoverinfo='none'
+    textposition="bottom center",
+    textfont=dict(size=16, color="black"),
+    hoverinfo='none',
+    showlegend=False # Legende entfernen
 ))
 
-# Die Pfeilspitze am rechten Ende
+# KORRIGIERTE PFEILSPITZE (Nach rechts zeigend)
 fig.add_annotation(
-    x=max(jahre)+3, y=0, ax=max(jahre)+1, ay=0,
-    xref="x", yref="y", showarrow=True,
+    x=max(jahre)+6, y=0,      # Spitze des Pfeils (Ziel)
+    ax=max(jahre)+4, ay=0,    # Ende des Pfeils (Startpunkt der Spitze)
+    xref="x", yref="y",
+    showarrow=True,
     arrowhead=2, arrowsize=1.5, arrowwidth=3, arrowcolor="black"
 )
 
-# Layout aufräumen (Kein Gitter, keine Achsen)
+# Layout-Cleanup
 fig.update_layout(
     height=200,
     margin=dict(l=10, r=10, t=10, b=10),
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[min(jahre)-4, max(jahre)+6]),
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[min(jahre)-8, max(jahre)+10]),
     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, 0.5]),
     plot_bgcolor="rgba(0,0,0,0)",
-    paper_bgcolor="rgba(0,0,0,0)"
+    paper_bgcolor="rgba(0,0,0,0)",
+    showlegend=False # Sicherstellen, dass keine Legende erscheint
 )
 
-# --- 3. ANZEIGE IN STREAMLIT ---
-# 'staticPlot': True verhindert das Verschieben/Zoomen durch den Nutzer
+# Anzeige
 st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
+
