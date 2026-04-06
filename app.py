@@ -304,39 +304,41 @@ with st.container(height=BLOCK_HOEHE, border=True):
     jahr_aktiv = highlights[st.session_state.info_idx]
 
     if jahr_aktiv == 1988:
-        st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
+            st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
 
-        # --- DEIN NEUER PARAMETER ---
-        MASSSTAB_MAP = 0.8  # 1.0 = 100%, 0.5 = 50% der Containerbreite
-        # ----------------------------
+            # --- DEIN PARAMETER ---
+            MASSSTAB_MAP = 0.8  # Ändere NUR diesen Wert (z.B. 0.5 für 50%)
+            # ----------------------------
 
-        import base64
-        def get_base64(path):
-            with open(path, "rb") as f:
-                return base64.b64encode(f.read()).decode()
+            import base64
+            def get_base64(path):
+                with open(path, "rb") as f:
+                    return base64.b64encode(f.read()).decode()
 
-        try:
-            img_b64 = get_base64("images/tscherlak_map.png")
-            
-            # Die Breite wird nun über den MASSSTAB gesteuert (z.B. 80%)
-            # 'margin: auto' zentriert das Bild, falls es kleiner als 100% ist
-            st.markdown(f"""
-                <div style="position: relative; width: {int(MASSSTAB_MAP * 100)}%; margin: auto;">
-                    <img src="data:image/png;base64,{img_b64}" style="width: 100%; border-radius: 10px;">
-                    <div style="
-                        position: absolute;
-                        top: 45.5%;
-                        left: 81.7%;
-                        transform: translate(-50%, -100%);
-                        font-size: 40px;
-                        filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
-                        z-index: 999;
-                    ">📍</div>
-                </div>
-            """, unsafe_allow_html=True)
-            
-        except Exception as e:
-            st.error(f"Fehler: {e}")
+            try:
+                img_b64 = get_base64("images/tscherlak_map.png")
+                
+                # WICHTIG: Die Prozentwerte für top/left müssen die ORIGINAL-Werte bleiben, 
+                # die bei 100% Größe funktioniert haben.
+                st.markdown(f"""
+                    <div style="width: {int(MASSSTAB_MAP * 100)}%; margin: auto;">
+                        <div style="position: relative; display: inline-block; width: 100%;">
+                            <img src="data:image/png;base64,{img_b64}" style="width: 100%; display: block; border-radius: 10px;">
+                            <div style="
+                                position: absolute;
+                                top: 45.5%;
+                                left: 81.7%;
+                                transform: translate(-50%, -100%);
+                                font-size: 40px;
+                                filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
+                                z-index: 999;
+                            ">📍</div>
+                        </div>
+                    </div>
+                """, unsafe_allow_html=True)
+                
+            except Exception as e:
+                st.error(f"Fehler: {e}")
 
   
 
