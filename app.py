@@ -465,7 +465,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     elif jahr_aktiv == 2017:
         # --- PARAMETER ---
-        MASSSTAB_TUV = 1.1
+        MASSSTAB_TUV = 1.2
         OBEN_ABSTAND_TEXT = "20px" 
 
         col_text, col_foto = st.columns([1, 1.8])
@@ -501,7 +501,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             img_tuv = lade_formatiertes_bild("tuev.png") 
             if img_tuv:
                 # Vertikaler Abstand, damit das Logo mittig zum Text steht
-                st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
+                st.markdown("<div style='margin-top: 5px;'></div>", unsafe_allow_html=True)
                 st.image(img_tuv, width=int(img_tuv.size[0] * MASSSTAB_TUV))
             else:
                 st.error("Datei 'images/tuev.png' nicht gefunden.")
