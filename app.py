@@ -420,8 +420,8 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 showocean = True, oceancolor = "#E8F4F9",
                 showcountries = True, countrycolor = "white",
                 # Fokus-Bereich angepasst, damit Berlin links genug Platz hat
-                lataxis = dict(range=[45, 65], showgrid=False),
-                lonaxis = dict(range=[5, 85], showgrid=False),
+                lataxis = dict(range=[45, 65], showgrid=False, showticklabels=False),
+                lonaxis = dict(range=[5, 85], showgrid=False, showticklabels=False),
                 resolution = 50
             ),
             showlegend = False
