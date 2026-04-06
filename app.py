@@ -512,4 +512,33 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
 
 
+#ab hier entsteht ein 3D-Raum mit Fähigkeiten und Fertigkeiten
+st.divider() # Trennlinie zur Zeitachse
+st.header("🎨 Expertise & Handwerk")
+
+col_skills, col_details = st.columns([1, 1.5])
+
+with col_skills:
+    st.write("### Meine Schwerpunkte")
+    # Ein schöner Weg, Skills ohne Balken zu zeigen
+    st.button("🧬 Qualitätsmanagement (ISO 9001/17025)", use_container_width=True)
+    st.button("🔊 Akustik & Schwingungsmesstechnik", use_container_width=True)
+    st.button("🐍 Python & Data Science", use_container_width=True)
+    st.button("🧼 3D-Modellierung & Seifendesign", use_container_width=True)
+
+with col_details:
+    # Hier kannst du z.B. eine Galerie deiner 3D-Seifenmodelle zeigen
+    st.info("Klicke auf einen Bereich links, um mehr zu erfahren (Logik kann noch ergänzt werden).")
+    
+    # Beispiel für ein Bild-Grid deiner handwerklichen Arbeit
+    c1, c2 = st.columns(2)
+    with c1:
+        st.image("images/seife_modell1.png", caption="3D-Entwurf", use_container_width=True)
+    with c2:
+        st.image("images/seife_fertig1.png", caption="Fertiges Produkt", use_container_width=True)
+
+
+
+
+
 
