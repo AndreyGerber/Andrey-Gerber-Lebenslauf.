@@ -465,10 +465,10 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     elif jahr_aktiv == 2017:
         # --- PARAMETER ---
-        MASSSTAB_TUV = 1
+        MASSSTAB_TUV = 1.2
         OBEN_ABSTAND_TEXT = "20px" 
 
-        col_text, col_foto = st.columns([1, 2])
+        col_text, col_foto = st.columns([1, 1.8])
 
         with col_text:
             st.markdown(f"<div style='margin-top: {OBEN_ABSTAND_TEXT};'></div>", unsafe_allow_html=True)
@@ -476,8 +476,8 @@ with st.container(height=BLOCK_HOEHE, border=True):
             
             # Fokus 1: Test & Measurement (2017-2019)
             st.markdown(f"""
-                <p style='font-size: 20px; color: #0055A5; margin-bottom: 5px;'><strong>Test & Measurement Engineer</strong></p>
-                <ul style='font-size: 16px; color: #333; line-height: 1.4;'>
+                <p style='font-size: 24px; color: #0055A5; margin-bottom: 5px;'><strong>Test & Measurement Engineer</strong></p>
+                <ul style='font-size: 20px; color: #333; line-height: 1.4;'>
                     <li>Normgerechte <b>akustische Messungen</b> (Haushaltsgeräte, Tools, Spielzeug)</li>
                     <li>Planung & Aufbau einer <b>neuen Prüfkammer</b> für Smart Speaker</li>
                     <li><b>Schwingungsmessungen & kundenspezifische Sondermessungen</b></li>
@@ -487,8 +487,8 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
             # Fokus 2: Qualitätsmanagement (2019-2022)
             st.markdown(f"""
-                <p style='font-size: 20px; color: #0055A5; margin-top: 20px; margin-bottom: 5px;'><strong>ab 2019 <br>Qualitätsmanager / Quality Expert</strong></p>
-                <ul style='font-size: 16px; color: #333; line-height: 1.4;'>
+                <p style='font-size: 24px; color: #0055A5; margin-top: 20px; margin-bottom: 5px;'><strong>ab 2019 <br>Qualitätsmanager / Quality Expert</strong></p>
+                <ul style='font-size: 20px; color: #333; line-height: 1.4;'>
                     <li>Durchführung <b>interner Audits</b>  (ISO 9001 & ISO 17025)</li>
                     <li>Verantwortung für <b>CAPA-Prozesse</b> und <b>Beschwerdemanagement</li>
                     <li><b>Externe Audits</b>  und <b>Management Reviews</b></li>
