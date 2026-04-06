@@ -767,69 +767,97 @@ st.markdown("<br>", unsafe_allow_html=True) # HTML-Umbruch für präzise Kontrol
 import streamlit as st
 import streamlit.components.v1 as components
 
-def show_3d_fix():
-    st.header("🌐 Andrey's 3D-Showroom")
-    
+def dreidimensionaler_sprachraum():
+    st.header("🌐 Andrey's 3D-Sprachlabor")
+    st.write("Klicke und ziehe mit der Maus, um dich im Raum umzusehen.")
+
+    # Der HTML/JS Block mit Fehler-Diagnose
     three_js_code = """
     <!DOCTYPE html>
     <html>
     <head>
         <style>
-            body { margin: 0; background-color: #f0f2f6; overflow: hidden; height: 500px; }
-            #container { width: 100%; height: 500px; background-color: #e5e7eb; }
+            body { margin: 0; background-color: #1a1a1a; overflow: hidden; }
+            #canvas-container { width: 100%; height: 500px; position: relative; }
+            #status { 
+                position: absolute; top: 10px; left: 10px; 
+                color: #ff4b4b; font-family: monospace; z-index: 10;
+            }
         </style>
     </head>
     <body>
-        <div id="container"></div>
+        <div id="status">Lade 3D-Engine...</div>
+        <div id="canvas-container"></div>
 
-        <!-- WICHTIG: Volle URLs mit https:// -->
-        <script src="https://cloudflare.com"></script>
-        <script src="https://jsdelivr.net"></script>
+        <!-- Stabiler Import von Three.js -->
+        <script src="https://unpkg.com"></script>
+        <script src="https://unpkg.com"></script>
 
         <script>
+            const status = document.getElementById('status');
+            
             try {
+                // 1. SETUP
                 const scene = new THREE.Scene();
-                scene.background = new THREE.Color(0xf0f2f6);
+                scene.background = new THREE.Color(0x111111);
                 
                 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / 500, 0.1, 1000);
                 const renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(window.innerWidth, 500);
-                document.getElementById('container').appendChild(renderer.domElement);
+                document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-                // Licht
-                const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+                // 2. LICHT
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
                 scene.add(ambientLight);
-                const pointLight = new THREE.PointLight(0xffffff, 1);
-                pointLight.position.set(5, 5, 5);
-                scene.add(pointLight);
+                const light = new THREE.PointLight(0xffffff, 1);
+                light.position.set(10, 10, 10);
+                scene.add(light);
 
-                // Ein schwebender Würfel (Dein Platzhalter)
-                const geometry = new THREE.BoxGeometry(2, 2, 2);
-                const material = new THREE.MeshPhongMaterial({ color: 0x0055A5 });
-                const cube = new THREE.Mesh(geometry, material);
-                scene.add(cube);
+                // 3. DER RAUM (EINE GROSSE BOX)
+                const roomGeo = new THREE.BoxGeometry(20, 10, 20);
+                const roomMat = new THREE.MeshPhongMaterial({ 
+                    color: 0x333333, 
+                    side: THREE.BackSide // Wir sehen die Innenseite
+                });
+                const room = new THREE.Mesh(roomGeo, roomMat);
+                scene.add(room);
 
-                camera.position.z = 5;
+                // 4. "WÄNDE" MIT SPRACHEN (Als schwebende Würfel simuliert)
+                const languages = },
+                    { text: "English", color: 0x00ff00, pos: [5, 1, 0] },
+                    { text: "Русский", color: 0x0000ff, pos: [0, -1, 5] },
+                    { text: "Python", color: 0xffff00, pos: [-3, 2, 3] }
+                ];
 
-                // Steuerung
+                languages.forEach(lang => {
+                    const geo = new THREE.BoxGeometry(2, 1, 0.2);
+                    const mat = new THREE.MeshPhongMaterial({ color: lang.color });
+                    const cube = new THREE.Mesh(geo, mat);
+                    cube.position.set(...lang.pos);
+                    scene.add(cube);
+                });
+
+                camera.position.set(0, 0, 8);
                 const controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+
+                status.innerHTML = "3D Aktiv: Nutze die Maus!";
+                status.style.color = "#00ff00";
 
                 function animate() {
                     requestAnimationFrame(animate);
-                    cube.rotation.x += 0.01;
-                    cube.rotation.y += 0.01;
+                    scene.children.forEach(child => {
+                        if(child.type === "Mesh" && child !== room) {
+                            child.rotation.y += 0.01;
+                        }
+                    });
+                    controls.update();
                     renderer.render(scene, camera);
                 }
                 animate();
 
-                // Resize-Event
-                window.addEventListener('resize', () => {
-                    camera.aspect = window.innerWidth / 500;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(window.innerWidth, 500);
-                });
-            } catch (e) {
-                document.getElementById('container').innerHTML = "Fehler beim Laden von 3D: " + e.message;
+            } catch (err) {
+                status.innerHTML = "FEHLER: " + err.message;
             }
         </script>
     </body>
@@ -837,7 +865,8 @@ def show_3d_fix():
     """
     components.html(three_js_code, height=520)
 
-show_3d_fix()
+dreidimensionaler_sprachraum()
+
 
 
 
