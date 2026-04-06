@@ -495,13 +495,14 @@ with st.container(height=BLOCK_HOEHE, border=True):
             """, unsafe_allow_html=True)
 
         with col_foto:
-            # Nutze dein Logo oder ein passendes Bild
-            img_tuv = lade_formatiertes_bild("tuv_logo.png") 
+            # Bild aus dem Unterordner "images" laden
+            img_tuv = lade_formatiertes_bild("tuev.png") 
             if img_tuv:
-                st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
+                # Vertikaler Abstand, damit das Logo mittig zum Text steht
+                st.markdown("<div style='margin-top: 150px;'></div>", unsafe_allow_html=True)
                 st.image(img_tuv, width=int(img_tuv.size[0] * MASSSTAB_TUV))
             else:
-                st.info("Hier ein Bild vom TÜV Rheinland einfügen (z.B. Labor oder Logo).")
+                st.error("Datei 'images/tuev.png' nicht gefunden.")
 
 
 
