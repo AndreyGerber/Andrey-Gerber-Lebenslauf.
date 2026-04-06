@@ -419,14 +419,13 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 showland = True, landcolor = "#F0F2F6",
                 showocean = True, oceancolor = "#E8F4F9",
                 showcountries = True, countrycolor = "white",
-                # Hier waren die Werte leer, jetzt sind sie wieder da:
-                lataxis = dict(range=[45, 65], showgrid=False, showticklabels=False),
-                lonaxis = dict(range=[5, 85], showgrid=False, showticklabels=False),
+                # Fokus-Bereich angepasst, damit Berlin links genug Platz hat
+                lataxis = dict(range=[45, 65], showgrid=False),
+                lonaxis = dict(range=[5, 85], showgrid=False),
                 resolution = 50
             ),
             showlegend = False
         )
-
 
         st.plotly_chart(fig_flight, use_container_width=True, key="flight_landing_final_fix")
 
