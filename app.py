@@ -597,7 +597,8 @@ st.markdown("""
 
 
 
-
+st.markdown("<br>", unsafe_allow_html=True) # HTML-Umbruch für präzise Kontrolle
+st.markdown("<br>", unsafe_allow_html=True) # HTML-Umbruch für präzise Kontrolle
 
 
 
@@ -758,94 +759,86 @@ show_3d_gallery()
 
 
 
-
+st.markdown("<br>", unsafe_allow_html=True) # HTML-Umbruch für präzise Kontrolle
+st.markdown("<br>", unsafe_allow_html=True) # HTML-Umbruch für präzise Kontrolle
 
 
 
 import streamlit as st
 import streamlit.components.v1 as components
 
-def three_js_showroom():
-    st.header("🌐 Andrey's 3D-Experience (Three.js)")
-    st.write("Nutze die Maus zum Drehen (Links-Klick) und Zoomen (Scrollen).")
-
-    # Der Three.js Code als HTML/JavaScript-Block
+def show_3d_fix():
+    st.header("🌐 Andrey's 3D-Showroom")
+    
     three_js_code = """
     <!DOCTYPE html>
     <html>
     <head>
         <style>
-            body { margin: 0; background-color: #f0f2f6; overflow: hidden; }
-            canvas { width: 100%; height: 500px; display: block; }
+            body { margin: 0; background-color: #f0f2f6; overflow: hidden; height: 500px; }
+            #container { width: 100%; height: 500px; background-color: #e5e7eb; }
         </style>
     </head>
     <body>
-        <!-- Three.js Bibliothek laden -->
+        <div id="container"></div>
+
+        <!-- WICHTIG: Volle URLs mit https:// -->
         <script src="https://cloudflare.com"></script>
-        <!-- OrbitControls für Maus-Interaktion -->
         <script src="https://jsdelivr.net"></script>
 
         <script>
-            // 1. SZENE & KAMERA ERSTELLEN
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xf0f2f6);
-            
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / 500, 0.1, 1000);
-            camera.position.z = 5;
-
-            // 2. RENDERER ERSTELLEN
-            const renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, 500);
-            document.body.appendChild(renderer.domElement);
-
-            // 3. LICHT HINZUFÜGEN
-            const light = new THREE.DirectionalLight(0xffffff, 1);
-            light.position.set(5, 5, 5).normalize();
-            scene.add(light);
-            scene.add(new THREE.AmbientLight(0x404040)); // Sanftes Umgebungslicht
-
-            // 4. EIN OBJEKT ERSTELLEN (Platzhalter für deine 3D-Seife oder ein Zertifikat)
-            const geometry = new THREE.BoxGeometry(2, 3, 0.2); // Wie ein gerahmtes Dokument
-            const material = new THREE.MeshPhongMaterial({ 
-                color: 0x0055A5, 
-                shininess: 100 
-            });
-            const documentCard = new THREE.Mesh(geometry, material);
-            scene.add(documentCard);
-
-            // 5. MAUS-STEUERUNG (OrbitControls)
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-
-            // 6. ANIMATION-LOOP
-            function animate() {
-                requestAnimationFrame(animate);
+            try {
+                const scene = new THREE.Scene();
+                scene.background = new THREE.Color(0xf0f2f6);
                 
-                // Optionale Eigenrotation
-                documentCard.rotation.y += 0.005;
-                
-                controls.update();
-                renderer.render(scene, camera);
-            }
-
-            // Fenstergröße anpassen
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / 500;
-                camera.updateProjectionMatrix();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / 500, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(window.innerWidth, 500);
-            });
+                document.getElementById('container').appendChild(renderer.domElement);
 
-            animate();
+                // Licht
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+                scene.add(ambientLight);
+                const pointLight = new THREE.PointLight(0xffffff, 1);
+                pointLight.position.set(5, 5, 5);
+                scene.add(pointLight);
+
+                // Ein schwebender Würfel (Dein Platzhalter)
+                const geometry = new THREE.BoxGeometry(2, 2, 2);
+                const material = new THREE.MeshPhongMaterial({ color: 0x0055A5 });
+                const cube = new THREE.Mesh(geometry, material);
+                scene.add(cube);
+
+                camera.position.z = 5;
+
+                // Steuerung
+                const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    cube.rotation.x += 0.01;
+                    cube.rotation.y += 0.01;
+                    renderer.render(scene, camera);
+                }
+                animate();
+
+                // Resize-Event
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / 500;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, 500);
+                });
+            } catch (e) {
+                document.getElementById('container').innerHTML = "Fehler beim Laden von 3D: " + e.message;
+            }
         </script>
     </body>
     </html>
     """
-
-    # Das 3D-Fenster in Streamlit einbetten
     components.html(three_js_code, height=520)
 
-# Aufruf der Funktion
-three_js_showroom()
+show_3d_fix()
+
 
 
 
