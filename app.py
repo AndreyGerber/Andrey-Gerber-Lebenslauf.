@@ -514,68 +514,86 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
 #ab hier entsteht ein 3D-Raum mit Fähigkeiten und Fertigkeiten
 st.divider()
-st.header("🎨 Expertise & Handwerk")
+st.header("🎨 Virtueller Expertise-Showroom")
 
-# 1. LOGIK: Welcher Skill ist gerade ausgewählt?
-if 'selected_skill' not in st.session_state:
-    st.session_state.selected_skill = "QM" # Standard-Startwert
-
-# 2. LAYOUT: 30% Buttons (links), 70% Details (rechts)
-col_skills, col_details = st.columns([1, 2.3])
-
-with col_skills:
-    st.write("### Meine Schwerpunkte")
+# 1. CSS FÜR DEN 3D-RAUM (Linke Wand: Zertifikate | Rechte Wand: Handwerk)
+st.markdown("""
+    <style>
+    .main-stage {
+        perspective: 1500px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 500px;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 20px;
+        padding: 40px;
+    }
+    .wall {
+        width: 300px;
+        height: 400px;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    /* Linke Wand (Zertifikate) */
+    .wall-left {
+        transform: rotateY(40deg) translateZ(50px);
+    }
+    /* Rechte Wand (Handwerk) */
+    .wall-right {
+        transform: rotateY(-40deg) translateZ(50px);
+    }
+    /* Die Karten im Raum */
+    .showroom-card {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 10px 10px 20px rgba(0,0,0,0.1);
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: all 0.4s;
+        cursor: pointer;
+        text-align: center;
+    }
+    /* Effekt beim Drüberfahren (Hover) */
+    .showroom-card:hover {
+        transform: scale(1.1) rotateY(0deg) translateZ(150px);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        border-color: #0055A5;
+        z-index: 100;
+    }
+    .info-center {
+        width: 30%;
+        text-align: center;
+        font-family: sans-serif;
+    }
+    </style>
     
-    # Buttons setzen den State und laden die Seite neu
-    if st.button("🧬 Qualitätsmanagement (ISO 9001/17025)", use_container_width=True):
-        st.session_state.selected_skill = "QM"
-        st.rerun()
+    <div class="main-stage">
+        <!-- LINKE WAND: DOKUMENTE -->
+        <div class="wall wall-left">
+            <div class="showroom-card">🎓<br><b>Master Sc.</b><br><small>Physik / Akustik</small></div>
+            <div class="showroom-card">📜<br><b>Auditor</b><br><small>ISO 9001 / 17025</small></div>
+            <div class="showroom-card">🏗️<br><b>Bachelor Eng.</b><br><small>Physiktechnik</small></div>
+        </div>
         
-    if st.button("🔊 Akustik & Schwingungsmesstechnik", use_container_width=True):
-        st.session_state.selected_skill = "Akustik"
-        st.rerun()
-        
-    if st.button("🐍 Python & Data Science", use_container_width=True):
-        st.session_state.selected_skill = "Python"
-        st.rerun()
-        
-    if st.button("🧼 3D-Modellierung & Seifendesign", use_container_width=True):
-        st.session_state.selected_skill = "Handwerk"
-        st.rerun()
+        <!-- MITTE: DEIN FOKUS -->
+        <div class="info-center">
+            <h2 style="color: #0055A5; margin-bottom: 5px;">Andrey's</h2>
+            <h3 style="margin-top: 0;">Showroom</h3>
+            <p style="font-size: 14px; color: #555;"><i>Bewege die Maus über die Objekte an den Wänden.</i></p>
+            <div style="font-size: 50px;">🛋️</div>
+        </div>
 
-with col_details:
-    # 3. ANZEIGE: Je nach Auswahl ändert sich dieser Block
-    with st.container(border=True):
-        if st.session_state.selected_skill == "QM":
-            st.subheader("Qualitätsmanagement")
-            st.write("Experte für ISO 9001 und 17025. Durchführung von Audits und Optimierung von CAPA-Prozessen.")
-            # Hier kannst du später Zertifikat-Bilder einfügen
-
-        elif st.session_state.selected_skill == "Akustik":
-            st.subheader("Akustik & Messtechnik")
-            st.write("Planung von Prüfkammern und Durchführung komplexer Schallmessungen.")
-
-        elif st.session_state.selected_skill == "Python":
-            st.subheader("Python & Data Science")
-            st.write("Automatisierung von Datenanalysen und Erstellung interaktiver Dashboards (wie dieses hier!).")
-
-        elif st.session_state.selected_skill == "Handwerk":
-            st.subheader("3D-Modellierung & Seifendesign")
-            st.write("Kreative Umsetzung von 3D-Entwürfen in handfeste Produkte.")
-            
-            # FEHLER-CHECK: Nur anzeigen, wenn Bilder existieren
-            c1, c2 = st.columns(2)
-            with c1:
-                if os.path.exists("images/seife_modell1.png"):
-                    st.image("images/seife_modell1.png", caption="3D-Entwurf")
-                else:
-                    st.warning("Bild 'seife_modell1.png' fehlt im Ordner images.")
-            with c2:
-                if os.path.exists("images/seife_fertig1.png"):
-                    st.image("images/seife_fertig1.png", caption="Fertiges Produkt")
-                else:
-                    st.warning("Bild 'seife_fertig1.png' fehlt im Ordner images.")
-
+        <!-- RECHTE WAND: HANDWERK & ERFOLGE -->
+        <div class="wall wall-right">
+            <div class="showroom-card">🧼<br><b>Seifendesign</b><br><small>3D-Modellierung</small></div>
+            <div class="showroom-card">🔇<br><b>Smart Speaker</b><br><small>Prüfkammer-Bau</small></div>
+            <div class="showroom-card">🐍<br><b>Python Dash</b><br><small>Data Science</small></div>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
 
 
 
