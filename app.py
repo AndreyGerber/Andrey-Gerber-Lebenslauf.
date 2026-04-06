@@ -612,65 +612,31 @@ def show_3d_gallery():
     # HTML & CSS für den 3D-Raum
     gallery_html = """
     <style>
-        body { margin: 0; background: #f0f2f6; font-family: sans-serif; overflow: hidden; }
-        
-        /* Der Raum */
-        .scene {
-            width: 100%;
-            height: 600px;
-            perspective: 1200px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        /* ... (restlicher CSS Code bleibt gleich) ... */
 
-        .room {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 1s;
-        }
-
-        /* Die Wände */
-        .wall {
-            position: absolute;
-            width: 300px;
-            height: 450px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid #0055A5;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            padding: 20px;
-            text-align: center;
-        }
-
-        /* Linke Wand (Zertifikate) */
-        .cert-1 { transform: rotateY(60deg) translateX(-400px) translateZ(-200px); }
-        .cert-2 { transform: rotateY(60deg) translateX(-400px) translateZ(100px); }
-
-        /* Rechte Wand (Erfolge) */
-        .success-1 { transform: rotateY(-60deg) translateX(400px) translateZ(-200px); }
-        .success-2 { transform: rotateY(-60deg) translateX(400px) translateZ(100px); }
-
-        /* Aktiv-Status: Das Bild fliegt in die Mitte */
+        /* KORREKTUR FÜR DEN ZOOM: Die Karte fliegt EXAKT in die Mitte */
         .wall.active {
-            transform: rotateY(0deg) translateX(0) translateZ(300px) scale(1.2);
-            z-index: 1000;
+            /* Wir setzen translateX auf 0, damit sie nicht links oder rechts klebt */
+            transform: rotateY(0deg) translateX(0) translateZ(400px) !important;
+            
+            /* Fixiert die Position in der Mitte des Containers */
+            left: 50% !important;
+            top: 50% !important;
+            margin-left: -150px; /* Die Hälfte der Kartenbreite (300px / 2) */
+            margin-top: -225px;  /* Die Hälfte der Kartenhöhe (450px / 2) */
+            
+            z-index: 9999;
             background: white;
-            box-shadow: 0 30px 100px rgba(0,0,0,0.5);
+            box-shadow: 0 50px 150px rgba(0,0,0,0.5);
+            border: 3px solid #0055A5;
         }
 
-        .icon { font-size: 50px; margin-bottom: 20px; }
-        h3 { color: #0055A5; margin: 10px 0; }
-        p { color: #555; font-size: 14px; }
+        /* Damit die Karten nicht hinter dem Container verschwinden */
+        .scene {
+            overflow: visible !important;
+        }
     </style>
+
 
     <div class="scene">
         <div class="room" id="room">
