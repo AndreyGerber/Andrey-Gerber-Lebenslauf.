@@ -609,86 +609,151 @@ def show_3d_gallery():
     st.header("🏛️ Andrey's Virtuelle Galerie")
     st.write("Klicke auf ein Dokument, um es heranzuzoomen.")
 
-    # HTML & CSS für den 3D-Raum
+    # Der komplette HTML/CSS/JS Block
     gallery_html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
     <style>
-        /* ... (restlicher CSS Code bleibt gleich) ... */
-
-        /* KORREKTUR FÜR DEN ZOOM: Die Karte fliegt EXAKT in die Mitte */
-        .wall.active {
-            /* Wir setzen translateX auf 0, damit sie nicht links oder rechts klebt */
-            transform: rotateY(0deg) translateX(0) translateZ(400px) !important;
-            
-            /* Fixiert die Position in der Mitte des Containers */
-            left: 50% !important;
-            top: 50% !important;
-            margin-left: -150px; /* Die Hälfte der Kartenbreite (300px / 2) */
-            margin-top: -225px;  /* Die Hälfte der Kartenhöhe (450px / 2) */
-            
-            z-index: 9999;
-            background: white;
-            box-shadow: 0 50px 150px rgba(0,0,0,0.5);
-            border: 3px solid #0055A5;
+        body { 
+            margin: 0; 
+            background: #f0f2f6; 
+            font-family: 'Segoe UI', sans-serif; 
+            overflow: hidden; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 600px;
         }
-
-        /* Damit die Karten nicht hinter dem Container verschwinden */
+        
+        /* Der Raum-Container */
         .scene {
-            overflow: visible !important;
+            width: 100%;
+            height: 100%;
+            perspective: 1200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
-    </style>
 
+        .room {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        /* Basis-Stil für alle Karten */
+        .wall {
+            position: absolute;
+            width: 260px;
+            height: 380px;
+            background: white;
+            border: 1px solid #0055A5;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            cursor: pointer;
+            padding: 20px;
+            text-align: center;
+            left: 50%;
+            top: 50%;
+            margin-left: -130px; /* Hälfte der Breite zur Zentrierung */
+            margin-top: -190px;  /* Hälfte der Höhe zur Zentrierung */
+        }
+
+        /* POSITIONIERUNG AN DEN WÄNDEN */
+        /* Links oben/unten */
+        .cert-1 { transform: rotateY(55deg) translateX(-450px) translateZ(-100px); }
+        .cert-2 { transform: rotateY(55deg) translateX(-450px) translateZ(150px); }
+
+        /* Rechts oben/unten */
+        .success-1 { transform: rotateY(-55deg) translateX(450px) translateZ(-100px); }
+        .success-2 { transform: rotateY(-55deg) translateX(450px) translateZ(150px); }
+
+        /* --- DER FIX: AKTIVE KARTE FLIEGT IN DIE MITTE --- */
+        .wall.active {
+            /* Wir setzen translateX auf 0, damit sie mittig landet */
+            transform: rotateY(0deg) translateX(0) translateZ(450px) !important;
+            z-index: 1000;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+            border-width: 3px;
+        }
+
+        /* Styling Inhalte */
+        .icon { font-size: 50px; margin-bottom: 15px; }
+        h3 { color: #0055A5; margin: 10px 0; font-size: 20px; }
+        p { color: #444; font-size: 14px; line-height: 1.4; }
+        .hint { font-size: 11px; color: #999; margin-top: 15px; }
+    </style>
+    </head>
+    <body>
 
     <div class="scene">
-        <div class="room" id="room">
-            <!-- LINKS: Zertifikate -->
-            <div class="wall cert-1" onclick="focusCard(this)">
+        <div class="room">
+            <!-- LINKE SEITE -->
+            <div class="wall cert-1" onclick="toggleFocus(this)">
                 <div class="icon">🎓</div>
-                <h3>Master of Science</h3>
-                <p>Physik & Akustik<br>TU Berlin / HAW</p>
-                <small>(Klicken zum Vergrößern)</small>
+                <h3>Master Sc.</h3>
+                <p>Physik & Akustik<br>Physiktechnik</p>
+                <div class="hint">Klick zum Zoomen</div>
             </div>
             
-            <div class="wall cert-2" onclick="focusCard(this)">
+            <div class="wall cert-2" onclick="toggleFocus(this)">
                 <div class="icon">📜</div>
                 <h3>ISO Auditor</h3>
                 <p>Zertifizierter Auditor<br>9001 & 17025</p>
+                <div class="hint">Klick zum Zoomen</div>
             </div>
 
-            <!-- RECHTS: Erfolge -->
-            <div class="wall success-1" onclick="focusCard(this)">
+            <!-- RECHTE SEITE -->
+            <div class="wall success-1" onclick="toggleFocus(this)">
                 <div class="icon">🧼</div>
-                <h3>3D Seifendesign</h3>
-                <p>Von der CAD-Modellierung<br>bis zum fertigen Handwerk.</p>
+                <h3>3D Seifen</h3>
+                <p>Modellierung &<br>handgefertigte Seifen</p>
+                <div class="hint">Klick zum Zoomen</div>
             </div>
 
-            <div class="wall success-2" onclick="focusCard(this)">
+            <div class="wall success-2" onclick="toggleFocus(this)">
                 <div class="icon">🔇</div>
-                <h3>Smart Speaker</h3>
-                <p>Aufbau der ersten<br>Prüfkammer bei TÜV.</p>
+                <h3>Prüfkammern</h3>
+                <p>Planung & Bau von<br>Akustik-Laboren</p>
+                <div class="hint">Klick zum Zoomen</div>
             </div>
         </div>
     </div>
 
     <script>
-        function focusCard(card) {
-            // Wenn die Karte schon aktiv ist, setze sie zurück
-            if (card.classList.contains('active')) {
-                card.classList.remove('active');
-            } else {
-                // Alle anderen Karten zurücksetzen
-                document.querySelectorAll('.wall').forEach(c => c.classList.remove('active'));
-                // Diese Karte fokussieren
+        function toggleFocus(card) {
+            const isActive = card.classList.contains('active');
+            
+            // Erst alle Karten zurücksetzen
+            document.querySelectorAll('.wall').forEach(c => {
+                c.classList.remove('active');
+            });
+
+            // Wenn die Karte vorher nicht aktiv war, jetzt aktivieren
+            if (!isActive) {
                 card.classList.add('active');
             }
         }
     </script>
+
+    </body>
+    </html>
     """
     
     # Rendern der Komponente
     components.html(gallery_html, height=650)
 
-# Aufruf der Funktion
+# Aufruf der Funktion in deiner App
 show_3d_gallery()
+
 
 
 
