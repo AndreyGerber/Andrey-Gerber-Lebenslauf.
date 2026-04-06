@@ -514,86 +514,67 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
 #ab hier entsteht ein 3D-Raum mit Fähigkeiten und Fertigkeiten
 st.header("🏛️ Andrey's Virtueller Showroom")
-st.write("Klicke auf ein Dokument, um es direkt als PDF zu öffnen.")
 
-# --- CSS FÜR DEN 3D-EFFEKT ---
+# 1. Zustandsverwaltung: Welches Dokument soll angezeigt werden?
+if 'active_doc' not in st.session_state:
+    st.session_state.active_doc = None
+
+# --- CSS FÜR DAS LAYOUT ---
 st.markdown("""
     <style>
     .main-stage {
-        perspective: 1500px;
         display: flex;
-        justify-content: space-around;
-        align-items: flex-start;
-        height: 850px; /* Höher, um alle Dokumente zu fassen */
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        border-radius: 20px;
-        padding: 40px;
-        overflow-y: auto;
+        justify-content: space-between;
+        height: 800px;
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 15px;
     }
-    .wall {
-        width: 320px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        transform-style: preserve-3d;
-    }
-    .wall-left { transform: rotateY(25deg); }
-    .wall-right { transform: rotateY(-25deg); }
+    .wall { width: 25%; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+    .viewer { width: 45%; background: white; border: 1px solid #ddd; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
     
-    .showroom-card {
-        background: white;
-        padding: 12px;
-        border-radius: 8px;
-        box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-        cursor: pointer;
-        text-align: left;
-        text-decoration: none;
-        color: #333;
-        border-left: 5px solid #0055A5;
-        display: block;
+    .doc-button {
+        background: white; padding: 10px; border-radius: 5px; border: 1px solid #0055A5;
+        cursor: pointer; text-align: left; font-size: 14px; transition: 0.3s;
     }
-    .showroom-card:hover {
-        transform: translateZ(50px) scale(1.05);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-        background: #fdfdfd;
-    }
-    .card-icon { margin-right: 10px; }
-    .info-center { text-align: center; width: 25%; align-self: center; }
+    .doc-button:hover { background: #eef4ff; transform: translateX(5px); }
     </style>
-    
-    <div class="main-stage">
-        <!-- LINKE WAND: BILDUNG & AUSBILDUNG -->
-        <div class="wall wall-left">
-            <h3 style="text-align:center; color:#0055A5;">Studium & Schule</h3>
-            <a href="documents/Master.pdf" target="_blank" class="showroom-card">🎓 <b>Master</b></a>
-            <a href="documents/Bachelor.pdf" target="_blank" class="showroom-card">🏗️ <b>Bachelor</b></a>
-            <a href="documents/allgemeine Hochschuleureife.pdf" target="_blank" class="showroom-card">🏫 <b>Abitur</b></a>
-            <a href="documents/Berufsschule.pdf" target="_blank" class="showroom-card">🎒 <b>Berufsschule</b></a>
-            <a href="documents/Praktikum V&F.pdf" target="_blank" class="showroom-card">💼 <b>Praktikum V&F</b></a>
-            <a href="documents/Namensänderung.pdf" target="_blank" class="showroom-card">📄 <b>Namensänderung</b></a>
-        </div>
-        
-        <!-- MITTE -->
-        <div class="info-center">
-            <h1 style="color: #0055A5; font-size: 40px; margin-bottom:0;">Showroom</h1>
-            <p style="color: #666;"><i>Interaktives Archiv</i></p>
-            <div style="font-size: 80px; margin-top:20px;">📂</div>
-        </div>
-
-        <!-- RECHTE WAND: ZERTIFIKATE & SKILLS -->
-        <div class="wall wall-right">
-            <h3 style="text-align:center; color:#0055A5;">Zertifikate</h3>
-            <a href="documents/Interner Qualitätsauditor.pdf" target="_blank" class="showroom-card">📜 <b>Qualitätsauditor</b></a>
-            <a href="documents/Qualitätsbeauftragter.pdf" target="_blank" class="showroom-card">✅ <b>Qualitätsbeauftragter</b></a>
-            <a href="documents/Wertanalytiker.pdf" target="_blank" class="showroom-card">📊 <b>Wertanalytiker</b></a>
-            <a href="documents/Schweisskurs.pdf" target="_blank" class="showroom-card">🔥 <b>Schweisskurs</b></a>
-            <a href="documents/B_K_PULSE.pdf" target="_blank" class="showroom-card">🔊 <b>B&K PULSE</b></a>
-            <a href="documents/M-BBM.pdf" target="_blank" class="showroom-card">📡 <b>M-BBM</b></a>
-            <a href="documents/Klangschale.pdf" target="_blank" class="showroom-card">🥣 <b>Klangschale</b></a>
-        </div>
-    </div>
 """, unsafe_allow_html=True)
+
+# 2. Layout: Links (Dokumente), Mitte (Vorschau), Rechts (Zertifikate)
+col_links, col_mitte, col_rechts = st.columns([1, 2, 1])
+
+with col_links:
+    st.subheader("Studium")
+    docs_links = {
+        "🎓 Master": "documents/Master.pdf",
+        "🏗️ Bachelor": "documents/Bachelor.pdf",
+        "🏫 Abitur": "documents/allgemeine Hochschuleureife.pdf",
+        "🎒 Berufsschule": "documents/Berufsschule.pdf"
+    }
+    for label, path in docs_links.items():
+        if st.button(label, key=label, use_container_width=True):
+            st.session_state.active_doc = path
+
+with col_mitte:
+    if st.session_state.active_doc:
+        # PDF direkt im Browser einbetten (IFrame)
+        pdf_path = st.session_state.active_doc
+        st.markdown(f'<iframe src="{pdf_path}" width="100%" height="700px" style="border:none;"></iframe>', unsafe_allow_html=True)
+    else:
+        st.info("Klicke links oder rechts auf ein Dokument, um die Vorschau zu öffnen.")
+
+with col_rechts:
+    st.subheader("Zertifikate")
+    docs_rechts = {
+        "📜 Qualitätsauditor": "documents/Interner Qualitätsauditor.pdf",
+        "✅ Qualitätsbeauftragter": "documents/Qualitätsbeauftragter.pdf",
+        "📊 Wertanalytiker": "documents/Wertanalytiker.pdf",
+        "🔥 Schweisskurs": "documents/Schweisskurs.pdf"
+    }
+    for label, path in docs_rechts.items():
+        if st.button(label, key=label, use_container_width=True):
+            st.session_state.active_doc = path
 
 
 
