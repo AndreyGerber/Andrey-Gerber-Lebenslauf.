@@ -481,6 +481,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
                     <li>Normgerechte <b>akustische Messungen</b> (Haushaltsgeräte, Tools, Spielzeug)</li>
                     <li>Planung & Aufbau einer neuen Prüfkammer für <b>Smart Speaker</b></li>
                     <li>Schwingungsmessungen & kundenspezifische Sondermessungen</li>
+                    <li>Mitglied im <b>DIN-Normenausschuss</b> für Schalldämmung</li>
                 </ul>
             """, unsafe_allow_html=True)
 
@@ -489,8 +490,9 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 <p style='font-size: 20px; color: #0055A5; margin-top: 20px; margin-bottom: 5px;'><strong>ab 2019 <br>Qualitätsmanager / Quality Expert</strong></p>
                 <ul style='font-size: 16px; color: #333; line-height: 1.4;'>
                     <li>Durchführung interner Audits (ISO 9001 & ISO 17025)</li>
-                    <li>Verantwortung für <b>CAPA-Prozesse</b> und Ursachenanalysen (8D, Ishikawa)</li>
-                    <li>Mitglied im <b>DIN-Normenausschuss</b> für Schalldämmung</li>
+                    <li>Verantwortung für <b>CAPA-Prozesse</b> und Beschwerdemanagement</li>
+                    <li>Externe Audits und Management Reviews</li>
+                    
                 </ul>
             """, unsafe_allow_html=True)
 
