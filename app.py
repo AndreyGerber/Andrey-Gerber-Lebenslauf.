@@ -271,6 +271,9 @@ st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'disp
 
 
 
+
+
+
 import pydeck as pdk
 
 #Oben ist der Abschnitt mit "meinem Werdegang" und dem Pfeil. Unten die "Erklärung dazu"
@@ -303,19 +306,22 @@ with st.container(height=BLOCK_HOEHE, border=True):
     if jahr_aktiv == 1988:
         st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
 
-        import base64
+        # --- DEIN NEUER PARAMETER ---
+        MASSSTAB_MAP = 0.8  # 1.0 = 100%, 0.5 = 50% der Containerbreite
+        # ----------------------------
 
+        import base64
         def get_base64(path):
             with open(path, "rb") as f:
                 return base64.b64encode(f.read()).decode()
 
         try:
-            # Bild laden
             img_b64 = get_base64("images/tscherlak_map.png")
             
-            # ALLES in einem einzigen Markdown-Block ohne Kommentare
+            # Die Breite wird nun über den MASSSTAB gesteuert (z.B. 80%)
+            # 'margin: auto' zentriert das Bild, falls es kleiner als 100% ist
             st.markdown(f"""
-                <div style="position: relative; width: 100%;">
+                <div style="position: relative; width: {int(MASSSTAB_MAP * 100)}%; margin: auto;">
                     <img src="data:image/png;base64,{img_b64}" style="width: 100%; border-radius: 10px;">
                     <div style="
                         position: absolute;
