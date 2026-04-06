@@ -626,157 +626,126 @@ st.markdown("<br>", unsafe_allow_html=True) # HTML-Umbruch für präzise Kontrol
 
 
 
+
+
+
 import streamlit as st
 import streamlit.components.v1 as components
 
-def show_3d_gallery():
+def show_3d_gallery_v3():
     st.header("🏛️ Andrey's Virtuelle Galerie")
-    st.write("Klicke auf ein Dokument, um es heranzuzoomen.")
-
-    # Der komplette HTML/CSS/JS Block
+    
+    # Der HTML/CSS-Block
     gallery_html = """
     <!DOCTYPE html>
     <html>
     <head>
     <style>
         body { 
-            margin: 0; 
-            background: #f0f2f6; 
+            margin: 0; background: #f0f2f6; 
             font-family: 'Segoe UI', sans-serif; 
             overflow: hidden; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
             height: 600px;
+            display: flex; justify-content: center; align-items: center;
         }
         
-        /* Der Raum-Container */
         .scene {
-            width: 100%;
-            height: 100%;
-            perspective: 1200px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            width: 100vw; height: 100vh;
+            perspective: 1400px;
+            display: flex; justify-content: center; align-items: center;
         }
 
         .room {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             position: relative;
             transform-style: preserve-3d;
         }
 
-        /* Basis-Stil für alle Karten */
         .wall {
             position: absolute;
-            width: 260px;
-            height: 380px;
+            width: 240px; height: 340px;
             background: white;
             border: 1px solid #0055A5;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
             cursor: pointer;
-            padding: 20px;
-            text-align: center;
-            left: 50%;
-            top: 50%;
-            margin-left: -130px; /* Hälfte der Breite zur Zentrierung */
-            margin-top: -190px;  /* Hälfte der Höhe zur Zentrierung */
+            padding: 15px; text-align: center;
+            /* Zentrierung als Startpunkt */
+            left: 50%; top: 50%;
+            margin-left: -120px; margin-top: -170px;
         }
 
-        /* POSITIONIERUNG AN DEN WÄNDEN */
-        /* Links oben/unten */
-        .cert-1 { transform: rotateY(55deg) translateX(-450px) translateZ(-100px); }
-        .cert-2 { transform: rotateY(55deg) translateX(-450px) translateZ(150px); }
+        /* --- POSITIONEN AN DEN WÄNDEN --- */
+        /* Links: Etwas weiter auseinander für mehr Platz */
+        .cert-1 { transform: rotateY(50deg) translateX(-380px) translateZ(-100px); }
+        .cert-2 { transform: rotateY(50deg) translateX(-380px) translateZ(150px); }
 
-        /* Rechts oben/unten */
-        .success-1 { transform: rotateY(-55deg) translateX(450px) translateZ(-100px); }
-        .success-2 { transform: rotateY(-55deg) translateX(450px) translateZ(150px); }
+        /* Rechts */
+        .success-1 { transform: rotateY(-50deg) translateX(380px) translateZ(-100px); }
+        .success-2 { transform: rotateY(-50deg) translateX(380px) translateZ(150px); }
 
-        /* --- DER FIX: AKTIVE KARTE FLIEGT IN DIE MITTE --- */
+        /* --- ZOOM-EFFEKT: Fliegt exakt in die Mitte --- */
         .wall.active {
-            /* Wir setzen translateX auf 0, damit sie mittig landet */
             transform: rotateY(0deg) translateX(0) translateZ(450px) !important;
-            z-index: 1000;
+            z-index: 9999;
             box-shadow: 0 40px 100px rgba(0,0,0,0.4);
-            border-width: 3px;
+            border-width: 2px;
         }
 
-        /* Styling Inhalte */
-        .icon { font-size: 50px; margin-bottom: 15px; }
-        h3 { color: #0055A5; margin: 10px 0; font-size: 20px; }
-        p { color: #444; font-size: 14px; line-height: 1.4; }
-        .hint { font-size: 11px; color: #999; margin-top: 15px; }
+        .icon { font-size: 45px; margin-bottom: 10px; }
+        h3 { color: #0055A5; margin: 5px 0; font-size: 18px; }
+        p { color: #444; font-size: 13px; line-height: 1.4; }
     </style>
     </head>
     <body>
-
     <div class="scene">
         <div class="room">
-            <!-- LINKE SEITE -->
-            <div class="wall cert-1" onclick="toggleFocus(this)">
+            <!-- Zertifikate links -->
+            <div class="wall cert-1" onclick="toggle(this)">
                 <div class="icon">🎓</div>
                 <h3>Master Sc.</h3>
-                <p>Physik & Akustik<br>Physiktechnik</p>
-                <div class="hint">Klick zum Zoomen</div>
+                <p>Physik & Akustik</p>
             </div>
-            
-            <div class="wall cert-2" onclick="toggleFocus(this)">
+            <div class="wall cert-2" onclick="toggle(this)">
                 <div class="icon">📜</div>
                 <h3>ISO Auditor</h3>
-                <p>Zertifizierter Auditor<br>9001 & 17025</p>
-                <div class="hint">Klick zum Zoomen</div>
+                <p>9001 & 17025</p>
             </div>
 
-            <!-- RECHTE SEITE -->
-            <div class="wall success-1" onclick="toggleFocus(this)">
+            <!-- Projekte rechts -->
+            <div class="wall success-1" onclick="toggle(this)">
                 <div class="icon">🧼</div>
                 <h3>3D Seifen</h3>
-                <p>Modellierung &<br>handgefertigte Seifen</p>
-                <div class="hint">Klick zum Zoomen</div>
+                <p>Design & Handwerk</p>
             </div>
-
-            <div class="wall success-2" onclick="toggleFocus(this)">
+            <div class="wall success-2" onclick="toggle(this)">
                 <div class="icon">🔇</div>
-                <h3>Prüfkammern</h3>
-                <p>Planung & Bau von<br>Akustik-Laboren</p>
-                <div class="hint">Klick zum Zoomen</div>
+                <h3>Labore</h3>
+                <p>Prüfkammerbau</p>
             </div>
         </div>
     </div>
 
     <script>
-        function toggleFocus(card) {
-            const isActive = card.classList.contains('active');
-            
-            // Erst alle Karten zurücksetzen
-            document.querySelectorAll('.wall').forEach(c => {
-                c.classList.remove('active');
-            });
-
-            // Wenn die Karte vorher nicht aktiv war, jetzt aktivieren
-            if (!isActive) {
-                card.classList.add('active');
-            }
+        function toggle(card) {
+            const isA = card.classList.contains('active');
+            document.querySelectorAll('.wall').forEach(c => c.classList.remove('active'));
+            if (!isA) card.classList.add('active');
         }
     </script>
-
     </body>
     </html>
     """
-    
-    # Rendern der Komponente
-    components.html(gallery_html, height=650)
+    components.html(gallery_html, height=620)
 
-# Aufruf der Funktion in deiner App
-show_3d_gallery()
+show_3d_gallery_v3()
+
+
+
+
 
 
 
