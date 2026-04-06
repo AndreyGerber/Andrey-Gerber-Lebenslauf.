@@ -87,7 +87,7 @@ with col_mitte:
 
 with col_daten:
     # Header
-    st.markdown("<p style='font-size: 20px; color: gray; margin-bottom: -10px;'>Meine Kontaktdaten</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 30px; color: gray; margin-bottom: -10px;'>Meine Kontaktdaten</p>", unsafe_allow_html=True)
     
     # Name: Groß und Fett
     st.markdown("<h1 style='font-size: 42px; font-weight: bold; margin-top: 0px;'>Andrey Gerber</h1>", unsafe_allow_html=True)
@@ -105,7 +105,7 @@ with col_daten:
                     andrey.gerber.88@gmail.com
                 </a>
             </p>
-            <p style='font-size: 18px; color: #666; margin-top: 20px;'>
+            <p style='font-size: 24px; color: #666; margin-top: 20px;'>
                 📍 <i>Wohnadresse: Brauchst du nicht, ruf an oder @</i>
             </p>
         </div>
