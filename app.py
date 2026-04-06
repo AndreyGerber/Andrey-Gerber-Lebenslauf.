@@ -108,7 +108,7 @@ with col_daten:
             <p style='font-size: 24px; color: #666; margin-top: 20px;'>
                 📍 <i>Wohnadresse: Brauchst du nicht, ruf an oder @</i>
             </p>
-            </p>
+            </p></p>
         </div>
     """, unsafe_allow_html=True)
 
