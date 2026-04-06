@@ -631,117 +631,103 @@ st.markdown("<br>", unsafe_allow_html=True) # HTML-Umbruch für präzise Kontrol
 
 import streamlit as st
 import streamlit.components.v1 as components
+import base64
+import os
 
-def show_3d_gallery_v3():
-    st.header("🏛️ Andrey's Virtuelle Galerie")
+def show_3d_pdf_gallery():
+    st.header("🏛️ Andrey's Interaktive Galerie")
     
-    # Der HTML/CSS-Block
-    gallery_html = """
+    # Hilfsfunktion um PDF in Base64 zu wandeln
+    def get_pdf_base64(file_path):
+        if os.path.exists(file_path):
+            with open(file_path, "rb") as f:
+                return base64.b64encode(f.read()).decode('utf-8')
+        return ""
+
+    # Lade deine wichtigsten Dokumente (Pfade anpassen!)
+    pdf_master = get_pdf_base64("documents/Master.pdf")
+    pdf_auditor = get_pdf_base64("documents/Interner Qualitätsauditor.pdf")
+    pdf_bachelor = get_pdf_base64("documents/Bachelor.pdf")
+    pdf_seifen = get_pdf_base64("documents/Praktikum V&F.pdf") # Beispiel für Projekt
+
+    gallery_html = f"""
     <!DOCTYPE html>
     <html>
     <head>
     <style>
-        body { 
-            margin: 0; background: #f0f2f6; 
-            font-family: 'Segoe UI', sans-serif; 
-            overflow: hidden; 
-            height: 600px;
-            display: flex; justify-content: center; align-items: center;
-        }
+        body {{ margin: 0; background: #f0f2f6; font-family: sans-serif; height: 600px; display: flex; justify-content: center; align-items: center; overflow: hidden; }}
+        .scene {{ width: 100vw; height: 100vh; perspective: 1200px; display: flex; justify-content: center; align-items: center; }}
+        .room {{ width: 100%; height: 100%; position: relative; transform-style: preserve-3d; }}
+
+        .wall {{
+            position: absolute; width: 240px; height: 340px; background: white;
+            border: 1px solid #0055A5; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: all 0.5s ease; cursor: pointer; padding: 15px; text-align: center;
+            left: 50%; top: 50%; margin-left: -120px; margin-top: -170px;
+        }}
+
+        /* Positionen wie im Bild */
+        .cert-1 {{ transform: rotateY(45deg) translateX(-400px) translateZ(-50px); }}
+        .cert-2 {{ transform: rotateY(45deg) translateX(-400px) translateZ(150px); }}
+        .proj-1 {{ transform: rotateY(-45deg) translateX(400px) translateZ(-50px); }}
+        .proj-2 {{ transform: rotateY(-45deg) translateX(400px) translateZ(150px); }}
+
+        .wall:hover {{ transform: scale(1.1) rotateY(0deg) translateZ(200px); z-index: 100; border-color: #ff4b4b; }}
         
-        .scene {
-            width: 100vw; height: 100vh;
-            perspective: 1400px;
-            display: flex; justify-content: center; align-items: center;
-        }
-
-        .room {
-            width: 100%; height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-        }
-
-        .wall {
-            position: absolute;
-            width: 240px; height: 340px;
-            background: white;
-            border: 1px solid #0055A5;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-            cursor: pointer;
-            padding: 15px; text-align: center;
-            /* Zentrierung als Startpunkt */
-            left: 50%; top: 50%;
-            margin-left: -120px; margin-top: -170px;
-        }
-
-        /* --- POSITIONEN AN DEN WÄNDEN --- */
-        /* Links: Etwas weiter auseinander für mehr Platz */
-        .cert-1 { transform: rotateY(50deg) translateX(-380px) translateZ(-100px); }
-        .cert-2 { transform: rotateY(50deg) translateX(-380px) translateZ(150px); }
-
-        /* Rechts */
-        .success-1 { transform: rotateY(-50deg) translateX(380px) translateZ(-100px); }
-        .success-2 { transform: rotateY(-50deg) translateX(380px) translateZ(150px); }
-
-        /* --- ZOOM-EFFEKT: Fliegt exakt in die Mitte --- */
-        .wall.active {
-            transform: rotateY(0deg) translateX(0) translateZ(450px) !important;
-            z-index: 9999;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.4);
-            border-width: 2px;
-        }
-
-        .icon { font-size: 45px; margin-bottom: 10px; }
-        h3 { color: #0055A5; margin: 5px 0; font-size: 18px; }
-        p { color: #444; font-size: 13px; line-height: 1.4; }
+        .icon {{ font-size: 50px; margin-bottom: 10px; }}
+        h3 {{ color: #0055A5; margin: 5px 0; }}
     </style>
     </head>
     <body>
     <div class="scene">
         <div class="room">
-            <!-- Zertifikate links -->
-            <div class="wall cert-1" onclick="toggle(this)">
+            <!-- Linke Wand -->
+            <div class="wall cert-1" onclick="openPDF('{pdf_master}')">
                 <div class="icon">🎓</div>
                 <h3>Master Sc.</h3>
-                <p>Physik & Akustik</p>
+                <p>Klick zum Öffnen</p>
             </div>
-            <div class="wall cert-2" onclick="toggle(this)">
+            <div class="wall cert-2" onclick="openPDF('{pdf_auditor}')">
                 <div class="icon">📜</div>
                 <h3>ISO Auditor</h3>
                 <p>9001 & 17025</p>
             </div>
 
-            <!-- Projekte rechts -->
-            <div class="wall success-1" onclick="toggle(this)">
-                <div class="icon">🧼</div>
-                <h3>3D Seifen</h3>
-                <p>Design & Handwerk</p>
+            <!-- Rechte Wand -->
+            <div class="wall proj-1" onclick="openPDF('{pdf_bachelor}')">
+                <div class="icon">🏗️</div>
+                <h3>Bachelor</h3>
+                <p>Physiktechnik</p>
             </div>
-            <div class="wall success-2" onclick="toggle(this)">
-                <div class="icon">🔇</div>
-                <h3>Labore</h3>
-                <p>Prüfkammerbau</p>
+            <div class="wall proj-2" onclick="openPDF('{pdf_seifen}')">
+                <div class="icon">🧼</div>
+                <h3>Projekte</h3>
+                <p>Seifen & Handwerk</p>
             </div>
         </div>
     </div>
 
     <script>
-        function toggle(card) {
-            const isA = card.classList.contains('active');
-            document.querySelectorAll('.wall').forEach(c => c.classList.remove('active'));
-            if (!isA) card.classList.add('active');
-        }
+        function openPDF(base64Data) {{
+            if(!base64Data) {{ alert("Datei nicht gefunden!"); return; }}
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {{
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }}
+            const byteArray = new Uint8Array(byteNumbers);
+            const file = new Blob([byteArray], {{ type: 'application/pdf' }});
+            const fileURL = URL.createObjectURL(file);
+            window.open(fileURL, '_blank');
+        }}
     </script>
     </body>
     </html>
     """
     components.html(gallery_html, height=620)
 
-show_3d_gallery_v3()
+show_3d_pdf_gallery()
 
 
 
