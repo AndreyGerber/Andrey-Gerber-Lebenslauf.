@@ -513,82 +513,110 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
 
 #ab hier entsteht ein 3D-Raum mit Fähigkeiten und Fertigkeiten
-
+import streamlit as st
 import base64
+import os
 
-def get_pdf_display(pdf_path):
-    with open(pdf_path, "rb") as f:
-        base64_pdf = base64.b64encode(f.read()).decode('utf-8')
-    # Erstellt einen eingebetteten PDF-Viewer
-    return f'<embed src="data:application/pdf;base64,{base64_pdf}" width="100%" height="800" type="application/pdf">'
-
-# 1. State initialisieren
-if 'current_pdf' not in st.session_state:
-    st.session_state.current_pdf = None
+# --- 1. FUNKTION ZUM EINBETTEN VON PDFS ---
+def get_pdf_embed_code(pdf_pfad):
+    if os.path.exists(pdf_pfad):
+        with open(pdf_pfad, "rb") as f:
+            base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+        # Erzeugt ein Objekt, das direkt im HTML-Showroom erscheint
+        return f'data:application/pdf;base64,{base64_pdf}'
+    return None
 
 st.header("🏛️ Andrey's Virtueller Showroom")
 
-# 2. Das 3D-Layout mit Klick-Logik (HTML/JS)
-# Wir nutzen "st.components", um das PDF in den State zu schreiben
+# --- 2. CSS FÜR DEN ECHTEN 3D-EFFEKT ---
 st.markdown("""
     <style>
-    .showroom-container {
-        perspective: 1200px;
+    .showroom-perspective {
+        perspective: 1500px;
         display: flex;
-        justify-content: space-around;
-        height: 500px;
+        justify-content: space-between;
         align-items: center;
+        height: 600px;
         background: #f0f2f6;
-        border-radius: 15px;
+        border-radius: 20px;
+        padding: 40px;
     }
-    .wall { width: 300px; display: flex; flex-direction: column; gap: 15px; transform-style: preserve-3d; }
-    .wall-left { transform: rotateY(30deg); }
-    .wall-right { transform: rotateY(-30deg); }
+    .wall {
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        transform-style: preserve-3d;
+    }
+    .wall-left { transform: rotateY(35deg); }
+    .wall-right { transform: rotateY(-35deg); }
     
-    /* 3D Karten-Styling */
-    .card {
-        background: white; padding: 15px; border-radius: 10px;
-        box-shadow: 10px 10px 20px rgba(0,0,0,0.1);
-        transition: 0.4s; cursor: pointer; text-align: center;
-        border: 1px solid #ddd;
+    .doc-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 10px 10px 25px rgba(0,0,0,0.1);
+        transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        color: #0055A5;
+        font-weight: bold;
+        border: 1px solid transparent;
     }
-    .card:hover {
-        transform: translateZ(100px) scale(1.1);
+    /* Effekt: Karte kommt beim Hovern nach vorne */
+    .doc-card:hover {
+        transform: translateZ(150px) scale(1.1);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.3);
         border-color: #0055A5;
         z-index: 100;
     }
+    .center-stage {
+        width: 30%;
+        text-align: center;
+        color: #666;
+    }
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-# 3. Spalten für den Showroom
-col_left, col_mid, col_right = st.columns([1, 2, 1])
+# --- 3. GENERIERUNG DER DOKUMENT-LINKS ---
+# Wir wandeln die PDFs in Base64 um, damit sie direkt im Browser öffnen
+master_link = get_pdf_embed_code("documents/Master.pdf")
+bachelor_link = get_pdf_embed_code("documents/Bachelor.pdf")
+abitur_link = get_pdf_embed_code("documents/allgemeine Hochschuleureife.pdf")
+auditor_link = get_pdf_embed_code("documents/Interner Qualitätsauditor.pdf")
+schweiss_link = get_pdf_embed_code("documents/Schweisskurs.pdf")
 
-with col_left:
-    st.subheader("Studium")
-    # Wir nutzen normale Buttons für die Logik, stylen sie aber später
-    if st.button("🎓 Master", use_container_width=True):
-        st.session_state.current_pdf = "documents/Master.pdf"
-    if st.button("🏗️ Bachelor", use_container_width=True):
-        st.session_state.current_pdf = "documents/Bachelor.pdf"
-    if st.button("🏫 Abitur", use_container_width=True):
-        st.session_state.current_pdf = "documents/allgemeine Hochschuleureife.pdf"
+# --- 4. DER SHOWROOM HTML-BLOCK ---
+st.markdown(f"""
+    <div class="showroom-perspective">
+        <!-- LINKE WAND: STUDIUM -->
+        <div class="wall wall-left">
+            <h3 style="text-align:center;">Studium</h3>
+            <a href="{master_link}" target="_blank" class="doc-card">🎓 Master</a>
+            <a href="{bachelor_link}" target="_blank" class="doc-card">🏗️ Bachelor</a>
+            <a href="{abitur_link}" target="_blank" class="doc-card">🏫 Abitur</a>
+        </div>
+        
+        <!-- MITTE -->
+        <div class="center-stage">
+            <div style="font-size: 60px;">🏢</div>
+            <p>Hover für 3D<br>Klick für PDF</p>
+        </div>
 
-with col_mid:
-    if st.session_state.current_pdf:
-        try:
-            pdf_display = get_pdf_display(st.session_state.current_pdf)
-            st.markdown(pdf_display, unsafe_allow_html=True)
-        except Exception as e:
-            st.error("PDF konnte nicht geladen werden. Prüfe den Dateipfad.")
-    else:
-        st.info("Wähle ein Dokument aus, um es hier anzuzeigen.")
+        <!-- RECHTE WAND: ZERTIFIKATE -->
+        <div class="wall wall-right">
+            <h3 style="text-align:center;">Zertifikate</h3>
+            <a href="{auditor_link}" target="_blank" class="doc-card">📜 Qualitätsauditor</a>
+            <a href="{schweiss_link}" target="_blank" class="doc-card">🔥 Schweisskurs</a>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
 
-with col_right:
-    st.subheader("Zertifikate")
-    if st.button("📜 Qualitätsauditor", use_container_width=True):
-        st.session_state.current_pdf = "documents/Interner Qualitätsauditor.pdf"
-    if st.button("🔥 Schweisskurs", use_container_width=True):
-        st.session_state.current_pdf = "documents/Schweisskurs.pdf"
+
+
+
+
 
 
 
