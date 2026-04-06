@@ -402,7 +402,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
         # 3. DAS LANDENDE FLUGZEUG (An das Ende der Linie geschoben)
         # x=14.5 setzt es fast direkt auf den Punkt Berlin (13.4)
         fig_flight.add_annotation(
-            x=12.8, y=152.7, 
+            x=14.8, y=52.7, 
             text="✈️",
             showarrow=False,
             font=dict(size=50), # Etwas größer für bessere Sichtbarkeit
