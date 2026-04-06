@@ -486,6 +486,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             """, unsafe_allow_html=True)
 
             # Fokus 2: Qualitätsmanagement (2019-2022)
+            st.subheader("ab 2019")
             st.markdown(f"""
                 <p style='font-size: 24px; color: #0055A5; margin-top: 20px; margin-bottom: 5px;'><strong>ab 2019 <br>Qualitätsmanager / Quality Expert</strong></p>
                 <ul style='font-size: 20px; color: #333; line-height: 1.6;'>
