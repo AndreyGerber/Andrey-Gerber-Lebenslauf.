@@ -599,3 +599,132 @@ st.markdown("""
 
 
 
+
+
+
+import streamlit as st
+import streamlit.components.v1 as components
+
+def show_3d_gallery():
+    st.header("🏛️ Andrey's Virtuelle Galerie")
+    st.write("Klicke auf ein Dokument, um es heranzuzoomen.")
+
+    # HTML & CSS für den 3D-Raum
+    gallery_html = """
+    <style>
+        body { margin: 0; background: #f0f2f6; font-family: sans-serif; overflow: hidden; }
+        
+        /* Der Raum */
+        .scene {
+            width: 100%;
+            height: 600px;
+            perspective: 1200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .room {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+        }
+
+        /* Die Wände */
+        .wall {
+            position: absolute;
+            width: 300px;
+            height: 450px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #0055A5;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Linke Wand (Zertifikate) */
+        .cert-1 { transform: rotateY(60deg) translateX(-400px) translateZ(-200px); }
+        .cert-2 { transform: rotateY(60deg) translateX(-400px) translateZ(100px); }
+
+        /* Rechte Wand (Erfolge) */
+        .success-1 { transform: rotateY(-60deg) translateX(400px) translateZ(-200px); }
+        .success-2 { transform: rotateY(-60deg) translateX(400px) translateZ(100px); }
+
+        /* Aktiv-Status: Das Bild fliegt in die Mitte */
+        .wall.active {
+            transform: rotateY(0deg) translateX(0) translateZ(300px) scale(1.2);
+            z-index: 1000;
+            background: white;
+            box-shadow: 0 30px 100px rgba(0,0,0,0.5);
+        }
+
+        .icon { font-size: 50px; margin-bottom: 20px; }
+        h3 { color: #0055A5; margin: 10px 0; }
+        p { color: #555; font-size: 14px; }
+    </style>
+
+    <div class="scene">
+        <div class="room" id="room">
+            <!-- LINKS: Zertifikate -->
+            <div class="wall cert-1" onclick="focusCard(this)">
+                <div class="icon">🎓</div>
+                <h3>Master of Science</h3>
+                <p>Physik & Akustik<br>TU Berlin / HAW</p>
+                <small>(Klicken zum Vergrößern)</small>
+            </div>
+            
+            <div class="wall cert-2" onclick="focusCard(this)">
+                <div class="icon">📜</div>
+                <h3>ISO Auditor</h3>
+                <p>Zertifizierter Auditor<br>9001 & 17025</p>
+            </div>
+
+            <!-- RECHTS: Erfolge -->
+            <div class="wall success-1" onclick="focusCard(this)">
+                <div class="icon">🧼</div>
+                <h3>3D Seifendesign</h3>
+                <p>Von der CAD-Modellierung<br>bis zum fertigen Handwerk.</p>
+            </div>
+
+            <div class="wall success-2" onclick="focusCard(this)">
+                <div class="icon">🔇</div>
+                <h3>Smart Speaker</h3>
+                <p>Aufbau der ersten<br>Prüfkammer bei TÜV.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function focusCard(card) {
+            // Wenn die Karte schon aktiv ist, setze sie zurück
+            if (card.classList.contains('active')) {
+                card.classList.remove('active');
+            } else {
+                // Alle anderen Karten zurücksetzen
+                document.querySelectorAll('.wall').forEach(c => c.classList.remove('active'));
+                // Diese Karte fokussieren
+                card.classList.add('active');
+            }
+        }
+    </script>
+    """
+    
+    # Rendern der Komponente
+    components.html(gallery_html, height=650)
+
+# Aufruf der Funktion
+show_3d_gallery()
+
+
+
+
+
