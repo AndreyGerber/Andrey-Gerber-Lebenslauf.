@@ -465,8 +465,8 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     elif jahr_aktiv == 2017:
         # --- PARAMETER ---
-        MASSSTAB_TUV = 1.2
-        OBEN_ABSTAND_TEXT = "20px" 
+        MASSSTAB_TUV = 1.15
+        OBEN_ABSTAND_TEXT = "10px" 
 
         col_text, col_foto = st.columns([1, 1.8])
 
