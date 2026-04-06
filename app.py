@@ -513,84 +513,84 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
 
 #ab hier entsteht ein 3D-Raum mit Fähigkeiten und Fertigkeiten
-st.divider()
-st.header("🎨 Virtueller Expertise-Showroom")
+st.header("🏛️ Andrey's Virtueller Showroom")
+st.write("Klicke auf ein Dokument, um es direkt als PDF zu öffnen.")
 
-# 1. CSS FÜR DEN 3D-RAUM (Linke Wand: Zertifikate | Rechte Wand: Handwerk)
+# --- CSS FÜR DEN 3D-EFFEKT ---
 st.markdown("""
     <style>
     .main-stage {
         perspective: 1500px;
         display: flex;
         justify-content: space-around;
-        align-items: center;
-        height: 500px;
+        align-items: flex-start;
+        height: 850px; /* Höher, um alle Dokumente zu fassen */
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         border-radius: 20px;
         padding: 40px;
+        overflow-y: auto;
     }
     .wall {
-        width: 300px;
-        height: 400px;
-        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 320px;
         display: flex;
         flex-direction: column;
-        gap: 15px;
+        gap: 12px;
+        transform-style: preserve-3d;
     }
-    /* Linke Wand (Zertifikate) */
-    .wall-left {
-        transform: rotateY(40deg) translateZ(50px);
-    }
-    /* Rechte Wand (Handwerk) */
-    .wall-right {
-        transform: rotateY(-40deg) translateZ(50px);
-    }
-    /* Die Karten im Raum */
+    .wall-left { transform: rotateY(25deg); }
+    .wall-right { transform: rotateY(-25deg); }
+    
     .showroom-card {
         background: white;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 10px 10px 20px rgba(0,0,0,0.1);
-        border: 1px solid rgba(0,0,0,0.05);
-        transition: all 0.4s;
+        padding: 12px;
+        border-radius: 8px;
+        box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
         cursor: pointer;
-        text-align: center;
+        text-align: left;
+        text-decoration: none;
+        color: #333;
+        border-left: 5px solid #0055A5;
+        display: block;
     }
-    /* Effekt beim Drüberfahren (Hover) */
     .showroom-card:hover {
-        transform: scale(1.1) rotateY(0deg) translateZ(150px);
-        box-shadow: 0 30px 60px rgba(0,0,0,0.2);
-        border-color: #0055A5;
-        z-index: 100;
+        transform: translateZ(50px) scale(1.05);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        background: #fdfdfd;
     }
-    .info-center {
-        width: 30%;
-        text-align: center;
-        font-family: sans-serif;
-    }
+    .card-icon { margin-right: 10px; }
+    .info-center { text-align: center; width: 25%; align-self: center; }
     </style>
     
     <div class="main-stage">
-        <!-- LINKE WAND: DOKUMENTE -->
+        <!-- LINKE WAND: BILDUNG & AUSBILDUNG -->
         <div class="wall wall-left">
-            <div class="showroom-card">🎓<br><b>Master Sc.</b><br><small>Physik / Akustik</small></div>
-            <div class="showroom-card">📜<br><b>Auditor</b><br><small>ISO 9001 / 17025</small></div>
-            <div class="showroom-card">🏗️<br><b>Bachelor Eng.</b><br><small>Physiktechnik</small></div>
+            <h3 style="text-align:center; color:#0055A5;">Studium & Schule</h3>
+            <a href="documents/Master.pdf" target="_blank" class="showroom-card">🎓 <b>Master</b></a>
+            <a href="documents/Bachelor.pdf" target="_blank" class="showroom-card">🏗️ <b>Bachelor</b></a>
+            <a href="documents/allgemeine Hochschuleureife.pdf" target="_blank" class="showroom-card">🏫 <b>Abitur</b></a>
+            <a href="documents/Berufsschule.pdf" target="_blank" class="showroom-card">🎒 <b>Berufsschule</b></a>
+            <a href="documents/Praktikum V&F.pdf" target="_blank" class="showroom-card">💼 <b>Praktikum V&F</b></a>
+            <a href="documents/Namensänderung.pdf" target="_blank" class="showroom-card">📄 <b>Namensänderung</b></a>
         </div>
         
-        <!-- MITTE: DEIN FOKUS -->
+        <!-- MITTE -->
         <div class="info-center">
-            <h2 style="color: #0055A5; margin-bottom: 5px;">Andrey's</h2>
-            <h3 style="margin-top: 0;">Showroom</h3>
-            <p style="font-size: 14px; color: #555;"><i>Bewege die Maus über die Objekte an den Wänden.</i></p>
-            <div style="font-size: 50px;">🛋️</div>
+            <h1 style="color: #0055A5; font-size: 40px; margin-bottom:0;">Showroom</h1>
+            <p style="color: #666;"><i>Interaktives Archiv</i></p>
+            <div style="font-size: 80px; margin-top:20px;">📂</div>
         </div>
 
-        <!-- RECHTE WAND: HANDWERK & ERFOLGE -->
+        <!-- RECHTE WAND: ZERTIFIKATE & SKILLS -->
         <div class="wall wall-right">
-            <div class="showroom-card">🧼<br><b>Seifendesign</b><br><small>3D-Modellierung</small></div>
-            <div class="showroom-card">🔇<br><b>Smart Speaker</b><br><small>Prüfkammer-Bau</small></div>
-            <div class="showroom-card">🐍<br><b>Python Dash</b><br><small>Data Science</small></div>
+            <h3 style="text-align:center; color:#0055A5;">Zertifikate</h3>
+            <a href="documents/Interner Qualitätsauditor.pdf" target="_blank" class="showroom-card">📜 <b>Qualitätsauditor</b></a>
+            <a href="documents/Qualitätsbeauftragter.pdf" target="_blank" class="showroom-card">✅ <b>Qualitätsbeauftragter</b></a>
+            <a href="documents/Wertanalytiker.pdf" target="_blank" class="showroom-card">📊 <b>Wertanalytiker</b></a>
+            <a href="documents/Schweisskurs.pdf" target="_blank" class="showroom-card">🔥 <b>Schweisskurs</b></a>
+            <a href="documents/B_K_PULSE.pdf" target="_blank" class="showroom-card">🔊 <b>B&K PULSE</b></a>
+            <a href="documents/M-BBM.pdf" target="_blank" class="showroom-card">📡 <b>M-BBM</b></a>
+            <a href="documents/Klangschale.pdf" target="_blank" class="showroom-card">🥣 <b>Klangschale</b></a>
         </div>
     </div>
 """, unsafe_allow_html=True)
