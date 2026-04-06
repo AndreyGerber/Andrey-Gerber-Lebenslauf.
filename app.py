@@ -513,29 +513,68 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
 
 #ab hier entsteht ein 3D-Raum mit Fähigkeiten und Fertigkeiten
-st.divider() # Trennlinie zur Zeitachse
+st.divider()
 st.header("🎨 Expertise & Handwerk")
 
-col_skills, col_details = st.columns([1, 1.5])
+# 1. LOGIK: Welcher Skill ist gerade ausgewählt?
+if 'selected_skill' not in st.session_state:
+    st.session_state.selected_skill = "QM" # Standard-Startwert
+
+# 2. LAYOUT: 30% Buttons (links), 70% Details (rechts)
+col_skills, col_details = st.columns([1, 2.3])
 
 with col_skills:
     st.write("### Meine Schwerpunkte")
-    # Ein schöner Weg, Skills ohne Balken zu zeigen
-    st.button("🧬 Qualitätsmanagement (ISO 9001/17025)", use_container_width=True)
-    st.button("🔊 Akustik & Schwingungsmesstechnik", use_container_width=True)
-    st.button("🐍 Python & Data Science", use_container_width=True)
-    st.button("🧼 3D-Modellierung & Seifendesign", use_container_width=True)
+    
+    # Buttons setzen den State und laden die Seite neu
+    if st.button("🧬 Qualitätsmanagement (ISO 9001/17025)", use_container_width=True):
+        st.session_state.selected_skill = "QM"
+        st.rerun()
+        
+    if st.button("🔊 Akustik & Schwingungsmesstechnik", use_container_width=True):
+        st.session_state.selected_skill = "Akustik"
+        st.rerun()
+        
+    if st.button("🐍 Python & Data Science", use_container_width=True):
+        st.session_state.selected_skill = "Python"
+        st.rerun()
+        
+    if st.button("🧼 3D-Modellierung & Seifendesign", use_container_width=True):
+        st.session_state.selected_skill = "Handwerk"
+        st.rerun()
 
 with col_details:
-    # Hier kannst du z.B. eine Galerie deiner 3D-Seifenmodelle zeigen
-    st.info("Klicke auf einen Bereich links, um mehr zu erfahren (Logik kann noch ergänzt werden).")
-    
-    # Beispiel für ein Bild-Grid deiner handwerklichen Arbeit
-    c1, c2 = st.columns(2)
-    with c1:
-        st.image("images/seife_modell1.png", caption="3D-Entwurf", use_container_width=True)
-    with c2:
-        st.image("images/seife_fertig1.png", caption="Fertiges Produkt", use_container_width=True)
+    # 3. ANZEIGE: Je nach Auswahl ändert sich dieser Block
+    with st.container(border=True):
+        if st.session_state.selected_skill == "QM":
+            st.subheader("Qualitätsmanagement")
+            st.write("Experte für ISO 9001 und 17025. Durchführung von Audits und Optimierung von CAPA-Prozessen.")
+            # Hier kannst du später Zertifikat-Bilder einfügen
+
+        elif st.session_state.selected_skill == "Akustik":
+            st.subheader("Akustik & Messtechnik")
+            st.write("Planung von Prüfkammern und Durchführung komplexer Schallmessungen.")
+
+        elif st.session_state.selected_skill == "Python":
+            st.subheader("Python & Data Science")
+            st.write("Automatisierung von Datenanalysen und Erstellung interaktiver Dashboards (wie dieses hier!).")
+
+        elif st.session_state.selected_skill == "Handwerk":
+            st.subheader("3D-Modellierung & Seifendesign")
+            st.write("Kreative Umsetzung von 3D-Entwürfen in handfeste Produkte.")
+            
+            # FEHLER-CHECK: Nur anzeigen, wenn Bilder existieren
+            c1, c2 = st.columns(2)
+            with c1:
+                if os.path.exists("images/seife_modell1.png"):
+                    st.image("images/seife_modell1.png", caption="3D-Entwurf")
+                else:
+                    st.warning("Bild 'seife_modell1.png' fehlt im Ordner images.")
+            with c2:
+                if os.path.exists("images/seife_fertig1.png"):
+                    st.image("images/seife_fertig1.png", caption="Fertiges Produkt")
+                else:
+                    st.warning("Bild 'seife_fertig1.png' fehlt im Ordner images.")
 
 
 
