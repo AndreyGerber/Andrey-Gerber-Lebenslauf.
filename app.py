@@ -634,9 +634,9 @@ import streamlit.components.v1 as components
 import base64
 import os
 
-# 1. SETUP & STATE
+# 1. SETUP
 if 'selected_pdf' not in st.session_state:
-    st.session_state.selected_pdf = None
+    st.session_state.selected_pdf = "documents/Master.pdf" # Start-Dokument
 
 def get_base64_pdf(file_path):
     if os.path.exists(file_path):
@@ -644,87 +644,72 @@ def get_base64_pdf(file_path):
             return base64.b64encode(f.read()).decode('utf-8')
     return None
 
-st.set_page_config(layout="wide") # Nutzt die volle Breite
-st.header("🏛️ Andrey's Virtuelle Galerie & Dokumenten-Viewer")
+st.set_page_config(layout="wide")
 
-# 2. LAYOUT AUFTEILUNG (2/3 Galerie, 1/3 Viewer)
-col_galerie, col_viewer = st.columns([2, 1])
+# 2. KOMMUNIKATIONS-BRIDGE (Wichtig für den Klick)
+# Wir nutzen eine kleine JS-Komponente, die den Klick an Streamlit sendet
+# Da dies ohne Zusatz-Library komplex ist, nutzen wir hier einen stabilen Query-Param-Trick
+query_params = st.query_params
+if "doc" in query_params:
+    st.session_state.selected_pdf = f"documents/{query_params['doc']}"
+
+# 3. LAYOUT
+col_galerie, col_viewer = st.columns([1.5, 1])
 
 with col_galerie:
-    # Wir übergeben die Klick-Events via 'st_javascript' oder einfacher via URL-Parameter
-    # Hier nutzen wir eine saubere HTML-Komponente
-    
-    gallery_html = """
+    # --- CSS FÜR STABILEN ZOOM (AUF DER STELLE) ---
+    gallery_html = f"""
     <style>
-        .scene { perspective: 1200px; display: flex; justify-content: center; height: 600px; background: #f0f2f6; border-radius: 15px; }
-        .wall { position: absolute; width: 180px; height: 260px; background: white; border: 1px solid #0055A5; border-radius: 10px; 
-                transition: 0.5s; cursor: pointer; text-align: center; padding: 10px; top: 150px; }
+        .scene {{ perspective: 1200px; display: flex; justify-content: center; height: 600px; background: #f0f2f6; border-radius: 15px; overflow: hidden; }}
+        .wall {{ 
+            position: absolute; width: 180px; height: 260px; background: white; 
+            border: 2px solid #0055A5; border-radius: 10px; transition: 0.4s ease-out; 
+            cursor: pointer; text-align: center; padding: 10px; top: 150px;
+            transform-style: preserve-3d;
+        }}
         
-        /* 3D-Positionen */
-        .c1 { transform: rotateY(45deg) translateX(-250px) translateZ(0px); }
-        .c2 { transform: rotateY(45deg) translateX(-250px) translateZ(150px); }
-        .p1 { transform: rotateY(-45deg) translateX(250px) translateZ(0px); }
-        .p2 { transform: rotateY(-45deg) translateX(250px) translateZ(150px); }
+        /* Positionen fest fixiert */
+        .c1 {{ transform: rotateY(40deg) translateX(-350px); }}
+        .c2 {{ transform: rotateY(40deg) translateX(-180px); }}
+        .p1 {{ transform: rotateY(-40deg) translateX(180px); }}
+        .p2 {{ transform: rotateY(-40deg) translateX(350px); }}
 
-        .wall:hover { transform: scale(1.1) rotateY(0deg) translateZ(200px); z-index: 100; border-color: #ff4b4b; }
+        /* ZOOM AUF DER STELLE: Nur translateZ und scale, kein translateX */
+        .wall:hover {{ 
+            transform: scale(1.3) translateZ(100px) !important; 
+            z-index: 1000; 
+            border-color: #ff4b4b; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }}
         
-        .icon { font-size: 40px; }
-        h4 { margin: 5px 0; color: #0055A5; font-size: 14px; }
+        .icon {{ font-size: 50px; margin-top: 20px; }}
+        h4 {{ color: #0055A5; margin-top: 10px; }}
+        a {{ text-decoration: none; color: inherit; display: block; height: 100%; }}
     </style>
 
     <div class="scene">
-        <!-- Wir nutzen einfache Links, die einen Query-Parameter setzen oder JS-Events feuern -->
-        <div class="wall c1" onclick="parent.postMessage('Master.pdf', '*')">
-            <div class="icon">🎓</div><h4>Master Sc.</h4><p style="font-size:10px;">Klick für Vorschau</p>
-        </div>
-        <div class="wall c2" onclick="parent.postMessage('Interner Qualitätsauditor.pdf', '*')">
-            <div class="icon">📜</div><h4>ISO Auditor</h4>
-        </div>
-        <div class="wall p1" onclick="parent.postMessage('Bachelor.pdf', '*')">
-            <div class="icon">🏗️</div><h4>Bachelor</h4>
-        </div>
-        <div class="wall p2" onclick="parent.postMessage('Schweisskurs.pdf', '*')">
-            <div class="icon">🔥</div><h4>Schweisskurs</h4>
-        </div>
+        <!-- Jeder Klick lädt die Seite mit dem PDF-Parameter neu -->
+        <div class="wall c1"><a href="/?doc=Master.pdf" target="_self"><div class="icon">🎓</div><h4>Master</h4></a></div>
+        <div class="wall c2"><a href="/?doc=Interner+Qualitätsauditor.pdf" target="_self"><div class="icon">📜</div><h4>Auditor</h4></a></div>
+        <div class="wall p1"><a href="/?doc=Bachelor.pdf" target="_self"><div class="icon">🏗️</div><h4>Bachelor</h4></a></div>
+        <div class="wall p2"><a href="/?doc=Schweisskurs.pdf" target="_self"><div class="icon">🔥</div><h4>Schweißen</h4></a></div>
     </div>
-
-    <script>
-        // Sendet den Dateinamen an Streamlit zurück
-        function sendMessage(name) {
-            window.parent.postMessage({type: 'streamlit:setComponentValue', value: name}, '*');
-        }
-    </script>
     """
-    
-    # Empfange Klick-Daten aus der HTML-Komponente
-    res = components.html(gallery_html, height=620)
-    
-    # HINWEIS: Da direkte Kommunikation komplex ist, nutzen wir hier 
-    # zur Sicherheit einfache Buttons unter der Galerie als Fallback/Trigger
-    st.write("---")
-    st.caption("Schnellauswahl für die Vorschau:")
-    c1, c2, c3, c4 = st.columns(4)
-    if c1.button("🎓 Master"): st.session_state.selected_pdf = "documents/Master.pdf"
-    if c2.button("📜 Auditor"): st.session_state.selected_pdf = "documents/Interner Qualitätsauditor.pdf"
-    if c3.button("🏗️ Bachelor"): st.session_state.selected_pdf = "documents/Bachelor.pdf"
-    if c4.button("🔥 Schweissen"): st.session_state.selected_pdf = "documents/Schweisskurs.pdf"
+    st.markdown(gallery_html, unsafe_allow_html=True)
 
 with col_viewer:
     st.subheader("📄 Dokumentenvorschau")
-    if st.session_state.selected_pdf:
-        pdf_data = get_base64_pdf(st.session_state.selected_pdf)
-        if pdf_data:
-            # Einbetten des PDFs ohne neuen Tab
-            pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_data}" width="100%" height="800px" style="border:none;"></iframe>'
-            st.markdown(pdf_display, unsafe_allow_html=True)
-            
-            # Download Link als Backup
-            with open(st.session_state.selected_pdf, "rb") as f:
-                st.download_button("Datei herunterladen", f, file_name=os.path.basename(st.session_state.selected_pdf))
-        else:
-            st.error("Datei nicht gefunden.")
+    pdf_path = st.session_state.selected_pdf
+    pdf_data = get_base64_pdf(pdf_path)
+    
+    if pdf_data:
+        pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_data}" width="100%" height="800px" style="border:none;"></iframe>'
+        st.markdown(pdf_display, unsafe_allow_html=True)
     else:
-        st.info("Wähle links ein Dokument aus, um es hier direkt zu lesen.")
+        st.error(f"Datei nicht gefunden: {pdf_path}")
+
+st.info("💡 Klicke auf eine Karte in der Galerie, um das Dokument rechts zu laden.")
+
 
 
 
