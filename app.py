@@ -465,8 +465,8 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     elif jahr_aktiv == 2017:
         # --- PARAMETER ---
-        MASSSTAB_TUV = 0.85
-        OBEN_ABSTAND_TEXT = "30px" 
+        MASSSTAB_TUV = 1
+        OBEN_ABSTAND_TEXT = "20px" 
 
         col_text, col_foto = st.columns([1.2, 1.0])
 
@@ -486,7 +486,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
             # Fokus 2: Qualitätsmanagement (2019-2022)
             st.markdown(f"""
-                <p style='font-size: 20px; color: #0055A5; margin-top: 20px; margin-bottom: 5px;'><strong>Qualitätsmanager / Quality Expert</strong></p>
+                <p style='font-size: 20px; color: #0055A5; margin-top: 20px; margin-bottom: 5px;'><strong>ab 2019 <br>Qualitätsmanager / Quality Expert</strong></p>
                 <ul style='font-size: 16px; color: #333; line-height: 1.4;'>
                     <li>Durchführung interner Audits (ISO 9001 & ISO 17025)</li>
                     <li>Verantwortung für <b>CAPA-Prozesse</b> und Ursachenanalysen (8D, Ishikawa)</li>
