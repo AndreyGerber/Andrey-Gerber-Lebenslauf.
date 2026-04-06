@@ -468,7 +468,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
         MASSSTAB_TUV = 1
         OBEN_ABSTAND_TEXT = "20px" 
 
-        col_text, col_foto = st.columns([1, 2.3])
+        col_text, col_foto = st.columns([1, 2])
 
         with col_text:
             st.markdown(f"<div style='margin-top: {OBEN_ABSTAND_TEXT};'></div>", unsafe_allow_html=True)
