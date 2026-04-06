@@ -628,7 +628,6 @@ st.markdown("<br>", unsafe_allow_html=True) # HTML-Umbruch für präzise Kontrol
 
 
 
-
 import streamlit as st
 import base64
 import os
