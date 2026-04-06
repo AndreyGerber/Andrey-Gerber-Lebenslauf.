@@ -479,8 +479,8 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 <p style='font-size: 20px; color: #0055A5; margin-bottom: 5px;'><strong>Test & Measurement Engineer</strong></p>
                 <ul style='font-size: 16px; color: #333; line-height: 1.4;'>
                     <li>Normgerechte <b>akustische Messungen</b> (Haushaltsgeräte, Tools, Spielzeug)</li>
-                    <li>Planung & Aufbau einer neuen Prüfkammer für <b>Smart Speaker</b></li>
-                    <li>Schwingungsmessungen & kundenspezifische Sondermessungen</li>
+                    <li>Planung & Aufbau einer <b>Sneuen Prüfkammer</b>S für Smart Speaker</li>
+                    <li><b>SSchwingungsmessungen & kundenspezifische Sondermessungen</b>S</li>
                     <li>Mitglied im <b>DIN-Normenausschuss</b> für Schalldämmung</li>
                 </ul>
             """, unsafe_allow_html=True)
