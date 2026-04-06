@@ -499,7 +499,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             img_tuv = lade_formatiertes_bild("tuev.png") 
             if img_tuv:
                 # Vertikaler Abstand, damit das Logo mittig zum Text steht
-                st.markdown("<div style='margin-top: 150px;'></div>", unsafe_allow_html=True)
+                st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
                 st.image(img_tuv, width=int(img_tuv.size[0] * MASSSTAB_TUV))
             else:
                 st.error("Datei 'images/tuev.png' nicht gefunden.")
