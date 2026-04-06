@@ -284,7 +284,7 @@ BILD_BREITE = 350
 INFO_FONT_SIZE = "24px" # Etwas größer, da der Block jetzt massiver ist
 
 # 1. Navigation (absolut unabhängig)
-highlights = [1988, 1996, 2006, 2010]
+highlights = [1988, 1996, 2006, 2010, 2017, 2022]
 if 'info_idx' not in st.session_state:
     st.session_state.info_idx = 0
 
@@ -463,6 +463,45 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 else:
                     st.error("Bild 'haw.png' konnte nicht geladen werden.")
 
+    elif jahr_aktiv == 2017:
+        # --- PARAMETER ---
+        MASSSTAB_TUV = 0.85
+        OBEN_ABSTAND_TEXT = "30px" 
+
+        col_text, col_foto = st.columns([1.2, 1.0])
+
+        with col_text:
+            st.markdown(f"<div style='margin-top: {OBEN_ABSTAND_TEXT};'></div>", unsafe_allow_html=True)
+            st.subheader(f"🛠️ {jahr_aktiv} – 2022: TÜV Rheinland")
+            
+            # Fokus 1: Test & Measurement (2017-2019)
+            st.markdown(f"""
+                <p style='font-size: 20px; color: #0055A5; margin-bottom: 5px;'><strong>Test & Measurement Engineer</strong></p>
+                <ul style='font-size: 16px; color: #333; line-height: 1.4;'>
+                    <li>Normgerechte <b>akustische Messungen</b> (Haushaltsgeräte, Tools, Spielzeug)</li>
+                    <li>Planung & Aufbau einer neuen Prüfkammer für <b>Smart Speaker</b></li>
+                    <li>Schwingungsmessungen & kundenspezifische Sondermessungen</li>
+                </ul>
+            """, unsafe_allow_html=True)
+
+            # Fokus 2: Qualitätsmanagement (2019-2022)
+            st.markdown(f"""
+                <p style='font-size: 20px; color: #0055A5; margin-top: 20px; margin-bottom: 5px;'><strong>Qualitätsmanager / Quality Expert</strong></p>
+                <ul style='font-size: 16px; color: #333; line-height: 1.4;'>
+                    <li>Durchführung interner Audits (ISO 9001 & ISO 17025)</li>
+                    <li>Verantwortung für <b>CAPA-Prozesse</b> und Ursachenanalysen (8D, Ishikawa)</li>
+                    <li>Mitglied im <b>DIN-Normenausschuss</b> für Schalldämmung</li>
+                </ul>
+            """, unsafe_allow_html=True)
+
+        with col_foto:
+            # Nutze dein Logo oder ein passendes Bild
+            img_tuv = lade_formatiertes_bild("tuv_logo.png") 
+            if img_tuv:
+                st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
+                st.image(img_tuv, width=int(img_tuv.size[0] * MASSSTAB_TUV))
+            else:
+                st.info("Hier ein Bild vom TÜV Rheinland einfügen (z.B. Labor oder Logo).")
 
 
 
