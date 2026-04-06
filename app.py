@@ -18,11 +18,11 @@ from PIL import Image, ImageOps
 
 # --- 1. FUNKTION FÜR STABILE BILDGRÖSSE ---
 def lade_formatiertes_bild(name, target_size=(900, 600)):
-    base_path = os.path.dirname(__file__)
-    pfad = os.path.join(base_path, "images", name)
+    # Nutze relativen Pfad oder absoluten Pfad falls nötig
+    pfad = os.path.join("images", name)
     if os.path.exists(pfad):
         img = Image.open(pfad)
-        # Erstellt ein Bild mit festem Format, ohne es zu verzerren (Padding)
+        # Erstellt ein Bild mit festem Format, ohne es zu verzerren
         img.thumbnail(target_size, Image.Resampling.LANCZOS)
         # Erzeugt einen transparenten Hintergrund in der Zielgröße
         new_img = Image.new("RGBA", target_size, (255, 255, 255, 0))
@@ -39,46 +39,77 @@ if 'bild_index' not in st.session_state:
 slideshow_bilder = ["ich1.JPG", "ich_pass.png"]
 zeichnung_name = "itsme2.png"
 
-# --- 3. LAYOUT: 3 SPALTEN ---
+# --- 3. GLOBALER STYLE FÜR ZENTRIERUNG ---
+st.markdown("""
+    <style>
+    /* Zentriert den Inhalt aller Spalten vertikal */
+    [data-testid="stHorizontalBlock"] {
+        align-items: center;
+    }
+    /* Link-Styling */
+    .contact-link {
+        text-decoration: none;
+        color: #007BFF;
+        font-weight: bold;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# --- 4. LAYOUT: 3 SPALTEN ---
 col_bild, col_mitte, col_daten = st.columns([1.5, 1.0, 1.5])
 
 with col_bild:
-    # Stabiles Bild laden
+    # Foto laden
     aktuelles_foto = lade_formatiertes_bild(slideshow_bilder[st.session_state.bild_index])
     if aktuelles_foto:
         st.image(aktuelles_foto, use_container_width=True)
     else:
         st.error(f"Datei fehlt: {slideshow_bilder[st.session_state.bild_index]}")
 
-
+    # Navigation unter dem Bild
     p_links, p_mitte, p_rechts = st.columns([1, 4, 1]) 
-    
     with p_links:
         if st.button("⬅️"):
             st.session_state.bild_index = (st.session_state.bild_index - 1) % len(slideshow_bilder)
             st.rerun()
-            
     with p_rechts:
         if st.button("➡️"):
             st.session_state.bild_index = (st.session_state.bild_index + 1) % len(slideshow_bilder)
             st.rerun()
 
 with col_mitte:
-    # Deine Zeichnung laden (ebenfalls formatiert für Stabilität)
+    # Zeichnung/Pfeil laden
     zeichnung = lade_formatiertes_bild(zeichnung_name, target_size=(300, 300))
     if zeichnung:
         st.image(zeichnung, use_container_width=True)
     else:
-        st.info("Hier erscheint bald deine Zeichnung...")
+        st.info("Hier erscheint deine Zeichnung...")
 
 with col_daten:
-    # Anpassung: Schriftgröße deutlich vergrößert
-    st.markdown("<h3 style='font-size: 26px;'>Meine Kontaktdaten</h3>", unsafe_allow_html=True)
-    st.markdown("<p style='font-size: 22px;'><strong>Name:</strong> Andrey Gerber</p>", unsafe_allow_html=True)
-    st.markdown("<p style='font-size: 22px;'>📞 <strong>0176 43 733 099</strong></p>", unsafe_allow_html=True)
-    st.markdown("<p style='font-size: 22px;'>📧 <a href='mailto:andrey.gerber.88@gmail.com'>andrey.gerber.88@gmail.com</a></p>", unsafe_allow_html=True)
-    st.markdown("<p style='font-size: 22px;'><strong>Wohnadresse:</strong> Brauchst du nicht, ruf an oder @</p>", unsafe_allow_html=True)
-
+    # Header
+    st.markdown("<p style='font-size: 20px; color: gray; margin-bottom: -10px;'>Meine Kontaktdaten</p>", unsafe_allow_html=True)
+    
+    # Name: Groß und Fett
+    st.markdown("<h1 style='font-size: 42px; font-weight: bold; margin-top: 0px;'>Andrey Gerber</h1>", unsafe_allow_html=True)
+    
+    # Kontaktdaten mit Icons
+    st.markdown(f"""
+        <div style='line-height: 1.8;'>
+            <p style='font-size: 24px;'>
+                <span style='margin-right: 15px;'>📞</span> 
+                <strong>0176 43 733 099</strong>
+            </p>
+            <p style='font-size: 24px;'>
+                <span style='margin-right: 15px;'>📧</span> 
+                <a href='mailto:andrey.gerber.88@gmail.com' class='contact-link'>
+                    andrey.gerber.88@gmail.com
+                </a>
+            </p>
+            <p style='font-size: 18px; color: #666; margin-top: 20px;'>
+                📍 <i>Wohnadresse: Brauchst du nicht, ruf an oder @</i>
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
 
 st.divider()
 
