@@ -582,7 +582,7 @@ st.markdown("""
     /* Info-Box Styling */
     .info-container {
         background-color: #e1f5fe;
-        padding: 20px;
+        padding: 10px;
         border-radius: 15px;
         border-left: 5px solid #01579b;
         margin-bottom: 25px;
