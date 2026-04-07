@@ -579,62 +579,65 @@ other_docs = [
 # --- 3. STYLING (HART ERZWUNGEN) ---
 st.markdown("""
 <style>
-    /* Punkt 1: Gesamte Spalte oben ausrichten mit Abstand */
+    /* 1. POSITIONS-FIX: Galerie oben bündig mit Abstand */
     [data-testid="stColumn"] {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start !important;
-        padding-top: 30px !important; /* DEIN ABSTAND VON OBEN */
-    }
-
-    /* Punkt 2: Icon OBEN, Text UNTEN (Flexbox) */
-    div.stButton > button {
-        height: 140px !important;
-        width: 100% !important;
         display: flex !important;
-        flex-direction: column !important; /* Vertikal */
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+    }
+    
+    /* Der Abstand von oben wird hier über den Header gesteuert */
+    .stHeader { margin-top: 40px !important; }
+
+    /* 2. ICON-TEXT-FIX: Zwingt den Inhalt UNTEREINANDER */
+    div.stButton > button > div[data-testid="stMarkdownContainer"] p {
+        display: flex !important;
+        flex-direction: column !important; /* DAS zwingt Icon über Text */
         align-items: center !important;
         justify-content: center !important;
         gap: 10px !important;
-        border: 2px solid #334155 !important;
-        border-radius: 15px !important;
-        background-color: #ffffff !important;
-    }
-
-    /* Icon-Größe & Position */
-    div.stButton > button span {
-        font-size: 45px !important;
-        display: block !important;
-    }
-
-    /* Text-Größe & Position */
-    div.stButton > button p {
-        font-size: 14px !important;
-        font-weight: 700 !important;
-        color: #1e293b !important;
-        margin: 0 !important;
         line-height: 1.2 !important;
     }
 
-    /* Punkt 3: AKTIVER BUTTON FARBE */
-    div.active-btn button {
-        background-color: #1e293b !important; /* Dunkelblau */
-        border-color: #000000 !important;
+    /* Button-Box Styling */
+    div.stButton > button {
+        height: 160px !important;
+        border: 2px solid #334155 !important;
+        border-radius: 15px !important;
+        background-color: #ffffff !important;
+        width: 100% !important;
     }
 
-    div.active-btn button p, div.active-btn button span {
-        color: #ffffff !important; /* Weißer Text/Icon wenn aktiv */
+    /* Icon-Größe massiv erhöhen */
+    div.stButton > button span {
+        font-size: 50px !important; /* Richtig große Icons */
+        display: block !important;
+    }
+
+    /* Text-Styling */
+    div.stButton > button p {
+        font-weight: 700 !important;
+        color: #1e293b !important;
+        font-size: 14px !important;
+    }
+
+    /* 3. AKTIVER BUTTON: Knalliges Blau */
+    div.active-btn button {
+        background-color: #0055A5 !important; /* Kräftiges Blau */
+        border-color: #003366 !important;
+    }
+    
+    /* Text im aktiven Button weiß machen */
+    div.active-btn button p, 
+    div.active-btn button span {
+        color: #ffffff !important;
     }
 
     /* Hover-Effekt */
     div.stButton > button:hover {
         border-color: #ff4b4b !important;
-        background-color: #f8fafc !important;
-    }
-    
-    /* Fix: Verhindert Verschiebung beim Klicken */
-    .active-btn {
-        display: contents;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
     }
 </style>
 """, unsafe_allow_html=True)
