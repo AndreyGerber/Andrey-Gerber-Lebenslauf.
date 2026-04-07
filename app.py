@@ -677,93 +677,91 @@ with col_viewer:
 
 
 #Zertifikate Data Science
-import base64
+import os
 
-# 1. Deine 16 Dokumente (Liste sicherstellen)
-prog_files_3d = [
-    "1_Python for Data Science.pdf", "2_Exploratory Statistics with Python.pdf",
-    "3_Data_Quality.pdf", "4_Data Visualization_Matplotlib.pdf",
-    "5_Data Visualization_with_Seaborn.pdf", "6_Matplotlib_Complements.pdf",
-    "7_DataViz_with_Plotly.pdf", "8_MCQ_Linux_and_Bash.pdf",
-    "9_Git_&_Github.pdf", "10_Unit_Testing.pdf",
-    "11_Classification_with_scikit-learn.pdf", "12_Regressionn_with_scikit-learn.pdf",
-    "13_Methodology_in_Data_Science.pdf", "14_Feature_Engineering_and_Optimisation.pdf",
-    "15_Time_Series_Analysis_with_Python.pdf", "16_Advanced_Classification_with_scikit.pdf"
-]
+# --- 1. DATEN ---
+# Wir gehen davon aus, dass deine Bilder in 'images/thumbnails/' liegen
+IMAGE_DIR = "images/thumbnails"
+# Erstellt eine Liste aller Bilder im Ordner
+thumb_files = sorted([f for f in os.listdir(IMAGE_DIR) if f.endswith(('.png', '.jpg', '.jpeg'))])
 
-# 2. Das 3D-Showroom Styling (Korrektes CSS für 8er Grid)
+# --- 2. CSS FÜR DAS 3D-KARUSSELL ---
 st.markdown("""
 <style>
-    /* Der dunkle Showroom-Boden */
-    .showroom-3d-grid {
-        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-        padding: 40px 20px;
-        border-radius: 25px;
-        display: grid;
-        grid-template-columns: repeat(8, 1fr); /* EXAKT 8 SPALTEN */
-        gap: 20px;
-        border: 1px solid #334155;
-        perspective: 1200px; /* Ermöglicht den 3D-Raum-Effekt */
+    /* Der Raum, in dem das Karussell steht */
+    .showroom-3d-scene {
+        perspective: 2000px;
+        width: 100%;
+        overflow-x: auto;
+        padding: 60px 0;
+        background: #0f172a; /* Dunkler Galerie-Boden */
+        border-radius: 20px;
     }
 
-    /* Die 3D-Zertifikats-Karte */
-    .exhibit-3d {
-        flex: 0 0 auto;
-        height: 160px;
-        background: white;
-        border-radius: 12px;
+    /* Das Band, das die Bilder hält */
+    .carousel-track {
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none !important;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        border: 1px solid #cbd5e1;
-        transform-style: preserve-3d; /* Wichtig für 3D */
+        gap: 30px;
+        padding-left: 50px;
+        transform-style: preserve-3d;
     }
 
-    /* Der Hover-Effekt (Karte neigt sich im Raum) */
-    .exhibit-3d:hover {
-        transform: translateZ(30px) rotateY(15deg) rotateX(5deg);
-        box-shadow: -10px 15px 30px rgba(0,0,0,0.5), 0 0 15px rgba(59, 130, 246, 0.6);
-        border-color: #3b82f6;
+    /* Das einzelne Zertifikat-Bild im 3D-Raum */
+    .carousel-item {
+        flex: 0 0 200px;
+        height: 280px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        transition: all 0.5s ease;
+        cursor: pointer;
+        
+        /* 3D-Grunddrehung für den Bogeneffekt */
+        transform: rotateY(-20deg);
+        border: 1px solid #334155;
+        overflow: hidden;
+    }
+
+    /* Effekt beim Drüberfahren (Bild kommt nach vorne) */
+    .carousel-item:hover {
+        transform: rotateY(0deg) scale(1.2) translateZ(50px);
+        box-shadow: 0 25px 50px rgba(59, 130, 246, 0.5);
         z-index: 100;
+        border-color: #3b82f6;
     }
 
-    .exhibit-3d-icon { font-size: 40px; margin-bottom: 8px; }
-    .exhibit-3d-label { 
-        font-size: 9px; 
-        font-weight: 800; 
-        color: #0f172a; 
-        text-align: center; 
-        padding: 0 5px;
-        line-height: 1.2;
+    .carousel-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
+
+    /* Scrollbar-Styling */
+    .showroom-3d-scene::-webkit-scrollbar { height: 8px; }
+    .showroom-3d-scene::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
 </style>
 """, unsafe_allow_html=True)
 
-# 3. HTML-Struktur zusammenbauen (Sichere Methode ohne Base64-Absturz)
-st.write("---")
-st.subheader("🏛️ Virtueller Programmier-Showroom")
-st.caption("Deine 16 Meilensteine in der interaktiven 3D-Ansicht")
+# --- 3. DARSTELLUNG ---
+st.subheader("🚀 Mein 3D-Zertifikats-Showroom")
 
-showroom_3d_html = '<div class="showroom-3d-grid">'
+# Wir bauen das HTML-Band zusammen
+carousel_html = '<div class="showroom-3d-scene"><div class="carousel-track">'
 
-for f in prog_files_3d:
-    # Namen für das Label säubern
-    clean_label = f.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
+for img in thumb_files:
+    # Pfad zum Bild für den Browser
+    img_path = f"{IMAGE_DIR}/{img}"
     
-    showroom_3d_html += f'''
-    <a href="/?doc={f}" target="_self" class="exhibit-3d">
-        <div class="exhibit-3d-icon">🐍</div>
-        <div class="exhibit-3d-label">{clean_label}</div>
-    </a>
+    carousel_html += f'''
+    <div class="carousel-item">
+        <img src="app/static/{img_path}" alt="{img}">
+    </div>
     '''
 
-showroom_3d_html += '</div>'
+carousel_html += '</div></div>'
 
-# NUR EIN EINZIGER AUFRUF FÜR DAS GESAMTE GRID
-st.markdown(showroom_3d_html, unsafe_allow_html=True)
+# Ausgabe des 3D-Showrooms
+st.markdown(carousel_html, unsafe_allow_html=True)
 
 
 
