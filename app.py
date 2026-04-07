@@ -508,7 +508,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 st.error("Datei 'images/tuev.png' nicht gefunden.")
 
 
-st.markdown('<div style="margin-top: 150px;"></div>', unsafe_allow_html=True)
+
 
 
 
@@ -519,7 +519,7 @@ import streamlit as st
 import base64
 import os
 
-# --- PFAD-LOGIK ---
+# --- 1. SETUP ---
 PDF_FOLDER = "documents"
 
 def get_pdf_base64(file_name):
@@ -529,68 +529,65 @@ def get_pdf_base64(file_name):
             return base64.b64encode(f.read()).decode('utf-8')
     return None
 
-# Aktuelles Dokument aus URL oder Standard festlegen
-query_params = st.query_params
-selected_doc = query_params.get("doc", "Master.pdf")
+# Initialisiere das gewählte Dokument im Session State
+if "active_doc" not in st.session_state:
+    st.session_state.active_doc = "Master.pdf"
 
-# --- LAYOUT ---
-col_gallery, col_viewer = st.columns([1.2, 1])
+# --- 2. LAYOUT ---
+col_gallery, col_viewer = st.columns([1, 1.5])
 
-# --- GALERIE ABSCHNITT ---
 with col_gallery:
     st.subheader("🏛️ Deine Virtuelle Galerie")
     
-    # 1. CSS Definition (Muss in EINER Markdown-Anweisung stehen)
-    st.markdown("""
-    <style>
-        .gallery-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-        .doc-card {
-            width: 90px; height: 110px;
-            background: #ffffff; border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            text-decoration: none; color: #333;
-            border: 1px solid #ddd; transition: 0.3s;
-        }
-        .doc-card:hover { transform: scale(1.05); border-color: #ff4b4b; }
-        .doc-icon { font-size: 25px; }
-        .doc-label { font-size: 10px; font-weight: bold; text-align: center; }
-    </style>
-    """, unsafe_allow_html=True)
-
-    # 2. Liste der Dokumente
+    # Liste deiner Dokumente
     docs = [
-        {"name": "Master.pdf", "icon": "🎓", "label": "Master"},
-        {"name": "Bachelor.pdf", "icon": "🏗️", "label": "Bachelor"},
-        {"name": "InternerQualitätsauditor.pdf", "icon": "📜", "label": "Auditor"},
-        {"name": "Qualitätsbeauftragter.pdf", "icon": "✅", "label": "QM-Beauftr."},
-        {"name": "Schweisskurs.pdf", "icon": "🔥", "label": "Schweißen"},
-        {"name": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalyse"}
+        {"file": "Master.pdf", "icon": "🎓", "label": "Master"},
+        {"file": "Bachelor.pdf", "icon": "🏗️", "label": "Bachelor"},
+        {"file": "InternerQualitätsauditor.pdf", "icon": "📜", "label": "Auditor"},
+        {"file": "Qualitätsbeauftragter.pdf", "icon": "✅", "label": "QM-Beauftr."},
+        {"file": "Schweisskurs.pdf", "icon": "🔥", "label": "Schweißen"},
+        {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalyse"}
     ]
 
-    # 3. HTML-String zusammenbauen
-    grid_html = '<div class="gallery-grid">'
-    for d in docs:
-        # WICHTIG: Nutze einfache Anführungszeichen für HTML-Attribute im f-string
-        grid_html += f'<a href="/?doc={d["name"]}" target="_self" class="doc-card">'
-        grid_html += f'<span class="doc-icon">{d["icon"]}</span>'
-        grid_html += f'<span class="doc-label">{d["label"]}</span></a>'
-    grid_html += '</div>'
-
-    # 4. Ausgabe als HTML
-    st.markdown(grid_html, unsafe_allow_html=True)
-
+    # Wir erstellen ein Grid aus Buttons, die wie Karten wirken
+    grid_cols = st.columns(3) # 3 Karten pro Reihe
+    
+    for i, doc in enumerate(docs):
+        with grid_cols[i % 3]:
+            # Der Trick: Ein Button pro Dokument
+            if st.button(f"{doc['icon']}\n\n{doc['label']}", key=doc['file'], use_container_width=True):
+                st.session_state.active_doc = doc['file']
+                st.rerun() # Aktualisiert den Viewer sofort
 
 with col_viewer:
     st.subheader("📄 Vorschau")
-    pdf_b64 = get_pdf_base64(selected_doc)
+    pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     
     if pdf_b64:
-        pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="800px" style="border:none; border-radius:15px; box-shadow: 0 0 20px rgba(0,0,0,0.1);"></iframe>'
+        pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="800px" style="border:none; border-radius:15px;"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
     else:
-        st.warning(f"Bitte wähle ein Dokument aus der Galerie aus. (Aktuell: {selected_doc})")
+        st.error(f"Datei {st.session_state.active_doc} nicht gefunden.")
+
+# CSS für das Styling der Buttons (damit sie wie Karten aussehen)
+st.markdown("""
+<style>
+    div.stButton > button {
+        height: 100px;
+        border-radius: 15px;
+        border: 1px solid #eee;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: 0.3s;
+        white-space: pre-wrap;
+    }
+    div.stButton > button:hover {
+        border-color: #ff4b4b;
+        color: #ff4b4b;
+        transform: scale(1.05);
+    }
+</style>
+""", unsafe_allow_html=True)
 
 
 
