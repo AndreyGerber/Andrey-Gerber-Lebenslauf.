@@ -884,6 +884,61 @@ st.markdown("<br>", unsafe_allow_html=True) # HTML-Umbruch für präzise Kontrol
 
 
 
+
+
+st.markdown("""
+<style>
+    /* Der Hintergrund: Eine matte Wandfarbe */
+    .gallery-wall {
+        background-color: #cbd5e1; /* Ein sanftes Grau-Blau, wie auf deinem Beispielfoto */
+        padding: 60px 20px;
+        border-radius: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    /* Das gerahmte Bild */
+    [data-testid="stImage"] {
+        background: #ffffff; /* Der weiße Rahmen */
+        padding: 12px; /* Breite des Rahmens */
+        border-radius: 4px; /* Leicht abgerundete Ecken für den Rahmen */
+        
+        /* Der Schatten erzeugt den 3D-Effekt an der Wand */
+        box-shadow: 
+            5px 5px 15px rgba(0,0,0,0.3), 
+            1px 1px 2px rgba(0,0,0,0.1);
+        
+        transition: all 0.4s ease-in-out;
+        cursor: pointer;
+    }
+
+    /* Animation: Wenn man näher tritt (Hover) */
+    [data-testid="stImage"]:hover {
+        transform: scale(1.1) translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        z-index: 100;
+    }
+
+    /* Optionale Bildunterschrift wie ein kleines Schildchen unter dem Bild */
+    [data-testid="stImageCaption"] {
+        background: rgba(255,255,255,0.8);
+        padding: 2px 8px;
+        margin-top: 10px !important;
+        font-size: 10px !important;
+        border-radius: 2px;
+        color: #334155 !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+
+
+
+
+
+
 import streamlit as st
 import base64
 import os
