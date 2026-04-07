@@ -576,6 +576,60 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
+#4 Style-Bereich
+
+st.markdown("""
+<style>
+    /* 1. ABSTAND OBEN: Schiebt den gesamten Galerie-Bereich nach unten */
+    [data-testid="stHorizontalBlock"] {
+        margin-top: 20px !important;
+    }
+
+    /* 2. BUTTON-STRUKTUR: Icon oben, Text unten */
+    div.stButton > button {
+        height: 150px !important; /* Feste Höhe für alle */
+        border-radius: 15px !important;
+        border: 2px solid #334155 !important; /* Dunkler Rand für Kontrast */
+        background-color: #ffffff !important;
+        color: #1e293b !important;
+        font-weight: 700 !important;
+        
+        /* Flexbox erzwingt Icon über dem Text */
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important; /* Abstand zwischen Icon und Text */
+    }
+
+    /* 3. ICON-GRÖSSE: Macht die Emojis richtig groß */
+    div.stButton > button p {
+        font-size: 45px !important;
+        margin: 0 !important;
+        line-height: 1.1 !important;
+    }
+
+    /* 4. AKTIVER BUTTON: Markiert das gewählte Dokument Blau */
+    div.active-btn button {
+        background-color: #1e293b !important; /* Edles Dunkelblau/Anthrazit */
+        color: #ffffff !important;
+        border-color: #0f172a !important;
+    }
+    
+    /* Icon-Farbe im aktiven Button auf weiß setzen */
+    div.active-btn button p {
+        color: #ffffff !important;
+    }
+
+    /* 5. HOVER: Sanfter Effekt beim Drüberfahren */
+    div.stButton > button:hover {
+        border-color: #ff4b4b !important;
+        color: #ff4b4b !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+</style>
+""", unsafe_allow_html=True)
 
 
 # --- 5. LAYOUT & GALERIE ---
