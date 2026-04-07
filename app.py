@@ -798,106 +798,76 @@ st.markdown("""
 
 
 
-#ab hier entsteht ein 3D-Raum mit Fähigkeiten und Fertigkeiten
-import streamlit as st
-import base64
-import os
+# --- VIRTUELLE GALERIE ---
+st.write("---")
+st.markdown("<h2 style='text-align: center; color: #1e293b;'>🏛️ Virtuelle Programmier-Galerie</h2>", unsafe_allow_html=True)
 
-# --- 1. FUNKTION ZUM EINBETTEN VON PDFS ---
-def get_pdf_embed_code(pdf_pfad):
-    if os.path.exists(pdf_pfad):
-        with open(pdf_pfad, "rb") as f:
-            base64_pdf = base64.b64encode(f.read()).decode('utf-8')
-        # Erzeugt ein Objekt, das direkt im HTML-Showroom erscheint
-        return f'data:application/pdf;base64,{base64_pdf}'
-    return None
-
-st.header("🏛️ Andrey's Virtueller Showroom")
-
-# --- 2. CSS FÜR DEN ECHTEN 3D-EFFEKT ---
+# Container für die Galerie-Box (Dunkler Raum)
 st.markdown("""
-    <style>
-    .showroom-perspective {
-        perspective: 1500px;
-        display: flex;
-        justify-content: space-between;
+<style>
+    /* 1. DER RAUM: Dunkler Hintergrund mit Tiefenwirkung */
+    .gallery-room {
+        background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+        padding: 60px 20px;
+        border-radius: 30px;
+        perspective: 2000px; /* Verstärkt den Raum-Effekt */
+        border: 1px solid #334155;
+        box-shadow: inset 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    /* 2. DIE WAND: Alle Bilder in der Galerie */
+    [data-testid="stHorizontalBlock"] {
         align-items: center;
-        height: 600px;
-        background: #f0f2f6;
-        border-radius: 20px;
-        padding: 40px;
+        gap: 10px !important;
     }
-    .wall {
-        width: 300px;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        transform-style: preserve-3d;
-    }
-    .wall-left { transform: rotateY(35deg); }
-    .wall-right { transform: rotateY(-35deg); }
-    
-    .doc-card {
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 10px 10px 25px rgba(0,0,0,0.1);
-        transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        color: #0055A5;
-        font-weight: bold;
-        border: 1px solid transparent;
-    }
-    /* Effekt: Karte kommt beim Hovern nach vorne */
-    .doc-card:hover {
-        transform: translateZ(150px) scale(1.1);
-        box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-        border-color: #0055A5;
-        z-index: 100;
-    }
-    .center-stage {
-        width: 30%;
-        text-align: center;
-        color: #666;
-    }
-    </style>
-""", unsafe_allow_html=True)
 
-# --- 3. GENERIERUNG DER DOKUMENT-LINKS ---
-# Wir wandeln die PDFs in Base64 um, damit sie direkt im Browser öffnen
-master_link = get_pdf_embed_code("documents/Master.pdf")
-bachelor_link = get_pdf_embed_code("documents/Bachelor.pdf")
-abitur_link = get_pdf_embed_code("documents/allgemeine Hochschuleureife.pdf")
-auditor_link = get_pdf_embed_code("documents/Interner Qualitätsauditor.pdf")
-schweiss_link = get_pdf_embed_code("documents/Schweisskurs.pdf")
-
-# --- 4. DER SHOWROOM HTML-BLOCK ---
-st.markdown(f"""
-    <div class="showroom-perspective">
-        <!-- LINKE WAND: STUDIUM -->
-        <div class="wall wall-left">
-            <h3 style="text-align:center;">Studium</h3>
-            <a href="{master_link}" target="_blank" class="doc-card">🎓 Master</a>
-            <a href="{bachelor_link}" target="_blank" class="doc-card">🏗️ Bachelor</a>
-            <a href="{abitur_link}" target="_blank" class="doc-card">🏫 Abitur</a>
-        </div>
+    /* 3. DIE EXPONATE (Bilder) */
+    [data-testid="stImage"] {
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1) !important;
         
-        <!-- MITTE -->
-        <div class="center-stage">
-            <div style="font-size: 60px;">🏢</div>
-            <p>Hover für 3D<br>Klick für PDF</p>
-        </div>
+        /* 3D-Anordnung: Leicht schräg wie an einer runden Wand */
+        transform: rotateY(-20deg) rotateX(5deg);
+        
+        border-radius: 5px;
+        border: 4px solid #ffffff; /* Weißer Rahmen wie bei echten Gemälden */
+        box-shadow: -15px 15px 30px rgba(0,0,0,0.6);
+        cursor: zoom-in;
+    }
+    
+    /* 4. BELEUCHTUNG & FOKUS (Hover) */
+    [data-testid="stImage"]:hover {
+        transform: rotateY(0deg) rotateX(0deg) scale(2.2) translateZ(150px) !important;
+        z-index: 1000 !important;
+        border-color: #3b82f6 !important; /* Blaues Licht bei Fokus */
+        box-shadow: 0 0 50px rgba(59, 130, 246, 0.6) !important;
+    }
 
-        <!-- RECHTE WAND: ZERTIFIKATE -->
-        <div class="wall wall-right">
-            <h3 style="text-align:center;">Zertifikate</h3>
-            <a href="{auditor_link}" target="_blank" class="doc-card">📜 Qualitätsauditor</a>
-            <a href="{schweiss_link}" target="_blank" class="doc-card">🔥 Schweisskurs</a>
-        </div>
-    </div>
+    /* 5. DER BODEN: Spiegelungseffekt für die Beschriftung */
+    [data-testid="stImageCaption"] {
+        color: #94a3b8 !important;
+        font-size: 9px !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 15px !important;
+        opacity: 0.7;
+    }
+</style>
 """, unsafe_allow_html=True)
+
+# Wir packen alles in einen "Raum"-Container
+with st.container():
+    st.markdown('<div class="gallery-room">', unsafe_allow_html=True)
+    
+    # Dein bestehender Grid-Loop (8er Spalten)
+    cols = st.columns(8)
+    for i, img_name in enumerate(prog_images):
+        with cols[i % 8]:
+            path = os.path.join(image_folder, img_name)
+            if os.path.exists(path):
+                display_name = img_name.split('_', 1)[-1].replace('.jpg', '').replace('_', ' ')
+                st.image(path, use_container_width=True, caption=display_name)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 
