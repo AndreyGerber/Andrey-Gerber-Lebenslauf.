@@ -559,12 +559,12 @@ if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
 
 # --- 2. DATEN-DEFINITION ---
-top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namens-\nänderung"}
+top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namensänderung"}
 
 other_docs = [
     {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Berufsschule"},
     {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Abitur"},
-    {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Praktikum\nV&F"},
+    {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Praktikum V&F"},
     {"file": "Bachelor.pdf", "icon": "✈️", "label": "Bachelor Zeugnis"},
     {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Schweißkurs"},
     {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalytiker"},
