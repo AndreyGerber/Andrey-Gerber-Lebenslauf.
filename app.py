@@ -678,7 +678,7 @@ with col_viewer:
 
 #Zertifikate Data Science
 
-
+"""
 # --- 1. DATEN-LISTE (Namen exakt wie im Screenshot) ---
 image_folder = "images"
 prog_images = [
@@ -700,91 +700,7 @@ prog_images = [
     "16_Advanced_Classification_with_scikit-learn.jpg",
     "17_Text_Mining.jpg"
 ]
-
-# --- 2. LAYOUT & GRID ---
-st.write("---")
-st.subheader("🏛️ Virtueller Programmier-Showroom")
-
-# Wir erstellen 8 Spalten für das Grid
-cols = st.columns(8)
-
-for i, img_name in enumerate(prog_images):
-    # Auswahl der Spalte (8er Modulo)
-    with cols[i % 8]:
-        path = os.path.join(image_folder, img_name)
-        
-        if os.path.exists(path):
-            # Nutze st.image für maximale Stabilität
-            st.image(path, use_container_width=True)
-            
-            # Label säubern: Nummer weg, Unterstriche weg
-            display_name = img_name.split('_', 1)[-1].replace('.jpg', '').replace('_', ' ')
-            st.markdown(f"<p style='font-size:10px; font-weight:bold; text-align:center; line-height:1;'>{display_name}</p>", unsafe_allow_html=True)
-        else:
-            st.error("X")
-
-# --- 3. DAS 3D-FEELING (CSS) ---
-st.markdown("""
-<style>
-    /* Der Showroom-Effekt: Vergrößern und Hervorheben beim Hovern */
-    [data-testid="stImage"] {
-        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        border-radius: 8px;
-        border: 1px solid #e2e8f0;
-        cursor: pointer;
-    }
-    
-    [data-testid="stImage"]:hover {
-        transform: scale(1.8) translateY(-10px) !important;
-        z-index: 999 !important;
-        box-shadow: 0 15px 30px rgba(0,0,0,0.3) !important;
-        border-color: #0055A5 !important;
-    }
-
-    /* Abstand zwischen den Grid-Elementen optimieren */
-    [data-testid="column"] {
-        padding: 5px !important;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<style>
-    /* 1. DER RAUM: Erzeugt die Tiefenwirkung für das gesamte Grid */
-    [data-testid="stHorizontalBlock"] {
-        perspective: 1500px; /* Je kleiner der Wert, desto stärker das 3D */
-        padding-top: 50px;
-    }
-
-    /* 2. DIE KARTE: Jedes Bild bekommt eine Grund-Neigung */
-    [data-testid="stImage"] {
-        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        transform: rotateY(-25deg) rotateX(10deg); /* Neigt die Bilder schräg in den Raum */
-        border-radius: 10px;
-        box-shadow: -10px 10px 20px rgba(0,0,0,0.3); /* Schatten zur Seite für Tiefe */
-        cursor: pointer;
-        border: 1px solid #dce4e9;
-    }
-    
-    /* 3. DER HOVER: Karte dreht sich beim Anschauen frontal zum User */
-    [data-testid="stImage"]:hover {
-        transform: rotateY(0deg) rotateX(0deg) scale(1.8) translateZ(100px) !important;
-        z-index: 999 !important;
-        box-shadow: 0 20px 40px rgba(0, 85, 165, 0.4) !important;
-        border-color: #0055A5 !important;
-    }
-
-    /* Beschriftung anpassen, damit sie nicht mitdreht */
-    [data-testid="stImageCaption"] {
-        font-size: 10px !important;
-        transform: translateZ(20px);
-        font-weight: bold;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-
-
+"""
 
 
 
