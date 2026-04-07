@@ -544,18 +544,18 @@ with col_gallery:
 
     # 2. Alle anderen Dokumente (Restliste)
     other_docs = [
-        {"file": "Berufsschule.pdf", "icon": "📚", "label": "Berufs-\nschule"},
-        {"file": "allgemeineHochschulreife.pdf", "icon": "🏫", "label": "Abitur"},
-        {"file": "Praktikum_V&F.pdf", "icon": "🏢", "label": "Praktikum\nV&F"},
-        {"file": "Bachelor.pdf", "icon": "🏗️", "label": "Bachelor\nZeugnis"},
-        {"file": "Schweisskurs.pdf", "icon": "🔥", "label": "Schweiß-\nkurs"},
-        {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Wert-\nanalytiker"},
-        {"file": "Master.pdf", "icon": "🎓", "label": "Master\nZeugnis"},
-        {"file": "b_k_pulse.pdf", "icon": "📈", "label": "B&K\nPulse"},
-        {"file": "M_BBM.pdf", "icon": "⚙️", "label": "M-BBM"},
-        {"file": "InternerQualitätsauditor.pdf", "icon": "📜", "label": "Qualitäts-\nauditor"},
-        {"file": "Qualitätsbeauftragter.pdf", "icon": "✅", "label": "QM-Beauf-\ntragter"},
-        {"file": "QMB_ISO_17025.pdf", "icon": "🧪", "label": "QMB\nISO 17025"}
+        {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Berufsschule"},
+        {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Abitur"},
+        {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Praktikum\nV&F"},
+        {"file": "Bachelor.pdf", "icon": "✈️", "label": "Bachelor Zeugnis"},
+        {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Schweißkurs"},
+        {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalytiker"},
+        {"file": "Master.pdf", "icon": "🎓", "label": "Master Zeugnis"},
+        {"file": "b_k_pulse.pdf", "icon": "📟", "label": "B&K Pulse"},
+        {"file": "M_BBM.pdf", "icon": "🔊", "label": "M-BBM"},
+        {"file": "InternerQualitätsauditor.pdf", "icon": "🕵️", "label": "Auditor 9000 ff."},
+        {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "QMB ISO 9001"},
+        {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
     ]
 
     # --- OBERE REIHE (Namensänderung zentriert) ---
