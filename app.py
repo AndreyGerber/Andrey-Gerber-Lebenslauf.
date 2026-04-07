@@ -587,8 +587,8 @@ st.markdown("""
 
     /* 3. BUTTON-GRUNDFORM (CARD-LOOK) */
     .pdf-section-wrapper div.stButton > button {
-        height: 125px !important;
-        border: 1px solid #f1f5f9 !important;
+        height: 185px !important;
+        border: 10px solid #f1f5f9 !important;
         border-radius: 16px !important;
         background-color: #ffffff !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
