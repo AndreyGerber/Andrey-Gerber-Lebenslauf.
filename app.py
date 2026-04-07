@@ -639,7 +639,7 @@ with col_gallery:
     # Top Dokument (zentriert)
     t_c1, t_c2, t_c3 = st.columns(3)
     with t_c2: render_btn(top_doc)
-    st.write("---") 
+    #st.write("---") 
 
     # Grid für Rest
     grid_cols = st.columns(3)
