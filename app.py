@@ -586,7 +586,7 @@ st.markdown("""
 
     /* Punkt 2: Zwingt Icon über Text & macht Icons groß */
     div.stButton > button {
-        height: 160px !important;
+        height: 110px !important;
         border: 2px solid #334155 !important;
         border-radius: 15px !important;
         background-color: #ffffff !important;
