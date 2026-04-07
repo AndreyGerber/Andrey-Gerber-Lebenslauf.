@@ -528,7 +528,7 @@ with st.container():
                 <strong>⚠️ Wichtiger Hinweis zur Namensänderung:</strong><br>
                 Bitte beachten Sie, dass ich im Laufe meines Lebens meinen Namen geändert habe. 
                 Einige der unten aufgeführten Dokumente (z. B. Abitur, Bachelor) sind daher auf meinen 
-                früheren Namen ausgestellt. \nEin entsprechender Nachweis über die Namensänderung ist als 
+                früheren Namen ausgestellt. <br>Ein entsprechender Nachweis über die Namensänderung ist als 
                 erstes Dokument in der Galerie hinterlegt.
             </div>
         </div>
