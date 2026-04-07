@@ -36,7 +36,7 @@ def lade_formatiertes_bild(name, target_size=(900, 600)):
 if 'bild_index' not in st.session_state:
     st.session_state.bild_index = 0
 
-slideshow_bilder = ["ich1.JPG", "ich_pass.png"]
+slideshow_bilder = ["ich1.JPG", "ich_pass.png", "aufenthaltstitel.png"]
 zeichnung_name = "itsme2.png"
 
 # --- 3. GLOBALER STYLE FÜR ZENTRIERUNG ---
