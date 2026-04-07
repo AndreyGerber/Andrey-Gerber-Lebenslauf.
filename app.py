@@ -678,10 +678,18 @@ with col_viewer:
 
 #Zertifikate Data Science
 
-import streamlit as st
+import base64
 import os
 
-# --- 1. DATEN-LISTE (Exakt nach deinem Screenshot) ---
+# --- 1. FUNKTION ZUM BILDER LADEN ---
+def get_image_base64(path):
+    if os.path.exists(path):
+        with open(path, "rb") as f:
+            data = f.read()
+            return base64.b64encode(data).decode()
+    return None
+
+# --- 2. DEINE BILDER-LISTE ---
 image_folder = "images"
 prog_images = [
     "1_Python for Data Science.jpg", "2_Exploratory Statistics with Python.jpg",
@@ -689,79 +697,70 @@ prog_images = [
     "5_Data Visualization_with_Seaborn.jpg", "6_Matplotlib_Complements.jpg",
     "7_DataViz_with_Plotly.jpg", "8_MCQ_Linux_and_Bash.jpg",
     "9_Git_&_Github.jpg", "10_Unit_Testing.jpg",
-    "11_Classification_with_scikit-learn.jpg", "12_Regressionn_with_scikit-learn.jpg",
+    "11_Classification_with_scikit-learn.jpg", "12_Regressionn_with_scikit-learn.pdf",
     "13_Methodology_in_Data_Science.jpg", "14_Feature_Engineering_and_Optimisation.jpg",
     "15_Time_Series_Analysis_with_Python.jpg", "16_Advanced_Classification_with_scikit.jpg",
     "17_Text_Mining.jpg"
 ]
 
-# --- 2. CSS FÜR DAS 3D-GRID (8 Spalten) ---
+# --- 3. DAS CSS (8-Spalten-Grid & 3D) ---
 st.markdown("""
 <style>
-    /* Der dunkle Showroom-Boden */
     .showroom-3d-grid {
-        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-        padding: 40px 20px;
-        border-radius: 25px;
+        background: #0f172a;
+        padding: 30px;
+        border-radius: 20px;
         display: grid;
-        grid-template-columns: repeat(8, 1fr); /* Genau 8 Spalten nebeneinander */
+        grid-template-columns: repeat(8, 1fr); /* 8 Spalten */
         gap: 15px;
-        perspective: 1200px; /* Ermöglicht 3D-Effekte */
-        border: 1px solid #334155;
+        perspective: 1000px;
     }
-
-    /* Die 3D-Zertifikats-Karte */
     .exhibit-3d {
-        flex: 0 0 auto;
-        height: 180px;
+        width: 100%;
+        height: 150px;
         background: white;
         border-radius: 10px;
         overflow: hidden;
-        border: 1px solid #cbd5e1;
-        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        transform: rotateY(-15deg); /* Grunddrehung für Galerie-Look */
-        box-shadow: -5px 5px 15px rgba(0,0,0,0.3);
+        transition: all 0.4s ease;
+        border: 1px solid #334155;
     }
-
-    /* Hover-Effekt: Karte kommt nach vorne */
     .exhibit-3d:hover {
-        transform: rotateY(0deg) scale(1.2) translateZ(100px);
-        box-shadow: 0 20px 40px rgba(59, 130, 246, 0.6);
+        transform: scale(1.2) translateZ(50px);
+        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5);
         z-index: 100;
         border-color: #3b82f6;
     }
-
     .exhibit-3d img {
         width: 100%;
         height: 100%;
-        object-fit: cover; /* Verhindert Verzerrung */
+        object-fit: cover;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- 3. SHOWROOM LOGIK ---
-st.write("---")
+# --- 4. SHOWROOM LOGIK ---
 st.subheader("🏛️ Virtueller Programmier-Showroom")
-st.caption("Fahre mit der Maus über die Zertifikate für die 3D-Ansicht.")
 
-# HTML-Struktur aufbauen
+# Wir bauen den GESAMTEN HTML-String erst zusammen
 showroom_html = '<div class="showroom-3d-grid">'
 
 for img_name in prog_images:
-    # Pfad zum Bild (Streamlit braucht Pfade relativ zum Root)
-    path = f"{image_folder}/{img_name}"
+    path = os.path.join(image_folder, img_name)
+    img_b64 = get_image_base64(path)
     
-    # Wir nutzen ein einfaches Bild-Tag. Da es JPGs sind, gibt es keinen Code-Salat mehr.
-    showroom_html += f'''
-    <div class="exhibit-3d">
-        <img src="https://githubusercontent.com{path}" alt="{img_name}">
-    </div>
-    '''
-    # HINWEIS: Falls du lokal arbeitest, nutze: img src="app/static/{path}" 
-    # oder lade die Bilder via base64, falls sie klein genug sind.
+    if img_b64:
+        showroom_html += f'''
+        <div class="exhibit-3d">
+            <img src="data:image/jpg;base64,{img_b64}">
+        </div>
+        '''
+    else:
+        # Fallback falls Bild fehlt
+        showroom_html += '<div class="exhibit-3d" style="background:gray;"></div>'
 
 showroom_html += '</div>'
 
+# --- 5. DER ENTSCHEIDENDE AUFRUF ---
 st.markdown(showroom_html, unsafe_allow_html=True)
 
 
