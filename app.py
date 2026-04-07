@@ -678,7 +678,6 @@ with col_viewer:
 
 #Zertifikate Data Science
 
-# --- 1. LISTE DER 16 ZERTIFIKATE ---
 prog_files = [
     "1_Python for Data Science.pdf", "2_Exploratory Statistics with Python.pdf",
     "3_Data_Quality.pdf", "4_Data Visualization_Matplotlib.pdf",
@@ -690,23 +689,24 @@ prog_files = [
     "15_Time_Series_Analysis_with_Python.pdf", "16_Advanced_Classification_with_scikit.pdf"
 ]
 
-# --- 2. 3D-SHOWROOM STYLING (CSS) ---
-st.markdown("""
+# --- 2. STYLING & SHOWROOM-LOGIK IN EINEM ---
+# Wir bauen das CSS und das HTML zusammen auf
+showroom_style = """
 <style>
-    /* Der dunkle Showroom-Boden */
+    /* Der dunkle Showroom-Container */
     .showroom-wrapper {
         display: flex !important;
         flex-direction: row !important;
-        overflow-x: auto !important; /* Aktiviert horizontales Scrollen */
+        overflow-x: auto !important; /* Horizontales Scrollen */
         gap: 25px;
-        padding: 40px 25px;
-        background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+        padding: 40px 20px;
+        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
         border-radius: 20px;
         border: 1px solid #334155;
-        perspective: 1000px; /* Ermöglicht 3D-Tiefe */
+        scroll-behavior: smooth;
     }
 
-    /* Das einzelne Zertifikat als 3D-Karte */
+    /* Die einzelnen 3D-Karten */
     .showroom-item {
         flex: 0 0 auto !important;
         width: 140px;
@@ -721,57 +721,48 @@ st.markdown("""
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         border: 1px solid #cbd5e1;
         position: relative;
-        transform-style: preserve-3d;
     }
 
-    /* 3D-Effekt beim Hovern */
+    /* Hover-Effekt (3D-Sprung) */
     .showroom-item:hover {
-        transform: translateY(-20px) rotateY(15deg) scale(1.1);
-        box-shadow: -15px 20px 30px rgba(0,0,0,0.5), 0 0 20px rgba(59, 130, 246, 0.6);
+        transform: translateY(-20px) rotateY(10deg) scale(1.1);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(59, 130, 246, 0.6);
         border-color: #3b82f6;
+        z-index: 100;
     }
 
-    .sr-icon { font-size: 50px; margin-bottom: 10px; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2)); }
-    
-    .sr-label {
-        font-size: 11px;
-        color: #0f172a;
-        font-weight: 800;
-        text-align: center;
-        padding: 0 10px;
-        line-height: 1.2;
+    .sr-icon { font-size: 50px; margin-bottom: 10px; }
+    .sr-label { 
+        font-size: 11px; color: #0f172a; font-weight: 800; 
+        text-align: center; padding: 0 10px; line-height: 1.2; 
     }
 
-    /* Moderne Scrollbar */
-    .showroom-wrapper::-webkit-scrollbar { height: 10px; }
+    /* Scrollbar-Design */
+    .showroom-wrapper::-webkit-scrollbar { height: 8px; }
     .showroom-wrapper::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
-    .showroom-wrapper::-webkit-scrollbar-track { background: #0f172a; }
 </style>
-""", unsafe_allow_html=True)
+"""
 
-# --- 3. DARSTELLUNG ---
-st.write("---")
-st.subheader("🖥️ Programmier- & Data Science Showroom")
-
-# HTML zusammenbauen
-sr_html = '<div class="showroom-wrapper">'
-
+# HTML-Inhalt generieren
+showroom_content = ""
 for f in prog_files:
-    # Bereinigt den Namen für die Karte
+    # Säuberung: Entfernt "1_" und ".pdf", ersetzt "_" durch Leerzeichen
     clean_label = f.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
     
-    sr_html += f'''
+    showroom_content += f'''
     <a href="/?doc={f}" target="_self" class="showroom-item">
         <div class="sr-icon">🐍</div>
         <div class="sr-label">{clean_label}</div>
     </a>
     '''
 
-sr_html += '</div>'
+# Alles zusammenfügen: Style + Wrapper + Inhalt
+full_html = f"{showroom_style}<div class='showroom-wrapper'>{showroom_content}</div>"
 
-# WICHTIG: Das Argument am Ende rendert den HTML-Code
-st.markdown(sr_html, unsafe_allow_html=True)
-
+# --- 3. AUSGABE ---
+st.write("---")
+st.subheader("🖥️ Programmier- & Data Science Showroom")
+st.markdown(full_html, unsafe_allow_html=True)
 
 
 
