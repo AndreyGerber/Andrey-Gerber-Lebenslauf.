@@ -678,57 +678,99 @@ with col_viewer:
 
 #Zertifikate Data Science
 
+# --- 1. LISTE DER 16 ZERTIFIKATE ---
+prog_files = [
+    "1_Python for Data Science.pdf", "2_Exploratory Statistics with Python.pdf",
+    "3_Data_Quality.pdf", "4_Data Visualization_Matplotlib.pdf",
+    "5_Data Visualization_with_Seaborn.pdf", "6_Matplotlib_Complements.pdf",
+    "7_DataViz_with_Plotly.pdf", "8_MCQ_Linux_and_Bash.pdf",
+    "9_Git_&_Github.pdf", "10_Unit_Testing.pdf",
+    "11_Classification_with_scikit-learn.pdf", "12_Regressionn_with_scikit-learn.pdf",
+    "13_Methodology_in_Data_Science.pdf", "14_Feature_Engineering_and_Optimisation.pdf",
+    "15_Time_Series_Analysis_with_Python.pdf", "16_Advanced_Classification_with_scikit.pdf"
+]
+
+# --- 2. 3D-SHOWROOM STYLING (CSS) ---
 st.markdown("""
 <style>
+    /* Der dunkle Showroom-Boden */
     .showroom-wrapper {
         display: flex !important;
         flex-direction: row !important;
-        overflow-x: auto !important;
-        gap: 20px;
-        padding: 25px;
-        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-        border-radius: 15px;
+        overflow-x: auto !important; /* Aktiviert horizontales Scrollen */
+        gap: 25px;
+        padding: 40px 25px;
+        background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+        border-radius: 20px;
+        border: 1px solid #334155;
+        perspective: 1000px; /* Ermöglicht 3D-Tiefe */
     }
+
+    /* Das einzelne Zertifikat als 3D-Karte */
     .showroom-item {
         flex: 0 0 auto !important;
-        width: 130px;
-        height: 170px;
-        background: white;
+        width: 140px;
+        height: 190px;
+        background: #ffffff;
         border-radius: 12px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         text-decoration: none !important;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         border: 1px solid #cbd5e1;
+        position: relative;
+        transform-style: preserve-3d;
     }
-    .sr-icon { font-size: 40px; }
-    .sr-label { font-size: 11px; color: #0f172a; font-weight: bold; text-align: center; }
+
+    /* 3D-Effekt beim Hovern */
+    .showroom-item:hover {
+        transform: translateY(-20px) rotateY(15deg) scale(1.1);
+        box-shadow: -15px 20px 30px rgba(0,0,0,0.5), 0 0 20px rgba(59, 130, 246, 0.6);
+        border-color: #3b82f6;
+    }
+
+    .sr-icon { font-size: 50px; margin-bottom: 10px; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2)); }
+    
+    .sr-label {
+        font-size: 11px;
+        color: #0f172a;
+        font-weight: 800;
+        text-align: center;
+        padding: 0 10px;
+        line-height: 1.2;
+    }
+
+    /* Moderne Scrollbar */
+    .showroom-wrapper::-webkit-scrollbar { height: 10px; }
+    .showroom-wrapper::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+    .showroom-wrapper::-webkit-scrollbar-track { background: #0f172a; }
 </style>
 """, unsafe_allow_html=True)
-# Deine Liste der Dokumente
-prog_files = [
-    "1_Python for Data Science.pdf", "2_Exploratory Statistics with Python.pdf",
-    "3_Data_Quality.pdf", "4_Data Visualization_Matplotlib.pdf",
-    "5_Data Visualization_with_Seaborn.pdf", "6_Matplotlib_Complements.pdf"
-    # ... hier die restlichen ergänzen
-]
 
-showroom_html = '<div class="showroom-wrapper">'
+# --- 3. DARSTELLUNG ---
+st.write("---")
+st.subheader("🖥️ Programmier- & Data Science Showroom")
+
+# HTML zusammenbauen
+sr_html = '<div class="showroom-wrapper">'
 
 for f in prog_files:
-    label = f.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
-    showroom_html += f'''
+    # Bereinigt den Namen für die Karte
+    clean_label = f.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
+    
+    sr_html += f'''
     <a href="/?doc={f}" target="_self" class="showroom-item">
         <div class="sr-icon">🐍</div>
-        <div class="sr-label">{label}</div>
+        <div class="sr-label">{clean_label}</div>
     </a>
     '''
 
-showroom_html += '</div>'
+sr_html += '</div>'
 
-# ✅ DAS IST DIE ENTSCHEIDENDE ZEILE:
-st.markdown(showroom_html, unsafe_allow_html=True)
+# WICHTIG: Das Argument am Ende rendert den HTML-Code
+st.markdown(sr_html, unsafe_allow_html=True)
 
 
 
