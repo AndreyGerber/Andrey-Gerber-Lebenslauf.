@@ -886,51 +886,104 @@ st.markdown("<br>", unsafe_allow_html=True) # HTML-Umbruch für präzise Kontrol
 
 
 
+# --- 1. DATEN-LISTE (Deine 17 Bilder) ---
+image_folder = "images"
+prog_images = [
+    "1_Python_for_Data_Science.jpg", "2_Exploratory_Statistics_with_Python.jpg",
+    "3_Data_Quality.jpg", "4_Data_Visualization_Matplotlib.jpg",
+    "5_Data_Visualization_with_Seaborn.jpg", "6_Matplotlib_Complements.jpg",
+    "7_DataViz_with_Plotly.jpg", "8_MCQ_Linux_and_Bash.jpg",
+    "9_Git_and_Github.jpg", "10_Unit_Testing.jpg",
+    "11_Classification_with_scikit-learn.jpg", "12_Regressionn_with_scikit_learn.jpg",
+    "13_Methodology_in_Data_Science.jpg", "14_Feature_Engineering_and_Optimisation.jpg",
+    "15_Time_Series_Analysis_with_Python.jpg", "16_Advanced_Classification_with_scikit-learn.jpg",
+    "17_Text_Mining.jpg"
+]
+
+# --- 2. DAS GALERIE-STYLING (Schwarze Rahmen & Passepartout) ---
 st.markdown("""
 <style>
-    /* Der Hintergrund: Eine neutrale Wandfarbe */
-    .picture-wall {
+    /* Hintergrund: Die Wand, an der die Bilder hängen */
+    .gallery-wall {
         background-color: #f1f5f9;
         padding: 60px 20px;
-        border-radius: 20px;
+        border-radius: 30px;
+        border: 1px solid #e2e8f0;
+        margin-top: 40px;
     }
 
-    /* Der äußere schwarze Rahmen */
+    /* Der Bilderrahmen-Effekt */
     [data-testid="stImage"] {
-        background-color: #111827; /* Schwarz/Anthrazit Rahmen */
-        padding: 8px; /* Dicke des äußeren Rahmens */
-        border-radius: 2px;
+        /* Äußerer schwarzer Rahmen */
+        background-color: #1a1a1a !important; 
+        padding: 8px !important; 
         
-        /* Das Passepartout (weißer Innenrand) */
-        border: 15px solid #ffffff; 
+        /* Das weiße Passepartout (Innenrand) */
+        border: 12px solid #ffffff !important; 
         
-        /* Schatten für den 3D-Effekt an der Wand */
+        /* Schatten für die räumliche Tiefe an der Wand */
         box-shadow: 
-            10px 10px 20px rgba(0,0,0,0.3), 
-            2px 2px 5px rgba(0,0,0,0.2);
+            12px 12px 25px rgba(0,0,0,0.4), 
+            2px 2px 5px rgba(0,0,0,0.2) !important;
             
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
         cursor: zoom-in;
     }
 
     /* Hover-Effekt: Das Bild kommt dem Betrachter entgegen */
     [data-testid="stImage"]:hover {
-        transform: scale(1.15) translateY(-15px);
-        box-shadow: 0 25px 50px rgba(0,0,0,0.4);
-        z-index: 100;
+        transform: scale(1.6) translateY(-15px) rotate(1deg) !important;
+        z-index: 1000 !important;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.5) !important;
     }
 
-    /* Die Beschriftung (wie ein kleines Schild unter dem Rahmen) */
+    /* Die Beschriftung (wie ein Schildchen unter dem Bild) */
     [data-testid="stImageCaption"] {
-        font-size: 10px !important;
-        font-weight: bold;
+        font-size: 9px !important;
+        font-weight: 800 !important;
         color: #475569 !important;
         margin-top: 15px !important;
         text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-align: center;
+    }
+
+    /* Abstand zwischen den Spalten */
+    [data-testid="column"] {
+        padding: 10px !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
+# --- 3. LAYOUT & DARSTELLUNG ---
+st.write("---")
+st.markdown("<h2 style='text-align: center; color: #1e293b;'>🖼️ Mein Programmier-Showroom</h2>", unsafe_allow_html=True)
+
+# Wir packen alles in einen Container, um die "Wand" zu simulieren
+with st.container():
+    st.markdown('<div class="gallery-wall">', unsafe_allow_html=True)
+    
+    # 8 Spalten für die erste Reihe
+    cols = st.columns(8)
+    
+    for i, img_name in enumerate(prog_images):
+        with cols[i % 8]:
+            path = os.path.join(image_folder, img_name)
+            
+            if os.path.exists(path):
+                # Säuberung des Namens für das Label
+                display_name = img_name.split('_', 1)[-1].replace('.jpg', '').replace('_', ' ')
+                
+                # Das Bild mit Rahmen-Effekt anzeigen
+                st.image(path, use_container_width=True, caption=display_name)
+            else:
+                # Fallback, falls Datei fehlt
+                st.error("X")
+                
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# Kleiner Tipp für den User
+st.caption("Fahre mit der Maus über die Rahmen, um die Details der Zertifikate zu sehen.")
 
 
 
