@@ -571,7 +571,7 @@ other_docs = [
     {"file": "M_BBM.pdf", "icon": "🔊", "label": "M-BBM"},
     {"file": "InternerQualitätsauditor.pdf", "icon": "🕵️", "label": "Auditor 9000 ff."},
     {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "QMB ISO 9001"},
-    {"file": "QMB_ISO_17025.pdf", "icon": "🧪", "label": "QMB ISO 17025"}
+    {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
 # --- 3. STYLING (DIESER BLOCK IST ENTSCHEIDEND) ---
