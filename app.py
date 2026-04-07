@@ -610,7 +610,7 @@ st.markdown("""
     
     /* Icons vergrößern */
     div.stButton > button p {
-        font-size: 42px !important;
+        font-size: 18px !important;
         margin-bottom: 5px !important;
     }
 
