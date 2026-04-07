@@ -639,6 +639,7 @@ with col_gallery:
     # Top Dokument (zentriert)
     t_c1, t_c2, t_c3 = st.columns(3)
     with t_c2: render_btn(top_doc)
+    st.write("---") 
 
     # Grid für Rest
     grid_cols = st.columns(3)
@@ -646,9 +647,8 @@ with col_gallery:
         with grid_cols[i % 3]: 
             render_btn(d)
     
-     st.write("---") 
-     st.write("---") 
-     st.write("---") 
+     
+
 
 with col_viewer:
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
