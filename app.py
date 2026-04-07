@@ -676,7 +676,7 @@ st.markdown("""
     
     /* 2. Die Icons (Emojis) deutlich vergrößern */
     div.stButton > button p {
-        font-size: 20px !important; /* Hier passiert der Zauber */
+        font-size: 18px !important; /* Hier passiert der Zauber */
         margin-bottom: 10px !important;
         line-height: 1.1 !important;
     }
