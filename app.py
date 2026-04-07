@@ -650,7 +650,7 @@ with col_gallery:
             render_btn(d)
     
     # Der Platzhalter am Ende schiebt alles nach oben
-    st.write('<div style="flex-grow: 1;"></div>', unsafe_allow_html=True)
+    st.write('<div style="flex-grow: 100;"></div>', unsafe_allow_html=True)
 
 with col_viewer:
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
