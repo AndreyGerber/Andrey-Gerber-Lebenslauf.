@@ -624,7 +624,7 @@ docs = [
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
-    st.markdown('<div style="margin-top: 140px;"></div>', unsafe_allow_html=True)
+    st.markdown('<div style="margin-top: -40px;"></div>', unsafe_allow_html=True)
     #st.subheader("🗃️ Credentials & Zertifikate")
 
     def create_card(doc):
