@@ -679,8 +679,8 @@ with col_viewer:
 #Zertifikate Data Science
 import base64
 
-# --- 1. DATEN: Deine 16 Dateien ---
-prog_files = [
+# 1. Deine 16 Dokumente (Liste sicherstellen)
+prog_files_3d = [
     "1_Python for Data Science.pdf", "2_Exploratory Statistics with Python.pdf",
     "3_Data_Quality.pdf", "4_Data Visualization_Matplotlib.pdf",
     "5_Data Visualization_with_Seaborn.pdf", "6_Matplotlib_Complements.pdf",
@@ -691,101 +691,79 @@ prog_files = [
     "15_Time_Series_Analysis_with_Python.pdf", "16_Advanced_Classification_with_scikit.pdf"
 ]
 
-# --- 2. 3D-SHOWROOM DESIGN (Zwei Reihen Layout) ---
+# 2. Das 3D-Showroom Styling (Korrektes CSS für 8er Grid)
 st.markdown("""
 <style>
-    /* Der dunkle Showroom-Hintergrund */
-    .showroom-grid {
+    /* Der dunkle Showroom-Boden */
+    .showroom-3d-grid {
         background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-        padding: 40px;
+        padding: 40px 20px;
         border-radius: 25px;
         display: grid;
-        grid-template-columns: repeat(8, 1fr); /* 8 Stück pro Reihe */
+        grid-template-columns: repeat(8, 1fr); /* EXAKT 8 SPALTEN */
         gap: 20px;
         border: 1px solid #334155;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        perspective: 1200px; /* Ermöglicht den 3D-Raum-Effekt */
     }
 
-    /* Die einzelne Zertifikats-Platte */
-    .exhibit-card {
+    /* Die 3D-Zertifikats-Karte */
+    .exhibit-3d {
+        flex: 0 0 auto;
+        height: 160px;
         background: white;
-        border-radius: 10px;
-        padding: 5px;
-        height: 180px;
-        transition: all 0.4s ease;
-        position: relative;
-        overflow: hidden;
-        border: 1px solid #94a3b8;
+        border-radius: 12px;
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         text-decoration: none !important;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid #cbd5e1;
+        transform-style: preserve-3d; /* Wichtig für 3D */
     }
 
-    /* 3D-Hover Effekt */
-    .exhibit-card:hover {
-        transform: scale(1.1) translateY(-10px) rotateX(5deg);
-        box-shadow: 0 15px 30px rgba(59, 130, 246, 0.4);
-        z-index: 100;
+    /* Der Hover-Effekt (Karte neigt sich im Raum) */
+    .exhibit-3d:hover {
+        transform: translateZ(30px) rotateY(15deg) rotateX(5deg);
+        box-shadow: -10px 15px 30px rgba(0,0,0,0.5), 0 0 15px rgba(59, 130, 246, 0.6);
         border-color: #3b82f6;
+        z-index: 100;
     }
 
-    /* PDF-Vorschau-Bereich */
-    .pdf-preview {
-        width: 100%;
-        height: 130px;
-        border-radius: 5px;
-        pointer-events: none; /* Klicks gehen durch zur Karte */
-        background: #f1f5f9;
-    }
-
-    .exhibit-label {
-        font-size: 9px;
-        font-weight: 800;
-        color: #1e293b;
-        text-align: center;
-        margin-top: 8px;
-        line-height: 1.1;
+    .exhibit-3d-icon { font-size: 40px; margin-bottom: 8px; }
+    .exhibit-3d-label { 
+        font-size: 9px; 
+        font-weight: 800; 
+        color: #0f172a; 
+        text-align: center; 
+        padding: 0 5px;
+        line-height: 1.2;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- 3. SHOWROOM LOGIK ---
+# 3. HTML-Struktur zusammenbauen (Sichere Methode ohne Base64-Absturz)
+st.write("---")
 st.subheader("🏛️ Virtueller Programmier-Showroom")
-st.write("Deine 16 Zertifikate in der 3D-Ansicht (8 pro Reihe)")
+st.caption("Deine 16 Meilensteine in der interaktiven 3D-Ansicht")
 
-# Wir bauen den Showroom-Inhalt als EINE Variable zusammen
-showroom_content = '<div class="showroom-grid">'
+showroom_3d_html = '<div class="showroom-3d-grid">'
 
-for f in prog_files:
-    # Namen säubern
-    label = f.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
+for f in prog_files_3d:
+    # Namen für das Label säubern
+    clean_label = f.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
     
-    # Wir laden das PDF als base64 für die interne Vorschau
-    try:
-        with open(f"documents/{f}", "rb") as pdf_file:
-            encoded_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
-            
-        # Jedes Item bekommt eine kleine eingebettete PDF-Vorschau
-        showroom_content += f'''
-        <a href="/?doc={f}" target="_self" class="exhibit-card">
-            <embed class="pdf-preview" src="data:application/pdf;base64,{encoded_pdf}#toolbar=0&navpanes=0&scrollbar=0" type="application/pdf">
-            <div class="exhibit-label">{label}</div>
-        </a>
-        '''
-    except:
-        # Fallback falls Datei nicht gefunden wird
-        showroom_content += f'''
-        <a href="#" class="exhibit-card" style="background: #fee2e2;">
-            <div style="font-size: 40px; margin-top: 20px;">⚠️</div>
-            <div class="exhibit-label">{label}<br>(Datei fehlt)</div>
-        </a>
-        '''
+    showroom_3d_html += f'''
+    <a href="/?doc={f}" target="_self" class="exhibit-3d">
+        <div class="exhibit-3d-icon">🐍</div>
+        <div class="exhibit-3d-label">{clean_label}</div>
+    </a>
+    '''
 
-showroom_content += '</div>'
+showroom_3d_html += '</div>'
 
 # NUR EIN EINZIGER AUFRUF FÜR DAS GESAMTE GRID
-st.markdown(showroom_content, unsafe_allow_html=True)
+st.markdown(showroom_3d_html, unsafe_allow_html=True)
 
 
 
