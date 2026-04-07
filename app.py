@@ -582,10 +582,10 @@ st.markdown("""
     /* Info-Box Styling */
     .info-container {
         background-color: #e1f5fe;
-        padding: 10px;
+        padding: 20px;
         border-radius: 15px;
         border-left: 5px solid #01579b;
-        margin-bottom: 25px;
+        margin-bottom: 20px;
     }
     .name-warning {
         background-color: #fff9c4;
