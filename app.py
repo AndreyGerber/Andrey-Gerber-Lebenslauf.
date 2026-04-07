@@ -276,7 +276,6 @@ st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'disp
 
 
 import pydeck as pdk
-
 #Oben ist der Abschnitt mit "meinem Werdegang" und dem Pfeil. Unten die "Erklärung dazu"
 
 
@@ -512,6 +511,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
 
 
+st.markdown('<div style="margin-top: 150px;"></div>', unsafe_allow_html=True)
 
 # Block mit dem Hinweis auf die Namensänderung
 st.write("") # Trennlinie zum vorherigen Abschnitt
