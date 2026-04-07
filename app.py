@@ -552,7 +552,8 @@ with col_gallery:
         {"file": "b_k_pulse.pdf", "icon": "📈", "label": "B&K\nPulse"},
         {"file": "M_BBM.pdf", "icon": "⚙️", "label": "M-BBM"},
         {"file": "InternerQualitätsauditor.pdf", "icon": "📜", "label": "Qualitäts-\nauditor"},
-        {"file": "Qualitätsbeauftragter.pdf", "icon": "✅", "label": "QM-Beauf-\ntragter"}
+        {"file": "Qualitätsbeauftragter.pdf", "icon": "✅", "label": "QM-Beauf-\ntragter"},
+        {"file": "QMB_ISO_17025.pdf", "icon": "🧪", "label": "QMB\nISO 17025"}
     ]
 
     # Grid aus Buttons (3 Spalten)
