@@ -575,75 +575,79 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# --- 3. STYLING (ISOLIERT & REPARIERT) ---
+# --- 3. STYLING (VERBESSERT) ---
 st.markdown("""
 <style>
-    /* 1. Container nach oben rücken */
-    .pdf-section-wrapper {
+    /* Die Spalte links oben ausrichten */
+    [data-testid="stHorizontalBlock"] > div:first-child {
         display: flex;
         flex-direction: column;
         justify-content: flex-start !important;
-        height: 100%;
     }
 
-    /* 2. Button-Grundgerüst */
-    .pdf-section-wrapper div.stButton > button {
-        height: 110px !important;
-        width: 100% !important;
+    /* Button Grunddesign */
+    .stButton > button {
+        height: 100px !important;
         border-radius: 12px !important;
         border: 1px solid #e2e8f0 !important;
         background-color: white !important;
-        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s !important;
+        transition: all 0.2s ease-in-out !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
 
-    /* 3. VERGRÖSSERN BEIM HOVER */
-    /* Wir nutzen :hover auf dem Button und erzwingen die Skalierung */
-    .pdf-section-wrapper div.stButton > button:hover {
-        transform: scale(1.2) !important; /* Deutliche Vergrößerung */
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    /* HOVER: Vergrößern und Schatten */
+    .stButton > button:hover {
+        transform: scale(1.1) !important;
         border-color: #3b82f6 !important;
-        z-index: 99 !important;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important;
+        z-index: 10 !important;
     }
 
-    /* 4. FARBE FÜR AKTIVEN BUTTON */
-    .pdf-section-wrapper div.active-btn button {
-        background-color: #1e293b !important; /* Dunkles Blau/Anthrazit */
+    /* AKTIVER BUTTON: Blau markiert */
+    .active-btn div.stButton > button {
+        background-color: #1e293b !important;
         border-color: #1e293b !important;
     }
-
-    /* Text im aktiven Button weiß machen */
-    .pdf-section-wrapper div.active-btn button div[data-testid="stMarkdownContainer"] p {
+    .active-btn div.stButton > button p {
         color: white !important;
     }
 
-    /* Emoji-Größe */
-    .pdf-section-wrapper div.stButton > button {
-        font-size: 24px !important;
+    /* Text & Icon Styling */
+    .stButton > button p {
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        line-height: 1.2 !important;
+        margin-top: 5px !important;
+    }
+    .stButton > button {
+        font-size: 24px !important; /* Größe des Emojis */
     }
 </style>
 """, unsafe_allow_html=True)
 
 # --- 4. LAYOUT & LOGIK ---
-st.markdown('<div class="pdf-section-wrapper">', unsafe_allow_html=True)
-
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
     def render_btn(doc):
         active = st.session_state.active_doc == doc['file']
-        if active: st.markdown('<div class="active-btn">', unsafe_allow_html=True)
+        # Wrapper für aktiven Zustand
+        if active:
+            st.markdown('<div class="active-btn">', unsafe_allow_html=True)
         
-        # WICHTIG: Reines Markdown, kein HTML-Span. \n für den Umbruch.
-        if st.button(f"{doc['icon']}\n\n{doc['label']}", key=f"doc_btn_{doc['file']}", use_container_width=True):
+        if st.button(f"{doc['icon']}\n{doc['label']}", key=f"doc_btn_{doc['file']}", use_container_width=True):
             st.session_state.active_doc = doc['file']
             st.rerun()
             
-        if active: st.markdown('</div>', unsafe_allow_html=True)
+        if active:
+            st.markdown('</div>', unsafe_allow_html=True)
 
-    # Top Dokument (zentriert)
+    # Top Dokument
     t_c1, t_c2, t_c3 = st.columns(3)
     with t_c2: render_btn(top_doc)
-
 
     # Grid für Rest
     grid_cols = st.columns(3)
@@ -651,8 +655,8 @@ with col_gallery:
         with grid_cols[i % 3]: 
             render_btn(d)
     
-     
-
+    # Der Platzhalter am Ende schiebt alles nach oben
+    st.write('<div style="flex-grow: 1;"></div>', unsafe_allow_html=True)
 
 with col_viewer:
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
@@ -662,7 +666,6 @@ with col_viewer:
     else:
         st.warning(f"Dokument {st.session_state.active_doc} nicht gefunden.")
 
-st.markdown('</div>', unsafe_allow_html=True)
 
 
 
