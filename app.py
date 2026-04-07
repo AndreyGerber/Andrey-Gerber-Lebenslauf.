@@ -577,10 +577,15 @@ other_docs = [
 # --- 3. STYLING (DIESER BLOCK IST ENTSCHEIDEND) ---
 st.markdown("""
 <style>
-    /* Punkt 1: Layout oben ausrichten */
-    [data-testid="stColumn"] {
+    [data-testid="stColumn"] > div {
+        vertical-align: top !important;
         display: flex !important;
         flex-direction: column !important;
+        justify-content: flex-start !important;
+    }
+
+    /* Verhindert, dass Streamlit den Inhalt der Spalte zentriert */
+    div[data-testid="stVerticalBlock"] {
         justify-content: flex-start !important;
     }
 
