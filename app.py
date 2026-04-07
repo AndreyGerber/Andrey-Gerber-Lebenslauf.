@@ -17,20 +17,35 @@ st.divider()
 from PIL import Image, ImageOps
 
 # --- 1. FUNKTION FÜR STABILE BILDGRÖSSE ---
-def lade_formatiertes_bild(name, target_size=(900, 600)):
-    # Nutze relativen Pfad oder absoluten Pfad falls nötig
+ef lade_formatiertes_bild(name, target_size=(900, 600)):
     pfad = os.path.join("images", name)
-    if os.path.exists(pfad):
+    
+    # 1. Check: Existiert die Datei überhaupt?
+    if not os.path.exists(pfad):
+        return None
+        
+    # 2. Check: Ist es eine PDF? (Die zerschießen PIL)
+    if pfad.lower().endswith(".pdf"):
+        return None
+
+    try:
+        # 3. Versuch das Bild zu öffnen
         img = Image.open(pfad)
-        # Erstellt ein Bild mit festem Format, ohne es zu verzerren
+        
+        # Falls es ein CMYK Bild ist (oft bei Profi-Scans), in RGB konvertieren
+        if img.mode != "RGB":
+            img = img.convert("RGB")
+            
         img.thumbnail(target_size, Image.Resampling.LANCZOS)
-        # Erzeugt einen transparenten Hintergrund in der Zielgröße
         new_img = Image.new("RGBA", target_size, (255, 255, 255, 0))
-        # Zentriert das Bild auf dem Hintergrund
         new_img.paste(img, ((target_size[0] - img.size[0]) // 2, 
                             (target_size[1] - img.size[1]) // 2))
         return new_img
-    return None
+        
+    except Exception as e:
+        # Falls die Datei korrupt ist, ignorieren wir sie einfach statt abzustürzen
+        print(f"Fehler bei Datei {name}: {e}")
+        return None
 
 # --- 2. DATEN & LOGIK ---
 if 'bild_index' not in st.session_state:
