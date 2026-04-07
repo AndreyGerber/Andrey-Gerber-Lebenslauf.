@@ -590,93 +590,89 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# --- 3. STYLING (SPACER & VERTIKALE BUTTONS) ---
+# --- 3. STYLING (ISOLIERT & GEZWUNGEN) ---
 st.markdown("""
 <style>
-    /* 1. Spacer & Layout */
-    .custom-spacer-t { height: 30px !important; display: block !important; }
-    .custom-spacer-b { height: 80px !important; display: block !important; }
+    /* 1. Manuelle Abstände (Spacer) */
+    .my-spacer-t { height: 40px !important; display: block; }
+    .my-spacer-b { height: 80px !important; display: block; }
 
-    /* 2. Button Grundform */
-    .pdf-section-wrapper div.stButton > button {
-        min-height: 120px !important;
+    /* 2. Button-Grundgerüst (Isoliert durch .doc-wrapper) */
+    .doc-wrapper div.stButton > button {
+        height: 120px !important;
         width: 100% !important;
         border-radius: 16px !important;
         border: 1px solid #f1f5f9 !important;
-        background-color: #ffffff !important;
+        background-color: white !important;
         transition: all 0.3s ease !important;
-        
-        /* Den Button-Container zwingen */
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
     }
 
-    /* 3. DER FIX FÜR ICON OBEN / TEXT UNTEN */
-    /* Wir müssen das p-Tag UND das darin liegende span ansprechen */
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p,
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p span {
-        display: block !important; /* Block erzwingt den Umbruch */
-        text-align: center !important;
-        width: 100% !important;
+    /* 3. ICON ÜBER TEXT (Der ultimative Fix) */
+    .doc-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
+        display: flex !important;
+        flex-direction: column !important; /* Icon über Text */
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 !important;
         white-space: pre-wrap !important;
     }
 
-    /* 4. ICON GRÖSSE (Erste Zeile) */
-    .pdf-section-wrapper div.stButton > button p::first-line {
-        font-size: 38px !important; 
+    /* Icon-Größe (Erste Zeile) */
+    .doc-wrapper div.stButton > button p::first-line {
+        font-size: 38px !important;
         line-height: 1.5 !important;
     }
 
-    /* 5. TEXT GRÖSSE (Der restliche Text) */
-    .pdf-section-wrapper div.stButton > button p {
+    /* Text-Größe (Rest) */
+    .doc-wrapper div.stButton > button p {
         font-size: 13px !important;
         font-weight: 700 !important;
         color: #475569 !important;
         line-height: 1.2 !important;
     }
 
-    /* 6. HOVER & AKTIV */
-    .pdf-section-wrapper div.stButton > button:hover {
-        transform: translateY(-5px) scale(1.02) !important;
+    /* 4. HOVER EFFEKT */
+    .doc-wrapper div.stButton > button:hover {
+        transform: translateY(-5px) !important;
         border-color: #3b82f6 !important;
-        box-shadow: 0 15px 25px -5px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 15px 25px rgba(0,0,0,0.1) !important;
     }
 
-    .pdf-section-wrapper .active-btn div.stButton > button {
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+    /* 5. AKTIVER BUTTON */
+    .active-doc-btn div.stButton > button {
+        background: #1e293b !important;
         border-color: #1e293b !important;
     }
-    .pdf-section-wrapper .active-btn div.stButton > button p {
-        color: #ffffff !important;
+    .active-doc-btn div.stButton > button p {
+        color: white !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-
-
 # --- 4. LAYOUT & LOGIK ---
-st.markdown('<div class="pdf-section-wrapper">', unsafe_allow_html=True)
-
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
     # ABSTAND OBEN
-    st.markdown('<div class="custom-spacer-t"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="my-spacer-t"></div>', unsafe_allow_html=True)
 
     def render_btn(doc):
-        active = st.session_state.active_doc == doc['file']
-        if active: st.markdown('<div class="active-btn">', unsafe_allow_html=True)
+        is_active = st.session_state.active_doc == doc['file']
+        # Wir wickeln jeden Button in eine Klasse ein für das Styling
+        wrapper_class = "doc-wrapper active-doc-btn" if is_active else "doc-wrapper"
         
-        # Das \n ist der Trenner für das CSS
-        if st.button(f"{doc['icon']}\n{doc['label']}", key=f"doc_btn_{doc['file']}", use_container_width=True):
+        st.markdown(f'<div class="{wrapper_class}">', unsafe_allow_html=True)
+        # Das \n im Label ist Pflicht für ::first-line
+        if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
             st.session_state.active_doc = doc['file']
             st.rerun()
-            
-        if active: st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    # Grid
+    # Grid Aufbau (Namensänderung oben, dann der Rest)
     t_c1, t_c2, t_c3 = st.columns(3)
     with t_c2: render_btn(top_doc)
 
@@ -686,15 +682,13 @@ with col_gallery:
             render_btn(d)
 
     # ABSTAND UNTEN
-    st.markdown('<div class="custom-spacer-b"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="my-spacer-b"></div>', unsafe_allow_html=True)
 
 with col_viewer:
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     if pdf_b64:
-        display = f'<iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" width="100%" height="900px" style="border:2px solid #334155; border-radius:15px;"></iframe>'
+        display = f'<iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" width="100%" height="850px" style="border-radius:15px; border:2px solid #1e293b;"></iframe>'
         st.markdown(display, unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
 
 
 
