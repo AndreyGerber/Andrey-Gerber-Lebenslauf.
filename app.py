@@ -596,10 +596,14 @@ st.markdown("""
         margin-bottom: 0px; /* Verhindert extra Abstände */
     }
 
-    /* Erzwingt, dass die Buttons bündig starten UND definiert den Abstand nach oben */
+    .galerie-stack {
+        margin-top: 50px; /* Hier deinen gewünschten Abstand einstellen */
+    }
+
+    /* Die Buttons innerhalb der Reihen bleiben bündig, ohne extra Abstand */
     [data-testid="stHorizontalBlock"] {
         align-items: flex-start !important;
-        margin-top: 50px !important; /* Hier kannst du den Wert (z.B. 50px) anpassen */
+        margin-top: 0px !important; 
     }
     
     /* Icons vergrößern und fixieren */
