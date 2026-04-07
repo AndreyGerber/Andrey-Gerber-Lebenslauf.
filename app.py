@@ -595,6 +595,12 @@ st.markdown("""
         justify-content: center; /* Zentriert Inhalt vertikal */
         margin-bottom: 0px; /* Verhindert extra Abstände */
     }
+
+    /* Erzwingt, dass die Buttons bündig starten UND definiert den Abstand nach oben */
+    [data-testid="stHorizontalBlock"] {
+        align-items: flex-start !important;
+        margin-top: 70px !important; /* Hier kannst du den Wert (z.B. 50px) anpassen */
+    }
     
     /* Icons vergrößern und fixieren */
     div.stButton > button p {
