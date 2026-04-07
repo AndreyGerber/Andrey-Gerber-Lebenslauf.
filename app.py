@@ -557,56 +557,9 @@ def get_pdf_base64(file_name):
 if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
 
-# --- 2. CSS FÜR ECHTE KARTEN-OPTIK ---
-st.markdown("""
-<style>
-    /* Galerie-Spalte oben bündig */
-    [data-testid="stColumn"] { justify-content: flex-start !important; }
-
-    /* Eigene Button-Klasse */
-    .nav-card {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100px;
-        width: 100%;
-        background-color: white;
-        border: 2px solid #334155;
-        border-radius: 15px;
-        cursor: pointer;
-        transition: all 0.3s;
-        text-decoration: none !important;
-        margin-bottom: 10px;
-    }
-    .nav-card:hover {
-        border-color: #ff4b4b;
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    .nav-card.active {
-        background-color: #1e293b !important;
-        border-color: #0f172a;
-        color: white !important;
-    }
-    .card-icon { font-size: 25px; margin-bottom: 10px; }
-    .card-label { font-size: 20px; font-weight: 700; text-align: center; line-height: 1.2; }
-    
-    /* Button-Reset (Streamlit Button unsichtbar über HTML Karte legen) */
-    .stButton button {
-        height: 100px !important;
-        background: transparent !important;
-        border: none !important;
-        color: transparent !important;
-        position: absolute;
-        z-index: 10;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# --- 3. DATEN & LOGIK ---
-docs = [
-    {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namensänderung", "top": True},
+# --- 2. DATEN ---
+top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namensänderung"}
+other_docs = [
     {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Berufsschule"},
     {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Abitur"},
     {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Praktikum V&F"},
@@ -621,40 +574,96 @@ docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
+# --- 3. STYLING (DIESER BLOCK IST ENTSCHEIDEND) ---
+st.markdown("""
+<style>
+    /* Punkt 1: Layout oben ausrichten */
+    [data-testid="stColumn"] {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+    }
+
+    /* Punkt 2: Zwingt Icon über Text & macht Icons groß */
+    div.stButton > button {
+        height: 110px !important;
+        border: 2px solid #334155 !important;
+        border-radius: 15px !important;
+        background-color: #ffffff !important;
+        padding: 10px !important;
+    }
+
+    /* Zielt auf den inneren Text-Container von Streamlit */
+    div.stButton > button div[data-testid="stMarkdownContainer"] p {
+        display: flex !important;
+        flex-direction: column !important; /* Vertikal zwingen */
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important; /* Abstand zwischen Icon und Text */
+        font-size: 20px !important;
+        font-weight: 700 !important;
+        color: #1e293b !important;
+        line-height: 1.2 !important;
+    }
+
+    /* Die Icons (Emojis) innerhalb des Buttons massiv vergrößern */
+    div.stButton > button div[data-testid="stMarkdownContainer"] p span {
+        font-size: 50px !important; 
+        display: block !important;
+    }
+
+    /* Punkt 3: Aktiver Button (Blau) */
+    div.active-btn button {
+        background-color: #1e293b !important; 
+        border-color: #000000 !important;
+    }
+    div.active-btn button div[data-testid="stMarkdownContainer"] p,
+    div.active-btn button div[data-testid="stMarkdownContainer"] p span {
+        color: #ffffff !important;
+    }
+
+    /* Hover-Effekt */
+    div.stButton > button:hover {
+        border-color: #ff4b4b !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    }
+    
+    .active-btn { display: contents; }
+</style>
+""", unsafe_allow_html=True)
+
+# --- 4. LAYOUT & LOGIK ---
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
-    st.markdown('<div style="margin-top: -40px;"></div>', unsafe_allow_html=True)
+    # Abstand von oben
+    #st.markdown('<div style="margin-top: 40px;"></div>', unsafe_allow_html=True)
     #st.subheader("🗃️ Credentials & Zertifikate")
-
-    def create_card(doc):
-        is_active = "active" if st.session_state.active_doc == doc['file'] else ""
-        # Wir bauen eine HTML-Karte und legen einen unsichtbaren Streamlit-Button darüber
-        container = st.container()
-        container.markdown(f"""
-            <div class="nav-card {is_active}">
-                <div class="card-icon">{doc['icon']}</div>
-                <div class="card-label">{doc['label']}</div>
-            </div>
-        """, unsafe_allow_html=True)
-        if container.button("", key=f"btn_{doc['file']}", use_container_width=True):
+    
+    def render_btn(doc):
+        active = st.session_state.active_doc == doc['file']
+        if active: st.markdown('<div class="active-btn">', unsafe_allow_html=True)
+        # WICHTIG: Das Icon und Label müssen im f-string stehen
+        if st.button(f"{doc['icon']}  \n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
             st.session_state.active_doc = doc['file']
             st.rerun()
+        if active: st.markdown('</div>', unsafe_allow_html=True)
 
-    # Layout
+    # Obere Reihe
     t_c1, t_c2, t_c3 = st.columns(3)
-    with t_c2: create_card(docs[0])
-    
+    with t_c2: render_btn(top_doc)
+
+    # Grid
     grid = st.columns(3)
-    for i, d in enumerate(docs[1:]):
-        with grid[i % 3]: create_card(d)
+    for i, d in enumerate(other_docs):
+        with grid[i % 3]: render_btn(d)
 
 with col_viewer:
     #st.subheader("📄 Vorschau")
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     if pdf_b64:
-        st.markdown(f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="1000px" style="border:2px solid #334155; border-radius:15px;"></iframe>', unsafe_allow_html=True)
-
+        display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="1000px" style="border:2px solid #334155; border-radius:15px;"></iframe>'
+        st.markdown(display, unsafe_allow_html=True)
 
 
 
