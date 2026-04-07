@@ -539,9 +539,11 @@ col_gallery, col_viewer = st.columns([1, 1.4])
 with col_gallery:
     st.subheader("🏛️ Deine Virtuelle Galerie")
     
-    # Deine exakte Liste in der gewünschten Reihenfolge
-    docs = [
-        {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namens-\nänderung"},
+    # 1. Das spezielle Dokument für die obere Reihe
+    top_doc = {"file": "Namensänderung.pdf", "icon": "📝", "label": "Namens-\nänderung"}
+
+    # 2. Alle anderen Dokumente (Restliste)
+    other_docs = [
         {"file": "Berufsschule.pdf", "icon": "📚", "label": "Berufs-\nschule"},
         {"file": "allgemeineHochschulreife.pdf", "icon": "🏫", "label": "Abitur"},
         {"file": "Praktikum_V&F.pdf", "icon": "🏢", "label": "Praktikum\nV&F"},
@@ -556,12 +558,17 @@ with col_gallery:
         {"file": "QMB_ISO_17025.pdf", "icon": "🧪", "label": "QMB\nISO 17025"}
     ]
 
-    # Grid aus Buttons (3 Spalten)
+    # --- OBERE REIHE (Namensänderung zentriert) ---
+    top_cols = st.columns(3)
+    with top_cols[1]: # Index 1 ist die mittlere Spalte
+        if st.button(f"{top_doc['icon']}\n{top_doc['label']}", key=f"btn_{top_doc['file']}", use_container_width=True):
+            st.session_state.active_doc = top_doc['file']
+            st.rerun()
+
+    # --- RESTLICHE REIHEN (3er Grid) ---
     grid_cols = st.columns(3)
-    
-    for i, doc in enumerate(docs):
+    for i, doc in enumerate(other_docs):
         with grid_cols[i % 3]:
-            # Falls dieses Dokument gerade aktiv ist, kriegt der Button ein spezielles Styling via Key
             if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
                 st.session_state.active_doc = doc['file']
                 st.rerun()
