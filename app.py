@@ -588,7 +588,7 @@ st.markdown("""
 
     /* 2. Button-Grundgerüst */
     .pdf-section-wrapper div.stButton > button {
-        height: 90px !important;
+        height: 110px !important;
         width: 100% !important;
         border-radius: 12px !important;
         border: 1px solid #e2e8f0 !important;
@@ -599,7 +599,7 @@ st.markdown("""
     /* 3. VERGRÖSSERN BEIM HOVER */
     /* Wir nutzen :hover auf dem Button und erzwingen die Skalierung */
     .pdf-section-wrapper div.stButton > button:hover {
-        transform: scale(1.08) !important; /* Deutliche Vergrößerung */
+        transform: scale(1.2) !important; /* Deutliche Vergrößerung */
         box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
         border-color: #3b82f6 !important;
         z-index: 99 !important;
