@@ -589,8 +589,8 @@ st.markdown("""
         border-color: #0f172a;
         color: white !important;
     }
-    .card-icon { font-size: 30px; margin-bottom: 10px; }
-    .card-label { font-size: 19px; font-weight: 700; text-align: center; line-height: 1.2; }
+    .card-icon { font-size: 25px; margin-bottom: 10px; }
+    .card-label { font-size: 20px; font-weight: 700; text-align: center; line-height: 1.2; }
     
     /* Button-Reset (Streamlit Button unsichtbar über HTML Karte legen) */
     .stButton button {
@@ -650,7 +650,7 @@ with col_gallery:
         with grid[i % 3]: create_card(d)
 
 with col_viewer:
-    st.subheader("📄 Vorschau")
+    #st.subheader("📄 Vorschau")
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     if pdf_b64:
         st.markdown(f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="1000px" style="border:2px solid #334155; border-radius:15px;"></iframe>', unsafe_allow_html=True)
