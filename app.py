@@ -677,7 +677,9 @@ with col_viewer:
 
 
 #Zertifikate Data Science
+import base64
 
+# --- 1. DATEN: Deine 16 Dateien ---
 prog_files = [
     "1_Python for Data Science.pdf", "2_Exploratory Statistics with Python.pdf",
     "3_Data_Quality.pdf", "4_Data Visualization_Matplotlib.pdf",
@@ -689,69 +691,101 @@ prog_files = [
     "15_Time_Series_Analysis_with_Python.pdf", "16_Advanced_Classification_with_scikit.pdf"
 ]
 
-# --- 2. GESAMT-HTML IN EINER VARIABLE SAMMELN ---
-# Wir bauen erst das CSS und dann alle Karten in EINER Variable zusammen
-showroom_html = """
+# --- 2. 3D-SHOWROOM DESIGN (Zwei Reihen Layout) ---
+st.markdown("""
 <style>
-    .showroom-wrapper {
-        display: flex !important;
-        flex-direction: row !important;
-        overflow-x: auto !important;
-        gap: 20px;
-        padding: 40px 20px;
+    /* Der dunkle Showroom-Hintergrund */
+    .showroom-grid {
         background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-        border-radius: 20px;
+        padding: 40px;
+        border-radius: 25px;
+        display: grid;
+        grid-template-columns: repeat(8, 1fr); /* 8 Stück pro Reihe */
+        gap: 20px;
         border: 1px solid #334155;
-        scroll-behavior: smooth;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     }
-    .showroom-item {
-        flex: 0 0 auto !important;
-        width: 140px;
-        height: 190px;
-        background: #ffffff;
-        border-radius: 12px;
+
+    /* Die einzelne Zertifikats-Platte */
+    .exhibit-card {
+        background: white;
+        border-radius: 10px;
+        padding: 5px;
+        height: 180px;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #94a3b8;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         text-decoration: none !important;
-        transition: all 0.4s ease;
-        border: 1px solid #cbd5e1;
     }
-    .showroom-item:hover {
-        transform: translateY(-15px) rotateY(10deg);
-        box-shadow: 0 15px 30px rgba(59, 130, 246, 0.5);
+
+    /* 3D-Hover Effekt */
+    .exhibit-card:hover {
+        transform: scale(1.1) translateY(-10px) rotateX(5deg);
+        box-shadow: 0 15px 30px rgba(59, 130, 246, 0.4);
+        z-index: 100;
+        border-color: #3b82f6;
     }
-    .sr-icon { font-size: 45px; margin-bottom: 10px; }
-    .sr-label { 
-        font-size: 11px; color: #0f172a; font-weight: 800; 
-        text-align: center; padding: 0 10px; line-height: 1.2; 
+
+    /* PDF-Vorschau-Bereich */
+    .pdf-preview {
+        width: 100%;
+        height: 130px;
+        border-radius: 5px;
+        pointer-events: none; /* Klicks gehen durch zur Karte */
+        background: #f1f5f9;
     }
-    .showroom-wrapper::-webkit-scrollbar { height: 8px; }
-    .showroom-wrapper::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+
+    .exhibit-label {
+        font-size: 9px;
+        font-weight: 800;
+        color: #1e293b;
+        text-align: center;
+        margin-top: 8px;
+        line-height: 1.1;
+    }
 </style>
-<div class="showroom-wrapper">
-"""
+""", unsafe_allow_html=True)
 
-# Jetzt die Karten an den String hängen
+# --- 3. SHOWROOM LOGIK ---
+st.subheader("🏛️ Virtueller Programmier-Showroom")
+st.write("Deine 16 Zertifikate in der 3D-Ansicht (8 pro Reihe)")
+
+# Wir bauen den Showroom-Inhalt als EINE Variable zusammen
+showroom_content = '<div class="showroom-grid">'
+
 for f in prog_files:
+    # Namen säubern
     label = f.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
-    showroom_html += f'''
-    <a href="/?doc={f}" target="_self" class="showroom-item">
-        <div class="sr-icon">🐍</div>
-        <div class="sr-label">{label}</div>
-    </a>
-    '''
+    
+    # Wir laden das PDF als base64 für die interne Vorschau
+    try:
+        with open(f"documents/{f}", "rb") as pdf_file:
+            encoded_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
+            
+        # Jedes Item bekommt eine kleine eingebettete PDF-Vorschau
+        showroom_content += f'''
+        <a href="/?doc={f}" target="_self" class="exhibit-card">
+            <embed class="pdf-preview" src="data:application/pdf;base64,{encoded_pdf}#toolbar=0&navpanes=0&scrollbar=0" type="application/pdf">
+            <div class="exhibit-label">{label}</div>
+        </a>
+        '''
+    except:
+        # Fallback falls Datei nicht gefunden wird
+        showroom_content += f'''
+        <a href="#" class="exhibit-card" style="background: #fee2e2;">
+            <div style="font-size: 40px; margin-top: 20px;">⚠️</div>
+            <div class="exhibit-label">{label}<br>(Datei fehlt)</div>
+        </a>
+        '''
 
-# Container schließen
-showroom_html += "</div>"
+showroom_content += '</div>'
 
-# --- 3. DIE AUSGABE (DER ENTSCHEIDENDE PUNKT) ---
-st.write("---")
-st.subheader("🖥️ Programmier- & Data Science Showroom")
-
-# NUR EINMALIGER AUFRUF FÜR ALLES
-st.markdown(showroom_html, unsafe_allow_html=True)
+# NUR EIN EINZIGER AUFRUF FÜR DAS GESAMTE GRID
+st.markdown(showroom_content, unsafe_allow_html=True)
 
 
 
