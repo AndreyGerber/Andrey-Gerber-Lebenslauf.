@@ -541,7 +541,7 @@ with col_gallery:
     
     # Deine exakte Liste in der gewünschten Reihenfolge
     docs = [
-        {"file": "Namensänderung.pdf", "icon": "📝", "label": "Namens-\nänderung"},
+        {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namens-\nänderung"},
         {"file": "Berufsschule.pdf", "icon": "📚", "label": "Berufs-\nschule"},
         {"file": "allgemeineHochschulreife.pdf", "icon": "🏫", "label": "Abitur"},
         {"file": "Praktikum_V&F.pdf", "icon": "🏢", "label": "Praktikum\nV&F"},
