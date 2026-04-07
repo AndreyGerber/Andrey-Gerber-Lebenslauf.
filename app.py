@@ -514,7 +514,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
 
 # Block mit dem Hinweis auf die Namensänderung
-st.write("---") # Trennlinie zum vorherigen Abschnitt
+st.write("") # Trennlinie zum vorherigen Abschnitt
 
 # Erstellt eine dekorative Infobox
 with st.container():
