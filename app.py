@@ -569,7 +569,7 @@ st.markdown("""
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 150px;
+        height: 100px;
         width: 100%;
         background-color: white;
         border: 2px solid #334155;
@@ -594,7 +594,7 @@ st.markdown("""
     
     /* Button-Reset (Streamlit Button unsichtbar über HTML Karte legen) */
     .stButton button {
-        height: 150px !important;
+        height: 100px !important;
         background: transparent !important;
         border: none !important;
         color: transparent !important;
@@ -618,14 +618,14 @@ docs = [
     {"file": "M_BBM.pdf", "icon": "🔊", "label": "M-BBM"},
     {"file": "InternerQualitätsauditor.pdf", "icon": "🕵️", "label": "Auditor 9000 ff."},
     {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "QMB ISO 9001"},
-    {"file": "QMB_ISO_17025.pdf", "icon": "🧪", "label": "QMB ISO 17025"}
+    {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
-    st.markdown('<div style="margin-top: 40px;"></div>', unsafe_allow_html=True)
-    st.subheader("🗃️ Credentials & Zertifikate")
+    #st.markdown('<div style="margin-top: 40px;"></div>', unsafe_allow_html=True)
+    #st.subheader("🗃️ Credentials & Zertifikate")
 
     def create_card(doc):
         is_active = "active" if st.session_state.active_doc == doc['file'] else ""
