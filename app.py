@@ -595,11 +595,6 @@ st.markdown("""
         justify-content: center; /* Zentriert Inhalt vertikal */
         margin-bottom: 0px; /* Verhindert extra Abstände */
     }
-
-    /* Erzwingt, dass die Buttons in einer Reihe oben bündig starten */
-    [data-testid="stHorizontalBlock"] {
-        align-items: flex-start !important;
-    }
     
     /* Icons vergrößern und fixieren */
     div.stButton > button p {
