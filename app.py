@@ -513,6 +513,32 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
 
 
+# Block mit dem Hinweis auf die Namensänderung
+st.write("---") # Trennlinie zum vorherigen Abschnitt
+
+# Erstellt eine dekorative Infobox
+with st.container():
+    st.markdown("""
+        <div style="background-color: #e1f5fe; padding: 20px; border-radius: 15px; border-left: 5px solid #01579b; margin-bottom: 20px;">
+            <h3 style="color: #01579b; margin-top: 0;">📜 Dokumente & Zertifikate</h3>
+            <p style="color: #333; font-size: 1.1em;">
+                Hier finden Sie eine Übersicht meiner akademischen und beruflichen Nachweise. 
+            </p>
+            <div style="background-color: #fff9c4; padding: 10px; border-radius: 8px; border: 1px solid #fbc02d;">
+                <strong>⚠️ Wichtiger Hinweis zur Namensänderung:</strong><br>
+                Bitte beachten Sie, dass ich im Laufe meines Lebens meinen Namen geändert habe. 
+                Einige der unten aufgeführten Dokumente (z. B. Abitur, Bachelor) sind daher auf meinen 
+                früheren Namen ausgestellt. Ein entsprechender Nachweis über die Namensänderung ist als 
+                erstes Dokument in der Galerie hinterlegt.
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+
+
+
+
+
 
 
 import streamlit as st
