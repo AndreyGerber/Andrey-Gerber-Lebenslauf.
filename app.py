@@ -565,7 +565,7 @@ other_docs = [
     {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Abitur"},
     {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Praktikum V&F"},
     {"file": "Bachelor.pdf", "icon": "✈️", "label": "Bachelor Zeugnis"},
-    {"file": "Schweisskurs.pdf", "icon": "👨‍Aldrich", "label": "Schweißkurs"},
+    {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Schweißkurs"},
     {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalytiker"},
     {"file": "Master.pdf", "icon": "🎓", "label": "Master Zeugnis"},
     {"file": "b_k_pulse.pdf", "icon": "📟", "label": "B&K Pulse"},
@@ -575,76 +575,64 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# --- 3. STYLING (MANUELLE ABSTÄNDE & VERTIKALE BUTTONS) ---
+# --- 3. STYLING (SPACER & VERTIKALE BUTTONS) ---
 st.markdown("""
 <style>
     /* 1. MANUELLE ABSTÄNDE (Spacer) */
     .custom-spacer-t { height: 40px !important; display: block !important; width: 100%; }
     .custom-spacer-b { height: 100px !important; display: block !important; width: 100%; }
 
-     /* 2. BUTTON DESIGN - Den inneren Container aufbrechen */
+    /* 2. BUTTON DESIGN (Zentrierter Stack) */
     .pdf-section-wrapper div.stButton > button {
-        height: 120px !important;
-        border-radius: 16px !important;
-        transition: all 0.2s ease-in-out !important;
+        height: 125px !important;
+        border-radius: 14px !important;
+        border: 1px solid #e2e8f0 !important;
         background-color: white !important;
+        transition: all 0.2s ease-in-out !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
     }
 
-    /* Das hier ist der entscheidende Teil für Icon OBEN, Text UNTEN */
+    /* 3. ICON & TEXT TRENNUNG ERZWINGEN */
+    /* Wir brechen das interne Paragraph-Tag von Streamlit auf */
     .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
         display: flex !important;
-        flex-direction: column !important; /* Erzwingt den Stapel */
+        flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        white-space: pre-wrap !important;
         margin: 0 !important;
-        line-height: 1.2 !important;
     }
 
-    /* 3. ICON GRÖSSE (Die erste Zeile) */
+    /* Icon-Größe (Erste Zeile) */
     .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p::first-line {
-        font-size: 38px !important; /* Icon massiv vergrößern */
+        font-size: 38px !important; 
+        line-height: 1.4 !important;
     }
 
-    /* 4. TEXT GRÖSSE (Der gesamte Paragraph-Inhalt) */
+    /* Text-Größe (Der Rest) */
     .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
         font-size: 13px !important;
         font-weight: 600 !important;
         color: #475569 !important;
     }
 
-    /* 5. HOVER-EFFEKT: Vergrößern */
+    /* 4. HOVER EFFEKT */
     .pdf-section-wrapper div.stButton > button:hover {
         transform: scale(1.1) !important;
         border-color: #3b82f6 !important;
         box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        z-index: 10 !important;
     }
 
-    /* 6. AKTIVER BUTTON */
+    /* 5. AKTIVER BUTTON */
     .pdf-section-wrapper .active-btn div.stButton > button {
         background-color: #1e293b !important;
         border-color: #1e293b !important;
     }
     .pdf-section-wrapper .active-btn div.stButton > button p {
         color: white !important;
-    }
-    
-    /* ABSTAND OBEN: Erhöhe die Zahl, um die Buttons weiter nach UNTEN zu schieben */
-    .custom-spacer-t { 
-        height: 40px !important; 
-        display: block !important; 
-        width: 100%; 
-    }
-
-    /* ABSTAND UNTEN: Erhöhe die Zahl für mehr Platz nach dem Grid */
-    .custom-spacer-b { 
-        height: 150px !important; 
-        display: block !important; 
-        width: 100%; 
     }
 </style>
 """, unsafe_allow_html=True)
@@ -655,31 +643,30 @@ st.markdown('<div class="pdf-section-wrapper">', unsafe_allow_html=True)
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
-    # --- ABSTAND OBEN ---
+    # ABSTAND OBEN
     st.markdown('<div class="custom-spacer-t"></div>', unsafe_allow_html=True)
 
     def render_btn(doc):
         active = st.session_state.active_doc == doc['file']
         if active: st.markdown('<div class="active-btn">', unsafe_allow_html=True)
         
-        # \n sorgt dafür, dass ::first-line im CSS das Icon erkennt
+        # Das \n ist der Trenner für das CSS
         if st.button(f"{doc['icon']}\n{doc['label']}", key=f"doc_btn_{doc['file']}", use_container_width=True):
             st.session_state.active_doc = doc['file']
             st.rerun()
             
         if active: st.markdown('</div>', unsafe_allow_html=True)
 
-    # Top Dokument (zentriert)
+    # Grid
     t_c1, t_c2, t_c3 = st.columns(3)
     with t_c2: render_btn(top_doc)
 
-    # Grid für Rest
     grid_cols = st.columns(3)
     for i, d in enumerate(other_docs):
         with grid_cols[i % 3]: 
             render_btn(d)
 
-    # --- ABSTAND UNTEN ---
+    # ABSTAND UNTEN
     st.markdown('<div class="custom-spacer-b"></div>', unsafe_allow_html=True)
 
 with col_viewer:
