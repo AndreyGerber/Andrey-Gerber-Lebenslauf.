@@ -626,6 +626,16 @@ st.markdown("""
     .pdf-section-wrapper .active-btn div.stButton > button p {
         color: white !important;
     }
+    .spacer-top {
+    height: 20px; /* Hier den oberen Abstand einstellen */
+    width: 100%;
+}
+
+    /* Block UNTER den Knöpfen */
+    .spacer-bottom {
+        height: 50px; /* Hier den unteren Abstand einstellen */
+        width: 100%;
+    }
 </style>
 """, unsafe_allow_html=True)
 
