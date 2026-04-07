@@ -578,41 +578,45 @@ other_docs = [
 # --- 3. STYLING (ISOLIERT & REPARIERT) ---
 st.markdown("""
 <style>
-    /* Das Grid nach oben schieben und Abstände optimieren */
+    /* 1. Container nach oben rücken */
     .pdf-section-wrapper {
-        margin-top: -50px; /* Schiebt alles weiter nach oben */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start !important;
+        height: 100%;
     }
 
-    /* Grunddesign der Buttons */
+    /* 2. Button-Grundgerüst */
     .pdf-section-wrapper div.stButton > button {
-        height: 100px !important;
-        border: 1px solid #e2e8f0 !important;
+        height: 90px !important;
+        width: 100% !important;
         border-radius: 12px !important;
-        background-color: #ffffff !important;
-        transition: all 0.3s ease-in-out !important; /* Wichtig für die Animation */
+        border: 1px solid #e2e8f0 !important;
+        background-color: white !important;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s !important;
     }
 
-    /* HOVER-EFFEKT: Button vergrößert sich */
+    /* 3. VERGRÖSSERN BEIM HOVER */
+    /* Wir nutzen :hover auf dem Button und erzwingen die Skalierung */
     .pdf-section-wrapper div.stButton > button:hover {
-        transform: scale(1.05) !important; /* Vergrößert den Button um 5% */
+        transform: scale(1.08) !important; /* Deutliche Vergrößerung */
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
         border-color: #3b82f6 !important;
-        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important;
-        z-index: 10; /* Damit er über anderen Elementen schwebt */
+        z-index: 99 !important;
     }
 
-    /* FARBLICHE KENNZEICHNUNG (Aktiv) */
+    /* 4. FARBE FÜR AKTIVEN BUTTON */
     .pdf-section-wrapper div.active-btn button {
-        background-color: #2563eb !important; /* Ein kräftiges Blau */
-        border-color: #1d4ed8 !important;
-        box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2) !important;
+        background-color: #1e293b !important; /* Dunkles Blau/Anthrazit */
+        border-color: #1e293b !important;
     }
 
-    /* Textfarbe im aktiven Button auf weiß setzen */
+    /* Text im aktiven Button weiß machen */
     .pdf-section-wrapper div.active-btn button div[data-testid="stMarkdownContainer"] p {
-        color: #ffffff !important;
+        color: white !important;
     }
 
-    /* Icon-Größe im Button */
+    /* Emoji-Größe */
     .pdf-section-wrapper div.stButton > button {
         font-size: 24px !important;
     }
@@ -639,9 +643,7 @@ with col_gallery:
     # Top Dokument (zentriert)
     t_c1, t_c2, t_c3 = st.columns(3)
     with t_c2: render_btn(top_doc)
-    st.vertical_spacer() # Falls vorhanden, sonst:
-    st.write("") 
-    st.container()
+
 
     # Grid für Rest
     grid_cols = st.columns(3)
