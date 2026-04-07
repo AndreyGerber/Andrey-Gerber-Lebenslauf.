@@ -599,7 +599,7 @@ st.markdown("""
     /* Erzwingt, dass die Buttons bündig starten UND definiert den Abstand nach oben */
     [data-testid="stHorizontalBlock"] {
         align-items: flex-start !important;
-        margin-top: 70px !important; /* Hier kannst du den Wert (z.B. 50px) anpassen */
+        margin-top: 50px !important; /* Hier kannst du den Wert (z.B. 50px) anpassen */
     }
     
     /* Icons vergrößern und fixieren */
