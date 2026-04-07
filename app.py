@@ -600,7 +600,7 @@ st.markdown("""
         align-items: center !important;
         justify-content: center !important;
         gap: 10px !important; /* Abstand zwischen Icon und Text */
-        font-size: 14px !important;
+        font-size: 20px !important;
         font-weight: 700 !important;
         color: #1e293b !important;
         line-height: 1.2 !important;
