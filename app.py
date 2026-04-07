@@ -579,26 +579,9 @@ other_docs = [
 # --- 3. STYLING (Der Feinschliff) ---
 st.markdown("""
 <style>
-    /* Info-Box Styling */
-    .info-container {
-        background-color: #e1f5fe;
-        padding: 20px;
-        border-radius: 15px;
-        border-left: 5px solid #01579b;
-        margin-bottom: 20px;
-    }
-    .name-warning {
-        background-color: #fff9c4;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid #fbc02d;
-        font-size: 0.95em;
-        margin-top: 10px;
-    }
-
     /* Button Styling */
     div.stButton > button {
-        height: 145px;
+        height: 120px;
         border-radius: 15px;
         border: 2px solid #334155 !important;
         background-color: #ffffff !important;
@@ -610,7 +593,7 @@ st.markdown("""
     
     /* Icons vergrößern */
     div.stButton > button p {
-        font-size: 18px !important;
+        font-size: 22px !important;
         margin-bottom: 5px !important;
     }
 
@@ -632,17 +615,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 4. HINWEIS-BLOCK ---
-st.markdown("""
-    <div class="info-container">
-        <h3 style="color: #01579b; margin-top: 0;">🗂️ Qualifikations-Portfolio</h3>
-        <p style="color: #333;">Hier finden Sie meine akademischen und beruflichen Nachweise im Überblick.</p>
-        <div class="name-warning">
-            <strong>⚠️ Hinweis zur Namensänderung:</strong> Einige Dokumente (z. B. Abitur, Bachelor) sind auf meinen 
-            früheren Namen ausgestellt. Ein offizieller Nachweis ist als erstes Dokument hinterlegt.
-        </div>
-    </div>
-""", unsafe_allow_html=True)
 
 # --- 5. LAYOUT & GALERIE ---
 col_gallery, col_viewer = st.columns([1, 1.4])
