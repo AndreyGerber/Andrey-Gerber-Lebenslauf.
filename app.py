@@ -952,38 +952,38 @@ st.markdown("""
     [data-testid="column"] {
         padding: 10px !important;
     }
-</style>
-""", unsafe_allow_html=True)
+    </style>
+    """, unsafe_allow_html=True)
 
-# --- 3. LAYOUT & DARSTELLUNG ---
-st.write("---")
-st.markdown("<h2 style='text-align: center; color: #1e293b;'>🖼️ Mein Programmier-Showroom</h2>", unsafe_allow_html=True)
+    # --- 3. LAYOUT & DARSTELLUNG ---
+    st.write("---")
+    st.markdown("<h2 style='text-align: center; color: #1e293b;'>🖼️ Mein Programmier-Showroom</h2>", unsafe_allow_html=True)
 
-# Wir packen alles in einen Container, um die "Wand" zu simulieren
-with st.container():
-    st.markdown('<div class="gallery-wall">', unsafe_allow_html=True)
-    
-    # 8 Spalten für die erste Reihe
-    cols = st.columns(8)
-    
-    for i, img_name in enumerate(prog_images):
-        with cols[i % 8]:
-            path = os.path.join(image_folder, img_name)
-            
-            if os.path.exists(path):
-                # Säuberung des Namens für das Label
-                display_name = img_name.split('_', 1)[-1].replace('.jpg', '').replace('_', ' ')
+    # Wir packen alles in einen Container, um die "Wand" zu simulieren
+    with st.container():
+        st.markdown('<div class="gallery-wall">', unsafe_allow_html=True)
+        
+        # 8 Spalten für die erste Reihe
+        cols = st.columns(8)
+        
+        for i, img_name in enumerate(prog_images):
+            with cols[i % 8]:
+                path = os.path.join(image_folder, img_name)
                 
-                # Das Bild mit Rahmen-Effekt anzeigen
-                st.image(path, use_container_width=True, caption=display_name)
-            else:
-                # Fallback, falls Datei fehlt
-                st.error("X")
-                
-    st.markdown('</div>', unsafe_allow_html=True)
+                if os.path.exists(path):
+                    # Säuberung des Namens für das Label
+                    display_name = img_name.split('_', 1)[-1].replace('.jpg', '').replace('_', ' ')
+                    
+                    # Das Bild mit Rahmen-Effekt anzeigen
+                    st.image(path, use_container_width=True, caption=display_name)
+                else:
+                    # Fallback, falls Datei fehlt
+                    st.error("X")
+                    
+        st.markdown('</div>', unsafe_allow_html=True)
 
-# Kleiner Tipp für den User
-st.caption("Fahre mit der Maus über die Rahmen, um die Details der Zertifikate zu sehen.")
+    # Kleiner Tipp für den User
+    st.caption("Fahre mit der Maus über die Rahmen, um die Details der Zertifikate zu sehen.")
 
 
 
