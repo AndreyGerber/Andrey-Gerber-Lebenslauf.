@@ -679,57 +679,69 @@ with col_viewer:
 #Zertifikate Data Science
 
 
-# --- 1. DATEN-LISTE (Deine 17 Dateien) ---
+# --- 1. DATEN-LISTE (Namen exakt wie im Screenshot) ---
 image_folder = "images"
 prog_images = [
-    "1_Python for Data Science.jpg", "2_Exploratory Statistics with Python.jpg",
-    "3_Data_Quality.jpg", "4_Data Visualization_Matplotlib.pdf", # Falls PDF, wird es übersprungen
-    "5_Data Visualization_with_Seaborn.jpg", "6_Matplotlib_Complements.jpg",
-    "7_DataViz_with_Plotly.jpg", "8_MCQ_Linux_and_Bash.jpg",
-    "9_Git_&_Github.jpg", "10_Unit_Testing.jpg",
-    "11_Classification_with_scikit-learn.jpg", "12_Regressionn_with_scikit-learn.jpg",
-    "13_Methodology_in_Data_Science.jpg", "14_Feature_Engineering_and_Optimisation.jpg",
-    "15_Time_Series_Analysis_with_Python.jpg", "16_Advanced_Classification_with_scikit.jpg",
+    "1_Python_for_Data_Science.jpg",
+    "2_Exploratory_Statistics_with_Python.jpg",
+    "3_Data_Quality.jpg",
+    "4_Data_Visualization_Matplotlib.jpg",
+    "5_Data_Visualization_with_Seaborn.jpg",
+    "6_Matplotlib_Complements.jpg",
+    "7_DataViz_with_Plotly.jpg",
+    "8_MCQ_Linux_and_Bash.jpg",
+    "9_Git_and_Github.jpg",
+    "10_Unit_Testing.jpg",
+    "11_Classification_with_scikit-learn.jpg",
+    "12_Regressionn_with_scikit_learn.jpg",
+    "13_Methodology_in_Data_Science.jpg",
+    "14_Feature_Engineering_and_Optimisation.jpg",
+    "15_Time_Series_Analysis_with_Python.jpg",
+    "16_Advanced_Classification_with_scikit-learn.jpg",
     "17_Text_Mining.jpg"
 ]
 
-# --- 2. LAYOUT-STRUKTUR ---
+# --- 2. LAYOUT & GRID ---
 st.write("---")
 st.subheader("🏛️ Virtueller Programmier-Showroom")
 
-# Wir erstellen 8 Spalten für das 8er-Grid
+# Wir erstellen 8 Spalten für das Grid
 cols = st.columns(8)
 
 for i, img_name in enumerate(prog_images):
+    # Auswahl der Spalte (8er Modulo)
     with cols[i % 8]:
         path = os.path.join(image_folder, img_name)
         
-        # Check 1: Existiert die Datei?
-        # Check 2: Ist es wirklich ein Bild (keine PDF)?
-        if os.path.exists(path) and img_name.lower().endswith(('.jpg', '.jpeg', '.png')):
-            # Wir nutzen st.image direkt (vermeidet den PIL-Fehler)
+        if os.path.exists(path):
+            # Nutze st.image für maximale Stabilität
             st.image(path, use_container_width=True)
+            
+            # Label säubern: Nummer weg, Unterstriche weg
+            display_name = img_name.split('_', 1)[-1].replace('.jpg', '').replace('_', ' ')
+            st.markdown(f"<p style='font-size:10px; font-weight:bold; text-align:center; line-height:1;'>{display_name}</p>", unsafe_allow_html=True)
         else:
-            # Platzhalter, falls Datei fehlt oder PDF ist
-            st.markdown(f'<div style="height:100px; background:#334155; border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px;">📄</div>', unsafe_allow_html=True)
-        
-        # Kleine Beschriftung unter dem Bild
-        st.caption(img_name.split('_', 1)[-1].replace('.jpg', '').replace('.pdf', ''))
+            st.error("X")
 
-# --- 3. DAS 3D-FEELING (Hover-Effekt) ---
+# --- 3. DAS 3D-FEELING (CSS) ---
 st.markdown("""
 <style>
-    /* Vergrößert die Bilder beim Drüberfahren für den Showroom-Effekt */
+    /* Der Showroom-Effekt: Vergrößern und Hervorheben beim Hovern */
     [data-testid="stImage"] {
         transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
         cursor: pointer;
     }
+    
     [data-testid="stImage"]:hover {
-        transform: scale(1.6) translateY(-10px) !important;
+        transform: scale(1.8) translateY(-10px) !important;
         z-index: 999 !important;
-        box-shadow: 0 15px 30px rgba(0,0,0,0.4) !important;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3) !important;
+        border-color: #0055A5 !important;
     }
-    /* Abstand zwischen den Reihen */
+
+    /* Abstand zwischen den Grid-Elementen optimieren */
     [data-testid="column"] {
         padding: 5px !important;
     }
