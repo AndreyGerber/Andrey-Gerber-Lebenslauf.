@@ -655,6 +655,55 @@ with col_viewer:
     else:
         st.error(f"Datei '{st.session_state.active_doc}' nicht gefunden.")
 
+st.markdown("""
+<style>
+    /* 1. Grund-Styling der Buttons */
+    div.stButton > button {
+        height: 135px; /* Etwas mehr Höhe für die größeren Icons */
+        border-radius: 15px;
+        border: 2px solid #334155 !important; 
+        background-color: #ffffff !important;
+        color: #1e293b !important;
+        font-weight: 700 !important;
+        transition: all 0.3s ease;
+        white-space: pre-wrap;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* 2. Die Icons (Emojis) deutlich vergrößern */
+    div.stButton > button p {
+        font-size: 38px !important; /* Hier passiert der Zauber */
+        margin-bottom: 10px !important;
+        line-height: 1.1 !important;
+    }
+
+    /* 3. Hover-Effekt (Sanftes Leuchten) */
+    div.stButton > button:hover {
+        border-color: #0055A5 !important;
+        color: #0055A5 !important;
+        background-color: #f8fafc !important;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1) !important;
+    }
+
+    /* 4. Styling für den AKTIVEN Button (Blau markiert) */
+    div[data-testid="stVerticalBlock"] div.active-btn button {
+        background-color: #0055A5 !important; /* Kräftiges Blau */
+        color: #ffffff !important;
+        border-color: #003366 !important;
+    }
+    
+    /* Weißer Text für das Icon im aktiven Button */
+    div[data-testid="stVerticalBlock"] div.active-btn button p {
+        color: #ffffff !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 
 
 
