@@ -908,7 +908,108 @@ prog_images = [
 
 
 
+# --- 1. DATEN-LISTE (Deine 17 Bilder) ---
+image_folder = "images"
+prog_images = [
+    "1_Python_for_Data_Science.jpg", "2_Exploratory_Statistics_with_Python.jpg",
+    "3_Data_Quality.jpg", "4_Data_Visualization_Matplotlib.jpg",
+    "5_Data_Visualization_with_Seaborn.jpg", "6_Matplotlib_Complements.jpg",
+    "7_DataViz_with_Plotly.jpg", "8_MCQ_Linux_and_Bash.jpg",
+    "9_Git_and_Github.jpg", "10_Unit_Testing.jpg",
+    "11_Classification_with_scikit-learn.jpg", "12_Regressionn_with_scikit_learn.jpg",
+    "13_Methodology_in_Data_Science.jpg", "14_Feature_Engineering_and_Optimisation.jpg",
+    "15_Time_Series_Analysis_with_Python.jpg", "16_Advanced_Classification_with_scikit-learn.jpg",
+    "17_Text_Mining.jpg"
+]
 
+# --- 2. DAS "KLASSISCHE GALERIE" STYLING ---
+st.markdown("""
+<style>
+    /* Der Hintergrund: Eine edle Museumswand */
+    .museum-wall {
+        background-color: #e2e8f0; /* Heller Stein-Ton */
+        padding: 80px 40px;
+        border-radius: 40px;
+        border: 2px solid #cbd5e1;
+        margin-top: 50px;
+        box-shadow: inset 0 0 100px rgba(0,0,0,0.05);
+    }
+
+    /* Der Bilderrahmen-Effekt (Schwarz + Weißes Passepartout) */
+    .museum-wall [data-testid="stImage"] {
+        background-color: #111827 !important; /* Schwarzer Außenrahmen */
+        padding: 10px !important; 
+        border: 15px solid #ffffff !important; /* Weißes Passepartout */
+        box-shadow: 
+            15px 15px 30px rgba(0,0,0,0.4), 
+            2px 2px 5px rgba(0,0,0,0.2) !important;
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        cursor: zoom-in;
+        position: relative;
+    }
+
+    /* Hover-Effekt: Bild kommt dem Betrachter entgegen */
+    .museum-wall [data-testid="stImage"]:hover {
+        transform: scale(1.8) translateY(-20px) !important;
+        z-index: 1000 !important;
+        box-shadow: 0 40px 80px rgba(0,0,0,0.6) !important;
+        border: 10px solid #ffffff !important; /* Passepartout verkleinert sich leicht beim Zoomen */
+    }
+
+    /* Das Icon für die Aufhängung (simuliert den Nagel über dem Bild) */
+    .museum-wall [data-testid="stImage"]::before {
+        content: "📌";
+        position: absolute;
+        top: -45px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 20px;
+        z-index: -1;
+    }
+
+    /* Beschriftung wie ein edles Messingschild */
+    .museum-wall [data-testid="stImageCaption"] {
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        color: #334155 !important;
+        margin-top: 20px !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-align: center;
+        background: rgba(255,255,255,0.5);
+        padding: 5px;
+        border-radius: 3px;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# --- 3. LAYOUT & DARSTELLUNG ---
+st.write("---")
+st.markdown("<h2 style='text-align: center; color: #0f172a; font-family: serif;'>🏛️ Klassische Zertifikats-Galerie</h2>", unsafe_allow_html=True)
+
+# Wir packen alles in die "Museumswand"
+with st.container():
+    st.markdown('<div class="museum-wall">', unsafe_allow_html=True)
+    
+    # Grid mit 6 Spalten für einen "hohen" Galerie-Look
+    cols = st.columns(6)
+    
+    for i, img_name in enumerate(prog_images):
+        with cols[i % 6]:
+            path = os.path.join(image_folder, img_name)
+            
+            if os.path.exists(path):
+                # Namen für das "Schild" säubern
+                display_name = img_name.split('_', 1)[-1].replace('.jpg', '').replace('_', ' ')
+                
+                # Das Bild im Rahmen-Stil
+                st.image(path, use_container_width=True, caption=display_name)
+            else:
+                st.error("Bild fehlt")
+                
+    st.markdown('</div>', unsafe_allow_html=True)
+
+st.caption("Vergleiche diesen klassischen Look mit den anderen Varianten oben.")
 
 
 
