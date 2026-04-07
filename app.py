@@ -676,31 +676,7 @@ with col_viewer:
 
 
 
-#Zertifikate Data Science
 
-"""
-# --- 1. DATEN-LISTE (Namen exakt wie im Screenshot) ---
-image_folder = "images"
-prog_images = [
-    "1_Python_for_Data_Science.jpg",
-    "2_Exploratory_Statistics_with_Python.jpg",
-    "3_Data_Quality.jpg",
-    "4_Data_Visualization_Matplotlib.jpg",
-    "5_Data_Visualization_with_Seaborn.jpg",
-    "6_Matplotlib_Complements.jpg",
-    "7_DataViz_with_Plotly.jpg",
-    "8_MCQ_Linux_and_Bash.jpg",
-    "9_Git_and_Github.jpg",
-    "10_Unit_Testing.jpg",
-    "11_Classification_with_scikit-learn.jpg",
-    "12_Regressionn_with_scikit_learn.jpg",
-    "13_Methodology_in_Data_Science.jpg",
-    "14_Feature_Engineering_and_Optimisation.jpg",
-    "15_Time_Series_Analysis_with_Python.jpg",
-    "16_Advanced_Classification_with_scikit-learn.jpg",
-    "17_Text_Mining.jpg"
-]
-"""
 
 
 
