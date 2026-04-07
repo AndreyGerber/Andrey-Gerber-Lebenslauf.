@@ -580,53 +580,55 @@ other_docs = [
 
 st.markdown("""
 <style>
-    /* 1. BUTTON-STRUKTUR: Zwingt Icon über den Text */
-    div.stButton > button {
-        height: 110px !important;
-        border-radius: 15px !important;
-        border: 2px solid #334155 !important;
-        background-color: #ffffff !important;
-        color: #1e293b !important;
-        font-weight: 700 !important;
-        
-        /* Das ist der entscheidende Teil */
-        display: flex !important;
-        flex-direction: column !important; /* Vertikale Ausrichtung */
-        align-items: center !important;    /* Horizontal zentrieren */
-        justify-content: center !important; /* Vertikal zentrieren */
-        gap: 8px !important;               /* Abstand zwischen Icon und Text */
+    /* PUNKT 1: Positionierung der Galerie oben mit definierbarem Abstand */
+    [data-testid="stColumn"] > div {
+        vertical-align: top !important;
+        padding-top: 50px !important; /* HIER den Abstand von oben steuern */
     }
 
-    /* 2. ICON-STYLING: Wir sprechen das Icon direkt an */
+    /* PUNKT 2: Icons ÜBER dem Text erzwingen */
+    div.stButton > button {
+        height: 140px !important;
+        display: flex !important;
+        flex-direction: column !important; /* Zwingt alles in eine Spalte */
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 5px !important; /* Kleiner Abstand zwischen Icon und Text */
+        border: 2px solid #334155 !important;
+        border-radius: 15px !important;
+        background-color: #ffffff !important;
+        line-height: 1.2 !important;
+    }
+
+    /* Damit das Icon (Span) oben steht */
     div.stButton > button span {
         display: block !important;
-        font-size: 45px !important; /* Große Icons */
+        font-size: 40px !important; /* Icon-Größe */
+        margin-bottom: 5px !important;
     }
 
-    /* 3. TEXT-STYLING: Der Text unter dem Icon */
-    div.stButton > button div {
-        font-size: 18px !important;
-        line-height: 1.2 !important;
+    /* Damit der Text (Paragraph) darunter steht */
+    div.stButton > button p {
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        margin: 0 !important;
         text-align: center !important;
     }
 
-    /* 4. AKTIVER BUTTON: Markierung in Blau */
+    /* PUNKT 3: Farbe für den angeklickten (aktiven) Button */
     div.active-btn button {
-        background-color: #1e293b !important;
+        background-color: #1e293b !important; /* Dunkles Blau/Anthrazit */
         color: #ffffff !important;
+        border-color: #000000 !important;
     }
-    div.active-btn button span {
+    
+    /* Text und Icon im aktiven Button weiß färben */
+    div.active-btn button p, div.active-btn button span {
         color: #ffffff !important;
-    }
-
-    /* 5. HOVER-EFFEKT */
-    div.stButton > button:hover {
-        border-color: #ff4b4b !important;
-        color: #ff4b4b !important;
-        transform: translateY(-2px);
     }
 </style>
 """, unsafe_allow_html=True)
+
 
 
 
@@ -634,11 +636,16 @@ st.markdown("""
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
+    # Hilfsfunktion für die Buttons
     def render_gallery_button(doc_obj):
+        # Prüfen ob aktiv
         is_active = st.session_state.active_doc == doc_obj['file']
+        
+        # Falls aktiv, CSS-Klasse drumherum legen
         if is_active:
             st.markdown('<div class="active-btn">', unsafe_allow_html=True)
         
+        # Button zeichnen - WICHTIG: Icon und Label getrennt übergeben
         if st.button(f"{doc_obj['icon']}\n{doc_obj['label']}", key=f"btn_{doc_obj['file']}", use_container_width=True):
             st.session_state.active_doc = doc_obj['file']
             st.rerun()
@@ -646,16 +653,9 @@ with col_gallery:
         if is_active:
             st.markdown('</div>', unsafe_allow_html=True)
 
-    # Obere Reihe
-    t_col1, t_col2, t_col3 = st.columns(3)
-    with t_col2:
-        render_gallery_button(top_doc)
+    # Dein Grid (Namensänderung und die restlichen 12)
+    # ... (t_col2 für oben, grid_cols für den Rest wie gehabt)
 
-    # Grid
-    grid_cols = st.columns(3)
-    for i, doc in enumerate(other_docs):
-        with grid_cols[i % 3]:
-            render_gallery_button(doc)
 
 with col_viewer:
     #st.subheader("📄 Vorschau")
