@@ -613,28 +613,33 @@ with col_viewer:
 # --- 3. STYLING (Buttons zu Karten machen) ---
 st.markdown("""
 <style>
-    /* Nur der Hintergrund für den Galerie-Container */
-    .galerie-box {
-        background-color: #f0f2f6; /* Dezentes Grau-Blau */
-        padding: 25px;
-        border-radius: 20px;
-        border: 1px solid #e0e4e9;
+    /* Styling für alle Buttons in der Galerie */
+    div.stButton > button {
+        height: 120px;
+        border-radius: 12px;
+        border: 1px solid #e0e0e0;
+        background-color: #ffffff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        font-size: 12px;
+        font-weight: 600;
+        color: #444;
+        white-space: pre-wrap; /* Erlaubt Zeilenumbrüche im Button-Text */
     }
     
-    /* Deine Button-Styles bleiben wie besprochen */
-    div.stButton > button {
-        height: 130px;
-        border-radius: 15px;
-        background-color: #ffffff;
-        border: 1px solid #dce4e9;
-        transition: 0.3s;
-    }
+    /* Hover Effekt */
     div.stButton > button:hover {
-        border-color: #0055A5;
-        transform: translateY(-2px);
+        border-color: #ff4b4b;
+        color: #ff4b4b;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
     }
+
+    /* Markierung für den aktiven Button ist über CSS schwer, 
+       daher nutzen wir das Standard-Hover-Feeling für Feedback */
 </style>
 """, unsafe_allow_html=True)
+
 
 
 
