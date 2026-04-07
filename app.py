@@ -272,78 +272,6 @@ st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'disp
 
 
 
-import streamlit as st
-
-# --- HEADER (Dein Foto & Kontakt) ---
-# (Hier kommt dein bestehender Header-Code hin)
-
-# --- ZEITSTRAHL ---
-st.write("---")
-st.subheader("📍 Mein Werdegang")
-
-# Dein gezeichneter Zeitstrahl als zentrales Element
-# Ersetze 'zeitstrahl.png' durch deinen Dateinamen
-st.image("documents/zeitstrahl.png", use_container_width=True)
-
-# --- DETAIL-SEKTIONEN (Expander) ---
-st.write("### Details zu den Stationen")
-
-# 1. TÜV Rheinland
-with st.expander("🛠️ 2017 – 2022: TÜV Rheinland | Test & Quality Expert", expanded=False):
-    col_text, col_img = st.columns([1.5, 1])
-    
-    with col_text:
-        st.markdown("#### **Test & Measurement Engineer**")
-        st.markdown("""
-        * **Akustik-Spezialist:** Normgerechte Messungen nach DIN EN ISO 3743/3744.
-        * **Innovation:** Planung und Aufbau einer Smart-Speaker-Prüfkammer.
-        * **Gremienarbeit:** Aktives Mitglied im DIN-Normenausschuss.
-        """)
-        
-        st.markdown("#### **Qualitätsmanager (ab 2019)**")
-        st.markdown("""
-        * **Auditierung:** Durchführung interner Audits (ISO 9001 & 17025).
-        * **Prozessoptimierung:** Verantwortung für CAPA und Beschwerdemanagement.
-        """)
-    
-    with col_img:
-        # Ersetze dies durch deine Collage aus dem Bild
-        st.image("documents/tuev_details.jpg", caption="Labor & Normen-Expertise")
-
-# 2. Ferchau / Siemens
-with st.expander("🏗️ 2022 – 2025: Ferchau (Einsatz Siemens) | Quality Systems Engineering"):
-    st.markdown("""
-    * **System-Optimierung:** Entwicklung und Implementierung von Qualitätsstandards in komplexen Engineering-Projekten.
-    * **Schnittstellenmanagement:** Koordination zwischen verschiedenen Fachabteilungen zur Sicherstellung der Projekt-Compliance.
-    """)
-
-# 3. Liora / Data Science
-with st.expander("🚀 2026: Liora | Data Science & Machine Learning"):
-    col_desc, col_tech = st.columns(2)
-    with col_desc:
-        st.markdown("""
-        * **KI-Integration:** Entwicklung von Machine-Learning-Modellen zur Prozessvorhersage.
-        * **Dashboards:** Visualisierung komplexer Datenströme mit Streamlit.
-        """)
-    with col_tech:
-        st.info("**Tech-Stack:** Python, Pandas, Scikit-Learn, Streamlit")
-
-# --- DER WEG ZU DEN DOKUMENTEN ---
-st.write("---")
-st.info("💡 **Tipp:** Klicke oben in der **3D-Galerie** auf die Symbole, um die zugehörigen Zertifikate und Zeugnisse im Viewer zu öffnen.")
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -578,6 +506,119 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 st.image(img_tuv, width=int(img_tuv.size[0] * MASSSTAB_TUV))
             else:
                 st.error("Datei 'images/tuev.png' nicht gefunden.")
+
+
+
+
+
+
+
+
+
+import streamlit as st
+import base64
+import os
+
+# --- PFAD-LOGIK ---
+PDF_FOLDER = "documents"
+
+def get_pdf_base64(file_name):
+    path = os.path.join(PDF_FOLDER, file_name)
+    if os.path.exists(path):
+        with open(path, "rb") as f:
+            return base64.b64encode(f.read()).decode('utf-8')
+    return None
+
+# Aktuelles Dokument aus URL oder Standard festlegen
+query_params = st.query_params
+selected_doc = query_params.get("doc", "Master.pdf")
+
+# --- LAYOUT ---
+col_gallery, col_viewer = st.columns([1.2, 1])
+
+with col_gallery:
+    st.subheader("🏛️ Deine Virtuelle Galerie")
+    
+    # CSS für das Styling der 12 Karten
+    st.markdown("""
+    <style>
+        .gallery-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            perspective: 1000px;
+        }
+        .doc-card {
+            width: 100px;
+            height: 130px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+            padding: 5px;
+        }
+        .doc-card:hover {
+            transform: translateY(-5px) rotateY(10deg);
+            border-color: #ff4b4b;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .doc-icon { font-size: 30px; margin-bottom: 5px; }
+        .doc-label { font-size: 11px; font-weight: bold; text-align: center; line-height: 1.2; }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # Die Liste deiner 12 Dokumente mit passenden Icons
+    docs = [
+        {"name": "Master.pdf", "icon": "🎓", "label": "Master"},
+        {"name": "Bachelor.pdf", "icon": "🏗️", "label": "Bachelor"},
+        {"name": "InternerQualitätsauditor.pdf", "icon": "📜", "label": "Auditor"},
+        {"name": "Qualitätsbeauftragter.pdf", "icon": "✅", "label": "QM-Beauftr."},
+        {"name": "Schweisskurs.pdf", "icon": "🔥", "label": "Schweißen"},
+        {"name": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalyse"},
+        {"name": "allgemeineHochschulreife.pdf", "icon": "🏫", "label": "Abitur"},
+        {"name": "Berufsschule.pdf", "icon": "📚", "label": "Berufsschule"},
+        {"name": "Klangschale.pdf", "icon": "🥣", "label": "Klangschale"},
+        {"name": "M_BBM.pdf", "icon": "⚙️", "label": "M-BBM"},
+        {"name": "Namensänderung.pdf", "icon": "📝", "label": "Name"},
+        {"name": "Praktikum_V&F.pdf", "icon": "🏢", "label": "Praktikum"}
+    ]
+
+    # HTML-Grid generieren
+    grid_html = '<div class="gallery-grid">'
+    for doc in docs:
+        grid_html += f'''
+        <a href="/?doc={doc['name']}" target="_self" class="doc-card">
+            <span class="doc-icon">{doc['icon']}</span>
+            <span class="doc-label">{doc['label']}</span>
+        </a>
+        '''
+    grid_html += '</div>'
+    
+    st.markdown(grid_html, unsafe_allow_html=True)
+    st.caption("Klicke auf ein Dokument, um die Vorschau zu laden.")
+
+with col_viewer:
+    st.subheader("📄 Vorschau")
+    pdf_b64 = get_pdf_base64(selected_doc)
+    
+    if pdf_b64:
+        pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="800px" style="border:none; border-radius:15px; box-shadow: 0 0 20px rgba(0,0,0,0.1);"></iframe>'
+        st.markdown(pdf_display, unsafe_allow_html=True)
+    else:
+        st.warning(f"Bitte wähle ein Dokument aus der Galerie aus. (Aktuell: {selected_doc})")
+
+
+
+
+
+
 
 
 
