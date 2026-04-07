@@ -578,15 +578,8 @@ other_docs = [
 # --- 3. STYLING (VERBESSERT) ---
 st.markdown("""
 <style>
-    /* Die Spalte links oben ausrichten */
-    [data-testid="stHorizontalBlock"] > div:first-child {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start !important;
-    }
-
-    /* Button Grunddesign */
-    .stButton > button {
+    /* NUR innerhalb des PDF-Abschnitts */
+    .pdf-section-wrapper div.stButton > button {
         height: 100px !important;
         border-radius: 12px !important;
         border: 1px solid #e2e8f0 !important;
@@ -596,34 +589,35 @@ st.markdown("""
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
+        font-size: 24px !important; /* Emoji-Größe */
     }
 
-    /* HOVER: Vergrößern und Schatten */
-    .stButton > button:hover {
+    /* HOVER nur für diese Buttons */
+    .pdf-section-wrapper div.stButton > button:hover {
         transform: scale(1.1) !important;
         border-color: #3b82f6 !important;
         box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important;
         z-index: 10 !important;
     }
 
-    /* AKTIVER BUTTON: Blau markiert */
-    .active-btn div.stButton > button {
+    /* AKTIVER BUTTON Kennzeichnung */
+    .pdf-section-wrapper .active-btn div.stButton > button {
         background-color: #1e293b !important;
         border-color: #1e293b !important;
     }
-    .active-btn div.stButton > button p {
+
+    /* Textfarbe im aktiven Button */
+    .pdf-section-wrapper .active-btn div.stButton > button p {
         color: white !important;
     }
 
-    /* Text & Icon Styling */
-    .stButton > button p {
+    /* Label-Textgröße korrigieren */
+    .pdf-section-wrapper div.stButton > button p {
         font-size: 13px !important;
         font-weight: 600 !important;
         line-height: 1.2 !important;
         margin-top: 5px !important;
-    }
-    .stButton > button {
-        font-size: 24px !important; /* Größe des Emojis */
+        color: #475569;
     }
 </style>
 """, unsafe_allow_html=True)
