@@ -689,24 +689,21 @@ prog_files = [
     "15_Time_Series_Analysis_with_Python.pdf", "16_Advanced_Classification_with_scikit.pdf"
 ]
 
-# --- 2. STYLING & SHOWROOM-LOGIK IN EINEM ---
-# Wir bauen das CSS und das HTML zusammen auf
-showroom_style = """
+# --- 2. GESAMT-HTML IN EINER VARIABLE SAMMELN ---
+# Wir bauen erst das CSS und dann alle Karten in EINER Variable zusammen
+showroom_html = """
 <style>
-    /* Der dunkle Showroom-Container */
     .showroom-wrapper {
         display: flex !important;
         flex-direction: row !important;
-        overflow-x: auto !important; /* Horizontales Scrollen */
-        gap: 25px;
+        overflow-x: auto !important;
+        gap: 20px;
         padding: 40px 20px;
         background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
         border-radius: 20px;
         border: 1px solid #334155;
         scroll-behavior: smooth;
     }
-
-    /* Die einzelnen 3D-Karten */
     .showroom-item {
         flex: 0 0 auto !important;
         width: 140px;
@@ -718,51 +715,43 @@ showroom_style = """
         align-items: center;
         justify-content: center;
         text-decoration: none !important;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: all 0.4s ease;
         border: 1px solid #cbd5e1;
-        position: relative;
     }
-
-    /* Hover-Effekt (3D-Sprung) */
     .showroom-item:hover {
-        transform: translateY(-20px) rotateY(10deg) scale(1.1);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(59, 130, 246, 0.6);
-        border-color: #3b82f6;
-        z-index: 100;
+        transform: translateY(-15px) rotateY(10deg);
+        box-shadow: 0 15px 30px rgba(59, 130, 246, 0.5);
     }
-
-    .sr-icon { font-size: 50px; margin-bottom: 10px; }
+    .sr-icon { font-size: 45px; margin-bottom: 10px; }
     .sr-label { 
         font-size: 11px; color: #0f172a; font-weight: 800; 
         text-align: center; padding: 0 10px; line-height: 1.2; 
     }
-
-    /* Scrollbar-Design */
     .showroom-wrapper::-webkit-scrollbar { height: 8px; }
     .showroom-wrapper::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
 </style>
+<div class="showroom-wrapper">
 """
 
-# HTML-Inhalt generieren
-showroom_content = ""
+# Jetzt die Karten an den String hängen
 for f in prog_files:
-    # Säuberung: Entfernt "1_" und ".pdf", ersetzt "_" durch Leerzeichen
-    clean_label = f.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
-    
-    showroom_content += f'''
+    label = f.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
+    showroom_html += f'''
     <a href="/?doc={f}" target="_self" class="showroom-item">
         <div class="sr-icon">🐍</div>
-        <div class="sr-label">{clean_label}</div>
+        <div class="sr-label">{label}</div>
     </a>
     '''
 
-# Alles zusammenfügen: Style + Wrapper + Inhalt
-full_html = f"{showroom_style}<div class='showroom-wrapper'>{showroom_content}</div>"
+# Container schließen
+showroom_html += "</div>"
 
-# --- 3. AUSGABE ---
+# --- 3. DIE AUSGABE (DER ENTSCHEIDENDE PUNKT) ---
 st.write("---")
 st.subheader("🖥️ Programmier- & Data Science Showroom")
-st.markdown(full_html, unsafe_allow_html=True)
+
+# NUR EINMALIGER AUFRUF FÜR ALLES
+st.markdown(showroom_html, unsafe_allow_html=True)
 
 
 
