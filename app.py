@@ -597,7 +597,7 @@ st.markdown("""
     }
 
     .galerie-stack {
-        margin-top: 50px; /* Hier deinen gewünschten Abstand einstellen */
+        margin-top: 150px; /* Hier deinen gewünschten Abstand einstellen */
     }
 
     /* Die Buttons innerhalb der Reihen bleiben bündig, ohne extra Abstand */
