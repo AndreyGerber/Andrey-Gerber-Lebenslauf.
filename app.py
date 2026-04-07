@@ -579,21 +579,25 @@ other_docs = [
 # --- 3. STYLING (Der Feinschliff) ---
 st.markdown("""
 <style>
-    /* Button Styling FIX für versetzte Spalten */
-        div.stButton > button {
-        height: 120px !important; /* Feste Höhe für alle Buttons */
-        width: 100%;
+    div.stButton > button {
+        height: 150px !important;
+        display: flex !important;
+        flex-direction: column !important; /* Icon oben, Text unten */
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important; /* Abstand zwischen Icon und Text */
         border-radius: 15px;
         border: 2px solid #334155 !important;
         background-color: #ffffff !important;
-        color: #1e293b !important;
         font-weight: 700 !important;
-        transition: all 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center; /* Zentriert Inhalt vertikal */
-        margin-bottom: 0px; /* Verhindert extra Abstände */
+        line-height: 1.2 !important;
+    }
+
+    /* Icon-Größe fixieren */
+    div.stButton > button p {
+        font-size: 40px !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
     /* Erzwingt, dass die Buttons in einer Reihe oben bündig starten */
