@@ -536,73 +536,51 @@ selected_doc = query_params.get("doc", "Master.pdf")
 # --- LAYOUT ---
 col_gallery, col_viewer = st.columns([1.2, 1])
 
+# --- GALERIE ABSCHNITT ---
 with col_gallery:
     st.subheader("🏛️ Deine Virtuelle Galerie")
     
-    # CSS für das Styling der 12 Karten
+    # 1. CSS Definition (Muss in EINER Markdown-Anweisung stehen)
     st.markdown("""
     <style>
-        .gallery-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            perspective: 1000px;
-        }
+        .gallery-grid { display: flex; flex-wrap: wrap; gap: 10px; }
         .doc-card {
-            width: 100px;
-            height: 130px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            color: #333;
-            transition: all 0.3s ease;
-            border: 1px solid #eee;
-            padding: 5px;
+            width: 90px; height: 110px;
+            background: #ffffff; border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-decoration: none; color: #333;
+            border: 1px solid #ddd; transition: 0.3s;
         }
-        .doc-card:hover {
-            transform: translateY(-5px) rotateY(10deg);
-            border-color: #ff4b4b;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-        }
-        .doc-icon { font-size: 30px; margin-bottom: 5px; }
-        .doc-label { font-size: 11px; font-weight: bold; text-align: center; line-height: 1.2; }
+        .doc-card:hover { transform: scale(1.05); border-color: #ff4b4b; }
+        .doc-icon { font-size: 25px; }
+        .doc-label { font-size: 10px; font-weight: bold; text-align: center; }
     </style>
     """, unsafe_allow_html=True)
 
-    # Die Liste deiner 12 Dokumente mit passenden Icons
+    # 2. Liste der Dokumente
     docs = [
         {"name": "Master.pdf", "icon": "🎓", "label": "Master"},
         {"name": "Bachelor.pdf", "icon": "🏗️", "label": "Bachelor"},
         {"name": "InternerQualitätsauditor.pdf", "icon": "📜", "label": "Auditor"},
         {"name": "Qualitätsbeauftragter.pdf", "icon": "✅", "label": "QM-Beauftr."},
         {"name": "Schweisskurs.pdf", "icon": "🔥", "label": "Schweißen"},
-        {"name": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalyse"},
-        {"name": "allgemeineHochschulreife.pdf", "icon": "🏫", "label": "Abitur"},
-        {"name": "Berufsschule.pdf", "icon": "📚", "label": "Berufsschule"},
-        {"name": "Klangschale.pdf", "icon": "🥣", "label": "Klangschale"},
-        {"name": "M_BBM.pdf", "icon": "⚙️", "label": "M-BBM"},
-        {"name": "Namensänderung.pdf", "icon": "📝", "label": "Name"},
-        {"name": "Praktikum_V&F.pdf", "icon": "🏢", "label": "Praktikum"}
+        {"name": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalyse"}
     ]
 
-    # HTML-Grid generieren
+    # 3. HTML-String zusammenbauen
     grid_html = '<div class="gallery-grid">'
-    for doc in docs:
-        grid_html += f'''
-        <a href="/?doc={doc['name']}" target="_self" class="doc-card">
-            <span class="doc-icon">{doc['icon']}</span>
-            <span class="doc-label">{doc['label']}</span>
-        </a>
-        '''
+    for d in docs:
+        # WICHTIG: Nutze einfache Anführungszeichen für HTML-Attribute im f-string
+        grid_html += f'<a href="/?doc={d["name"]}" target="_self" class="doc-card">'
+        grid_html += f'<span class="doc-icon">{d["icon"]}</span>'
+        grid_html += f'<span class="doc-label">{d["label"]}</span></a>'
     grid_html += '</div>'
-    
+
+    # 4. Ausgabe als HTML
     st.markdown(grid_html, unsafe_allow_html=True)
-    st.caption("Klicke auf ein Dokument, um die Vorschau zu laden.")
+
 
 with col_viewer:
     st.subheader("📄 Vorschau")
