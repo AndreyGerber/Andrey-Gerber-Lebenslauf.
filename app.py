@@ -582,7 +582,7 @@ st.markdown("""
 <style>
     /* 1. BUTTON-STRUKTUR: Zwingt Icon über den Text */
     div.stButton > button {
-        height: 150px !important;
+        height: 110px !important;
         border-radius: 15px !important;
         border: 2px solid #334155 !important;
         background-color: #ffffff !important;
@@ -605,7 +605,7 @@ st.markdown("""
 
     /* 3. TEXT-STYLING: Der Text unter dem Icon */
     div.stButton > button div {
-        font-size: 14px !important;
+        font-size: 18px !important;
         line-height: 1.2 !important;
         text-align: center !important;
     }
