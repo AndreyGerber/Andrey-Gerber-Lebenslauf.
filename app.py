@@ -925,51 +925,68 @@ prog_images = [
 # --- 2. DAS "KLASSISCHE GALERIE" STYLING ---
 st.markdown("""
 <style>
-    /* 1. DIE WAND: Ein warmer, neutraler Galerie-Hintergrund */
+    /* 1. DER RAUM: Erzeugt Tiefe für die ganze Wand */
     .museum-wall {
-        background-color: #d1d5db; /* Klassisches Museumsgrau */
-        padding: 80px 40px;
-        border-radius: 40px;
-        perspective: 1500px; /* Ermöglicht 3D im Raum */
+        background-color: #cbd5e1;
+        padding: 100px 50px;
+        border-radius: 30px;
+        perspective: 2500px; /* Verstärkter 3D-Raum */
     }
 
-    /* 2. DER RAHMEN: 3D-Transformation von Anfang an */
-    .museum-wall [data-testid="stImage"] {
-        background-color: #1a1a1a !important; /* Anthrazit-Rahmen */
-        padding: 10px !important; 
-        border: 15px solid #ffffff !important; /* Weißes Passepartout */
+    /* 2. DER RAHMEN: 3D-Lage an der Wand */
+    [data-testid="stImage"] {
+        background-color: #1a1a1a !important; 
+        padding: 8px !important; 
+        border: 12px solid #ffffff !important; 
         
-        /* 3D-Effekt: Leicht zur Seite gedreht */
-        transform: rotateY(-15deg) rotateX(5deg) !important;
+        /* Grundposition: Leicht schräg im Raum */
+        transform: rotateY(-25deg) rotateX(5deg) !important;
         
-        /* Tiefer Schatten für das "Abstehen" von der Wand */
-        box-shadow: 
-            -10px 15px 25px rgba(0,0,0,0.4), 
-            0px 2px 5px rgba(0,0,0,0.2) !important;
-            
-        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1) !important;
+        box-shadow: -15px 15px 30px rgba(0,0,0,0.4) !important;
+        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+        cursor: zoom-in;
     }
 
-    /* 3. DER FOKUS: Das Bild dreht sich beim Hovern frontal zum Betrachter */
-    .museum-wall [data-testid="stImage"]:hover {
-        transform: rotateY(0deg) rotateX(0deg) scale(2.0) translateZ(100px) !important;
-        z-index: 1000 !important;
-        box-shadow: 0 40px 80px rgba(0,0,0,0.6) !important;
-        border: 8px solid #ffffff !important; /* Passepartout wird beim Zoomen schmaler */
+    /* 3. MEGA-ZOOM: Bricht aus dem Spalten-Gitter aus */
+    [data-testid="stImage"]:hover {
+        /* Dreht sich frontal, kommt extrem weit nach vorne (Z-Achse) 
+           und vergrößert sich massiv auf das 3-fache */
+        transform: rotateY(0deg) rotateX(0deg) scale(3.5) translateZ(500px) !important;
+        
+        z-index: 9999 !important; /* Überlagert ALLES andere */
+        position: relative;
+        
+        box-shadow: 0 50px 100px rgba(0,0,0,0.8) !important;
+        border: 4px solid #ffffff !important; /* Schmalerer Rahmen im Zoom */
     }
 
-    /* 4. DAS SCHILDCHEN: Edler Text unter dem Rahmen */
-    .museum-wall [data-testid="stImageCaption"] {
-        font-size: 10px !important;
-        font-weight: 900 !important;
-        color: #1f2937 !important;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        margin-top: 20px !important;
-        opacity: 0.8;
+    /* Fix: Verhindert, dass das Bild von anderen Spalten abgeschnitten wird */
+    [data-testid="column"] {
+        z-index: 1;
+    }
+    [data-testid="column"]:hover {
+        z-index: 999;
     }
 </style>
 """, unsafe_allow_html=True)
+
+# --- LAYOUT ---
+st.markdown("<h1 style='text-align: center;'>🏛️ Klassische Zertifikats-Galerie</h1>", unsafe_allow_html=True)
+
+with st.container():
+    st.markdown('<div class="museum-wall">', unsafe_allow_html=True)
+    
+    # Weniger Spalten (4 statt 8) machen die Grundbilder größer
+    cols = st.columns(4)
+    
+    for i, img_name in enumerate(prog_images):
+        with cols[i % 4]:
+            path = os.path.join(image_folder, img_name)
+            if os.path.exists(path):
+                display_name = img_name.split('_', 1)[-1].replace('.jpg', '').replace('_', ' ')
+                st.image(path, use_container_width=True, caption=display_name)
+
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # --- 3. LAYOUT & DARSTELLUNG ---
 st.write("---")
