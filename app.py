@@ -547,6 +547,7 @@ import os
 
 # --- 1. SETUP ---
 PDF_FOLDER = "documents"
+
 def get_pdf_base64(file_name):
     path = os.path.join(PDF_FOLDER, file_name)
     if os.path.exists(path):
@@ -574,23 +575,18 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# --- 3. STYLING (DIESER BLOCK IST ENTSCHEIDEND) ---
+# --- 3. STYLING (JETZT ISOLIERT) ---
 st.markdown("""
 <style>
-    [data-testid="stColumn"] > div {
+    /* CSS greift NUR innerhalb von .pdf-section-wrapper */
+    .pdf-section-wrapper [data-testid="stColumn"] > div {
         vertical-align: top !important;
         display: flex !important;
         flex-direction: column !important;
         justify-content: flex-start !important;
     }
 
-    /* Verhindert, dass Streamlit den Inhalt der Spalte zentriert */
-    div[data-testid="stVerticalBlock"] {
-        justify-content: flex-start !important;
-    }
-
-    /* Punkt 2: Zwingt Icon über Text & macht Icons groß */
-    div.stButton > button {
+    .pdf-section-wrapper div.stButton > button {
         height: 110px !important;
         border: 2px solid #334155 !important;
         border-radius: 15px !important;
@@ -598,39 +594,36 @@ st.markdown("""
         padding: 10px !important;
     }
 
-    /* Zielt auf den inneren Text-Container von Streamlit */
-    div.stButton > button div[data-testid="stMarkdownContainer"] p {
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
         display: flex !important;
-        flex-direction: column !important; /* Vertikal zwingen */
+        flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 10px !important; /* Abstand zwischen Icon und Text */
-        font-size: 20px !important;
+        gap: 10px !important;
+        font-size: 16px !important; /* Etwas kleiner für bessere Lesbarkeit */
         font-weight: 700 !important;
         color: #1e293b !important;
-        line-height: 1.2 !important;
+        line-height: 1.1 !important;
     }
 
-    /* Die Icons (Emojis) innerhalb des Buttons massiv vergrößern */
-    div.stButton > button div[data-testid="stMarkdownContainer"] p span {
-        font-size: 50px !important; 
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p span {
+        font-size: 40px !important; 
         display: block !important;
     }
 
-    /* Punkt 3: Aktiver Button (Blau) */
-    div.active-btn button {
+    /* Aktiver Button */
+    .pdf-section-wrapper div.active-btn button {
         background-color: #1e293b !important; 
         border-color: #000000 !important;
     }
-    div.active-btn button div[data-testid="stMarkdownContainer"] p,
-    div.active-btn button div[data-testid="stMarkdownContainer"] p span {
+    .pdf-section-wrapper div.active-btn button div[data-testid="stMarkdownContainer"] p,
+    .pdf-section-wrapper div.active-btn button div[data-testid="stMarkdownContainer"] p span {
         color: #ffffff !important;
     }
 
-    /* Hover-Effekt */
-    div.stButton > button:hover {
+    /* Hover */
+    .pdf-section-wrapper div.stButton > button:hover {
         border-color: #ff4b4b !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
     }
     
     .active-btn { display: contents; }
@@ -638,37 +631,43 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- 4. LAYOUT & LOGIK ---
+# Start des isolierten Bereichs
+st.markdown('<div class="pdf-section-wrapper">', unsafe_allow_html=True)
+
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
-    # Abstand von oben
-    #st.markdown('<div style="margin-top: 40px;"></div>', unsafe_allow_html=True)
-    #st.subheader("🗃️ Credentials & Zertifikate")
-    
     def render_btn(doc):
         active = st.session_state.active_doc == doc['file']
         if active: st.markdown('<div class="active-btn">', unsafe_allow_html=True)
-        # WICHTIG: Das Icon und Label müssen im f-string stehen
-        if st.button(f"{doc['icon']}  \n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
+        
+        # Button mit Icon und Label
+        if st.button(f"<span>{doc['icon']}</span>  \n{doc['label']}", key=f"doc_btn_{doc['file']}", use_container_width=True):
             st.session_state.active_doc = doc['file']
             st.rerun()
+            
         if active: st.markdown('</div>', unsafe_allow_html=True)
 
-    # Obere Reihe
+    # Obere Reihe (Zentrierter Einzelbutton)
     t_c1, t_c2, t_c3 = st.columns(3)
     with t_c2: render_btn(top_doc)
 
-    # Grid
-    grid = st.columns(3)
+    # Grid für die restlichen Dokumente
+    grid_cols = st.columns(3)
     for i, d in enumerate(other_docs):
-        with grid[i % 3]: render_btn(d)
+        with grid_cols[i % 3]: 
+            render_btn(d)
 
 with col_viewer:
-    #st.subheader("📄 Vorschau")
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     if pdf_b64:
-        display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="1000px" style="border:2px solid #334155; border-radius:15px;"></iframe>'
+        display = f'<iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" width="100%" height="900px" style="border:2px solid #334155; border-radius:15px;"></iframe>'
         st.markdown(display, unsafe_allow_html=True)
+    else:
+        st.error(f"Datei '{st.session_state.active_doc}' nicht im Ordner '{PDF_FOLDER}' gefunden.")
+
+# Ende des isolierten Bereichs
+st.markdown('</div>', unsafe_allow_html=True)
 
 
 
