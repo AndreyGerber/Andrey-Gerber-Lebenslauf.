@@ -555,20 +555,55 @@ def get_pdf_base64(file_name):
             return base64.b64encode(f.read()).decode('utf-8')
     return None
 
-# Initialisiere das erste Dokument der Liste im Session State
 if "active_doc" not in st.session_state:
-    st.session_state.active_doc = "Namensänderung.pdf"
+    st.session_state.active_doc = "Namensaenderung.pdf"
 
-# --- 2. LAYOUT ---
+# --- 2. STYLING (Vorgezogen für korrekte Anzeige) ---
+st.markdown("""
+<style>
+    /* Der Hintergrund-Container für die Galerie */
+    .gallery-container {
+        background-color: #f0f2f6; /* Dezentes Grau-Blau */
+        padding: 25px;
+        border-radius: 20px;
+        border: 1px solid #e0e4e9;
+        margin-bottom: 20px;
+    }
+
+    /* Styling für die Buttons */
+    div.stButton > button {
+        height: 120px;
+        border-radius: 12px;
+        border: 1px solid #e0e0e0;
+        background-color: #ffffff !important; /* Wichtig: Weiß auf Grau */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        font-size: 12px;
+        font-weight: 600;
+        color: #444;
+        white-space: pre-wrap;
+    }
+    
+    div.stButton > button:hover {
+        border-color: #ff4b4b;
+        color: #ff4b4b;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# --- 3. LAYOUT ---
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
+    # Beginn des farbigen Hintergrund-Bereichs
+    st.markdown('<div class="gallery-container">', unsafe_allow_html=True)
+    
     st.subheader("🗃️ Credentials & Zertifikate")
     
-    # 1. Das spezielle Dokument für die obere Reihe
     top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namens-\nänderung"}
 
-    # 2. Alle anderen Dokumente (Restliste)
     other_docs = [
         {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Berufsschule"},
         {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Abitur"},
@@ -584,61 +619,34 @@ with col_gallery:
         {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
     ]
 
-    # --- OBERE REIHE (Namensänderung zentriert) ---
+    # Obere Reihe (Zentriert)
     top_cols = st.columns(3)
-    with top_cols[1]: # Index 1 ist die mittlere Spalte
+    with top_cols[1]:
         if st.button(f"{top_doc['icon']}\n{top_doc['label']}", key=f"btn_{top_doc['file']}", use_container_width=True):
             st.session_state.active_doc = top_doc['file']
             st.rerun()
 
-    # --- RESTLICHE REIHEN (3er Grid) ---
+    # Restliche Reihen (3er Grid)
     grid_cols = st.columns(3)
     for i, doc in enumerate(other_docs):
         with grid_cols[i % 3]:
             if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
                 st.session_state.active_doc = doc['file']
                 st.rerun()
+    
+    # Ende des farbigen Hintergrund-Bereichs
+    st.markdown('</div>', unsafe_allow_html=True)
 
 with col_viewer:
     st.subheader("📄 Vorschau")
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     
     if pdf_b64:
-        # PDF Viewer
         pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="900px" style="border:none; border-radius:15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
     else:
-        st.error(f"Datei '{st.session_state.active_doc}' wurde nicht im Ordner '{PDF_FOLDER}' gefunden.")
+        st.error(f"Datei '{st.session_state.active_doc}' wurde nicht gefunden.")
 
-# --- 3. STYLING (Buttons zu Karten machen) ---
-st.markdown("""
-<style>
-    /* Styling für alle Buttons in der Galerie */
-    div.stButton > button {
-        height: 120px;
-        border-radius: 12px;
-        border: 1px solid #e0e0e0;
-        background-color: #ffffff;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        transition: all 0.3s ease;
-        font-size: 12px;
-        font-weight: 600;
-        color: #444;
-        white-space: pre-wrap; /* Erlaubt Zeilenumbrüche im Button-Text */
-    }
-    
-    /* Hover Effekt */
-    div.stButton > button:hover {
-        border-color: #ff4b4b;
-        color: #ff4b4b;
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    }
-
-    /* Markierung für den aktiven Button ist über CSS schwer, 
-       daher nutzen wir das Standard-Hover-Feeling für Feedback */
-</style>
-""", unsafe_allow_html=True)
 
 
 
