@@ -909,9 +909,8 @@ prog_images = [
 
 
 # --- 1. DATEN-LISTE (Deine 17 Bilder) ---
-# --- 1. DATEN-LISTE (Deine Zertifikate) ---
+# --- 1. DATEN-LISTE ---
 image_folder = "images"
-# Stelle sicher, dass diese Liste alle deine 17 Dateinamen enthält
 prog_images = [
     "1_Python_for_Data_Science.jpg", "2_Exploratory_Statistics_with_Python.jpg",
     "3_Data_Quality.jpg", "4_Data_Visualization_Matplotlib.jpg",
@@ -924,66 +923,60 @@ prog_images = [
     "17_Text_Mining.jpg"
 ]
 
-# --- 2. DAS OPTIMIERTE STYLING ---
+# --- 2. DAS OPTIMIERTE STYLING (Isoliert auf .zertifikats-galerie) ---
 st.markdown("""
 <style>
-    /* FIX: Die 'Wand' wird direkt als Hintergrund der Spalten-Reihe definiert */
-    [data-testid="stHorizontalBlock"] {
-        background-color: #cbd5e1 !important; /* Museumsgrau */
-        padding: 50px 30px !important;
-        border-radius: 30px !important;
-        box-shadow: inset 0 0 50px rgba(0,0,0,0.1);
-        perspective: 2000px; /* Ermöglicht den 3D-Effekt */
+    /* Der äußere Container für die gesamte Galerie */
+    .zertifikats-galerie {
+        background-color: #cbd5e1; 
+        padding: 40px 20px;
+        border-radius: 20px;
+        box-shadow: inset 0 0 30px rgba(0,0,0,0.1);
         margin-bottom: 50px;
     }
 
-    /* Damit der Zoom nicht innerhalb der Spalte abgeschnitten wird */
-    [data-testid="column"], [data-testid="stVerticalBlock"] {
+    /* Verhindert das Abschneiden beim Zoomen */
+    .zertifikats-galerie [data-testid="column"] {
         overflow: visible !important;
     }
 
-    /* RAHMEN-STYLING: Klassische Galerie mit Passepartout */
-    [data-testid="stImage"] {
-        background-color: #1a1a1a !important; /* Schwarzer Rahmen */
-        padding: 6px !important; 
-        border: 10px solid #ffffff !important; /* Weißes Passepartout */
-        
-        /* 3D-Positionierung: Schräg an der Wand */
-        transform: rotateY(-20deg) rotateX(5deg) !important;
-        
-        box-shadow: -10px 10px 20px rgba(0,0,0,0.3) !important;
-        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        cursor: zoom-in;
+    /* RAHMEN-STYLING */
+    .zertifikats-galerie [data-testid="stImage"] {
+        background-color: #1a1a1a !important;
+        padding: 5px !important; 
+        border: 8px solid #ffffff !important;
+        transform: rotateY(-15deg) rotateX(5deg) !important;
+        box-shadow: -8px 8px 15px rgba(0,0,0,0.3) !important;
+        transition: all 0.4s ease-in-out !important;
+        cursor: pointer;
+        z-index: 1;
     }
 
-    /* INTERAKTIVER ZOOM-EFFEKT */
-    [data-testid="stImage"]:hover {
-        /* Hier kannst du die Vergrößerung anpassen (aktuell 2.2-fach) */
-        transform: rotateY(0deg) rotateX(0deg) scale(2.2) translateZ(150px) !important;
-        
-        z-index: 9999 !important; /* Überlagert alles andere */
+    /* INTERAKTIVER ZOOM (Sanfter als vorher) */
+    .zertifikats-galerie [data-testid="stImage"]:hover {
+        transform: rotateY(0deg) rotateX(0deg) scale(1.5) !important;
+        z-index: 999 !important;
         position: relative;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.5) !important;
-        border: 4px solid #ffffff !important; /* Schmaleres Passepartout beim Zoomen */
+        box-shadow: 0 20px 40px rgba(0,0,0,0.6) !important;
     }
 
-    /* BESCHRIFTUNG (Das kleine Schildchen unter dem Rahmen) */
-    [data-testid="stImageCaption"] {
-        font-size: 10px !important;
-        font-weight: 800 !important;
-        color: #334155 !important;
+    /* BESCHRIFTUNG */
+    .zertifikats-galerie [data-testid="stImageCaption"] {
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        color: #1e293b !important;
         text-transform: uppercase;
-        margin-top: 15px !important;
-        text-align: center;
-        opacity: 0.8;
+        margin-top: 10px !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # --- 3. LAYOUT & DARSTELLUNG ---
-st.markdown("<h2 style='text-align: center;'>🏛️ Klassische Zertifikats-Galerie</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>🏛️ Meine Zertifikate</h2>", unsafe_allow_html=True)
 
-# Wir nutzen 4 Spalten für eine gute Grundgröße der Rahmen
+# Wir packen alles in ein div mit der Klasse 'zertifikats-galerie'
+st.markdown('<div class="zertifikats-galerie">', unsafe_allow_html=True)
+
 cols = st.columns(4)
 
 for i, img_name in enumerate(prog_images):
@@ -991,14 +984,16 @@ for i, img_name in enumerate(prog_images):
         path = os.path.join(image_folder, img_name)
         
         if os.path.exists(path):
-            # Namen säubern (Unterstriche durch Leerzeichen ersetzen)
+            # Namen säubern
             display_name = img_name.split('_', 1)[-1].replace('.jpg', '').replace('_', ' ')
-            
-            # Bild anzeigen
             st.image(path, use_container_width=True, caption=display_name)
         else:
-            # Platzhalter falls Bild nicht gefunden wird
-            st.error(f"Fehlt: {img_name}")
+            st.warning(f"Datei nicht gefunden: {img_name}")
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Ein Test-Element außerhalb, um zu prüfen, ob das CSS isoliert bleibt
+st.info("Dieser Bereich sollte jetzt wieder ganz normal aussehen.")
 
 st.write("") # Abstandshalter nach unten
 
