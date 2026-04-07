@@ -17,7 +17,7 @@ st.divider()
 from PIL import Image, ImageOps
 
 # --- 1. FUNKTION FÜR STABILE BILDGRÖSSE ---
-ef lade_formatiertes_bild(name, target_size=(900, 600)):
+def lade_formatiertes_bild(name, target_size=(900, 600)):
     pfad = os.path.join("images", name)
     
     # 1. Check: Existiert die Datei überhaupt?
