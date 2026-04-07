@@ -582,40 +582,42 @@ st.markdown("""
     .custom-spacer-t { height: 40px !important; display: block !important; width: 100%; }
     .custom-spacer-b { height: 100px !important; display: block !important; width: 100%; }
 
-    /* 2. BUTTON DESIGN (Zentrierter Stack) */
+    /* 2. BUTTON DESIGN (Erzwungener vertikaler Stack) */
     .pdf-section-wrapper div.stButton > button {
-        height: 125px !important;
-        border-radius: 14px !important;
+        height: 130px !important; /* Mehr Höhe für den Stapel */
+        border-radius: 16px !important;
         border: 1px solid #e2e8f0 !important;
         background-color: white !important;
         transition: all 0.2s ease-in-out !important;
+        
+        /* Das hier zwingt Icon und Text untereinander */
         display: flex !important;
-        flex-direction: column !important; /* Stapelt Icon über Text */
+        flex-direction: column !important; 
         align-items: center !important;
         justify-content: center !important;
-        gap: 8px !important;
+        white-space: pre !important; /* WICHTIG: Erlaubt den Zeilenumbruch \n */
     }
 
-    /* 3. ICON GRÖSSE (Einzeln anpassbar) */
-    .pdf-section-wrapper div.stButton > button p::first-line {
-        font-size: 32px !important; /* Größe des Emojis */
-        line-height: 1.4 !important;
+    /* 3. ICON GRÖSSE (Erste Zeile im Button) */
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p::first-line {
+        font-size: 36px !important; /* Dein Icon wird hier groß gemacht */
+        line-height: 1.5 !important;
     }
 
-    /* 4. TEXT GRÖSSE (Einzeln anpassbar) */
-    .pdf-section-wrapper div.stButton > button p {
-        font-size: 13px !important; /* Größe des Labels */
+    /* 4. TEXT GRÖSSE (Die gesamte Textbox) */
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
+        font-size: 13px !important; /* Dein Label-Text wird hier klein gemacht */
         font-weight: 600 !important;
         color: #475569 !important;
         margin: 0 !important;
         text-align: center !important;
     }
 
-    /* 5. HOVER EFFEKT: Vergrößern */
+    /* 5. HOVER EFFEKT: Knöpfe "ploppen" hervor */
     .pdf-section-wrapper div.stButton > button:hover {
-        transform: scale(1.1) !important;
+        transform: scale(1.1) !important; /* Vergrößern beim Hover */
         border-color: #3b82f6 !important;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 12px 20px -5px rgba(0,0,0,0.1) !important;
         z-index: 10 !important;
     }
 
