@@ -909,7 +909,9 @@ prog_images = [
 
 
 # --- 1. DATEN-LISTE (Deine 17 Bilder) ---
+# --- 1. DATEN-LISTE (Deine Zertifikate) ---
 image_folder = "images"
+# Stelle sicher, dass diese Liste alle deine 17 Dateinamen enthält
 prog_images = [
     "1_Python_for_Data_Science.jpg", "2_Exploratory_Statistics_with_Python.jpg",
     "3_Data_Quality.jpg", "4_Data_Visualization_Matplotlib.jpg",
@@ -922,100 +924,83 @@ prog_images = [
     "17_Text_Mining.jpg"
 ]
 
-# --- 2. DAS "KLASSISCHE GALERIE" STYLING ---
+# --- 2. DAS OPTIMIERTE STYLING ---
 st.markdown("""
 <style>
-    /* 1. DER RAUM: Erzeugt Tiefe für die ganze Wand */
-    .museum-wall {
-        background-color: #cbd5e1;
-        padding: 100px 50px;
-        border-radius: 30px;
-        perspective: 2500px; /* Verstärkter 3D-Raum */
+    /* FIX: Die 'Wand' wird direkt als Hintergrund der Spalten-Reihe definiert */
+    [data-testid="stHorizontalBlock"] {
+        background-color: #cbd5e1 !important; /* Museumsgrau */
+        padding: 50px 30px !important;
+        border-radius: 30px !important;
+        box-shadow: inset 0 0 50px rgba(0,0,0,0.1);
+        perspective: 2000px; /* Ermöglicht den 3D-Effekt */
+        margin-bottom: 50px;
     }
 
-    /* 2. DER RAHMEN: 3D-Lage an der Wand */
+    /* Damit der Zoom nicht innerhalb der Spalte abgeschnitten wird */
+    [data-testid="column"], [data-testid="stVerticalBlock"] {
+        overflow: visible !important;
+    }
+
+    /* RAHMEN-STYLING: Klassische Galerie mit Passepartout */
     [data-testid="stImage"] {
-        background-color: #1a1a1a !important; 
-        padding: 8px !important; 
-        border: 12px solid #ffffff !important; 
+        background-color: #1a1a1a !important; /* Schwarzer Rahmen */
+        padding: 6px !important; 
+        border: 10px solid #ffffff !important; /* Weißes Passepartout */
         
-        /* Grundposition: Leicht schräg im Raum */
-        transform: rotateY(-25deg) rotateX(5deg) !important;
+        /* 3D-Positionierung: Schräg an der Wand */
+        transform: rotateY(-20deg) rotateX(5deg) !important;
         
-        box-shadow: -15px 15px 30px rgba(0,0,0,0.4) !important;
-        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+        box-shadow: -10px 10px 20px rgba(0,0,0,0.3) !important;
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
         cursor: zoom-in;
     }
 
-    /* 3. MEGA-ZOOM: Bricht aus dem Spalten-Gitter aus */
+    /* INTERAKTIVER ZOOM-EFFEKT */
     [data-testid="stImage"]:hover {
-        /* Dreht sich frontal, kommt extrem weit nach vorne (Z-Achse) 
-           und vergrößert sich massiv auf das 3-fache */
-        transform: rotateY(0deg) rotateX(0deg) scale(3.5) translateZ(500px) !important;
+        /* Hier kannst du die Vergrößerung anpassen (aktuell 2.2-fach) */
+        transform: rotateY(0deg) rotateX(0deg) scale(2.2) translateZ(150px) !important;
         
-        z-index: 9999 !important; /* Überlagert ALLES andere */
+        z-index: 9999 !important; /* Überlagert alles andere */
         position: relative;
-        
-        box-shadow: 0 50px 100px rgba(0,0,0,0.8) !important;
-        border: 4px solid #ffffff !important; /* Schmalerer Rahmen im Zoom */
+        box-shadow: 0 30px 60px rgba(0,0,0,0.5) !important;
+        border: 4px solid #ffffff !important; /* Schmaleres Passepartout beim Zoomen */
     }
 
-    /* Fix: Verhindert, dass das Bild von anderen Spalten abgeschnitten wird */
-    [data-testid="column"] {
-        z-index: 1;
-    }
-    [data-testid="column"]:hover {
-        z-index: 999;
+    /* BESCHRIFTUNG (Das kleine Schildchen unter dem Rahmen) */
+    [data-testid="stImageCaption"] {
+        font-size: 10px !important;
+        font-weight: 800 !important;
+        color: #334155 !important;
+        text-transform: uppercase;
+        margin-top: 15px !important;
+        text-align: center;
+        opacity: 0.8;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- LAYOUT ---
-st.markdown("<h1 style='text-align: center;'>🏛️ Klassische Zertifikats-Galerie</h1>", unsafe_allow_html=True)
-
-with st.container():
-    st.markdown('<div class="museum-wall">', unsafe_allow_html=True)
-    
-    # Weniger Spalten (4 statt 8) machen die Grundbilder größer
-    cols = st.columns(4)
-    
-    for i, img_name in enumerate(prog_images):
-        with cols[i % 4]:
-            path = os.path.join(image_folder, img_name)
-            if os.path.exists(path):
-                display_name = img_name.split('_', 1)[-1].replace('.jpg', '').replace('_', ' ')
-                st.image(path, use_container_width=True, caption=display_name)
-
-    st.markdown('</div>', unsafe_allow_html=True)
-
 # --- 3. LAYOUT & DARSTELLUNG ---
-st.write("---")
-st.markdown("<h2 style='text-align: center; color: #0f172a; font-family: serif;'>🏛️ Klassische Zertifikats-Galerie</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>🏛️ Klassische Zertifikats-Galerie</h2>", unsafe_allow_html=True)
 
-# Wir packen alles in die "Museumswand"
-with st.container():
-    st.markdown('<div class="museum-wall">', unsafe_allow_html=True)
-    
-    # Grid mit 6 Spalten für einen "hohen" Galerie-Look
-    cols = st.columns(6)
-    
-    for i, img_name in enumerate(prog_images):
-        with cols[i % 6]:
-            path = os.path.join(image_folder, img_name)
+# Wir nutzen 4 Spalten für eine gute Grundgröße der Rahmen
+cols = st.columns(4)
+
+for i, img_name in enumerate(prog_images):
+    with cols[i % 4]:
+        path = os.path.join(image_folder, img_name)
+        
+        if os.path.exists(path):
+            # Namen säubern (Unterstriche durch Leerzeichen ersetzen)
+            display_name = img_name.split('_', 1)[-1].replace('.jpg', '').replace('_', ' ')
             
-            if os.path.exists(path):
-                # Namen für das "Schild" säubern
-                display_name = img_name.split('_', 1)[-1].replace('.jpg', '').replace('_', ' ')
-                
-                # Das Bild im Rahmen-Stil
-                st.image(path, use_container_width=True, caption=display_name)
-            else:
-                st.error("Bild fehlt")
-                
-    st.markdown('</div>', unsafe_allow_html=True)
+            # Bild anzeigen
+            st.image(path, use_container_width=True, caption=display_name)
+        else:
+            # Platzhalter falls Bild nicht gefunden wird
+            st.error(f"Fehlt: {img_name}")
 
-st.caption("Vergleiche diesen klassischen Look mit den anderen Varianten oben.")
-
+st.write("") # Abstandshalter nach unten
 
 
 
