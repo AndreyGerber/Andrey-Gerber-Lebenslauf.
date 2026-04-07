@@ -545,9 +545,8 @@ import streamlit as st
 import base64
 import os
 
-# --- 1. SETUP & HELPER ---
+# --- 1. SETUP ---
 PDF_FOLDER = "documents"
-
 def get_pdf_base64(file_name):
     path = os.path.join(PDF_FOLDER, file_name)
     if os.path.exists(path):
@@ -558,9 +557,8 @@ def get_pdf_base64(file_name):
 if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
 
-# --- 2. DATEN-DEFINITION ---
+# --- 2. DATEN ---
 top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namensänderung"}
-
 other_docs = [
     {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Berufsschule"},
     {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Abitur"},
@@ -573,72 +571,64 @@ other_docs = [
     {"file": "M_BBM.pdf", "icon": "🔊", "label": "M-BBM"},
     {"file": "InternerQualitätsauditor.pdf", "icon": "🕵️", "label": "Auditor 9000 ff."},
     {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "QMB ISO 9001"},
-    {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
+    {"file": "QMB_ISO_17025.pdf", "icon": "🧪", "label": "QMB ISO 17025"}
 ]
 
-# --- 3. STYLING (HART ERZWUNGEN) ---
+# --- 3. STYLING (DIESER BLOCK IST ENTSCHEIDEND) ---
 st.markdown("""
 <style>
-    /* 1. POSITIONS-FIX: Galerie oben bündig mit Abstand */
+    /* Punkt 1: Layout oben ausrichten */
     [data-testid="stColumn"] {
         display: flex !important;
         flex-direction: column !important;
         justify-content: flex-start !important;
     }
-    
-    /* Der Abstand von oben wird hier über den Header gesteuert */
-    .stHeader { margin-top: 40px !important; }
 
-    /* 2. ICON-TEXT-FIX: Zwingt den Inhalt UNTEREINANDER */
-    div.stButton > button > div[data-testid="stMarkdownContainer"] p {
-        display: flex !important;
-        flex-direction: column !important; /* DAS zwingt Icon über Text */
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 10px !important;
-        line-height: 1.2 !important;
-    }
-
-    /* Button-Box Styling */
+    /* Punkt 2: Zwingt Icon über Text & macht Icons groß */
     div.stButton > button {
         height: 160px !important;
         border: 2px solid #334155 !important;
         border-radius: 15px !important;
         background-color: #ffffff !important;
-        width: 100% !important;
+        padding: 10px !important;
     }
 
-    /* Icon-Größe massiv erhöhen */
-    div.stButton > button span {
-        font-size: 50px !important; /* Richtig große Icons */
+    /* Zielt auf den inneren Text-Container von Streamlit */
+    div.stButton > button div[data-testid="stMarkdownContainer"] p {
+        display: flex !important;
+        flex-direction: column !important; /* Vertikal zwingen */
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important; /* Abstand zwischen Icon und Text */
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        color: #1e293b !important;
+        line-height: 1.2 !important;
+    }
+
+    /* Die Icons (Emojis) innerhalb des Buttons massiv vergrößern */
+    div.stButton > button div[data-testid="stMarkdownContainer"] p span {
+        font-size: 50px !important; 
         display: block !important;
     }
 
-    /* Text-Styling */
-    div.stButton > button p {
-        font-weight: 700 !important;
-        color: #1e293b !important;
-        font-size: 14px !important;
-    }
-
-    /* 3. AKTIVER BUTTON: Knalliges Blau */
+    /* Punkt 3: Aktiver Button (Blau) */
     div.active-btn button {
-        background-color: #0055A5 !important; /* Kräftiges Blau */
-        border-color: #003366 !important;
+        background-color: #1e293b !important; 
+        border-color: #000000 !important;
     }
-    
-    /* Text im aktiven Button weiß machen */
-    div.active-btn button p, 
-    div.active-btn button span {
+    div.active-btn button div[data-testid="stMarkdownContainer"] p,
+    div.active-btn button div[data-testid="stMarkdownContainer"] p span {
         color: #ffffff !important;
     }
 
     /* Hover-Effekt */
     div.stButton > button:hover {
         border-color: #ff4b4b !important;
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
     }
+    
+    .active-btn { display: contents; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -646,42 +636,34 @@ st.markdown("""
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
+    # Abstand von oben
+    st.markdown('<div style="margin-top: 40px;"></div>', unsafe_allow_html=True)
     st.subheader("🗃️ Credentials & Zertifikate")
     
-    def render_gallery_button(doc_obj):
-        is_active = st.session_state.active_doc == doc_obj['file']
-        
-        # Wrapper für aktiven Status
-        if is_active:
-            st.markdown('<div class="active-btn">', unsafe_allow_html=True)
-        
-        # Button mit Icon und Label
-        if st.button(f"{doc_obj['icon']}\n{doc_obj['label']}", key=f"btn_{doc_obj['file']}", use_container_width=True):
-            st.session_state.active_doc = doc_obj['file']
+    def render_btn(doc):
+        active = st.session_state.active_doc == doc['file']
+        if active: st.markdown('<div class="active-btn">', unsafe_allow_html=True)
+        # WICHTIG: Das Icon und Label müssen im f-string stehen
+        if st.button(f"{doc['icon']}  \n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
+            st.session_state.active_doc = doc['file']
             st.rerun()
-            
-        if is_active:
-            st.markdown('</div>', unsafe_allow_html=True)
+        if active: st.markdown('</div>', unsafe_allow_html=True)
 
-    # Obere Reihe (Zentriert)
-    t_col1, t_col2, t_col3 = st.columns(3)
-    with t_col2:
-        render_gallery_button(top_doc)
+    # Obere Reihe
+    t_c1, t_c2, t_c3 = st.columns(3)
+    with t_c2: render_btn(top_doc)
 
-    # Grid (3er Reihen)
-    grid_cols = st.columns(3)
-    for i, doc in enumerate(other_docs):
-        with grid_cols[i % 3]:
-            render_gallery_button(doc)
+    # Grid
+    grid = st.columns(3)
+    for i, d in enumerate(other_docs):
+        with grid[i % 3]: render_btn(d)
 
 with col_viewer:
     st.subheader("📄 Vorschau")
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     if pdf_b64:
-        pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="1000px" style="border:2px solid #334155; border-radius:15px;"></iframe>'
-        st.markdown(pdf_display, unsafe_allow_html=True)
-    else:
-        st.error(f"Datei '{st.session_state.active_doc}' nicht gefunden.")
+        display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="1000px" style="border:2px solid #334155; border-radius:15px;"></iframe>'
+        st.markdown(display, unsafe_allow_html=True)
 
 
 
