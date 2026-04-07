@@ -596,14 +596,17 @@ st.markdown("""
         margin-bottom: 0px; /* Verhindert extra Abstände */
     }
 
-    .galerie-stack {
-        margin-top: 350px; /* Hier deinen gewünschten Abstand einstellen */
+    .galerie-header {
+        margin-top: 60px !important; /* Hier den Abstand nach oben einstellen */
+        margin-bottom: 20px !important;
+        display: block;
     }
 
-    /* Die Buttons innerhalb der Reihen bleiben bündig, ohne extra Abstand */
+    /* Setzt die Abstände der Button-Reihen auf Null zurück */
     [data-testid="stHorizontalBlock"] {
         align-items: flex-start !important;
         margin-top: 0px !important; 
+        gap: 10px !important; /* Kleiner, sauberer Abstand zwischen den Spalten */
     }
     
     /* Icons vergrößern und fixieren */
