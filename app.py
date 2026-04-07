@@ -677,10 +677,10 @@ with col_viewer:
 
 
 #Zertifikate Data Science
+# --- PROGRAMMIER SHOWROOM ---
 st.write("---")
-st.markdown("### 🖥️ Programmier- & Data Science Showroom")
+st.subheader("🖥️ Programmier- & Data Science Showroom")
 
-# Deine exakten Dateinamen aus dem Bild
 prog_files = [
     "1_Python for Data Science.pdf",
     "2_Exploratory Statistics with Python.pdf",
@@ -700,11 +700,11 @@ prog_files = [
     "16_Advanced_Classification_with_scikit.pdf"
 ]
 
-# HTML für den Showroom
+# WICHTIG: Den String hier zusammenbauen
 showroom_html = '<div class="showroom-wrapper">'
 
 for file in prog_files:
-    # Säuberung des Namens für die Anzeige (Nummern und .pdf weg)
+    # Namen säubern
     display_name = file.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
     
     showroom_html += f'''
@@ -716,7 +716,47 @@ for file in prog_files:
     '''
 
 showroom_html += '</div>'
+
+# HIER liegt der Fehler: Du musst unsafe_allow_html=True setzen!
 st.markdown(showroom_html, unsafe_allow_html=True)
+<style>
+    .showroom-wrapper {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow-x: auto !important; /* Erlaubt das Scrollen nach rechts */
+        gap: 20px;
+        padding: 25px;
+        background: #1e293b; /* Dunkler Showroom-Boden */
+        border-radius: 15px;
+    }
+
+    .showroom-item {
+        flex: 0 0 auto !important; /* Verhindert, dass die Karten schrumpfen */
+        width: 120px;
+        height: 160px;
+        background: white;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none !important;
+        transition: 0.3s;
+    }
+
+    .showroom-item:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+
+    .pdf-label {
+        font-size: 10px;
+        color: #1e293b;
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+
 
 
 
