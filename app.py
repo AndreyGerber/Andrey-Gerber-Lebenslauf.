@@ -676,6 +676,55 @@ with col_viewer:
 
 
 
+#Zertifikate Data Science
+st.write("---")
+st.markdown("### 🖥️ Programmier- & Data Science Showroom")
+
+# Deine exakten Dateinamen aus dem Bild
+prog_files = [
+    "1_Python for Data Science.pdf",
+    "2_Exploratory Statistics with Python.pdf",
+    "3_Data_Quality.pdf",
+    "4_Data Visualization_Matplotlib.pdf",
+    "5_Data Visualization_with_Seaborn.pdf",
+    "6_Matplotlib_Complements.pdf",
+    "7_DataViz_with_Plotly.pdf",
+    "8_MCQ_Linux_and_Bash.pdf",
+    "9_Git_&_Github.pdf",
+    "10_Unit_Testing.pdf",
+    "11_Classification_with_scikit-learn.pdf",
+    "12_Regressionn_with_scikit-learn.pdf",
+    "13_Methodology_in_Data_Science.pdf",
+    "14_Feature_Engineering_and_Optimisation.pdf",
+    "15_Time_Series_Analysis_with_Python.pdf",
+    "16_Advanced_Classification_with_scikit.pdf"
+]
+
+# HTML für den Showroom
+showroom_html = '<div class="showroom-wrapper">'
+
+for file in prog_files:
+    # Säuberung des Namens für die Anzeige (Nummern und .pdf weg)
+    display_name = file.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
+    
+    showroom_html += f'''
+    <a href="/?doc={file}" target="_self" class="showroom-item">
+        <div class="glass-effect"></div>
+        <div class="pdf-icon">🐍</div>
+        <div class="pdf-label">{display_name}</div>
+    </a>
+    '''
+
+showroom_html += '</div>'
+st.markdown(showroom_html, unsafe_allow_html=True)
+
+
+
+
+
+
+
+
 
 
 
