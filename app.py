@@ -575,53 +575,65 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# --- 3. STYLING ---
+# --- 3. STYLING (PERFEKTIONIERT) ---
 st.markdown("""
 <style>
-    /* Spalte nach oben ausrichten */
+    /* 1. Alles nach OBEN schieben */
     [data-testid="stHorizontalBlock"] { align-items: flex-start !important; }
 
-    /* Button als vertikaler Container */
+    /* 2. Button Design (Card-Look) */
     .pdf-section-wrapper div.stButton > button {
-        height: 115px !important;
+        height: 120px !important;
         border-radius: 12px !important;
         border: 1px solid #e2e8f0 !important;
         background-color: white !important;
         transition: all 0.2s ease-in-out !important;
         display: flex !important;
-        flex-direction: column !important; /* Icon ÜBER Text */
+        flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
+        padding: 15px !important;
     }
 
-    /* HOVER: Vergrößern */
+    /* 3. ICON GRÖSSE (Erstes Element) */
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        margin: 0 !important;
+        line-height: 1 !important;
+    }
+
+    /* Das Icon wird hier gesteuert */
+    .pdf-section-wrapper div.stButton > button p {
+        font-size: 34px !important; /* ICON-GRÖSSE */
+    }
+
+    /* 4. TEXT GRÖSSE (Zweites Element) */
+    /* Wir nutzen den Trick, dass der Text im Button ein zweites Child ist */
+    .pdf-section-wrapper div.stButton > button p small {
+        font-size: 13px !important; /* TEXT-GRÖSSE */
+        font-weight: 600 !important;
+        color: #475569 !important;
+        margin-top: 10px !important;
+        display: block !important;
+        font-style: normal !important;
+    }
+
+    /* 5. HOVER: Vergrößern */
     .pdf-section-wrapper div.stButton > button:hover {
         transform: scale(1.1) !important;
         border-color: #3b82f6 !important;
-        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
     }
 
-    /* ICON-STYLING (Die erste Zeile) */
-    .pdf-section-wrapper div.stButton > button p::first-line {
-        font-size: 32px !important; /* ICON GRÖSSE */
-        line-height: 1.5 !important;
-    }
-
-    /* TEXT-STYLING (Der Rest) */
-    .pdf-section-wrapper div.stButton > button p {
-        font-size: 13px !important; /* TEXT GRÖSSE */
-        font-weight: 600 !important;
-        color: #475569 !important;
-        margin: 0 !important;
-        text-align: center !important;
-    }
-
-    /* AKTIVER BUTTON */
+    /* 6. AKTIVER BUTTON */
     .pdf-section-wrapper .active-btn div.stButton > button {
         background-color: #1e293b !important;
         border-color: #1e293b !important;
     }
-    .pdf-section-wrapper .active-btn div.stButton > button p {
+    .pdf-section-wrapper .active-btn div.stButton > button p,
+    .pdf-section-wrapper .active-btn div.stButton > button p small {
         color: white !important;
     }
 </style>
@@ -636,8 +648,10 @@ with col_gallery:
         active = st.session_state.active_doc == doc['file']
         if active: st.markdown('<div class="active-btn">', unsafe_allow_html=True)
         
-        # Wichtig: \n erzwingt die Trennung für ::first-line
-        if st.button(f"{doc['icon']}\n{doc['label']}", key=f"doc_btn_{doc['file']}", use_container_width=True):
+        # Der Trick: Wir nutzen <small> für den Text, damit das CSS ihn erkennt
+        label_content = f"{doc['icon']} \n <small>{doc['label']}</small>"
+        
+        if st.button(label_content, key=f"doc_btn_{doc['file']}", use_container_width=True):
             st.session_state.active_doc = doc['file']
             st.rerun()
             
