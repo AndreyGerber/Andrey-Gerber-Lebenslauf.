@@ -677,91 +677,93 @@ with col_viewer:
 
 
 #Zertifikate Data Science
+
+import streamlit as st
 import os
 
-# --- 1. DATEN ---
-# Wir gehen davon aus, dass deine Bilder in 'images/thumbnails/' liegen
-IMAGE_DIR = "images/thumbnails"
-# Erstellt eine Liste aller Bilder im Ordner
-thumb_files = sorted([f for f in os.listdir(IMAGE_DIR) if f.endswith(('.png', '.jpg', '.jpeg'))])
+# --- 1. DATEN-LISTE (Exakt nach deinem Screenshot) ---
+image_folder = "images"
+prog_images = [
+    "1_Python for Data Science.jpg", "2_Exploratory Statistics with Python.jpg",
+    "3_Data_Quality.jpg", "4_Data Visualization_Matplotlib.jpg",
+    "5_Data Visualization_with_Seaborn.jpg", "6_Matplotlib_Complements.jpg",
+    "7_DataViz_with_Plotly.jpg", "8_MCQ_Linux_and_Bash.jpg",
+    "9_Git_&_Github.jpg", "10_Unit_Testing.jpg",
+    "11_Classification_with_scikit-learn.jpg", "12_Regressionn_with_scikit-learn.jpg",
+    "13_Methodology_in_Data_Science.jpg", "14_Feature_Engineering_and_Optimisation.jpg",
+    "15_Time_Series_Analysis_with_Python.jpg", "16_Advanced_Classification_with_scikit.jpg",
+    "17_Text_Mining.jpg"
+]
 
-# --- 2. CSS FÜR DAS 3D-KARUSSELL ---
+# --- 2. CSS FÜR DAS 3D-GRID (8 Spalten) ---
 st.markdown("""
 <style>
-    /* Der Raum, in dem das Karussell steht */
-    .showroom-3d-scene {
-        perspective: 2000px;
-        width: 100%;
-        overflow-x: auto;
-        padding: 60px 0;
-        background: #0f172a; /* Dunkler Galerie-Boden */
-        border-radius: 20px;
+    /* Der dunkle Showroom-Boden */
+    .showroom-3d-grid {
+        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        padding: 40px 20px;
+        border-radius: 25px;
+        display: grid;
+        grid-template-columns: repeat(8, 1fr); /* Genau 8 Spalten nebeneinander */
+        gap: 15px;
+        perspective: 1200px; /* Ermöglicht 3D-Effekte */
+        border: 1px solid #334155;
     }
 
-    /* Das Band, das die Bilder hält */
-    .carousel-track {
-        display: flex;
-        gap: 30px;
-        padding-left: 50px;
-        transform-style: preserve-3d;
-    }
-
-    /* Das einzelne Zertifikat-Bild im 3D-Raum */
-    .carousel-item {
-        flex: 0 0 200px;
-        height: 280px;
+    /* Die 3D-Zertifikats-Karte */
+    .exhibit-3d {
+        flex: 0 0 auto;
+        height: 180px;
         background: white;
         border-radius: 10px;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        transition: all 0.5s ease;
-        cursor: pointer;
-        
-        /* 3D-Grunddrehung für den Bogeneffekt */
-        transform: rotateY(-20deg);
-        border: 1px solid #334155;
         overflow: hidden;
+        border: 1px solid #cbd5e1;
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transform: rotateY(-15deg); /* Grunddrehung für Galerie-Look */
+        box-shadow: -5px 5px 15px rgba(0,0,0,0.3);
     }
 
-    /* Effekt beim Drüberfahren (Bild kommt nach vorne) */
-    .carousel-item:hover {
-        transform: rotateY(0deg) scale(1.2) translateZ(50px);
-        box-shadow: 0 25px 50px rgba(59, 130, 246, 0.5);
+    /* Hover-Effekt: Karte kommt nach vorne */
+    .exhibit-3d:hover {
+        transform: rotateY(0deg) scale(1.2) translateZ(100px);
+        box-shadow: 0 20px 40px rgba(59, 130, 246, 0.6);
         z-index: 100;
         border-color: #3b82f6;
     }
 
-    .carousel-item img {
+    .exhibit-3d img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: cover; /* Verhindert Verzerrung */
     }
-
-    /* Scrollbar-Styling */
-    .showroom-3d-scene::-webkit-scrollbar { height: 8px; }
-    .showroom-3d-scene::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
 </style>
 """, unsafe_allow_html=True)
 
-# --- 3. DARSTELLUNG ---
-st.subheader("🚀 Mein 3D-Zertifikats-Showroom")
+# --- 3. SHOWROOM LOGIK ---
+st.write("---")
+st.subheader("🏛️ Virtueller Programmier-Showroom")
+st.caption("Fahre mit der Maus über die Zertifikate für die 3D-Ansicht.")
 
-# Wir bauen das HTML-Band zusammen
-carousel_html = '<div class="showroom-3d-scene"><div class="carousel-track">'
+# HTML-Struktur aufbauen
+showroom_html = '<div class="showroom-3d-grid">'
 
-for img in thumb_files:
-    # Pfad zum Bild für den Browser
-    img_path = f"{IMAGE_DIR}/{img}"
+for img_name in prog_images:
+    # Pfad zum Bild (Streamlit braucht Pfade relativ zum Root)
+    path = f"{image_folder}/{img_name}"
     
-    carousel_html += f'''
-    <div class="carousel-item">
-        <img src="app/static/{img_path}" alt="{img}">
+    # Wir nutzen ein einfaches Bild-Tag. Da es JPGs sind, gibt es keinen Code-Salat mehr.
+    showroom_html += f'''
+    <div class="exhibit-3d">
+        <img src="https://githubusercontent.com{path}" alt="{img_name}">
     </div>
     '''
+    # HINWEIS: Falls du lokal arbeitest, nutze: img src="app/static/{path}" 
+    # oder lade die Bilder via base64, falls sie klein genug sind.
 
-carousel_html += '</div></div>'
+showroom_html += '</div>'
 
-# Ausgabe des 3D-Showrooms
-st.markdown(carousel_html, unsafe_allow_html=True)
+st.markdown(showroom_html, unsafe_allow_html=True)
+
 
 
 
