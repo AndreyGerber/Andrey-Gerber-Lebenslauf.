@@ -587,7 +587,7 @@ st.markdown("""
 
     /* 2. BUTTON-STRUKTUR: Icon oben, Text unten */
     div.stButton > button {
-        height: 150px !important; /* Feste Höhe für alle */
+        height: 120px !important; /* Feste Höhe für alle */
         border-radius: 15px !important;
         border: 2px solid #334155 !important; /* Dunkler Rand für Kontrast */
         background-color: #ffffff !important;
@@ -604,7 +604,7 @@ st.markdown("""
 
     /* 3. ICON-GRÖSSE: Macht die Emojis richtig groß */
     div.stButton > button p {
-        font-size: 45px !important;
+        font-size: 20px !important;
         margin: 0 !important;
         line-height: 1.1 !important;
     }
