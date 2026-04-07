@@ -540,7 +540,7 @@ with col_gallery:
     st.subheader("🏛️ Deine Virtuelle Galerie")
     
     # 1. Das spezielle Dokument für die obere Reihe
-    top_doc = {"file": "Namensänderung.pdf", "icon": "📝", "label": "Namens-\nänderung"}
+    top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namens-\nänderung"}
 
     # 2. Alle anderen Dokumente (Restliste)
     other_docs = [
