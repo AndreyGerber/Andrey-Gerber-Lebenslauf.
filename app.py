@@ -576,76 +576,83 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-#4 Style-Bereich
-
+# --- 3. STYLING (HART ERZWUNGEN) ---
 st.markdown("""
 <style>
-    /* PUNKT 1: Positionierung der Galerie oben mit definierbarem Abstand */
-    [data-testid="stColumn"] > div {
-        vertical-align: top !important;
-        padding-top: 50px !important; /* HIER den Abstand von oben steuern */
+    /* Punkt 1: Gesamte Spalte oben ausrichten mit Abstand */
+    [data-testid="stColumn"] {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start !important;
+        padding-top: 30px !important; /* DEIN ABSTAND VON OBEN */
     }
 
-    /* PUNKT 2: Icons ÜBER dem Text erzwingen */
+    /* Punkt 2: Icon OBEN, Text UNTEN (Flexbox) */
     div.stButton > button {
         height: 140px !important;
+        width: 100% !important;
         display: flex !important;
-        flex-direction: column !important; /* Zwingt alles in eine Spalte */
+        flex-direction: column !important; /* Vertikal */
         align-items: center !important;
         justify-content: center !important;
-        gap: 5px !important; /* Kleiner Abstand zwischen Icon und Text */
+        gap: 10px !important;
         border: 2px solid #334155 !important;
         border-radius: 15px !important;
         background-color: #ffffff !important;
-        line-height: 1.2 !important;
     }
 
-    /* Damit das Icon (Span) oben steht */
+    /* Icon-Größe & Position */
     div.stButton > button span {
+        font-size: 45px !important;
         display: block !important;
-        font-size: 40px !important; /* Icon-Größe */
-        margin-bottom: 5px !important;
     }
 
-    /* Damit der Text (Paragraph) darunter steht */
+    /* Text-Größe & Position */
     div.stButton > button p {
         font-size: 14px !important;
         font-weight: 700 !important;
+        color: #1e293b !important;
         margin: 0 !important;
-        text-align: center !important;
+        line-height: 1.2 !important;
     }
 
-    /* PUNKT 3: Farbe für den angeklickten (aktiven) Button */
+    /* Punkt 3: AKTIVER BUTTON FARBE */
     div.active-btn button {
-        background-color: #1e293b !important; /* Dunkles Blau/Anthrazit */
-        color: #ffffff !important;
+        background-color: #1e293b !important; /* Dunkelblau */
         border-color: #000000 !important;
     }
-    
-    /* Text und Icon im aktiven Button weiß färben */
+
     div.active-btn button p, div.active-btn button span {
-        color: #ffffff !important;
+        color: #ffffff !important; /* Weißer Text/Icon wenn aktiv */
+    }
+
+    /* Hover-Effekt */
+    div.stButton > button:hover {
+        border-color: #ff4b4b !important;
+        background-color: #f8fafc !important;
+    }
+    
+    /* Fix: Verhindert Verschiebung beim Klicken */
+    .active-btn {
+        display: contents;
     }
 </style>
 """, unsafe_allow_html=True)
 
-
-
-
-# --- 5. LAYOUT & GALERIE ---
+# --- 4. LAYOUT & LOGIK ---
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
-    # Hilfsfunktion für die Buttons
+    st.subheader("🗃️ Credentials & Zertifikate")
+    
     def render_gallery_button(doc_obj):
-        # Prüfen ob aktiv
         is_active = st.session_state.active_doc == doc_obj['file']
         
-        # Falls aktiv, CSS-Klasse drumherum legen
+        # Wrapper für aktiven Status
         if is_active:
             st.markdown('<div class="active-btn">', unsafe_allow_html=True)
         
-        # Button zeichnen - WICHTIG: Icon und Label getrennt übergeben
+        # Button mit Icon und Label
         if st.button(f"{doc_obj['icon']}\n{doc_obj['label']}", key=f"btn_{doc_obj['file']}", use_container_width=True):
             st.session_state.active_doc = doc_obj['file']
             st.rerun()
@@ -653,18 +660,26 @@ with col_gallery:
         if is_active:
             st.markdown('</div>', unsafe_allow_html=True)
 
-    # Dein Grid (Namensänderung und die restlichen 12)
-    # ... (t_col2 für oben, grid_cols für den Rest wie gehabt)
+    # Obere Reihe (Zentriert)
+    t_col1, t_col2, t_col3 = st.columns(3)
+    with t_col2:
+        render_gallery_button(top_doc)
 
+    # Grid (3er Reihen)
+    grid_cols = st.columns(3)
+    for i, doc in enumerate(other_docs):
+        with grid_cols[i % 3]:
+            render_gallery_button(doc)
 
 with col_viewer:
-    #st.subheader("📄 Vorschau")
+    st.subheader("📄 Vorschau")
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     if pdf_b64:
         pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="1000px" style="border:2px solid #334155; border-radius:15px;"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
     else:
         st.error(f"Datei '{st.session_state.active_doc}' nicht gefunden.")
+
 
 
 
