@@ -627,7 +627,7 @@ st.markdown("""
         color: white !important;
     }
     .spacer-top {
-    height: 20px; /* Hier den oberen Abstand einstellen */
+    height: 120px; /* Hier den oberen Abstand einstellen */
     width: 100%;
 }
 
