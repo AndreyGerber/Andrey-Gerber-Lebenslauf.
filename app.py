@@ -576,66 +576,6 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# --- 3. STYLING (Der Feinschliff) ---
-st.markdown("""
-<style>
-    div.stButton > button {
-        height: 150px !important;
-        display: flex !important;
-        flex-direction: column !important; /* Icon oben, Text unten */
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 10px !important; /* Abstand zwischen Icon und Text */
-        border-radius: 15px;
-        border: 2px solid #334155 !important;
-        background-color: #ffffff !important;
-        font-weight: 700 !important;
-        line-height: 1.2 !important;
-    }
-
-    /* Icon-Größe fixieren */
-    div.stButton > button p {
-        font-size: 40px !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    /* Erzwingt, dass die Buttons in einer Reihe oben bündig starten */
-    [data-testid="stHorizontalBlock"] {
-        align-items: flex-start !important;
-    }
-    
-    /* Icons vergrößern und fixieren */
-    div.stButton > button p {
-        font-size: 20px !important;
-        margin: 0 !important;
-        line-height: 1.2 !important;
-        display: block;
-    }
-    
-    /* Icons vergrößern */
-    div.stButton > button p {
-        font-size: 22px !important;
-        margin-bottom: 5px !important;
-    }
-
-    div.stButton > button:hover {
-        border-color: #ff4b4b !important;
-        color: #ff4b4b !important;
-        transform: translateY(-3px);
-    }
-
-    /* AKTIVER BUTTON (Blau) */
-    div.active-btn button {
-        background-color: #0055A5 !important;
-        color: #ffffff !important;
-        border-color: #003366 !important;
-    }
-    div.active-btn button p {
-        color: #ffffff !important;
-    }
-</style>
-""", unsafe_allow_html=True)
 
 
 # --- 5. LAYOUT & GALERIE ---
