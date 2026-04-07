@@ -677,7 +677,7 @@ with col_viewer:
 
 
 #Zertifikate Data Science
-# --- 1. DATEN: Liste deiner 16 Dokumente ---
+# --- 1. DATEN ---
 prog_files = [
     "1_Python for Data Science.pdf", "2_Exploratory Statistics with Python.pdf",
     "3_Data_Quality.pdf", "4_Data Visualization_Matplotlib.pdf",
@@ -689,88 +689,15 @@ prog_files = [
     "15_Time_Series_Analysis_with_Python.pdf", "16_Advanced_Classification_with_scikit.pdf"
 ]
 
-# --- 2. STYLING: CSS für den Showroom ---
-st.markdown("""
-<style>
-    /* Der dunkle Hintergrund-Container mit horizontalem Scroll */
-    .showroom-wrapper {
-        display: flex !important;
-        flex-direction: row !important;
-        overflow-x: auto !important; /* Aktiviert das seitliche Scrollen */
-        gap: 20px;
-        padding: 30px 20px;
-        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-        border-radius: 20px;
-        border: 1px solid #334155;
-        scroll-behavior: smooth;
-    }
-
-    /* Die einzelnen Zertifikats-Karten */
-    .showroom-item {
-        flex: 0 0 auto !important; /* Verhindert, dass Karten schrumpfen */
-        width: 140px;
-        height: 180px;
-        background: #ffffff;
-        border-radius: 12px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none !important;
-        transition: all 0.3s ease;
-        border: 1px solid #cbd5e1;
-        position: relative;
-    }
-
-    /* Hover-Effekt: Karte hebt sich ab */
-    .showroom-item:hover {
-        transform: translateY(-10px) scale(1.05);
-        box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
-        border-color: #3b82f6;
-    }
-
-    /* Icon im Showroom */
-    .sr-icon {
-        font-size: 45px;
-        margin-bottom: 10px;
-    }
-
-    /* Beschriftung im Showroom */
-    .sr-label {
-        font-size: 11px;
-        color: #0f172a;
-        font-weight: 700;
-        text-align: center;
-        padding: 0 8px;
-        line-height: 1.2;
-        white-space: normal; /* Erlaubt Zeilenumbruch im Label */
-    }
-
-    /* Scrollbar-Styling (Modern & dezent) */
-    .showroom-wrapper::-webkit-scrollbar {
-        height: 8px;
-    }
-    .showroom-wrapper::-webkit-scrollbar-thumb {
-        background: #475569;
-        border-radius: 10px;
-    }
-    .showroom-wrapper::-webkit-scrollbar-track {
-        background: #1e293b;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# --- 3. DARSTELLUNG: HTML Struktur aufbauen ---
-st.write("---")
-st.subheader("🖥️ Programmier- & Data Science Showroom")
-
-# HTML zusammenbauen
+# --- 2. HTML-STRING ZUSAMMENBAUEN ---
+# Wir nutzen einfache Anführungszeichen außen, damit wir doppelte im HTML nutzen können
 sr_html = '<div class="showroom-wrapper">'
 
 for f in prog_files:
-    # Bereinigt den Namen für das Label (entfernt '1_', '2_' etc. und '.pdf')
+    # Namen für die Anzeige säubern
     clean_label = f.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
     
+    # Der HTML-Baustein für jede Karte
     sr_html += f'''
     <a href="/?doc={f}" target="_self" class="showroom-item">
         <div class="sr-icon">🐍</div>
@@ -780,7 +707,11 @@ for f in prog_files:
 
 sr_html += '</div>'
 
-# WICHTIG: Das 'unsafe_allow_html=True' ist zwingend erforderlich
+# --- 3. AUSGABE (DER WICHTIGSTE TEIL) ---
+st.write("---")
+st.subheader("🖥️ Programmier- & Data Science Showroom")
+
+# Hier MUSS unsafe_allow_html=True stehen, sonst sieht man nur Text
 st.markdown(sr_html, unsafe_allow_html=True)
 
 
