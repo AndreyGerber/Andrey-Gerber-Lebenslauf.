@@ -643,7 +643,7 @@ st.markdown("""
 
     /* 4. Die Emojis/Icons innerhalb der Buttons vergrößern */
     div.stButton > button p {
-        font-size: 28px !important; /* Macht die Icons deutlich präsenter */
+        font-size: 20px !important; /* Macht die Icons deutlich präsenter */
         margin-bottom: 8px;
     }
 </style>
