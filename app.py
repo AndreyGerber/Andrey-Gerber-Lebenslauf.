@@ -582,43 +582,46 @@ st.markdown("""
     .custom-spacer-t { height: 40px !important; display: block !important; width: 100%; }
     .custom-spacer-b { height: 100px !important; display: block !important; width: 100%; }
 
-    /* 2. BUTTON DESIGN (Erzwungener vertikaler Stack) */
+     /* 2. BUTTON DESIGN - Den inneren Container aufbrechen */
     .pdf-section-wrapper div.stButton > button {
-        height: 130px !important; /* Mehr Höhe für den Stapel */
+        height: 120px !important;
         border-radius: 16px !important;
-        border: 1px solid #e2e8f0 !important;
-        background-color: white !important;
         transition: all 0.2s ease-in-out !important;
-        
-        /* Das hier zwingt Icon und Text untereinander */
+        background-color: white !important;
         display: flex !important;
-        flex-direction: column !important; 
+        flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        white-space: pre !important; /* WICHTIG: Erlaubt den Zeilenumbruch \n */
     }
 
-    /* 3. ICON GRÖSSE (Erste Zeile im Button) */
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p::first-line {
-        font-size: 36px !important; /* Dein Icon wird hier groß gemacht */
-        line-height: 1.5 !important;
-    }
-
-    /* 4. TEXT GRÖSSE (Die gesamte Textbox) */
+    /* Das hier ist der entscheidende Teil für Icon OBEN, Text UNTEN */
     .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
-        font-size: 13px !important; /* Dein Label-Text wird hier klein gemacht */
+        display: flex !important;
+        flex-direction: column !important; /* Erzwingt den Stapel */
+        align-items: center !important;
+        justify-content: center !important;
+        white-space: pre-wrap !important;
+        margin: 0 !important;
+        line-height: 1.2 !important;
+    }
+
+    /* 3. ICON GRÖSSE (Die erste Zeile) */
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p::first-line {
+        font-size: 38px !important; /* Icon massiv vergrößern */
+    }
+
+    /* 4. TEXT GRÖSSE (Der gesamte Paragraph-Inhalt) */
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
+        font-size: 13px !important;
         font-weight: 600 !important;
         color: #475569 !important;
-        margin: 0 !important;
-        text-align: center !important;
     }
 
-    /* 5. HOVER EFFEKT: Knöpfe "ploppen" hervor */
+    /* 5. HOVER-EFFEKT: Vergrößern */
     .pdf-section-wrapper div.stButton > button:hover {
-        transform: scale(1.1) !important; /* Vergrößern beim Hover */
+        transform: scale(1.1) !important;
         border-color: #3b82f6 !important;
-        box-shadow: 0 12px 20px -5px rgba(0,0,0,0.1) !important;
-        z-index: 10 !important;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
     }
 
     /* 6. AKTIVER BUTTON */
