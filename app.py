@@ -580,56 +580,54 @@ other_docs = [
 
 st.markdown("""
 <style>
-    /* 1. ABSTAND OBEN: Schiebt den gesamten Galerie-Bereich nach unten */
-    [data-testid="stHorizontalBlock"] {
-        margin-top: 20px !important;
-    }
-
-    /* 2. BUTTON-STRUKTUR: Icon oben, Text unten */
+    /* 1. BUTTON-STRUKTUR: Zwingt Icon über den Text */
     div.stButton > button {
-        height: 120px !important; /* Feste Höhe für alle */
+        height: 150px !important;
         border-radius: 15px !important;
-        border: 2px solid #334155 !important; /* Dunkler Rand für Kontrast */
+        border: 2px solid #334155 !important;
         background-color: #ffffff !important;
         color: #1e293b !important;
         font-weight: 700 !important;
         
-        /* Flexbox erzwingt Icon über dem Text */
+        /* Das ist der entscheidende Teil */
         display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 10px !important; /* Abstand zwischen Icon und Text */
+        flex-direction: column !important; /* Vertikale Ausrichtung */
+        align-items: center !important;    /* Horizontal zentrieren */
+        justify-content: center !important; /* Vertikal zentrieren */
+        gap: 8px !important;               /* Abstand zwischen Icon und Text */
     }
 
-    /* 3. ICON-GRÖSSE: Macht die Emojis richtig groß */
-    div.stButton > button p {
-        font-size: 20px !important;
-        margin: 0 !important;
-        line-height: 1.1 !important;
+    /* 2. ICON-STYLING: Wir sprechen das Icon direkt an */
+    div.stButton > button span {
+        display: block !important;
+        font-size: 45px !important; /* Große Icons */
     }
 
-    /* 4. AKTIVER BUTTON: Markiert das gewählte Dokument Blau */
+    /* 3. TEXT-STYLING: Der Text unter dem Icon */
+    div.stButton > button div {
+        font-size: 14px !important;
+        line-height: 1.2 !important;
+        text-align: center !important;
+    }
+
+    /* 4. AKTIVER BUTTON: Markierung in Blau */
     div.active-btn button {
-        background-color: #1e293b !important; /* Edles Dunkelblau/Anthrazit */
+        background-color: #1e293b !important;
         color: #ffffff !important;
-        border-color: #0f172a !important;
     }
-    
-    /* Icon-Farbe im aktiven Button auf weiß setzen */
-    div.active-btn button p {
+    div.active-btn button span {
         color: #ffffff !important;
     }
 
-    /* 5. HOVER: Sanfter Effekt beim Drüberfahren */
+    /* 5. HOVER-EFFEKT */
     div.stButton > button:hover {
         border-color: #ff4b4b !important;
         color: #ff4b4b !important;
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 </style>
 """, unsafe_allow_html=True)
+
 
 
 # --- 5. LAYOUT & GALERIE ---
