@@ -627,6 +627,20 @@ st.markdown("""
     .pdf-section-wrapper .active-btn div.stButton > button p {
         color: white !important;
     }
+    
+    /* ABSTAND OBEN: Erhöhe die Zahl, um die Buttons weiter nach UNTEN zu schieben */
+    .custom-spacer-t { 
+        height: 40px !important; 
+        display: block !important; 
+        width: 100%; 
+    }
+
+    /* ABSTAND UNTEN: Erhöhe die Zahl für mehr Platz nach dem Grid */
+    .custom-spacer-b { 
+        height: 100px !important; 
+        display: block !important; 
+        width: 100%; 
+    }
 </style>
 """, unsafe_allow_html=True)
 
