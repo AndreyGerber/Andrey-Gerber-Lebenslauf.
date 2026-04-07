@@ -591,66 +591,59 @@ other_docs = [
 ]
 
 # --- 3. STYLING (SPACER & VERTIKALE BUTTONS) ---
-# --- 3. STYLING (FINAL KACHEL-EDITION) ---
 st.markdown("""
 <style>
-    /* 1. ABSTÄNDE (Spacer) */
+    /* 1. Spacer & Layout */
     .custom-spacer-t { height: 30px !important; display: block !important; }
     .custom-spacer-b { height: 80px !important; display: block !important; }
 
-    /* 2. BUTTON-GRUNDFORM (Die Kachel) */
+    /* 2. Button Grundform */
     .pdf-section-wrapper div.stButton > button {
-        /* FESTE BREITE & HÖHE FÜR KACHEL-LOOK */
         min-height: 120px !important;
         width: 100% !important;
-        
         border-radius: 16px !important;
         border: 1px solid #f1f5f9 !important;
         background-color: #ffffff !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important;
+        transition: all 0.3s ease !important;
         
-        /* Zwingt den Button-Inhalt in einen Stapel */
+        /* Den Button-Container zwingen */
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
     }
 
-    /* 3. ICON ÜBER TEXT ERZWINGEN */
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
-        display: flex !important;
-        flex-direction: column !important; /* ICON OBEN, TEXT UNTEN */
-        align-items: center !important;
-        justify-content: center !important;
-        margin: 0 !important;
-        gap: 8px !important; /* Abstand zwischen Icon und Text */
+    /* 3. DER FIX FÜR ICON OBEN / TEXT UNTEN */
+    /* Wir müssen das p-Tag UND das darin liegende span ansprechen */
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p,
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p span {
+        display: block !important; /* Block erzwingt den Umbruch */
+        text-align: center !important;
+        width: 100% !important;
         white-space: pre-wrap !important;
     }
 
-    /* ICON-GRÖSSE */
+    /* 4. ICON GRÖSSE (Erste Zeile) */
     .pdf-section-wrapper div.stButton > button p::first-line {
-        font-size: 36px !important; 
-        line-height: 1.2 !important;
+        font-size: 38px !important; 
+        line-height: 1.5 !important;
     }
 
-    /* TEXT-GRÖSSE & STIL */
+    /* 5. TEXT GRÖSSE (Der restliche Text) */
     .pdf-section-wrapper div.stButton > button p {
         font-size: 13px !important;
         font-weight: 700 !important;
         color: #475569 !important;
-        text-align: center !important;
-        line-height: 1.1 !important;
+        line-height: 1.2 !important;
     }
 
-    /* 4. HOVER-EFFEKT */
+    /* 6. HOVER & AKTIV */
     .pdf-section-wrapper div.stButton > button:hover {
-        transform: translateY(-5px) scale(1.03) !important;
+        transform: translateY(-5px) scale(1.02) !important;
         border-color: #3b82f6 !important;
         box-shadow: 0 15px 25px -5px rgba(0,0,0,0.1) !important;
     }
 
-    /* 5. AKTIVER BUTTON */
     .pdf-section-wrapper .active-btn div.stButton > button {
         background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
         border-color: #1e293b !important;
