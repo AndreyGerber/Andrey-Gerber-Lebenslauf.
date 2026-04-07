@@ -638,7 +638,7 @@ with col_gallery:
     st.markdown('</div>', unsafe_allow_html=True)
 
 with col_viewer:
-    st.subheader("📄 Vorschau")
+    #st.subheader("📄 Vorschau")
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     
     if pdf_b64:
