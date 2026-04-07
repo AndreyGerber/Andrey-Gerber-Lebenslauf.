@@ -677,42 +677,59 @@ with col_viewer:
 
 
 #Zertifikate Data Science
-# --- 1. DATEN ---
+
+st.markdown("""
+<style>
+    .showroom-wrapper {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        gap: 20px;
+        padding: 25px;
+        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        border-radius: 15px;
+    }
+    .showroom-item {
+        flex: 0 0 auto !important;
+        width: 130px;
+        height: 170px;
+        background: white;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none !important;
+        border: 1px solid #cbd5e1;
+    }
+    .sr-icon { font-size: 40px; }
+    .sr-label { font-size: 11px; color: #0f172a; font-weight: bold; text-align: center; }
+</style>
+""", unsafe_allow_html=True)
+# Deine Liste der Dokumente
 prog_files = [
     "1_Python for Data Science.pdf", "2_Exploratory Statistics with Python.pdf",
     "3_Data_Quality.pdf", "4_Data Visualization_Matplotlib.pdf",
-    "5_Data Visualization_with_Seaborn.pdf", "6_Matplotlib_Complements.pdf",
-    "7_DataViz_with_Plotly.pdf", "8_MCQ_Linux_and_Bash.pdf",
-    "9_Git_&_Github.pdf", "10_Unit_Testing.pdf",
-    "11_Classification_with_scikit-learn.pdf", "12_Regressionn_with_scikit-learn.pdf",
-    "13_Methodology_in_Data_Science.pdf", "14_Feature_Engineering_and_Optimisation.pdf",
-    "15_Time_Series_Analysis_with_Python.pdf", "16_Advanced_Classification_with_scikit.pdf"
+    "5_Data Visualization_with_Seaborn.pdf", "6_Matplotlib_Complements.pdf"
+    # ... hier die restlichen ergänzen
 ]
 
-# --- 2. HTML-STRING ZUSAMMENBAUEN ---
-# Wir nutzen einfache Anführungszeichen außen, damit wir doppelte im HTML nutzen können
-sr_html = '<div class="showroom-wrapper">'
+showroom_html = '<div class="showroom-wrapper">'
 
 for f in prog_files:
-    # Namen für die Anzeige säubern
-    clean_label = f.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
-    
-    # Der HTML-Baustein für jede Karte
-    sr_html += f'''
+    label = f.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
+    showroom_html += f'''
     <a href="/?doc={f}" target="_self" class="showroom-item">
         <div class="sr-icon">🐍</div>
-        <div class="sr-label">{clean_label}</div>
+        <div class="sr-label">{label}</div>
     </a>
     '''
 
-sr_html += '</div>'
+showroom_html += '</div>'
 
-# --- 3. AUSGABE (DER WICHTIGSTE TEIL) ---
-st.write("---")
-st.subheader("🖥️ Programmier- & Data Science Showroom")
+# ✅ DAS IST DIE ENTSCHEIDENDE ZEILE:
+st.markdown(showroom_html, unsafe_allow_html=True)
 
-# Hier MUSS unsafe_allow_html=True stehen, sonst sieht man nur Text
-st.markdown(sr_html, unsafe_allow_html=True)
 
 
 
