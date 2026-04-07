@@ -589,8 +589,8 @@ st.markdown("""
         border-color: #0f172a;
         color: white !important;
     }
-    .card-icon { font-size: 50px; margin-bottom: 10px; }
-    .card-label { font-size: 14px; font-weight: 700; text-align: center; line-height: 1.2; }
+    .card-icon { font-size: 30px; margin-bottom: 10px; }
+    .card-label { font-size: 19px; font-weight: 700; text-align: center; line-height: 1.2; }
     
     /* Button-Reset (Streamlit Button unsichtbar über HTML Karte legen) */
     .stButton button {
