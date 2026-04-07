@@ -545,7 +545,7 @@ import streamlit as st
 import base64
 import os
 
-# --- 1. SETUP ---
+# --- 1. SETUP & HELPER ---
 PDF_FOLDER = "documents"
 
 def get_pdf_base64(file_name):
@@ -558,94 +558,102 @@ def get_pdf_base64(file_name):
 if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
 
-# --- 2. STYLING (Vorgezogen für korrekte Anzeige) ---
+# --- 2. STYLING (Kontrast & Aktiver Status) ---
 st.markdown("""
 <style>
-    /* Der Hintergrund-Container für die Galerie */
-    .gallery-container {
-        background-color: #f0f2f6; /* Dezentes Grau-Blau */
-        padding: 25px;
-        border-radius: 20px;
-        border: 1px solid #e0e4e9;
-        margin-bottom: 20px;
-    }
-
-    /* Styling für die Buttons */
+    /* Grund-Styling der Buttons (Starker Kontrast) */
     div.stButton > button {
-        height: 120px;
+        height: 130px;
         border-radius: 12px;
-        border: 1px solid #e0e0e0;
-        background-color: #ffffff !important; /* Wichtig: Weiß auf Grau */
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        transition: all 0.3s ease;
-        font-size: 12px;
-        font-weight: 600;
-        color: #444;
+        border: 2px solid #334155 !important; /* Dunkler, kräftiger Rand */
+        background-color: #ffffff !important;
+        color: #1e293b !important;
+        font-weight: 700 !important;
+        transition: all 0.2s ease;
         white-space: pre-wrap;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
     
+    /* Hover-Effekt */
     div.stButton > button:hover {
-        border-color: #ff4b4b;
-        color: #ff4b4b;
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        border-color: #ff4b4b !important;
+        color: #ff4b4b !important;
+        background-color: #f8fafc !important;
+    }
+
+    /* Styling für den GERADE AUSGEWÄHLTEN Button */
+    div[data-testid="stVerticalBlock"] div.active-btn button {
+        background-color: #1e293b !important; /* Dunkelblau/Anthrazit */
+        color: #ffffff !important;
+        border-color: #0f172a !important;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.3) !important;
+    }
+    
+    /* Icons vergrößern */
+    div.stButton > button span {
+        font-size: 24px;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- 3. LAYOUT ---
+# --- 3. DATEN ---
+top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namens-\nänderung"}
+
+other_docs = [
+    {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Berufsschule"},
+    {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Abitur"},
+    {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Praktikum\nV&F"},
+    {"file": "Bachelor.pdf", "icon": "✈️", "label": "Bachelor Zeugnis"},
+    {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Schweißkurs"},
+    {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalytiker"},
+    {"file": "Master.pdf", "icon": "🎓", "label": "Master Zeugnis"},
+    {"file": "b_k_pulse.pdf", "icon": "📟", "label": "B&K Pulse"},
+    {"file": "M_BBM.pdf", "icon": "🔊", "label": "M-BBM"},
+    {"file": "InternerQualitätsauditor.pdf", "icon": "🕵️", "label": "Auditor 9000 ff."},
+    {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "QMB ISO 9001"},
+    {"file": "QMB_ISO_17025.pdf", "icon": "🧪", "label": "QMB ISO 17025"}
+]
+
+# --- 4. LAYOUT ---
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
-    # Beginn des farbigen Hintergrund-Bereichs
-    st.markdown('<div class="gallery-container">', unsafe_allow_html=True)
-    
     st.subheader("🗃️ Credentials & Zertifikate")
     
-    top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namens-\nänderung"}
-
-    other_docs = [
-        {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Berufsschule"},
-        {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Abitur"},
-        {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Praktikum\nV&F"},
-        {"file": "Bachelor.pdf", "icon": "✈️", "label": "Bachelor Zeugnis"},
-        {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Schweißkurs"},
-        {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalytiker"},
-        {"file": "Master.pdf", "icon": "🎓", "label": "Master Zeugnis"},
-        {"file": "b_k_pulse.pdf", "icon": "📟", "label": "B&K Pulse"},
-        {"file": "M_BBM.pdf", "icon": "🔊", "label": "M-BBM"},
-        {"file": "InternerQualitätsauditor.pdf", "icon": "🕵️", "label": "Auditor 9000 ff."},
-        {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "QMB ISO 9001"},
-        {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
-    ]
+    # Helfer-Funktion um Buttons zu zeichnen
+    def render_gallery_button(doc_obj):
+        is_active = st.session_state.active_doc == doc_obj['file']
+        if is_active:
+            # Falls aktiv, in Container mit CSS-Klasse 'active-btn' packen
+            st.markdown('<div class="active-btn">', unsafe_allow_html=True)
+        
+        if st.button(f"{doc_obj['icon']}\n{doc_obj['label']}", key=f"btn_{doc_obj['file']}", use_container_width=True):
+            st.session_state.active_doc = doc_obj['file']
+            st.rerun()
+            
+        if is_active:
+            st.markdown('</div>', unsafe_allow_html=True)
 
     # Obere Reihe (Zentriert)
-    top_cols = st.columns(3)
-    with top_cols[1]:
-        if st.button(f"{top_doc['icon']}\n{top_doc['label']}", key=f"btn_{top_doc['file']}", use_container_width=True):
-            st.session_state.active_doc = top_doc['file']
-            st.rerun()
+    t_col1, t_col2, t_col3 = st.columns(3)
+    with t_col2:
+        render_gallery_button(top_doc)
 
     # Restliche Reihen (3er Grid)
     grid_cols = st.columns(3)
     for i, doc in enumerate(other_docs):
         with grid_cols[i % 3]:
-            if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
-                st.session_state.active_doc = doc['file']
-                st.rerun()
-    
-    # Ende des farbigen Hintergrund-Bereichs
-    st.markdown('</div>', unsafe_allow_html=True)
+            render_gallery_button(doc)
 
 with col_viewer:
-    #st.subheader("📄 Vorschau")
+    st.subheader("📄 Vorschau")
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     
     if pdf_b64:
-        pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="900px" style="border:none; border-radius:15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></iframe>'
+        pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="1000px" style="border:2px solid #334155; border-radius:15px;"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
     else:
-        st.error(f"Datei '{st.session_state.active_doc}' wurde nicht gefunden.")
+        st.error(f"Datei '{st.session_state.active_doc}' nicht gefunden.")
 
 
 
