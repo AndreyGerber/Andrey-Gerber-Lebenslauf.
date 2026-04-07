@@ -748,7 +748,40 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<style>
+    /* 1. DER RAUM: Erzeugt die Tiefenwirkung für das gesamte Grid */
+    [data-testid="stHorizontalBlock"] {
+        perspective: 1500px; /* Je kleiner der Wert, desto stärker das 3D */
+        padding-top: 50px;
+    }
 
+    /* 2. DIE KARTE: Jedes Bild bekommt eine Grund-Neigung */
+    [data-testid="stImage"] {
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        transform: rotateY(-25deg) rotateX(10deg); /* Neigt die Bilder schräg in den Raum */
+        border-radius: 10px;
+        box-shadow: -10px 10px 20px rgba(0,0,0,0.3); /* Schatten zur Seite für Tiefe */
+        cursor: pointer;
+        border: 1px solid #dce4e9;
+    }
+    
+    /* 3. DER HOVER: Karte dreht sich beim Anschauen frontal zum User */
+    [data-testid="stImage"]:hover {
+        transform: rotateY(0deg) rotateX(0deg) scale(1.8) translateZ(100px) !important;
+        z-index: 999 !important;
+        box-shadow: 0 20px 40px rgba(0, 85, 165, 0.4) !important;
+        border-color: #0055A5 !important;
+    }
+
+    /* Beschriftung anpassen, damit sie nicht mitdreht */
+    [data-testid="stImageCaption"] {
+        font-size: 10px !important;
+        transform: translateZ(20px);
+        font-weight: bold;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 
 
