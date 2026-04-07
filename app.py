@@ -565,7 +565,7 @@ other_docs = [
     {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Abitur"},
     {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Praktikum V&F"},
     {"file": "Bachelor.pdf", "icon": "✈️", "label": "Bachelor Zeugnis"},
-    {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Schweißkurs"},
+    {"file": "Schweisskurs.pdf", "icon": "👨‍Aldrich", "label": "Schweißkurs"},
     {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalytiker"},
     {"file": "Master.pdf", "icon": "🎓", "label": "Master Zeugnis"},
     {"file": "b_k_pulse.pdf", "icon": "📟", "label": "B&K Pulse"},
@@ -575,46 +575,47 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# --- 3. STYLING (VERTIKALER STACK & EINZELGRÖSSEN) ---
+# --- 3. STYLING (MANUELLE ABSTÄNDE & VERTIKALE BUTTONS) ---
 st.markdown("""
 <style>
-    /* 1. Gesamte Galerie nach oben rücken */
-    [data-testid="stHorizontalBlock"] { align-items: flex-start !important; }
+    /* 1. MANUELLE ABSTÄNDE (Spacer) */
+    .custom-spacer-t { height: 40px !important; display: block !important; width: 100%; }
+    .custom-spacer-b { height: 100px !important; display: block !important; width: 100%; }
 
-    /* 2. Button als vertikale Karte */
+    /* 2. BUTTON DESIGN (Zentrierter Stack) */
     .pdf-section-wrapper div.stButton > button {
-        height: 115px !important;
-        border-radius: 12px !important;
+        height: 125px !important;
+        border-radius: 14px !important;
         border: 1px solid #e2e8f0 !important;
         background-color: white !important;
         transition: all 0.2s ease-in-out !important;
         display: flex !important;
-        flex-direction: column !important; /* Stapelt Inhalt übereinander */
+        flex-direction: column !important; /* Stapelt Icon über Text */
         align-items: center !important;
         justify-content: center !important;
-        white-space: pre-wrap !important; /* Erlaubt den Zeilenumbruch */
+        gap: 8px !important;
     }
 
-    /* 3. ICON GRÖSSE (Die erste Zeile des Paragraphs) */
+    /* 3. ICON GRÖSSE (Einzeln anpassbar) */
     .pdf-section-wrapper div.stButton > button p::first-line {
-        font-size: 32px !important; /* HIER Icon-Größe ändern */
-        line-height: 1.6 !important;
+        font-size: 32px !important; /* Größe des Emojis */
+        line-height: 1.4 !important;
     }
 
-    /* 4. TEXT GRÖSSE (Der restliche Text) */
+    /* 4. TEXT GRÖSSE (Einzeln anpassbar) */
     .pdf-section-wrapper div.stButton > button p {
-        font-size: 13px !important; /* HIER Text-Größe ändern */
+        font-size: 13px !important; /* Größe des Labels */
         font-weight: 600 !important;
         color: #475569 !important;
         margin: 0 !important;
         text-align: center !important;
     }
 
-    /* 5. HOVER-EFFEKT: Zoom */
+    /* 5. HOVER EFFEKT: Vergrößern */
     .pdf-section-wrapper div.stButton > button:hover {
         transform: scale(1.1) !important;
         border-color: #3b82f6 !important;
-        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
         z-index: 10 !important;
     }
 
@@ -626,48 +627,47 @@ st.markdown("""
     .pdf-section-wrapper .active-btn div.stButton > button p {
         color: white !important;
     }
-    .custom-spacer-t {
-        height: 30px !important; /* Hier kannst du den Abstand in Pixeln einstellen */
-        display: block !important;
-        width: 100% !important;
-    }
-
-    /* Der untere Block */
-    .custom-spacer-b {
-        height: 100px !important; /* Hier den Abstand nach unten einstellen */
-        display: block !important;
-    }
 </style>
 """, unsafe_allow_html=True)
 
 # --- 4. LAYOUT & LOGIK ---
 st.markdown('<div class="pdf-section-wrapper">', unsafe_allow_html=True)
+
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
+    # --- ABSTAND OBEN ---
+    st.markdown('<div class="custom-spacer-t"></div>', unsafe_allow_html=True)
+
     def render_btn(doc):
         active = st.session_state.active_doc == doc['file']
         if active: st.markdown('<div class="active-btn">', unsafe_allow_html=True)
         
-        # WICHTIG: Das \n erzwingt, dass ::first-line (unser Icon) separat erkannt wird
+        # \n sorgt dafür, dass ::first-line im CSS das Icon erkennt
         if st.button(f"{doc['icon']}\n{doc['label']}", key=f"doc_btn_{doc['file']}", use_container_width=True):
             st.session_state.active_doc = doc['file']
             st.rerun()
             
         if active: st.markdown('</div>', unsafe_allow_html=True)
 
-    # Grid
+    # Top Dokument (zentriert)
     t_c1, t_c2, t_c3 = st.columns(3)
     with t_c2: render_btn(top_doc)
 
+    # Grid für Rest
     grid_cols = st.columns(3)
     for i, d in enumerate(other_docs):
-        with grid_cols[i % 3]: render_btn(d)
+        with grid_cols[i % 3]: 
+            render_btn(d)
+
+    # --- ABSTAND UNTEN ---
+    st.markdown('<div class="custom-spacer-b"></div>', unsafe_allow_html=True)
 
 with col_viewer:
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     if pdf_b64:
-        st.markdown(f'<iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" width="100%" height="900px" style="border:2px solid #334155; border-radius:15px;"></iframe>', unsafe_allow_html=True)
+        display = f'<iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" width="100%" height="900px" style="border:2px solid #334155; border-radius:15px;"></iframe>'
+        st.markdown(display, unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
