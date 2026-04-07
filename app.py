@@ -577,59 +577,25 @@ other_docs = [
 # --- 3. STYLING (DIESER BLOCK IST ENTSCHEIDEND) ---
 st.markdown("""
 <style>
-    /* Punkt 1: Layout oben ausrichten */
-    [data-testid="stColumn"] {
+    /* Punkt 1: Zwingt die linke Spalte dazu, ganz oben zu starten */
+    [data-testid="column"]:first-child div[data-testid="stVerticalBlock"] {
+        justify-content: flex-start !important;
+        vertical-align: top !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: flex-start !important;
     }
 
-    /* Punkt 2: Zwingt Icon über Text & macht Icons groß */
-    div.stButton > button {
-        height: 110px !important;
-        border: 2px solid #334155 !important;
-        border-radius: 15px !important;
-        background-color: #ffffff !important;
-        padding: 10px !important;
+    /* Entfernt den Standard-Abstand, den Streamlit oben einbaut */
+    [data-testid="column"]:first-child {
+        padding-top: 0rem !important;
     }
 
-    /* Zielt auf den inneren Text-Container von Streamlit */
-    div.stButton > button div[data-testid="stMarkdownContainer"] p {
-        display: flex !important;
-        flex-direction: column !important; /* Vertikal zwingen */
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 10px !important; /* Abstand zwischen Icon und Text */
-        font-size: 20px !important;
-        font-weight: 700 !important;
-        color: #1e293b !important;
-        line-height: 1.2 !important;
+    /* Optional: Falls du doch einen kleinen, kontrollierten Abstand willst */
+    .gallery-top-spacer {
+        margin-top: 20px;
     }
-
-    /* Die Icons (Emojis) innerhalb des Buttons massiv vergrößern */
-    div.stButton > button div[data-testid="stMarkdownContainer"] p span {
-        font-size: 50px !important; 
-        display: block !important;
-    }
-
-    /* Punkt 3: Aktiver Button (Blau) */
-    div.active-btn button {
-        background-color: #1e293b !important; 
-        border-color: #000000 !important;
-    }
-    div.active-btn button div[data-testid="stMarkdownContainer"] p,
-    div.active-btn button div[data-testid="stMarkdownContainer"] p span {
-        color: #ffffff !important;
-    }
-
-    /* Hover-Effekt */
-    div.stButton > button:hover {
-        border-color: #ff4b4b !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
-    }
-    
-    .active-btn { display: contents; }
 </style>
+
 """, unsafe_allow_html=True)
 
 # --- 4. LAYOUT & LOGIK ---
