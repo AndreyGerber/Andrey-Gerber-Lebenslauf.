@@ -578,51 +578,40 @@ other_docs = [
 # --- 3. STYLING (ISOLIERT & REPARIERT) ---
 st.markdown("""
 <style>
-    /* 1. Den gesamten Bereich abgrenzen */
-    .pdf-section-wrapper {
-        padding: 10px;
-    }
-
-    /* 2. Button-Styling: Stabil & Modern */
+    /* 1. Button-Container stabilisieren */
     .pdf-section-wrapper div.stButton > button {
-        height: 110px !important;
-        width: 100% !important;
-        border: 1px solid #e2e8f0 !important;
+        min-height: 110px !important;
+        padding-top: 20px !important;
+        padding-bottom: 20px !important;
         border-radius: 12px !important;
         background-color: #ffffff !important;
-        transition: all 0.3s ease !important;
-        /* Zentrierung des Inhalts */
+        border: 1px solid #e2e8f0 !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        white-space: pre-wrap !important; /* Erlaubt Zeilenumbrüche für das Label */
     }
 
-    /* 3. Text & Emoji Größe */
+    /* 2. Emoji-Größe & Position korrigieren */
+    /* Streamlit packt den Text in ein <p> Tag. Das müssen wir ansprechen. */
     .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
-        font-size: 14px !important;
-        font-weight: 600 !important;
-        color: #475569 !important;
-        line-height: 1.2 !important;
-        text-align: center !important;
+        font-size: 14px !important; /* Textgröße */
+        line-height: 1.6 !important;
+        display: block !important;
     }
 
-    /* 4. Aktiver Button (Dunkelblau) */
+    /* Trick: Das Emoji wird über die Schriftgröße des gesamten Buttons gesteuert */
+    .pdf-section-wrapper div.stButton > button {
+        font-size: 28px !important; /* Hier stellst du die EMOJI-Größe ein */
+    }
+
+    /* 3. Aktiver Button (Dunkelblau) */
     .pdf-section-wrapper div.active-btn button {
         background-color: #1e293b !important;
-        border-color: #1e293b !important;
+        color: white !important;
     }
-    
-    .pdf-section-wrapper div.active-btn button p {
-        color: #ffffff !important;
-    }
-
-    /* 5. Hover-Effekt */
-    .pdf-section-wrapper div.stButton > button:hover {
-        border-color: #3b82f6 !important;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    .pdf-section-wrapper div.active-btn button div[data-testid="stMarkdownContainer"] p {
+        color: white !important;
     }
 </style>
 """, unsafe_allow_html=True)
