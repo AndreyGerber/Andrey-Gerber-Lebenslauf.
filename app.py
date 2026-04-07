@@ -272,28 +272,66 @@ st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'disp
 
 
 
-import plotly.express as px
-import pandas as pd
+import streamlit as st
 
-# Daten aufbereiten
-data = [
-    dict(Event="Geburt (UdSSR)", Start="1988-01-01", Ende="1988-12-31", Info="Born in UdSSR"),
-    dict(Event="Russland", Start="1991-01-01", Ende="1991-12-31", Info="Moved without moving"),
-    dict(Event="Schule", Start="1996-01-01", Ende="2005-12-31", Info="School (not cool)"),
-    dict(Event="Emigration", Start="2006-01-01", Ende="2006-12-31", Info="Emigration to GE 🇩🇪"),
-    dict(Event="Studium", Start="2010-01-01", Ende="2016-12-31", Info="Aircraft Design (B.Eng. & Ms.Sc.)"),
-    dict(Event="TÜV Rheinland", Start="2017-01-01", Ende="2021-12-31", Info="Lab & Quality Expert"),
-    dict(Event="Ferchau (Siemens)", Start="2022-01-01", Ende="2025-12-31", Info="Quality Systems Engineering"),
-    dict(Event="Liora", Start="2026-01-01", Ende="2026-12-31", Info="Data Science & ML")
-]
+# --- HEADER (Dein Foto & Kontakt) ---
+# (Hier kommt dein bestehender Header-Code hin)
 
-df = pd.DataFrame(data)
+# --- ZEITSTRAHL ---
+st.write("---")
+st.subheader("📍 Mein Werdegang")
 
-fig = px.timeline(df, x_start="Start", x_end="Ende", y="Event", hover_data=["Info"], color="Event")
-fig.update_yaxes(autorange="reversed") 
-fig.update_layout(showlegend=False, height=400)
+# Dein gezeichneter Zeitstrahl als zentrales Element
+# Ersetze 'zeitstrahl.png' durch deinen Dateinamen
+st.image("documents/zeitstrahl.png", use_container_width=True)
 
-st.plotly_chart(fig, use_container_width=True)
+# --- DETAIL-SEKTIONEN (Expander) ---
+st.write("### Details zu den Stationen")
+
+# 1. TÜV Rheinland
+with st.expander("🛠️ 2017 – 2022: TÜV Rheinland | Test & Quality Expert", expanded=False):
+    col_text, col_img = st.columns([1.5, 1])
+    
+    with col_text:
+        st.markdown("#### **Test & Measurement Engineer**")
+        st.markdown("""
+        * **Akustik-Spezialist:** Normgerechte Messungen nach DIN EN ISO 3743/3744.
+        * **Innovation:** Planung und Aufbau einer Smart-Speaker-Prüfkammer.
+        * **Gremienarbeit:** Aktives Mitglied im DIN-Normenausschuss.
+        """)
+        
+        st.markdown("#### **Qualitätsmanager (ab 2019)**")
+        st.markdown("""
+        * **Auditierung:** Durchführung interner Audits (ISO 9001 & 17025).
+        * **Prozessoptimierung:** Verantwortung für CAPA und Beschwerdemanagement.
+        """)
+    
+    with col_img:
+        # Ersetze dies durch deine Collage aus dem Bild
+        st.image("documents/tuev_details.jpg", caption="Labor & Normen-Expertise")
+
+# 2. Ferchau / Siemens
+with st.expander("🏗️ 2022 – 2025: Ferchau (Einsatz Siemens) | Quality Systems Engineering"):
+    st.markdown("""
+    * **System-Optimierung:** Entwicklung und Implementierung von Qualitätsstandards in komplexen Engineering-Projekten.
+    * **Schnittstellenmanagement:** Koordination zwischen verschiedenen Fachabteilungen zur Sicherstellung der Projekt-Compliance.
+    """)
+
+# 3. Liora / Data Science
+with st.expander("🚀 2026: Liora | Data Science & Machine Learning"):
+    col_desc, col_tech = st.columns(2)
+    with col_desc:
+        st.markdown("""
+        * **KI-Integration:** Entwicklung von Machine-Learning-Modellen zur Prozessvorhersage.
+        * **Dashboards:** Visualisierung komplexer Datenströme mit Streamlit.
+        """)
+    with col_tech:
+        st.info("**Tech-Stack:** Python, Pandas, Scikit-Learn, Streamlit")
+
+# --- DER WEG ZU DEN DOKUMENTEN ---
+st.write("---")
+st.info("💡 **Tipp:** Klicke oben in der **3D-Galerie** auf die Symbole, um die zugehörigen Zertifikate und Zeugnisse im Viewer zu öffnen.")
+
 
 
 
