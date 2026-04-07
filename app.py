@@ -578,39 +578,51 @@ other_docs = [
 # --- 3. STYLING (ISOLIERT & REPARIERT) ---
 st.markdown("""
 <style>
-    /* Button als Karte mit Schatten statt Rahmen */
+    /* 1. Den gesamten Bereich abgrenzen */
+    .pdf-section-wrapper {
+        padding: 10px;
+    }
+
+    /* 2. Button-Styling: Stabil & Modern */
     .pdf-section-wrapper div.stButton > button {
-        height: 120px !important; /* Etwas höher für mehr Platz */
-        border: 1px solid #f1f5f9 !important;
-        border-radius: 16px !important;
+        height: 110px !important;
+        width: 100% !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
         background-color: #ffffff !important;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important;
+        transition: all 0.3s ease !important;
+        /* Zentrierung des Inhalts */
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
+        white-space: pre-wrap !important; /* Erlaubt Zeilenumbrüche für das Label */
     }
 
-    /* Die Emojis (Icons) gezielt ansprechen */
-    /* Hinweis: Wir nutzen hier eine größere Font-Size für den ersten Teil des Button-Texts */
-    .pdf-section-wrapper div.stButton > button p {
-        font-size: 14px !important; /* Textgröße */
-        font-weight: 500 !important;
-        line-height: 1.4 !important;
+    /* 3. Text & Emoji Größe */
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        color: #475569 !important;
+        line-height: 1.2 !important;
+        text-align: center !important;
     }
 
-    /* Hover-Effekt: Karte hebt sich leicht ab */
+    /* 4. Aktiver Button (Dunkelblau) */
+    .pdf-section-wrapper div.active-btn button {
+        background-color: #1e293b !important;
+        border-color: #1e293b !important;
+    }
+    
+    .pdf-section-wrapper div.active-btn button p {
+        color: #ffffff !important;
+    }
+
+    /* 5. Hover-Effekt */
     .pdf-section-wrapper div.stButton > button:hover {
         border-color: #3b82f6 !important;
-        background-color: #f8fafc !important;
-        transform: translateY(-3px);
-        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important;
-    }
-
-    /* Aktiver Status (Dunkelblau) */
-    .pdf-section-wrapper div.active-btn button {
-        background: #1e293b !important;
-        color: white !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
     }
 </style>
 """, unsafe_allow_html=True)
