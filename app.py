@@ -637,7 +637,7 @@ st.markdown("""
 
     /* ABSTAND UNTEN: Erhöhe die Zahl für mehr Platz nach dem Grid */
     .custom-spacer-b { 
-        height: 100px !important; 
+        height: 150px !important; 
         display: block !important; 
         width: 100%; 
     }
