@@ -596,22 +596,14 @@ st.markdown("""
         margin-bottom: 0px; /* Verhindert extra Abstände */
     }
 
-    .galerie-header {
-        margin-top: 160px !important; /* Hier den Abstand nach oben einstellen */
-        margin-bottom: 20px !important;
-        display: block;
-    }
-
-    /* Setzt die Abstände der Button-Reihen auf Null zurück */
+    /* Erzwingt, dass die Buttons in einer Reihe oben bündig starten */
     [data-testid="stHorizontalBlock"] {
         align-items: flex-start !important;
-        margin-top: 0px !important; 
-        gap: 10px !important; /* Kleiner, sauberer Abstand zwischen den Spalten */
     }
     
     /* Icons vergrößern und fixieren */
     div.stButton > button p {
-        font-size: 18px !important;
+        font-size: 20px !important;
         margin: 0 !important;
         line-height: 1.2 !important;
         display: block;
