@@ -888,47 +888,45 @@ st.markdown("<br>", unsafe_allow_html=True) # HTML-Umbruch für präzise Kontrol
 
 st.markdown("""
 <style>
-    /* Der Hintergrund: Eine matte Wandfarbe */
-    .gallery-wall {
-        background-color: #cbd5e1; /* Ein sanftes Grau-Blau, wie auf deinem Beispielfoto */
+    /* Der Hintergrund: Eine neutrale Wandfarbe */
+    .picture-wall {
+        background-color: #f1f5f9;
         padding: 60px 20px;
         border-radius: 20px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 30px;
     }
 
-    /* Das gerahmte Bild */
+    /* Der äußere schwarze Rahmen */
     [data-testid="stImage"] {
-        background: #ffffff; /* Der weiße Rahmen */
-        padding: 12px; /* Breite des Rahmens */
-        border-radius: 4px; /* Leicht abgerundete Ecken für den Rahmen */
+        background-color: #111827; /* Schwarz/Anthrazit Rahmen */
+        padding: 8px; /* Dicke des äußeren Rahmens */
+        border-radius: 2px;
         
-        /* Der Schatten erzeugt den 3D-Effekt an der Wand */
+        /* Das Passepartout (weißer Innenrand) */
+        border: 15px solid #ffffff; 
+        
+        /* Schatten für den 3D-Effekt an der Wand */
         box-shadow: 
-            5px 5px 15px rgba(0,0,0,0.3), 
-            1px 1px 2px rgba(0,0,0,0.1);
-        
-        transition: all 0.4s ease-in-out;
-        cursor: pointer;
+            10px 10px 20px rgba(0,0,0,0.3), 
+            2px 2px 5px rgba(0,0,0,0.2);
+            
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: zoom-in;
     }
 
-    /* Animation: Wenn man näher tritt (Hover) */
+    /* Hover-Effekt: Das Bild kommt dem Betrachter entgegen */
     [data-testid="stImage"]:hover {
-        transform: scale(1.1) translateY(-10px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        transform: scale(1.15) translateY(-15px);
+        box-shadow: 0 25px 50px rgba(0,0,0,0.4);
         z-index: 100;
     }
 
-    /* Optionale Bildunterschrift wie ein kleines Schildchen unter dem Bild */
+    /* Die Beschriftung (wie ein kleines Schild unter dem Rahmen) */
     [data-testid="stImageCaption"] {
-        background: rgba(255,255,255,0.8);
-        padding: 2px 8px;
-        margin-top: 10px !important;
         font-size: 10px !important;
-        border-radius: 2px;
-        color: #334155 !important;
+        font-weight: bold;
+        color: #475569 !important;
+        margin-top: 15px !important;
+        text-transform: uppercase;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -937,132 +935,6 @@ st.markdown("""
 
 
 
-
-
-import streamlit as st
-import base64
-import os
-
-# --- 1. SETUP & DATEN ---
-st.set_page_config(layout="wide")
-
-if 'selected_doc' not in st.session_state:
-    st.session_state.selected_doc = "Master.pdf"
-
-# Funktion zum Laden des PDFs
-def get_pdf_base64(file_name):
-    path = f"documents/{file_name}"
-    if os.path.exists(path):
-        with open(path, "rb") as f:
-            return base64.b64encode(f.read()).decode('utf-8')
-    return None
-
-# Überprüfe, ob ein Link geklickt wurde (via URL-Parameter)
-query_params = st.query_params
-if "doc" in query_params:
-    st.session_state.selected_doc = query_params["doc"]
-
-# --- 2. LAYOUT (70% Galerie, 30% Viewer) ---
-col_galerie, col_viewer = st.columns([2, 1])
-
-with col_galerie:
-    st.header("🏛️ Deine Virtuelle Galerie")
-    
-    # CSS für stabilen 3D-Effekt und Klickbarkeit
-    gallery_html = f"""
-    <style>
-        .scene {{
-            perspective: 1200px;
-            display: flex;
-            justify-content: center;
-            height: 550px;
-            background: #f0f2f6;
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-        }}
-        .wall {{
-            position: absolute;
-            width: 200px;
-            height: 280px;
-            top: 120px;
-            transform-style: preserve-3d;
-            transition: all 0.4s ease-out;
-        }}
-        
-        /* Karten-Positionen (fest fixiert) */
-        .c1 {{ transform: rotateY(35deg) translateX(-350px); }}
-        .c2 {{ transform: rotateY(35deg) translateX(-120px); }}
-        .p1 {{ transform: rotateY(-35deg) translateX(120px); }}
-        .p2 {{ transform: rotateY(-35deg) translateX(350px); }}
-
-        /* Jede Karte ist ein Link, der die ganze Fläche füllt */
-        .card-link {{
-            display: block;
-            width: 100%;
-            height: 100%;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            text-decoration: none;
-            color: #0055A5;
-            text-align: center;
-            border: 2px solid transparent;
-            transition: all 0.4s;
-        }}
-
-        /* ZOOM AUF DER STELLE (Keine Verschiebung der Hitbox) */
-        .wall:hover {{
-            transform: scale(1.25) translateZ(150px) !important;
-            z-index: 1000;
-        }}
-        .wall:hover .card-link {{
-            border-color: #ff4b4b;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }}
-
-        .icon {{ font-size: 50px; margin-top: 50px; display: block; }}
-        .title {{ font-size: 20px; font-weight: bold; margin-top: 15px; display: block; }}
-    </style>
-
-    <div class="scene">
-        <div class="wall c1">
-            <a href="/?doc=Interner+Qualitätsauditor.pdf" target="_self" class="card-link">
-                <span class="icon">📜</span><span class="title">Auditor</span>
-            </a>
-        </div>
-        <div class="wall c2">
-            <a href="/?doc=Master.pdf" target="_self" class="card-link">
-                <span class="icon">🎓</span><span class="title">Master</span>
-            </a>
-        </div>
-        <div class="wall p1">
-            <a href="/?doc=Bachelor.pdf" target="_self" class="card-link">
-                <span class="icon">🏗️</span><span class="title">Bachelor</span>
-            </a>
-        </div>
-        <div class="wall p2">
-            <a href="/?doc=Schweisskurs.pdf" target="_self" class="card-link">
-                <span class="icon">🔥</span><span class="title">Schweißen</span>
-            </a>
-        </div>
-    </div>
-    """
-    st.markdown(gallery_html, unsafe_allow_html=True)
-
-with col_viewer:
-    st.subheader("📄 Vorschau")
-    current_file = st.session_state.selected_doc
-    pdf_b64 = get_pdf_base64(current_file)
-    
-    if pdf_b64:
-        # PDF ohne neuen Tab anzeigen
-        pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="800px" style="border:none; border-radius:10px;"></iframe>'
-        st.markdown(pdf_display, unsafe_allow_html=True)
-    else:
-        st.error(f"Datei nicht gefunden: {current_file}")
-
-st.caption("Tipp: Klicke direkt auf die Karte, um das Dokument rechts zu laden.")
 
 
 
