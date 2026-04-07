@@ -663,7 +663,7 @@ with col_gallery:
             render_gallery_button(doc)
 
 with col_viewer:
-    st.subheader("📄 Vorschau")
+    #st.subheader("📄 Vorschau")
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     if pdf_b64:
         pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="1000px" style="border:2px solid #334155; border-radius:15px;"></iframe>'
