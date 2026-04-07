@@ -578,55 +578,52 @@ other_docs = [
 # --- 3. STYLING (ISOLIERT & REPARIERT) ---
 st.markdown("""
 <style>
-    /* Der Schutzkasten */
+    /* 1. Die Button-Grundform */
     .pdf-section-wrapper div.stButton > button {
-        height: 110px !important;
-        border: 1.5px solid #e2e8f0 !important; /* Dezenterer Rahmen */
+        height: 100px !important;
+        border: 1px solid #e2e8f0 !important;
         border-radius: 12px !important;
         background-color: #ffffff !important;
-        padding: 5px !important;
-        transition: all 0.2s ease-in-out !important;
+        transition: all 0.3s ease !important;
     }
 
-    /* Das Layout IM Button */
+    /* 2. Text & Icon Ausrichtung */
     .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 2px !important; /* Engerer Zusammenhalt von Icon & Text */
+        line-height: 1.2 !important;
     }
 
-    /* Die Emojis massiv vergrößern */
+    /* 3. DAS EMOJI GROSS MACHEN */
+    /* Wir vergrößern den gesamten Button-Inhalt und regeln den Text danach wieder runter */
     .pdf-section-wrapper div.stButton > button {
-        font-size: 38px !important; /* Emoji-Power */
+        font-size: 32px !important; /* Größe des Emojis */
     }
 
-    /* Das Label (Text unter dem Emoji) */
+    /* 4. DAS LABEL (TEXT) ANPASSEN */
     .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] {
-        font-size: 13px !important;
+        font-size: 13px !important; /* Kleinerer Text fürs Label */
         font-weight: 600 !important;
         color: #475569 !important;
-        line-height: 1.1 !important;
     }
 
-    /* Aktiver Button: Kräftiges Dunkelblau */
+    /* 5. Aktiver Button (Dunkelblau) */
     .pdf-section-wrapper div.active-btn button {
         background-color: #1e293b !important;
         border-color: #1e293b !important;
-        box-shadow: 0 4px 12px rgba(30, 41, 59, 0.2) !important;
     }
-    
-    .pdf-section-wrapper div.active-btn button div[data-testid="stMarkdownContainer"] p,
-    .pdf-section-wrapper div.active-btn button div[data-testid="stMarkdownContainer"] {
+    .pdf-section-wrapper div.active-btn button div[data-testid="stMarkdownContainer"],
+    .pdf-section-wrapper div.active-btn button div[data-testid="stMarkdownContainer"] p {
         color: #ffffff !important;
     }
 
-    /* Sanfter Hover-Effekt */
+    /* 6. Hover-Effekt */
     .pdf-section-wrapper div.stButton > button:hover {
         border-color: #3b82f6 !important;
-        background-color: #f8fafc !important;
-        transform: translateY(-2px); /* Kleiner "Lift-Up" Effekt */
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
     }
 </style>
 """, unsafe_allow_html=True)
