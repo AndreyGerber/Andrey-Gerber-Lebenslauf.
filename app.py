@@ -678,10 +678,12 @@ with col_viewer:
 
 #Zertifikate Data Science
 
+
+# --- 1. DATEN-LISTE (Deine 17 Dateien) ---
 image_folder = "images"
 prog_images = [
     "1_Python for Data Science.jpg", "2_Exploratory Statistics with Python.jpg",
-    "3_Data_Quality.jpg", "4_Data Visualization_Matplotlib.jpg",
+    "3_Data_Quality.jpg", "4_Data Visualization_Matplotlib.pdf", # Falls PDF, wird es übersprungen
     "5_Data Visualization_with_Seaborn.jpg", "6_Matplotlib_Complements.jpg",
     "7_DataViz_with_Plotly.jpg", "8_MCQ_Linux_and_Bash.jpg",
     "9_Git_&_Github.jpg", "10_Unit_Testing.jpg",
@@ -691,47 +693,49 @@ prog_images = [
     "17_Text_Mining.jpg"
 ]
 
-# --- 2. LAYOUT ---
+# --- 2. LAYOUT-STRUKTUR ---
 st.write("---")
 st.subheader("🏛️ Virtueller Programmier-Showroom")
 
-# Wir erstellen 8 Spalten für das 8er Grid
+# Wir erstellen 8 Spalten für das 8er-Grid
 cols = st.columns(8)
 
 for i, img_name in enumerate(prog_images):
-    # Auswahl der richtigen Spalte (Modulo 8 für die Reihen)
     with cols[i % 8]:
         path = os.path.join(image_folder, img_name)
-        if os.path.exists(path):
-            # Nutze st.image statt HTML - das ist sicher und performant
-            st.image(path, use_container_width=True, caption=img_name.split('_', 1)[-1].replace('.jpg', ''))
+        
+        # Check 1: Existiert die Datei?
+        # Check 2: Ist es wirklich ein Bild (keine PDF)?
+        if os.path.exists(path) and img_name.lower().endswith(('.jpg', '.jpeg', '.png')):
+            # Wir nutzen st.image direkt (vermeidet den PIL-Fehler)
+            st.image(path, use_container_width=True)
         else:
-            st.error("X")
+            # Platzhalter, falls Datei fehlt oder PDF ist
+            st.markdown(f'<div style="height:100px; background:#334155; border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px;">📄</div>', unsafe_allow_html=True)
+        
+        # Kleine Beschriftung unter dem Bild
+        st.caption(img_name.split('_', 1)[-1].replace('.jpg', '').replace('.pdf', ''))
 
-# --- 3. DAS 3D-FEELING VIA CSS ---
-# Dieser Teil ist nur für den Hover-Effekt und stört das Laden der Bilder nicht
+# --- 3. DAS 3D-FEELING (Hover-Effekt) ---
 st.markdown("""
 <style>
-    /* Vergrößert die Bilder beim Drüberfahren */
+    /* Vergrößert die Bilder beim Drüberfahren für den Showroom-Effekt */
     [data-testid="stImage"] {
-        transition: transform 0.3s ease;
-        border-radius: 10px;
-        border: 1px solid #dce4e9;
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        cursor: pointer;
     }
     [data-testid="stImage"]:hover {
-        transform: scale(1.5);
-        z-index: 999;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        border-color: #ff4b4b;
+        transform: scale(1.6) translateY(-10px) !important;
+        z-index: 999 !important;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.4) !important;
     }
-    /* Macht die Bildunterschriften kleiner */
-    [data-testid="stImageCaption"] {
-        font-size: 10px !important;
-        line-height: 1.1;
-        text-align: center;
+    /* Abstand zwischen den Reihen */
+    [data-testid="column"] {
+        padding: 5px !important;
     }
 </style>
 """, unsafe_allow_html=True)
+
 
 
 
