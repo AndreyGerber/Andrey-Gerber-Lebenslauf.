@@ -638,7 +638,7 @@ col_gallery, col_viewer = st.columns([1, 1.4])
 with col_gallery:
     # Abstand von oben
     st.markdown('<div style="margin-top: 40px;"></div>', unsafe_allow_html=True)
-    st.subheader("🗃️ Credentials & Zertifikate")
+    #st.subheader("🗃️ Credentials & Zertifikate")
     
     def render_btn(doc):
         active = st.session_state.active_doc == doc['file']
