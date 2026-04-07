@@ -575,49 +575,43 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# --- 3. STYLING (ISOLIERT & ANPASSBAR) ---
+# --- 3. STYLING (REPARIERT) ---
 st.markdown("""
 <style>
-    /* 1. Container-Schutz: Nur Buttons innerhalb dieses Divs stylen */
+    /* 1. Gesamte Spalte nach oben zwingen */
+    [data-testid="stHorizontalBlock"] {
+        align-items: flex-start !important;
+    }
+
+    /* 2. Button Design */
     .pdf-section-wrapper div.stButton > button {
-        height: 120px !important;
+        height: 110px !important;
         width: 100% !important;
-        border-radius: 14px !important;
+        border-radius: 12px !important;
         border: 1px solid #e2e8f0 !important;
-        background-color: #ffffff !important;
-        display: flex !important;
-        flex-direction: column !important; /* Icon ÜBER Text */
-        align-items: center !important;
-        justify-content: center !important;
+        background-color: white !important;
         transition: all 0.2s ease-in-out !important;
-        padding: 10px !important;
-    }
-
-    /* 2. ICON-GRÖSSE (Hier einzeln anpassen) */
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
-        font-size: 32px !important; /* Größe des Emojis */
-        margin-bottom: 0px !important;
+        /* Wichtig: Textumbruch erlauben */
+        white-space: pre-wrap !important;
         line-height: 1.2 !important;
+        display: block !important; /* Erlaubt first-line Styling */
     }
 
-    /* 3. TEXT-GRÖSSE (Hier einzeln anpassen) */
-    /* Wir nutzen einen Trick: Das zweite Element (Label) wird kleiner */
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
+    /* 3. ICON GRÖSSE (Die erste Zeile) */
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p::first-line {
+        font-size: 30px !important; /* Größe des Emojis */
     }
-    
-    /* Dieser Teil spricht den Text unter dem Emoji an */
-    .pdf-section-wrapper div.stButton > button span {
-        font-size: 13px !important; 
+
+    /* 4. TEXT GRÖSSE (Der Rest des Textes) */
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
+        font-size: 13px !important; /* Größe des Labels */
         font-weight: 600 !important;
         color: #475569 !important;
-        margin-top: 8px !important;
-        display: block !important;
+        margin: 0 !important;
+        padding-top: 5px !important;
     }
 
-    /* 4. HOVER-EFFEKT: Vergrößern */
+    /* 5. HOVER-EFFEKT: Vergrößern */
     .pdf-section-wrapper div.stButton > button:hover {
         transform: scale(1.1) !important;
         border-color: #3b82f6 !important;
@@ -625,20 +619,18 @@ st.markdown("""
         z-index: 10 !important;
     }
 
-    /* 5. AKTIVER BUTTON: Blau/Dunkel */
+    /* 6. AKTIVER BUTTON */
     .pdf-section-wrapper .active-btn div.stButton > button {
         background-color: #1e293b !important;
         border-color: #1e293b !important;
     }
-    .pdf-section-wrapper .active-btn div.stButton > button p,
-    .pdf-section-wrapper .active-btn div.stButton > button span {
-        color: #ffffff !important;
+    .pdf-section-wrapper .active-btn div.stButton > button div[data-testid="stMarkdownContainer"] p {
+        color: white !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # --- 4. LAYOUT & LOGIK ---
-# Wir umschließen alles in den pdf-section-wrapper
 st.markdown('<div class="pdf-section-wrapper">', unsafe_allow_html=True)
 
 col_gallery, col_viewer = st.columns([1, 1.4])
@@ -649,23 +641,19 @@ with col_gallery:
         if active: 
             st.markdown('<div class="active-btn">', unsafe_allow_html=True)
         
-        # Das Label wird so aufgebaut, dass das CSS das Icon und den Text trennen kann
-        # Wir nutzen ein span für den Text, damit wir ihn im CSS einzeln ansprechen können
-        button_label = f"{doc['icon']} \n <span>{doc['label']}</span>"
-        
-        if st.button(button_label, key=f"doc_btn_{doc['file']}", use_container_width=True):
+        # KEIN HTML im Label! Wir nutzen \n für die Trennung.
+        # Das CSS (::first-line) macht das Emoji in der ersten Zeile groß.
+        if st.button(f"{doc['icon']}\n{doc['label']}", key=f"doc_btn_{doc['file']}", use_container_width=True):
             st.session_state.active_doc = doc['file']
             st.rerun()
             
         if active: 
             st.markdown('</div>', unsafe_allow_html=True)
 
-    # Top Dokument (Namensänderung)
+    # Grid-Struktur
     t_c1, t_c2, t_c3 = st.columns(3)
-    with t_c2: 
-        render_btn(top_doc)
+    with t_c2: render_btn(top_doc)
 
-    # Grid für Rest
     grid_cols = st.columns(3)
     for i, d in enumerate(other_docs):
         with grid_cols[i % 3]: 
@@ -676,10 +664,8 @@ with col_viewer:
     if pdf_b64:
         display = f'<iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" width="100%" height="900px" style="border:2px solid #334155; border-radius:15px;"></iframe>'
         st.markdown(display, unsafe_allow_html=True)
-    else:
-        st.warning(f"Dokument {st.session_state.active_doc} nicht gefunden.")
 
-st.markdown('</div>', unsafe_allow_html=True) # Ende des Wrappers
+st.markdown('</div>', unsafe_allow_html=True)
 
 
 
