@@ -529,63 +529,80 @@ def get_pdf_base64(file_name):
             return base64.b64encode(f.read()).decode('utf-8')
     return None
 
-# Initialisiere das gewählte Dokument im Session State
+# Initialisiere das erste Dokument der Liste im Session State
 if "active_doc" not in st.session_state:
-    st.session_state.active_doc = "Master.pdf"
+    st.session_state.active_doc = "Namensänderung.pdf"
 
 # --- 2. LAYOUT ---
-col_gallery, col_viewer = st.columns([1, 1.5])
+col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
     st.subheader("🏛️ Deine Virtuelle Galerie")
     
-    # Liste deiner Dokumente
+    # Deine exakte Liste in der gewünschten Reihenfolge
     docs = [
-        {"file": "Master.pdf", "icon": "🎓", "label": "Master"},
-        {"file": "Bachelor.pdf", "icon": "🏗️", "label": "Bachelor"},
-        {"file": "InternerQualitätsauditor.pdf", "icon": "📜", "label": "Auditor"},
-        {"file": "Qualitätsbeauftragter.pdf", "icon": "✅", "label": "QM-Beauftr."},
-        {"file": "Schweisskurs.pdf", "icon": "🔥", "label": "Schweißen"},
-        {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalyse"}
+        {"file": "Namensänderung.pdf", "icon": "📝", "label": "Namens-\nänderung"},
+        {"file": "Berufsschule.pdf", "icon": "📚", "label": "Berufs-\nschule"},
+        {"file": "allgemeineHochschulreife.pdf", "icon": "🏫", "label": "Abitur"},
+        {"file": "Praktikum_V&F.pdf", "icon": "🏢", "label": "Praktikum\nV&F"},
+        {"file": "Bachelor.pdf", "icon": "🏗️", "label": "Bachelor\nZeugnis"},
+        {"file": "Schweisskurs.pdf", "icon": "🔥", "label": "Schweiß-\nkurs"},
+        {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Wert-\nanalytiker"},
+        {"file": "Master.pdf", "icon": "🎓", "label": "Master\nZeugnis"},
+        {"file": "b_k_pulse.pdf", "icon": "📈", "label": "B&K\nPulse"},
+        {"file": "M_BBM.pdf", "icon": "⚙️", "label": "M-BBM"},
+        {"file": "InternerQualitätsauditor.pdf", "icon": "📜", "label": "Qualitäts-\nauditor"},
+        {"file": "Qualitätsbeauftragter.pdf", "icon": "✅", "label": "QM-Beauf-\ntragter"}
     ]
 
-    # Wir erstellen ein Grid aus Buttons, die wie Karten wirken
-    grid_cols = st.columns(3) # 3 Karten pro Reihe
+    # Grid aus Buttons (3 Spalten)
+    grid_cols = st.columns(3)
     
     for i, doc in enumerate(docs):
         with grid_cols[i % 3]:
-            # Der Trick: Ein Button pro Dokument
-            if st.button(f"{doc['icon']}\n\n{doc['label']}", key=doc['file'], use_container_width=True):
+            # Falls dieses Dokument gerade aktiv ist, kriegt der Button ein spezielles Styling via Key
+            if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
                 st.session_state.active_doc = doc['file']
-                st.rerun() # Aktualisiert den Viewer sofort
+                st.rerun()
 
 with col_viewer:
     st.subheader("📄 Vorschau")
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     
     if pdf_b64:
-        pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="800px" style="border:none; border-radius:15px;"></iframe>'
+        # PDF Viewer
+        pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="900px" style="border:none; border-radius:15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
     else:
-        st.error(f"Datei {st.session_state.active_doc} nicht gefunden.")
+        st.error(f"Datei '{st.session_state.active_doc}' wurde nicht im Ordner '{PDF_FOLDER}' gefunden.")
 
-# CSS für das Styling der Buttons (damit sie wie Karten aussehen)
+# --- 3. STYLING (Buttons zu Karten machen) ---
 st.markdown("""
 <style>
+    /* Styling für alle Buttons in der Galerie */
     div.stButton > button {
-        height: 100px;
-        border-radius: 15px;
-        border: 1px solid #eee;
-        background-color: white;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: 0.3s;
-        white-space: pre-wrap;
+        height: 120px;
+        border-radius: 12px;
+        border: 1px solid #e0e0e0;
+        background-color: #ffffff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        font-size: 12px;
+        font-weight: 600;
+        color: #444;
+        white-space: pre-wrap; /* Erlaubt Zeilenumbrüche im Button-Text */
     }
+    
+    /* Hover Effekt */
     div.stButton > button:hover {
         border-color: #ff4b4b;
         color: #ff4b4b;
-        transform: scale(1.05);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
     }
+
+    /* Markierung für den aktiven Button ist über CSS schwer, 
+       daher nutzen wir das Standard-Hover-Feeling für Feedback */
 </style>
 """, unsafe_allow_html=True)
 
