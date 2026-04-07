@@ -613,33 +613,41 @@ with col_viewer:
 # --- 3. STYLING (Buttons zu Karten machen) ---
 st.markdown("""
 <style>
-    /* Styling für alle Buttons in der Galerie */
+    /* 1. Hintergrund der Seite leicht abdunkeln für besseren Kontrast */
+    .stApp {
+        background-color: #f4f7f9;
+    }
+
+    /* 2. Knöpfe als Karten stylen */
     div.stButton > button {
-        height: 120px;
-        border-radius: 12px;
-        border: 1px solid #e0e0e0;
+        height: 130px; /* Etwas höher für bessere Proportionen */
+        border-radius: 15px;
+        border: 1px solid #dce4e9;
         background-color: #ffffff;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        transition: all 0.3s ease;
-        font-size: 12px;
-        font-weight: 600;
-        color: #444;
-        white-space: pre-wrap; /* Erlaubt Zeilenumbrüche im Button-Text */
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        transition: all 0.3s ease-in-out;
+        white-space: pre-wrap;
+        color: #1e293b; /* Dunkles Anthrazit für bessere Lesbarkeit */
+        font-weight: 500;
+        font-size: 14px;
+        padding: 10px;
     }
     
-    /* Hover Effekt */
+    /* 3. Hover-Effekt: Kräftiger Schatten und blauer Rand */
     div.stButton > button:hover {
-        border-color: #ff4b4b;
-        color: #ff4b4b;
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        border-color: #0055A5; /* Klassisches Ingenieurs-Blau */
+        color: #0055A5;
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        transform: translateY(-3px); /* Sanftes Schweben */
     }
 
-    /* Markierung für den aktiven Button ist über CSS schwer, 
-       daher nutzen wir das Standard-Hover-Feeling für Feedback */
+    /* 4. Die Emojis/Icons innerhalb der Buttons vergrößern */
+    div.stButton > button p {
+        font-size: 28px !important; /* Macht die Icons deutlich präsenter */
+        margin-bottom: 8px;
+    }
 </style>
 """, unsafe_allow_html=True)
-
 
 
 
