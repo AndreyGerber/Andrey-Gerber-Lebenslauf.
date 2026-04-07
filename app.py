@@ -508,7 +508,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 st.error("Datei 'images/tuev.png' nicht gefunden.")
 
 
-st.markdown('<div style="margin-top: 50px;"></div>', unsafe_allow_html=True)
+st.markdown('<div style="margin-top: 150px;"></div>', unsafe_allow_html=True)
 
 
 
