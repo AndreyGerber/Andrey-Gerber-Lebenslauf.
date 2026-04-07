@@ -563,7 +563,7 @@ if "active_doc" not in st.session_state:
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
-    st.subheader("🗂️ Credentials & Zertifikate")
+    st.subheader("🗃️ Credentials & Zertifikate")
     
     # 1. Das spezielle Dokument für die obere Reihe
     top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namens-\nänderung"}
