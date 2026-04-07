@@ -645,9 +645,10 @@ with col_gallery:
     for i, d in enumerate(other_docs):
         with grid_cols[i % 3]: 
             render_btn(d)
-        st.vertical_spacer() # Falls vorhanden, sonst:
-    st.write("") 
-    st.container() 
+    
+     st.write("-") 
+     st.write("-") 
+     st.write("-") 
 
 with col_viewer:
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
