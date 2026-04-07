@@ -593,69 +593,38 @@ other_docs = [
 # --- 3. STYLING (SPACER & VERTIKALE BUTTONS) ---
 st.markdown("""
 <style>
-    /* 1. SPACER (Manuelle Abstände) */
-    .custom-spacer-t { height: 50px !important; display: block !important; }
-    .custom-spacer-b { height: 80px !important; display: block !important; }
+    /* 1. Abstände (Spacer) */
+    .custom-spacer-t { height: 40px !important; display: block !important; }
 
-    /* 2. KNOPFGRÖSSE & FORM KONTROLLIEREN */
+    /* 2. Der Button-Container */
     .pdf-section-wrapper div.stButton > button {
-        /* HIER KNOPFGRÖSSE ÄNDERN */
-        width: 160px !important; 
-        height: 140px !important;
-        
-        border-radius: 20px !important;
+        width: 100% !important;
+        height: 130px !important; /* Hier kannst du die Knopfhöhe ändern */
+        border-radius: 18px !important;
+        background: white !important;
         border: 1px solid #f1f5f9 !important;
-        background-color: #ffffff !important;
-        transition: all 0.3s ease !important;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important;
-        
-        /* Den Button-Container selbst auf Spalte setzen */
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
-    /* 3. DER ENTSCHEIDENDE FIX: Den inneren Streamlit-Container zähmen */
-    /* Wir müssen ALLES auf 'block' oder 'column' setzen, was Streamlit auf 'inline' hält */
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"],
+    /* 3. ICON OBEN, TEXT UNTEN (Der entscheidende Fix!) */
     .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
         display: flex !important;
-        flex-direction: column !important; /* ICON ÜBER TEXT */
+        flex-direction: column !important; /* DAS zwingt das Icon nach oben */
         align-items: center !important;
         justify-content: center !important;
-        width: 100% !important;
-        margin: 0 !important;
-        white-space: pre-wrap !important;
+        gap: 5px !important; /* Abstand zwischen Icon und Text */
     }
 
-    /* 4. ICON GRÖSSE (Einzeln) */
+    /* Icon-Größe (Erste Zeile) */
     .pdf-section-wrapper div.stButton > button p::first-line {
-        font-size: 45px !important; /* HIER Icon-Größe ändern */
-        line-height: 1.2 !important;
+        font-size: 38px !important;
     }
 
-    /* 5. TEXT GRÖSSE (Einzeln) */
-    .pdf-section-wrapper div.stButton > button p {
-        font-size: 13px !important; /* HIER Text-Größe ändern */
-        font-weight: 700 !important;
-        color: #475569 !important;
-        margin-top: 10px !important; /* Abstand zwischen Icon und Text */
-    }
-
-    /* 6. HOVER & AKTIV */
+    /* Hover-Effekt (Vergrößern) */
     .pdf-section-wrapper div.stButton > button:hover {
-        transform: translateY(-5px) !important;
+        transform: translateY(-5px) scale(1.05) !important;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
         border-color: #3b82f6 !important;
-        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1) !important;
-    }
-
-    .pdf-section-wrapper .active-btn div.stButton > button {
-        background: #1e293b !important;
-        border-color: #1e293b !important;
-    }
-    .pdf-section-wrapper .active-btn div.stButton > button p {
-        color: white !important;
     }
 </style>
 """, unsafe_allow_html=True)
