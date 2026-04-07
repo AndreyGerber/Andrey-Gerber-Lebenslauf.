@@ -590,95 +590,98 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# --- 3. STYLING (ISOLIERT & GEZWUNGEN) ---
+# --- 3. STYLING (DIESMAL WIRKLICH VERTIKAL) ---
 st.markdown("""
 <style>
-    /* 1. Spacer */
-    .my-spacer-t { height: 40px !important; display: block; }
-    .my-spacer-b { height: 80px !important; display: block; }
+    /* 1. Manuelle Abstände */
+    .custom-spacer-t { height: 30px !important; display: block; }
+    .custom-spacer-b { height: 80px !important; display: block; }
 
-    /* 2. Den Button-Container für Spalten-Layout vorbereiten */
-    .doc-wrapper div.stButton > button {
+    /* 2. Button-Grundform */
+    .pdf-section-wrapper div.stButton > button {
         height: 120px !important;
         width: 100% !important;
         border-radius: 16px !important;
         background-color: white !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
+        transition: all 0.3s ease !important;
     }
 
-    /* 3. DER ENTSCHEIDENDE FIX: Das p-Tag im Button auf 'column' setzen */
-    .doc-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
+    /* 3. DER FIX: Icon OBEN, Text UNTEN erzwingen */
+    /* Wir müssen das p-Tag UND das darin liegende span auf flex-column setzen */
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p,
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p span {
         display: flex !important;
-        flex-direction: column !important; /* Zwingt Icon über Text */
+        flex-direction: column !important; /* DAS zwingt den Umbruch */
         align-items: center !important;
         justify-content: center !important;
-        margin: 0 !important;
-        white-space: pre-wrap !important; /* Erlaubt den Umbruch durch \n */
+        white-space: pre-wrap !important;
     }
 
-    /* 4. ICON GRÖSSE (Erste Zeile) */
-    .doc-wrapper div.stButton > button p::first-line {
-        font-size: 38px !important;
+    /* 4. ICON GRÖSSE (Die erste Zeile) */
+    .pdf-section-wrapper div.stButton > button p::first-line {
+        font-size: 38px !important; 
         line-height: 1.5 !important;
     }
 
-    /* 5. TEXT GRÖSSE (Der Rest) */
-    .doc-wrapper div.stButton > button p {
+    /* 5. TEXT GRÖSSE (Der restliche Text) */
+    .pdf-section-wrapper div.stButton > button p {
         font-size: 13px !important;
         font-weight: 700 !important;
         color: #475569 !important;
+        line-height: 1.1 !important;
     }
 
-    /* 6. AKTIVER BUTTON */
-    .active-doc-btn div.stButton > button {
+    /* 6. HOVER & AKTIV */
+    .pdf-section-wrapper div.stButton > button:hover {
+        transform: translateY(-5px) !important;
+        border-color: #3b82f6 !important;
+    }
+
+    .pdf-section-wrapper .active-btn div.stButton > button {
         background: #1e293b !important;
         border-color: #1e293b !important;
     }
-    .active-doc-btn div.stButton > button p {
+    .pdf-section-wrapper .active-btn div.stButton > button p {
         color: white !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # --- 4. LAYOUT & LOGIK ---
+st.markdown('<div class="pdf-section-wrapper">', unsafe_allow_html=True)
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
-    # ABSTAND OBEN
-    st.markdown('<div class="my-spacer-t"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="custom-spacer-t"></div>', unsafe_allow_html=True)
 
     def render_btn(doc):
-        is_active = st.session_state.active_doc == doc['file']
-        # Wir wickeln jeden Button in eine Klasse ein für das Styling
-        wrapper_class = "doc-wrapper active-doc-btn" if is_active else "doc-wrapper"
+        active = st.session_state.active_doc == doc['file']
+        if active: st.markdown('<div class="active-btn">', unsafe_allow_html=True)
         
-        st.markdown(f'<div class="{wrapper_class}">', unsafe_allow_html=True)
-        # Das \n im Label ist Pflicht für ::first-line
+        # Das \n im String ist essenziell für das CSS!
         if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
             st.session_state.active_doc = doc['file']
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
+            
+        if active: st.markdown('</div>', unsafe_allow_html=True)
 
-    # Grid Aufbau (Namensänderung oben, dann der Rest)
+    # Grid Aufbau
     t_c1, t_c2, t_c3 = st.columns(3)
     with t_c2: render_btn(top_doc)
 
     grid_cols = st.columns(3)
     for i, d in enumerate(other_docs):
-        with grid_cols[i % 3]: 
-            render_btn(d)
+        with grid_cols[i % 3]: render_btn(d)
 
-    # ABSTAND UNTEN
-    st.markdown('<div class="my-spacer-b"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="custom-spacer-b"></div>', unsafe_allow_html=True)
 
 with col_viewer:
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     if pdf_b64:
-        display = f'<iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" width="100%" height="850px" style="border-radius:15px; border:2px solid #1e293b;"></iframe>'
-        st.markdown(display, unsafe_allow_html=True)
+        st.markdown(f'<iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" width="100%" height="850px" style="border-radius:15px; border:2px solid #1e293b;"></iframe>', unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
+
 
 
 
