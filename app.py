@@ -558,45 +558,7 @@ def get_pdf_base64(file_name):
 if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
 
-# --- 2. STYLING (Kontrast & Aktiver Status) ---
-st.markdown("""
-<style>
-    /* Grund-Styling der Buttons (Starker Kontrast) */
-    div.stButton > button {
-        height: 130px;
-        border-radius: 12px;
-        border: 2px solid #334155 !important; /* Dunkler, kräftiger Rand */
-        background-color: #ffffff !important;
-        color: #1e293b !important;
-        font-weight: 700 !important;
-        transition: all 0.2s ease;
-        white-space: pre-wrap;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    }
-    
-    /* Hover-Effekt */
-    div.stButton > button:hover {
-        border-color: #ff4b4b !important;
-        color: #ff4b4b !important;
-        background-color: #f8fafc !important;
-    }
-
-    /* Styling für den GERADE AUSGEWÄHLTEN Button */
-    div[data-testid="stVerticalBlock"] div.active-btn button {
-        background-color: #1e293b !important; /* Dunkelblau/Anthrazit */
-        color: #ffffff !important;
-        border-color: #0f172a !important;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.3) !important;
-    }
-    
-    /* Icons vergrößern */
-    div.stButton > button span {
-        font-size: 24px;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# --- 3. DATEN ---
+# --- 2. DATEN-DEFINITION ---
 top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namens-\nänderung"}
 
 other_docs = [
@@ -611,20 +573,84 @@ other_docs = [
     {"file": "M_BBM.pdf", "icon": "🔊", "label": "M-BBM"},
     {"file": "InternerQualitätsauditor.pdf", "icon": "🕵️", "label": "Auditor 9000 ff."},
     {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "QMB ISO 9001"},
-    {"file": "QMB_ISO_17025.pdf", "icon": "🧪", "label": "QMB ISO 17025"}
+    {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# --- 4. LAYOUT ---
+# --- 3. STYLING (Der Feinschliff) ---
+st.markdown("""
+<style>
+    /* Info-Box Styling */
+    .info-container {
+        background-color: #e1f5fe;
+        padding: 20px;
+        border-radius: 15px;
+        border-left: 5px solid #01579b;
+        margin-bottom: 25px;
+    }
+    .name-warning {
+        background-color: #fff9c4;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #fbc02d;
+        font-size: 0.95em;
+        margin-top: 10px;
+    }
+
+    /* Button Styling */
+    div.stButton > button {
+        height: 145px;
+        border-radius: 15px;
+        border: 2px solid #334155 !important;
+        background-color: #ffffff !important;
+        color: #1e293b !important;
+        font-weight: 700 !important;
+        transition: all 0.3s ease;
+        white-space: pre-wrap;
+    }
+    
+    /* Icons vergrößern */
+    div.stButton > button p {
+        font-size: 42px !important;
+        margin-bottom: 5px !important;
+    }
+
+    div.stButton > button:hover {
+        border-color: #ff4b4b !important;
+        color: #ff4b4b !important;
+        transform: translateY(-3px);
+    }
+
+    /* AKTIVER BUTTON (Blau) */
+    div.active-btn button {
+        background-color: #0055A5 !important;
+        color: #ffffff !important;
+        border-color: #003366 !important;
+    }
+    div.active-btn button p {
+        color: #ffffff !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# --- 4. HINWEIS-BLOCK ---
+st.markdown("""
+    <div class="info-container">
+        <h3 style="color: #01579b; margin-top: 0;">🗂️ Qualifikations-Portfolio</h3>
+        <p style="color: #333;">Hier finden Sie meine akademischen und beruflichen Nachweise im Überblick.</p>
+        <div class="name-warning">
+            <strong>⚠️ Hinweis zur Namensänderung:</strong> Einige Dokumente (z. B. Abitur, Bachelor) sind auf meinen 
+            früheren Namen ausgestellt. Ein offizieller Nachweis ist als erstes Dokument hinterlegt.
+        </div>
+    </div>
+""", unsafe_allow_html=True)
+
+# --- 5. LAYOUT & GALERIE ---
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
-    st.subheader("🗃️ Credentials & Zertifikate")
-    
-    # Helfer-Funktion um Buttons zu zeichnen
     def render_gallery_button(doc_obj):
         is_active = st.session_state.active_doc == doc_obj['file']
         if is_active:
-            # Falls aktiv, in Container mit CSS-Klasse 'active-btn' packen
             st.markdown('<div class="active-btn">', unsafe_allow_html=True)
         
         if st.button(f"{doc_obj['icon']}\n{doc_obj['label']}", key=f"btn_{doc_obj['file']}", use_container_width=True):
@@ -634,12 +660,12 @@ with col_gallery:
         if is_active:
             st.markdown('</div>', unsafe_allow_html=True)
 
-    # Obere Reihe (Zentriert)
+    # Obere Reihe
     t_col1, t_col2, t_col3 = st.columns(3)
     with t_col2:
         render_gallery_button(top_doc)
 
-    # Restliche Reihen (3er Grid)
+    # Grid
     grid_cols = st.columns(3)
     for i, doc in enumerate(other_docs):
         with grid_cols[i % 3]:
@@ -648,61 +674,11 @@ with col_gallery:
 with col_viewer:
     st.subheader("📄 Vorschau")
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
-    
     if pdf_b64:
         pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_b64}" width="100%" height="1000px" style="border:2px solid #334155; border-radius:15px;"></iframe>'
         st.markdown(pdf_display, unsafe_allow_html=True)
     else:
         st.error(f"Datei '{st.session_state.active_doc}' nicht gefunden.")
-
-st.markdown("""
-<style>
-    /* 1. Grund-Styling der Buttons */
-    div.stButton > button {
-        height: 135px; /* Etwas mehr Höhe für die größeren Icons */
-        border-radius: 15px;
-        border: 2px solid #334155 !important; 
-        background-color: #ffffff !important;
-        color: #1e293b !important;
-        font-weight: 700 !important;
-        transition: all 0.3s ease;
-        white-space: pre-wrap;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    /* 2. Die Icons (Emojis) deutlich vergrößern */
-    div.stButton > button p {
-        font-size: 18px !important; /* Hier passiert der Zauber */
-        margin-bottom: 10px !important;
-        line-height: 1.1 !important;
-    }
-
-    /* 3. Hover-Effekt (Sanftes Leuchten) */
-    div.stButton > button:hover {
-        border-color: #0055A5 !important;
-        color: #0055A5 !important;
-        background-color: #f8fafc !important;
-        transform: translateY(-3px);
-        box-shadow: 0 10px 15px rgba(0,0,0,0.1) !important;
-    }
-
-    /* 4. Styling für den AKTIVEN Button (Blau markiert) */
-    div[data-testid="stVerticalBlock"] div.active-btn button {
-        background-color: #0055A5 !important; /* Kräftiges Blau */
-        color: #ffffff !important;
-        border-color: #003366 !important;
-    }
-    
-    /* Weißer Text für das Icon im aktiven Button */
-    div[data-testid="stVerticalBlock"] div.active-btn button p {
-        color: #ffffff !important;
-    }
-</style>
-""", unsafe_allow_html=True)
 
 
 
