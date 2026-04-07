@@ -925,60 +925,48 @@ prog_images = [
 # --- 2. DAS "KLASSISCHE GALERIE" STYLING ---
 st.markdown("""
 <style>
-    /* Der Hintergrund: Eine edle Museumswand */
+    /* 1. DIE WAND: Ein warmer, neutraler Galerie-Hintergrund */
     .museum-wall {
-        background-color: #e2e8f0; /* Heller Stein-Ton */
+        background-color: #d1d5db; /* Klassisches Museumsgrau */
         padding: 80px 40px;
         border-radius: 40px;
-        border: 2px solid #cbd5e1;
-        margin-top: 50px;
-        box-shadow: inset 0 0 100px rgba(0,0,0,0.05);
+        perspective: 1500px; /* Ermöglicht 3D im Raum */
     }
 
-    /* Der Bilderrahmen-Effekt (Schwarz + Weißes Passepartout) */
+    /* 2. DER RAHMEN: 3D-Transformation von Anfang an */
     .museum-wall [data-testid="stImage"] {
-        background-color: #111827 !important; /* Schwarzer Außenrahmen */
+        background-color: #1a1a1a !important; /* Anthrazit-Rahmen */
         padding: 10px !important; 
         border: 15px solid #ffffff !important; /* Weißes Passepartout */
+        
+        /* 3D-Effekt: Leicht zur Seite gedreht */
+        transform: rotateY(-15deg) rotateX(5deg) !important;
+        
+        /* Tiefer Schatten für das "Abstehen" von der Wand */
         box-shadow: 
-            15px 15px 30px rgba(0,0,0,0.4), 
-            2px 2px 5px rgba(0,0,0,0.2) !important;
-        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        cursor: zoom-in;
-        position: relative;
+            -10px 15px 25px rgba(0,0,0,0.4), 
+            0px 2px 5px rgba(0,0,0,0.2) !important;
+            
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1) !important;
     }
 
-    /* Hover-Effekt: Bild kommt dem Betrachter entgegen */
+    /* 3. DER FOKUS: Das Bild dreht sich beim Hovern frontal zum Betrachter */
     .museum-wall [data-testid="stImage"]:hover {
-        transform: scale(1.8) translateY(-20px) !important;
+        transform: rotateY(0deg) rotateX(0deg) scale(2.0) translateZ(100px) !important;
         z-index: 1000 !important;
         box-shadow: 0 40px 80px rgba(0,0,0,0.6) !important;
-        border: 10px solid #ffffff !important; /* Passepartout verkleinert sich leicht beim Zoomen */
+        border: 8px solid #ffffff !important; /* Passepartout wird beim Zoomen schmaler */
     }
 
-    /* Das Icon für die Aufhängung (simuliert den Nagel über dem Bild) */
-    .museum-wall [data-testid="stImage"]::before {
-        content: "📌";
-        position: absolute;
-        top: -45px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 20px;
-        z-index: -1;
-    }
-
-    /* Beschriftung wie ein edles Messingschild */
+    /* 4. DAS SCHILDCHEN: Edler Text unter dem Rahmen */
     .museum-wall [data-testid="stImageCaption"] {
         font-size: 10px !important;
-        font-weight: 700 !important;
-        color: #334155 !important;
-        margin-top: 20px !important;
+        font-weight: 900 !important;
+        color: #1f2937 !important;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        text-align: center;
-        background: rgba(255,255,255,0.5);
-        padding: 5px;
-        border-radius: 3px;
+        letter-spacing: 2px;
+        margin-top: 20px !important;
+        opacity: 0.8;
     }
 </style>
 """, unsafe_allow_html=True)
