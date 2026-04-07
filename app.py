@@ -575,65 +575,60 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# --- 3. STYLING (PERFEKTIONIERT) ---
+# --- 3. STYLING (ISOLIERT & REPARIERT) ---
 st.markdown("""
 <style>
-    /* 1. Alles nach OBEN schieben */
-    [data-testid="stHorizontalBlock"] { align-items: flex-start !important; }
+    /* 1. Spalte nach OBEN ausrichten */
+    [data-testid="stHorizontalBlock"] {
+        align-items: flex-start !important;
+    }
 
-    /* 2. Button Design (Card-Look) */
+    /* 2. Button Grund-Design (Card Look) */
     .pdf-section-wrapper div.stButton > button {
-        height: 120px !important;
+        height: 110px !important;
+        width: 100% !important;
         border-radius: 12px !important;
         border: 1px solid #e2e8f0 !important;
         background-color: white !important;
         transition: all 0.2s ease-in-out !important;
+        
+        /* Flexbox für vertikale Stapelung */
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        padding: 15px !important;
+        white-space: pre-wrap !important; /* Wichtig für den Zeilenumbruch */
     }
 
-    /* 3. ICON GRÖSSE (Erstes Element) */
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        margin: 0 !important;
-        line-height: 1 !important;
+    /* 3. ICON GRÖSSE (Erste Zeile) */
+    .pdf-section-wrapper div.stButton > button p::first-line {
+        font-size: 30px !important; /* HIER Icon-Größe anpassen */
+        line-height: 1.4 !important;
     }
 
-    /* Das Icon wird hier gesteuert */
+    /* 4. TEXT GRÖSSE (Gesamter Text-Block) */
     .pdf-section-wrapper div.stButton > button p {
-        font-size: 34px !important; /* ICON-GRÖSSE */
-    }
-
-    /* 4. TEXT GRÖSSE (Zweites Element) */
-    /* Wir nutzen den Trick, dass der Text im Button ein zweites Child ist */
-    .pdf-section-wrapper div.stButton > button p small {
-        font-size: 13px !important; /* TEXT-GRÖSSE */
+        font-size: 13px !important; /* HIER Text-Größe anpassen */
         font-weight: 600 !important;
         color: #475569 !important;
-        margin-top: 10px !important;
-        display: block !important;
-        font-style: normal !important;
+        margin: 0 !important;
+        text-align: center !important;
     }
 
-    /* 5. HOVER: Vergrößern */
+    /* 5. HOVER-EFFEKT: Vergrößern */
     .pdf-section-wrapper div.stButton > button:hover {
         transform: scale(1.1) !important;
         border-color: #3b82f6 !important;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important;
+        z-index: 10 !important;
     }
 
-    /* 6. AKTIVER BUTTON */
+    /* 6. AKTIVER BUTTON: Markierung */
     .pdf-section-wrapper .active-btn div.stButton > button {
         background-color: #1e293b !important;
         border-color: #1e293b !important;
     }
-    .pdf-section-wrapper .active-btn div.stButton > button p,
-    .pdf-section-wrapper .active-btn div.stButton > button p small {
+    .pdf-section-wrapper .active-btn div.stButton > button p {
         color: white !important;
     }
 </style>
@@ -641,34 +636,38 @@ st.markdown("""
 
 # --- 4. LAYOUT & LOGIK ---
 st.markdown('<div class="pdf-section-wrapper">', unsafe_allow_html=True)
+
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
     def render_btn(doc):
         active = st.session_state.active_doc == doc['file']
-        if active: st.markdown('<div class="active-btn">', unsafe_allow_html=True)
+        if active: 
+            st.markdown('<div class="active-btn">', unsafe_allow_html=True)
         
-        # Der Trick: Wir nutzen <small> für den Text, damit das CSS ihn erkennt
-        label_content = f"{doc['icon']} \n <small>{doc['label']}</small>"
-        
-        if st.button(label_content, key=f"doc_btn_{doc['file']}", use_container_width=True):
+        # KEIN HTML-TAG! Nur Icon, Zeilenumbruch und Label.
+        # Das CSS (::first-line) kümmert sich um die unterschiedlichen Größen.
+        if st.button(f"{doc['icon']}\n{doc['label']}", key=f"doc_btn_{doc['file']}", use_container_width=True):
             st.session_state.active_doc = doc['file']
             st.rerun()
             
-        if active: st.markdown('</div>', unsafe_allow_html=True)
+        if active: 
+            st.markdown('</div>', unsafe_allow_html=True)
 
-    # Grid
+    # Grid-Struktur
     t_c1, t_c2, t_c3 = st.columns(3)
     with t_c2: render_btn(top_doc)
 
     grid_cols = st.columns(3)
     for i, d in enumerate(other_docs):
-        with grid_cols[i % 3]: render_btn(d)
+        with grid_cols[i % 3]: 
+            render_btn(d)
 
 with col_viewer:
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     if pdf_b64:
-        st.markdown(f'<iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" width="100%" height="900px" style="border:2px solid #334155; border-radius:15px;"></iframe>', unsafe_allow_html=True)
+        display = f'<iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" width="100%" height="900px" style="border:2px solid #334155; border-radius:15px;"></iframe>'
+        st.markdown(display, unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
