@@ -646,9 +646,9 @@ with col_gallery:
         with grid_cols[i % 3]: 
             render_btn(d)
     
-     st.write("-") 
-     st.write("-") 
-     st.write("-") 
+     st.write("---") 
+     st.write("---") 
+     st.write("---") 
 
 with col_viewer:
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
