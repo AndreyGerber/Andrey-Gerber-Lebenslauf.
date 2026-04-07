@@ -576,66 +576,6 @@ other_docs = [
 ]
 
 # --- 3. STYLING (SPACER & VERTIKALE BUTTONS) ---
-st.markdown("""
-<style>
-    /* 1. MANUELLE ABSTÄNDE (Spacer) */
-    .custom-spacer-t { height: 40px !important; display: block !important; width: 100%; }
-    .custom-spacer-b { height: 100px !important; display: block !important; width: 100%; }
-
-    /* 2. BUTTON DESIGN (Zentrierter Stack) */
-    .pdf-section-wrapper div.stButton > button {
-        height: 125px !important;
-        border-radius: 14px !important;
-        border: 1px solid #e2e8f0 !important;
-        background-color: white !important;
-        transition: all 0.2s ease-in-out !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-
-    /* 3. ICON & TEXT TRENNUNG ERZWINGEN */
-    /* Wir brechen das interne Paragraph-Tag von Streamlit auf */
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        margin: 0 !important;
-    }
-
-    /* Icon-Größe (Erste Zeile) */
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p::first-line {
-        font-size: 38px !important; 
-        line-height: 1.4 !important;
-    }
-
-    /* Text-Größe (Der Rest) */
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
-        font-size: 13px !important;
-        font-weight: 600 !important;
-        color: #475569 !important;
-    }
-
-    /* 4. HOVER EFFEKT */
-    .pdf-section-wrapper div.stButton > button:hover {
-        transform: scale(1.1) !important;
-        border-color: #3b82f6 !important;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-        z-index: 10 !important;
-    }
-
-    /* 5. AKTIVER BUTTON */
-    .pdf-section-wrapper .active-btn div.stButton > button {
-        background-color: #1e293b !important;
-        border-color: #1e293b !important;
-    }
-    .pdf-section-wrapper .active-btn div.stButton > button p {
-        color: white !important;
-    }
-</style>
-""", unsafe_allow_html=True)
 
 # --- 4. LAYOUT & LOGIK ---
 st.markdown('<div class="pdf-section-wrapper">', unsafe_allow_html=True)
