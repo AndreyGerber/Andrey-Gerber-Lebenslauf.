@@ -591,43 +591,71 @@ other_docs = [
 ]
 
 # --- 3. STYLING (SPACER & VERTIKALE BUTTONS) ---
-st.markdown("""
+st.markdown("""ss
 <style>
-    /* 1. Abstände (Spacer) */
-    .custom-spacer-t { height: 40px !important; display: block !important; }
+    /* 1. ABSTÄNDE (Spacer) */
+    .custom-spacer-t { height: 40px !important; display: block !important; width: 100%; }
+    .custom-spacer-b { height: 100px !important; display: block !important; width: 100%; }
 
-    /* 2. Der Button-Container */
+    /* 2. BUTTON GRUNDFORM (Kachel-Design) */
     .pdf-section-wrapper div.stButton > button {
-        width: 100% !important;
-        height: 130px !important; /* Hier kannst du die Knopfhöhe ändern */
+        height: 130px !important; /* Hier die Knopfhöhe festlegen */
         border-radius: 18px !important;
-        background: white !important;
         border: 1px solid #f1f5f9 !important;
+        background-color: #ffffff !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    }
-
-    /* 3. ICON OBEN, TEXT UNTEN (Der entscheidende Fix!) */
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important;
         display: flex !important;
-        flex-direction: column !important; /* DAS zwingt das Icon nach oben */
+        flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 5px !important; /* Abstand zwischen Icon und Text */
     }
 
-    /* Icon-Größe (Erste Zeile) */
+    /* 3. ICON ÜBER TEXT ERZWINGEN (Der "Brute-Force" Fix) */
+    /* Wir brechen das innerste Paragraph-Tag von Streamlit auf */
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
+        display: flex !important;
+        flex-direction: column !important; /* ICON OBEN, TEXT UNTEN */
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 !important;
+        gap: 8px !important; /* Abstand zwischen Icon und Text */
+        white-space: pre-wrap !important;
+    }
+
+    /* ICON-GRÖSSE (Einzeln anpassbar) */
     .pdf-section-wrapper div.stButton > button p::first-line {
-        font-size: 38px !important;
+        font-size: 38px !important; /* Hier Icon-Größe ändern */
+        line-height: 1.2 !important;
     }
 
-    /* Hover-Effekt (Vergrößern) */
+    /* TEXT-GRÖSSE (Einzeln anpassbar) */
+    .pdf-section-wrapper div.stButton > button p {
+        font-size: 13px !important; /* Hier Text-Größe ändern */
+        font-weight: 700 !important;
+        color: #475569 !important;
+        text-align: center !important;
+    }
+
+    /* 4. HOVER-EFFEKT: "Premium-Feel" */
     .pdf-section-wrapper div.stButton > button:hover {
         transform: translateY(-5px) scale(1.05) !important;
-        box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
         border-color: #3b82f6 !important;
+        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1) !important;
+        z-index: 10 !important;
+    }
+
+    /* 5. AKTIVER BUTTON (Dein Dunkel-Blau) */
+    .pdf-section-wrapper .active-btn div.stButton > button {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+        border-color: #1e293b !important;
+    }
+    .pdf-section-wrapper .active-btn div.stButton > button p {
+        color: #ffffff !important;
     }
 </style>
 """, unsafe_allow_html=True)
+
 
 
 # --- 4. LAYOUT & LOGIK ---
