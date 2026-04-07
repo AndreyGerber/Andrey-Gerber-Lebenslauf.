@@ -575,63 +575,56 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# --- 3. STYLING (JETZT ISOLIERT) ---
+# --- 3. STYLING (ISOLIERT & REPARIERT) ---
 st.markdown("""
 <style>
-    /* CSS greift NUR innerhalb von .pdf-section-wrapper */
-    .pdf-section-wrapper [data-testid="stColumn"] > div {
-        vertical-align: top !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: flex-start !important;
-    }
-
+    /* Container-Isolation */
     .pdf-section-wrapper div.stButton > button {
-        height: 110px !important;
+        height: 120px !important;
         border: 2px solid #334155 !important;
         border-radius: 15px !important;
         background-color: #ffffff !important;
         padding: 10px !important;
+        transition: all 0.3s ease;
     }
 
+    /* Emoji-Größe erzwingen (Erste Zeile im Button) */
     .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 10px !important;
-        font-size: 16px !important; /* Etwas kleiner für bessere Lesbarkeit */
+        line-height: 1.2 !important;
+        font-size: 14px !important; /* Textgröße für das Label */
         font-weight: 700 !important;
         color: #1e293b !important;
-        line-height: 1.1 !important;
     }
 
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p span {
-        font-size: 40px !important; 
-        display: block !important;
+    /* Das Emoji (Streamlit rendert das oft als Text oder Image) */
+    .pdf-section-wrapper div.stButton > button {
+        font-size: 45px !important; /* Steuert die Emoji-Größe */
     }
 
-    /* Aktiver Button */
+    /* Aktiver Status */
     .pdf-section-wrapper div.active-btn button {
-        background-color: #1e293b !important; 
+        background-color: #1e293b !important;
         border-color: #000000 !important;
     }
-    .pdf-section-wrapper div.active-btn button div[data-testid="stMarkdownContainer"] p,
-    .pdf-section-wrapper div.active-btn button div[data-testid="stMarkdownContainer"] p span {
+    .pdf-section-wrapper div.active-btn button p {
         color: #ffffff !important;
     }
 
-    /* Hover */
+    /* Hover-Effekt */
     .pdf-section-wrapper div.stButton > button:hover {
         border-color: #ff4b4b !important;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
     }
-    
+
     .active-btn { display: contents; }
 </style>
 """, unsafe_allow_html=True)
 
 # --- 4. LAYOUT & LOGIK ---
-# Start des isolierten Bereichs
 st.markdown('<div class="pdf-section-wrapper">', unsafe_allow_html=True)
 
 col_gallery, col_viewer = st.columns([1, 1.4])
@@ -641,18 +634,18 @@ with col_gallery:
         active = st.session_state.active_doc == doc['file']
         if active: st.markdown('<div class="active-btn">', unsafe_allow_html=True)
         
-        # Button mit Icon und Label
-        if st.button(f"<span>{doc['icon']}</span>  \n{doc['label']}", key=f"doc_btn_{doc['file']}", use_container_width=True):
+        # WICHTIG: Reines Markdown, kein HTML-Span. \n für den Umbruch.
+        if st.button(f"{doc['icon']}\n\n{doc['label']}", key=f"doc_btn_{doc['file']}", use_container_width=True):
             st.session_state.active_doc = doc['file']
             st.rerun()
             
         if active: st.markdown('</div>', unsafe_allow_html=True)
 
-    # Obere Reihe (Zentrierter Einzelbutton)
+    # Top Dokument (zentriert)
     t_c1, t_c2, t_c3 = st.columns(3)
     with t_c2: render_btn(top_doc)
 
-    # Grid für die restlichen Dokumente
+    # Grid für Rest
     grid_cols = st.columns(3)
     for i, d in enumerate(other_docs):
         with grid_cols[i % 3]: 
@@ -664,11 +657,9 @@ with col_viewer:
         display = f'<iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" width="100%" height="900px" style="border:2px solid #334155; border-radius:15px;"></iframe>'
         st.markdown(display, unsafe_allow_html=True)
     else:
-        st.error(f"Datei '{st.session_state.active_doc}' nicht im Ordner '{PDF_FOLDER}' gefunden.")
+        st.warning(f"Dokument {st.session_state.active_doc} nicht gefunden.")
 
-# Ende des isolierten Bereichs
 st.markdown('</div>', unsafe_allow_html=True)
-
 
 
 
