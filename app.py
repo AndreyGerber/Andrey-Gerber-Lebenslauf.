@@ -678,18 +678,6 @@ with col_viewer:
 
 #Zertifikate Data Science
 
-import base64
-import os
-
-# --- 1. FUNKTION ZUM BILDER LADEN ---
-def get_image_base64(path):
-    if os.path.exists(path):
-        with open(path, "rb") as f:
-            data = f.read()
-            return base64.b64encode(data).decode()
-    return None
-
-# --- 2. DEINE BILDER-LISTE ---
 image_folder = "images"
 prog_images = [
     "1_Python for Data Science.jpg", "2_Exploratory Statistics with Python.jpg",
@@ -697,71 +685,53 @@ prog_images = [
     "5_Data Visualization_with_Seaborn.jpg", "6_Matplotlib_Complements.jpg",
     "7_DataViz_with_Plotly.jpg", "8_MCQ_Linux_and_Bash.jpg",
     "9_Git_&_Github.jpg", "10_Unit_Testing.jpg",
-    "11_Classification_with_scikit-learn.jpg", "12_Regressionn_with_scikit-learn.pdf",
+    "11_Classification_with_scikit-learn.jpg", "12_Regressionn_with_scikit-learn.jpg",
     "13_Methodology_in_Data_Science.jpg", "14_Feature_Engineering_and_Optimisation.jpg",
     "15_Time_Series_Analysis_with_Python.jpg", "16_Advanced_Classification_with_scikit.jpg",
     "17_Text_Mining.jpg"
 ]
 
-# --- 3. DAS CSS (8-Spalten-Grid & 3D) ---
+# --- 2. LAYOUT ---
+st.write("---")
+st.subheader("🏛️ Virtueller Programmier-Showroom")
+
+# Wir erstellen 8 Spalten für das 8er Grid
+cols = st.columns(8)
+
+for i, img_name in enumerate(prog_images):
+    # Auswahl der richtigen Spalte (Modulo 8 für die Reihen)
+    with cols[i % 8]:
+        path = os.path.join(image_folder, img_name)
+        if os.path.exists(path):
+            # Nutze st.image statt HTML - das ist sicher und performant
+            st.image(path, use_container_width=True, caption=img_name.split('_', 1)[-1].replace('.jpg', ''))
+        else:
+            st.error("X")
+
+# --- 3. DAS 3D-FEELING VIA CSS ---
+# Dieser Teil ist nur für den Hover-Effekt und stört das Laden der Bilder nicht
 st.markdown("""
 <style>
-    .showroom-3d-grid {
-        background: #0f172a;
-        padding: 30px;
-        border-radius: 20px;
-        display: grid;
-        grid-template-columns: repeat(8, 1fr); /* 8 Spalten */
-        gap: 15px;
-        perspective: 1000px;
-    }
-    .exhibit-3d {
-        width: 100%;
-        height: 150px;
-        background: white;
+    /* Vergrößert die Bilder beim Drüberfahren */
+    [data-testid="stImage"] {
+        transition: transform 0.3s ease;
         border-radius: 10px;
-        overflow: hidden;
-        transition: all 0.4s ease;
-        border: 1px solid #334155;
+        border: 1px solid #dce4e9;
     }
-    .exhibit-3d:hover {
-        transform: scale(1.2) translateZ(50px);
-        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5);
-        z-index: 100;
-        border-color: #3b82f6;
+    [data-testid="stImage"]:hover {
+        transform: scale(1.5);
+        z-index: 999;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        border-color: #ff4b4b;
     }
-    .exhibit-3d img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+    /* Macht die Bildunterschriften kleiner */
+    [data-testid="stImageCaption"] {
+        font-size: 10px !important;
+        line-height: 1.1;
+        text-align: center;
     }
 </style>
 """, unsafe_allow_html=True)
-
-# --- 4. SHOWROOM LOGIK ---
-st.subheader("🏛️ Virtueller Programmier-Showroom")
-
-# Wir bauen den GESAMTEN HTML-String erst zusammen
-showroom_html = '<div class="showroom-3d-grid">'
-
-for img_name in prog_images:
-    path = os.path.join(image_folder, img_name)
-    img_b64 = get_image_base64(path)
-    
-    if img_b64:
-        showroom_html += f'''
-        <div class="exhibit-3d">
-            <img src="data:image/jpg;base64,{img_b64}">
-        </div>
-        '''
-    else:
-        # Fallback falls Bild fehlt
-        showroom_html += '<div class="exhibit-3d" style="background:gray;"></div>'
-
-showroom_html += '</div>'
-
-# --- 5. DER ENTSCHEIDENDE AUFRUF ---
-st.markdown(showroom_html, unsafe_allow_html=True)
 
 
 
