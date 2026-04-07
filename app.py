@@ -578,40 +578,43 @@ other_docs = [
 # --- 3. STYLING (ISOLIERT & REPARIERT) ---
 st.markdown("""
 <style>
-    /* 1. Button-Container stabilisieren */
+    /* Das Grid nach oben schieben und Abstände optimieren */
+    .pdf-section-wrapper {
+        margin-top: -50px; /* Schiebt alles weiter nach oben */
+    }
+
+    /* Grunddesign der Buttons */
     .pdf-section-wrapper div.stButton > button {
-        min-height: 110px !important;
-        padding-top: 20px !important;
-        padding-bottom: 20px !important;
+        height: 100px !important;
+        border: 1px solid #e2e8f0 !important;
         border-radius: 12px !important;
         background-color: #ffffff !important;
-        border: 1px solid #e2e8f0 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
+        transition: all 0.3s ease-in-out !important; /* Wichtig für die Animation */
     }
 
-    /* 2. Emoji-Größe & Position korrigieren */
-    /* Streamlit packt den Text in ein <p> Tag. Das müssen wir ansprechen. */
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
-        font-size: 14px !important; /* Textgröße */
-        line-height: 1.6 !important;
-        display: block !important;
+    /* HOVER-EFFEKT: Button vergrößert sich */
+    .pdf-section-wrapper div.stButton > button:hover {
+        transform: scale(1.05) !important; /* Vergrößert den Button um 5% */
+        border-color: #3b82f6 !important;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important;
+        z-index: 10; /* Damit er über anderen Elementen schwebt */
     }
 
-    /* Trick: Das Emoji wird über die Schriftgröße des gesamten Buttons gesteuert */
-    .pdf-section-wrapper div.stButton > button {
-        font-size: 28px !important; /* Hier stellst du die EMOJI-Größe ein */
-    }
-
-    /* 3. Aktiver Button (Dunkelblau) */
+    /* FARBLICHE KENNZEICHNUNG (Aktiv) */
     .pdf-section-wrapper div.active-btn button {
-        background-color: #1e293b !important;
-        color: white !important;
+        background-color: #2563eb !important; /* Ein kräftiges Blau */
+        border-color: #1d4ed8 !important;
+        box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2) !important;
     }
+
+    /* Textfarbe im aktiven Button auf weiß setzen */
     .pdf-section-wrapper div.active-btn button div[data-testid="stMarkdownContainer"] p {
-        color: white !important;
+        color: #ffffff !important;
+    }
+
+    /* Icon-Größe im Button */
+    .pdf-section-wrapper div.stButton > button {
+        font-size: 24px !important;
     }
 </style>
 """, unsafe_allow_html=True)
