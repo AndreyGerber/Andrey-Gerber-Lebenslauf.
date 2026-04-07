@@ -578,36 +578,39 @@ other_docs = [
 # --- 3. STYLING (ISOLIERT & REPARIERT) ---
 st.markdown("""
 <style>
-    /* 1. Button Grunddesign: Subtiler Schatten statt harter Rahmen */
+    /* Button als Karte mit Schatten statt Rahmen */
     .pdf-section-wrapper div.stButton > button {
-        height: 110px !important;
-        border: none !important; /* Rahmen weg */
+        height: 120px !important; /* Etwas höher für mehr Platz */
+        border: 1px solid #f1f5f9 !important;
         border-radius: 16px !important;
-        background-color: #f8fafc !important; /* Ganz helles Grau/Blau */
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-        transition: all 0.2s ease-in-out !important;
-    }
-
-    /* 2. Text-Styling: Mehr Fokus auf das Label */
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] {
-        font-size: 12px !important;
-        letter-spacing: 0.02em !important;
-        text-transform: uppercase !important; /* Wirkt oft professioneller für Badges */
-        color: #64748b !important;
-    }
-
-    /* 3. Hover-Effekt: "Anheben" der Karte */
-    .pdf-section-wrapper div.stButton > button:hover {
         background-color: #ffffff !important;
-        transform: translateY(-4px) !important;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
-        border: 1px solid #3b82f6 !important; /* Akzentfarbe beim Hover */
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
 
-    /* 4. Aktiver Button: Dunkler Kontrast */
+    /* Die Emojis (Icons) gezielt ansprechen */
+    /* Hinweis: Wir nutzen hier eine größere Font-Size für den ersten Teil des Button-Texts */
+    .pdf-section-wrapper div.stButton > button p {
+        font-size: 14px !important; /* Textgröße */
+        font-weight: 500 !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Hover-Effekt: Karte hebt sich leicht ab */
+    .pdf-section-wrapper div.stButton > button:hover {
+        border-color: #3b82f6 !important;
+        background-color: #f8fafc !important;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important;
+    }
+
+    /* Aktiver Status (Dunkelblau) */
     .pdf-section-wrapper div.active-btn button {
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
-        box-shadow: 0 10px 15px -3px rgba(30, 41, 59, 0.3) !important;
+        background: #1e293b !important;
+        color: white !important;
     }
 </style>
 """, unsafe_allow_html=True)
