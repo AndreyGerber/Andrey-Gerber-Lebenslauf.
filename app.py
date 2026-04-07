@@ -593,56 +593,46 @@ other_docs = [
 # --- 3. STYLING (ISOLIERT & GEZWUNGEN) ---
 st.markdown("""
 <style>
-    /* 1. Manuelle Abstände (Spacer) */
+    /* 1. Spacer */
     .my-spacer-t { height: 40px !important; display: block; }
     .my-spacer-b { height: 80px !important; display: block; }
 
-    /* 2. Button-Grundgerüst (Isoliert durch .doc-wrapper) */
+    /* 2. Den Button-Container für Spalten-Layout vorbereiten */
     .doc-wrapper div.stButton > button {
         height: 120px !important;
         width: 100% !important;
         border-radius: 16px !important;
-        border: 1px solid #f1f5f9 !important;
         background-color: white !important;
-        transition: all 0.3s ease !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
     }
 
-    /* 3. ICON ÜBER TEXT (Der ultimative Fix) */
+    /* 3. DER ENTSCHEIDENDE FIX: Das p-Tag im Button auf 'column' setzen */
     .doc-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
         display: flex !important;
-        flex-direction: column !important; /* Icon über Text */
+        flex-direction: column !important; /* Zwingt Icon über Text */
         align-items: center !important;
         justify-content: center !important;
         margin: 0 !important;
-        white-space: pre-wrap !important;
+        white-space: pre-wrap !important; /* Erlaubt den Umbruch durch \n */
     }
 
-    /* Icon-Größe (Erste Zeile) */
+    /* 4. ICON GRÖSSE (Erste Zeile) */
     .doc-wrapper div.stButton > button p::first-line {
         font-size: 38px !important;
         line-height: 1.5 !important;
     }
 
-    /* Text-Größe (Rest) */
+    /* 5. TEXT GRÖSSE (Der Rest) */
     .doc-wrapper div.stButton > button p {
         font-size: 13px !important;
         font-weight: 700 !important;
         color: #475569 !important;
-        line-height: 1.2 !important;
     }
 
-    /* 4. HOVER EFFEKT */
-    .doc-wrapper div.stButton > button:hover {
-        transform: translateY(-5px) !important;
-        border-color: #3b82f6 !important;
-        box-shadow: 0 15px 25px rgba(0,0,0,0.1) !important;
-    }
-
-    /* 5. AKTIVER BUTTON */
+    /* 6. AKTIVER BUTTON */
     .active-doc-btn div.stButton > button {
         background: #1e293b !important;
         border-color: #1e293b !important;
