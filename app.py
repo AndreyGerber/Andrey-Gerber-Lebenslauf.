@@ -272,6 +272,41 @@ st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'disp
 
 
 
+import plotly.express as px
+import pandas as pd
+
+# Daten aufbereiten
+data = [
+    dict(Event="Geburt (UdSSR)", Start="1988-01-01", Ende="1988-12-31", Info="Born in UdSSR"),
+    dict(Event="Russland", Start="1991-01-01", Ende="1991-12-31", Info="Moved without moving"),
+    dict(Event="Schule", Start="1996-01-01", Ende="2005-12-31", Info="School (not cool)"),
+    dict(Event="Emigration", Start="2006-01-01", Ende="2006-12-31", Info="Emigration to GE 🇩🇪"),
+    dict(Event="Studium", Start="2010-01-01", Ende="2016-12-31", Info="Aircraft Design (B.Eng. & Ms.Sc.)"),
+    dict(Event="TÜV Rheinland", Start="2017-01-01", Ende="2021-12-31", Info="Lab & Quality Expert"),
+    dict(Event="Ferchau (Siemens)", Start="2022-01-01", Ende="2025-12-31", Info="Quality Systems Engineering"),
+    dict(Event="Liora", Start="2026-01-01", Ende="2026-12-31", Info="Data Science & ML")
+]
+
+df = pd.DataFrame(data)
+
+fig = px.timeline(df, x_start="Start", x_end="Ende", y="Event", hover_data=["Info"], color="Event")
+fig.update_yaxes(autorange="reversed") 
+fig.update_layout(showlegend=False, height=400)
+
+st.plotly_chart(fig, use_container_width=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 import pydeck as pdk
