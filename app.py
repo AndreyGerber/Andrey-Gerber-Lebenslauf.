@@ -578,52 +578,36 @@ other_docs = [
 # --- 3. STYLING (ISOLIERT & REPARIERT) ---
 st.markdown("""
 <style>
-    /* 1. Die Button-Grundform */
+    /* 1. Button Grunddesign: Subtiler Schatten statt harter Rahmen */
     .pdf-section-wrapper div.stButton > button {
-        height: 100px !important;
-        border: 1px solid #e2e8f0 !important;
-        border-radius: 12px !important;
-        background-color: #ffffff !important;
-        transition: all 0.3s ease !important;
+        height: 110px !important;
+        border: none !important; /* Rahmen weg */
+        border-radius: 16px !important;
+        background-color: #f8fafc !important; /* Ganz helles Grau/Blau */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+        transition: all 0.2s ease-in-out !important;
     }
 
-    /* 2. Text & Icon Ausrichtung */
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        line-height: 1.2 !important;
-    }
-
-    /* 3. DAS EMOJI GROSS MACHEN */
-    /* Wir vergrößern den gesamten Button-Inhalt und regeln den Text danach wieder runter */
-    .pdf-section-wrapper div.stButton > button {
-        font-size: 32px !important; /* Größe des Emojis */
-    }
-
-    /* 4. DAS LABEL (TEXT) ANPASSEN */
+    /* 2. Text-Styling: Mehr Fokus auf das Label */
     .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] {
-        font-size: 13px !important; /* Kleinerer Text fürs Label */
-        font-weight: 600 !important;
-        color: #475569 !important;
+        font-size: 12px !important;
+        letter-spacing: 0.02em !important;
+        text-transform: uppercase !important; /* Wirkt oft professioneller für Badges */
+        color: #64748b !important;
     }
 
-    /* 5. Aktiver Button (Dunkelblau) */
-    .pdf-section-wrapper div.active-btn button {
-        background-color: #1e293b !important;
-        border-color: #1e293b !important;
-    }
-    .pdf-section-wrapper div.active-btn button div[data-testid="stMarkdownContainer"],
-    .pdf-section-wrapper div.active-btn button div[data-testid="stMarkdownContainer"] p {
-        color: #ffffff !important;
-    }
-
-    /* 6. Hover-Effekt */
+    /* 3. Hover-Effekt: "Anheben" der Karte */
     .pdf-section-wrapper div.stButton > button:hover {
-        border-color: #3b82f6 !important;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
+        background-color: #ffffff !important;
+        transform: translateY(-4px) !important;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+        border: 1px solid #3b82f6 !important; /* Akzentfarbe beim Hover */
+    }
+
+    /* 4. Aktiver Button: Dunkler Kontrast */
+    .pdf-section-wrapper div.active-btn button {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+        box-shadow: 0 10px 15px -3px rgba(30, 41, 59, 0.3) !important;
     }
 </style>
 """, unsafe_allow_html=True)
