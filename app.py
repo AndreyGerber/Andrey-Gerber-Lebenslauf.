@@ -719,43 +719,43 @@ showroom_html += '</div>'
 
 # HIER liegt der Fehler: Du musst unsafe_allow_html=True setzen!
 st.markdown(showroom_html, unsafe_allow_html=True)
-<style>
-    .showroom-wrapper {
-        display: flex !important;
-        flex-direction: row !important;
-        overflow-x: auto !important; /* Erlaubt das Scrollen nach rechts */
-        gap: 20px;
-        padding: 25px;
-        background: #1e293b; /* Dunkler Showroom-Boden */
-        border-radius: 15px;
-    }
+    <style>
+        .showroom-wrapper {
+            display: flex !important;
+            flex-direction: row !important;
+            overflow-x: auto !important; /* Erlaubt das Scrollen nach rechts */
+            gap: 20px;
+            padding: 25px;
+            background: #1e293b; /* Dunkler Showroom-Boden */
+            border-radius: 15px;
+        }
 
-    .showroom-item {
-        flex: 0 0 auto !important; /* Verhindert, dass die Karten schrumpfen */
-        width: 120px;
-        height: 160px;
-        background: white;
-        border-radius: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none !important;
-        transition: 0.3s;
-    }
+        .showroom-item {
+            flex: 0 0 auto !important; /* Verhindert, dass die Karten schrumpfen */
+            width: 120px;
+            height: 160px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none !important;
+            transition: 0.3s;
+        }
 
-    .showroom-item:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-    }
+        .showroom-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
 
-    .pdf-label {
-        font-size: 10px;
-        color: #1e293b;
-        text-align: center;
-        font-weight: bold;
-    }
-</style>
+        .pdf-label {
+            font-size: 10px;
+            color: #1e293b;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
 
 
 
