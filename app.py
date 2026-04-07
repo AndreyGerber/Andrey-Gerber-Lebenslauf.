@@ -677,86 +677,111 @@ with col_viewer:
 
 
 #Zertifikate Data Science
-# --- PROGRAMMIER SHOWROOM ---
+# --- 1. DATEN: Liste deiner 16 Dokumente ---
+prog_files = [
+    "1_Python for Data Science.pdf", "2_Exploratory Statistics with Python.pdf",
+    "3_Data_Quality.pdf", "4_Data Visualization_Matplotlib.pdf",
+    "5_Data Visualization_with_Seaborn.pdf", "6_Matplotlib_Complements.pdf",
+    "7_DataViz_with_Plotly.pdf", "8_MCQ_Linux_and_Bash.pdf",
+    "9_Git_&_Github.pdf", "10_Unit_Testing.pdf",
+    "11_Classification_with_scikit-learn.pdf", "12_Regressionn_with_scikit-learn.pdf",
+    "13_Methodology_in_Data_Science.pdf", "14_Feature_Engineering_and_Optimisation.pdf",
+    "15_Time_Series_Analysis_with_Python.pdf", "16_Advanced_Classification_with_scikit.pdf"
+]
+
+# --- 2. STYLING: CSS für den Showroom ---
+st.markdown("""
+<style>
+    /* Der dunkle Hintergrund-Container mit horizontalem Scroll */
+    .showroom-wrapper {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow-x: auto !important; /* Aktiviert das seitliche Scrollen */
+        gap: 20px;
+        padding: 30px 20px;
+        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        border-radius: 20px;
+        border: 1px solid #334155;
+        scroll-behavior: smooth;
+    }
+
+    /* Die einzelnen Zertifikats-Karten */
+    .showroom-item {
+        flex: 0 0 auto !important; /* Verhindert, dass Karten schrumpfen */
+        width: 140px;
+        height: 180px;
+        background: #ffffff;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none !important;
+        transition: all 0.3s ease;
+        border: 1px solid #cbd5e1;
+        position: relative;
+    }
+
+    /* Hover-Effekt: Karte hebt sich ab */
+    .showroom-item:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
+        border-color: #3b82f6;
+    }
+
+    /* Icon im Showroom */
+    .sr-icon {
+        font-size: 45px;
+        margin-bottom: 10px;
+    }
+
+    /* Beschriftung im Showroom */
+    .sr-label {
+        font-size: 11px;
+        color: #0f172a;
+        font-weight: 700;
+        text-align: center;
+        padding: 0 8px;
+        line-height: 1.2;
+        white-space: normal; /* Erlaubt Zeilenumbruch im Label */
+    }
+
+    /* Scrollbar-Styling (Modern & dezent) */
+    .showroom-wrapper::-webkit-scrollbar {
+        height: 8px;
+    }
+    .showroom-wrapper::-webkit-scrollbar-thumb {
+        background: #475569;
+        border-radius: 10px;
+    }
+    .showroom-wrapper::-webkit-scrollbar-track {
+        background: #1e293b;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# --- 3. DARSTELLUNG: HTML Struktur aufbauen ---
 st.write("---")
 st.subheader("🖥️ Programmier- & Data Science Showroom")
 
-prog_files = [
-    "1_Python for Data Science.pdf",
-    "2_Exploratory Statistics with Python.pdf",
-    "3_Data_Quality.pdf",
-    "4_Data Visualization_Matplotlib.pdf",
-    "5_Data Visualization_with_Seaborn.pdf",
-    "6_Matplotlib_Complements.pdf",
-    "7_DataViz_with_Plotly.pdf",
-    "8_MCQ_Linux_and_Bash.pdf",
-    "9_Git_&_Github.pdf",
-    "10_Unit_Testing.pdf",
-    "11_Classification_with_scikit-learn.pdf",
-    "12_Regressionn_with_scikit-learn.pdf",
-    "13_Methodology_in_Data_Science.pdf",
-    "14_Feature_Engineering_and_Optimisation.pdf",
-    "15_Time_Series_Analysis_with_Python.pdf",
-    "16_Advanced_Classification_with_scikit.pdf"
-]
+# HTML zusammenbauen
+sr_html = '<div class="showroom-wrapper">'
 
-# WICHTIG: Den String hier zusammenbauen
-showroom_html = '<div class="showroom-wrapper">'
-
-for file in prog_files:
-    # Namen säubern
-    display_name = file.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
+for f in prog_files:
+    # Bereinigt den Namen für das Label (entfernt '1_', '2_' etc. und '.pdf')
+    clean_label = f.split('_', 1)[-1].replace('.pdf', '').replace('_', ' ')
     
-    showroom_html += f'''
-    <a href="/?doc={file}" target="_self" class="showroom-item">
-        <div class="glass-effect"></div>
-        <div class="pdf-icon">🐍</div>
-        <div class="pdf-label">{display_name}</div>
+    sr_html += f'''
+    <a href="/?doc={f}" target="_self" class="showroom-item">
+        <div class="sr-icon">🐍</div>
+        <div class="sr-label">{clean_label}</div>
     </a>
     '''
 
-showroom_html += '</div>'
+sr_html += '</div>'
 
-# HIER liegt der Fehler: Du musst unsafe_allow_html=True setzen!
-st.markdown(showroom_html, unsafe_allow_html=True)
-    <style>
-        .showroom-wrapper {
-            display: flex !important;
-            flex-direction: row !important;
-            overflow-x: auto !important; /* Erlaubt das Scrollen nach rechts */
-            gap: 20px;
-            padding: 25px;
-            background: #1e293b; /* Dunkler Showroom-Boden */
-            border-radius: 15px;
-        }
-
-        .showroom-item {
-            flex: 0 0 auto !important; /* Verhindert, dass die Karten schrumpfen */
-            width: 120px;
-            height: 160px;
-            background: white;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none !important;
-            transition: 0.3s;
-        }
-
-        .showroom-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
-
-        .pdf-label {
-            font-size: 10px;
-            color: #1e293b;
-            text-align: center;
-            font-weight: bold;
-        }
-    </style>
-
+# WICHTIG: Das 'unsafe_allow_html=True' ist zwingend erforderlich
+st.markdown(sr_html, unsafe_allow_html=True)
 
 
 
