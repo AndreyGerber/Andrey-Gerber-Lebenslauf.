@@ -576,6 +576,70 @@ other_docs = [
 ]
 
 # --- 3. STYLING (SPACER & VERTIKALE BUTTONS) ---
+st.markdown("""
+<style>
+    /* 1. ABSTÄNDE KONTROLLIEREN */
+    .custom-spacer-t { height: 30px !important; display: block !important; }
+    .custom-spacer-b { height: 80px !important; display: block !important; }
+
+    /* 2. BUTTON-GRUNDFORM (CARD-LOOK) */
+    .pdf-section-wrapper div.stButton > button {
+        height: 120px !important;
+        border: 1px solid #f1f5f9 !important;
+        border-radius: 16px !important;
+        background-color: #ffffff !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* 3. ICON ÜBER TEXT ERZWINGEN (Der "Magic" Fix) */
+    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p {
+        display: flex !important;
+        flex-direction: column !important; /* Stapelt Icon über Text */
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 !important;
+        gap: 8px !important; /* Abstand zwischen Icon und Text */
+    }
+
+    /* ICON GRÖSSE (Die erste Zeile) */
+    .pdf-section-wrapper div.stButton > button p::first-line {
+        font-size: 34px !important; 
+        line-height: 1 !important;
+    }
+
+    /* TEXT GRÖSSE & STIL (Das Label) */
+    .pdf-section-wrapper div.stButton > button p {
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        color: #475569 !important;
+        text-align: center !important;
+        line-height: 1.2 !important;
+    }
+
+    /* 4. HOVER-EFFEKT (Interaktives Feedback) */
+    .pdf-section-wrapper div.stButton > button:hover {
+        transform: translateY(-5px) scale(1.05) !important; /* Hebt sich leicht ab */
+        border-color: #3b82f6 !important;
+        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1) !important;
+        z-index: 10 !important;
+    }
+
+    /* 5. AKTIVER BUTTON (Dein Markenzeichen) */
+    .pdf-section-wrapper .active-btn div.stButton > button {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+        border-color: #1e293b !important;
+    }
+    .pdf-section-wrapper .active-btn div.stButton > button p {
+        color: #ffffff !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 
 # --- 4. LAYOUT & LOGIK ---
 st.markdown('<div class="pdf-section-wrapper">', unsafe_allow_html=True)
