@@ -597,7 +597,7 @@ st.markdown("""
     }
 
     .galerie-header {
-        margin-top: 60px !important; /* Hier den Abstand nach oben einstellen */
+        margin-top: 160px !important; /* Hier den Abstand nach oben einstellen */
         margin-bottom: 20px !important;
         display: block;
     }
