@@ -1091,3 +1091,14 @@ st.markdown(f"""
         <i>Übrigens half mir das dabei, meinen Wortschatz an Schimpfwörtern und deren Kombinationen in mehreren Sprachen zu aktualisieren.</i>
     </div>
     """, unsafe_allow_html=True)
+
+
+
+st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
+
+st.subheader("Persönliche Metriken")
+m_col1, m_col2, m_col3 = st.columns(3)
+
+m_col1.metric("Kaffee-Verbrauch", "Hoher Wirkungsgrad", "☕")
+m_col2.metric("Neugier-Level", "100%", "📈")
+m_col3.metric("Fehlertoleranz", "0.01mm", "📏")
