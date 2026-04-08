@@ -934,3 +934,78 @@ st.markdown("<br>" * 3, unsafe_allow_html=True)  # Drei Umbrüche
 
 
 
+import streamlit as st
+import os
+from PIL import Image
+
+def load_scaled_img(path, degrees=0, scale=0.4):
+    if os.path.exists(path):
+        img = Image.open(path)
+        if degrees != 0:
+            img = img.rotate(degrees, expand=True)
+        new_size = (int(img.width * scale), int(img.height * scale))
+        return img.resize(new_size, Image.Resampling.LANCZOS)
+    return None
+
+# --- CONTAINER FÜR FERTIGKEITEN (UM DAS CSS ZU ISOLIEREN) ---
+with st.container():
+    # Wir vergeben eine eindeutige CSS-Klasse nur für diesen Bereich
+    st.markdown("""
+        <style>
+            /* Nur Bilder innerhalb von Containern mit dieser Struktur erhalten den Schatten */
+            .skill-section img {
+                border-radius: 12px !important;
+                box-shadow: 3px 3px 12px rgba(0,0,0,0.2) !important;
+                margin-bottom: 10px !important;
+            }
+        </style>
+        <div class="skill-section">
+    """, unsafe_allow_html=True)
+
+    st.title("🛠️ Meine Fertigkeiten")
+    st.divider()
+
+    header_col1, header_col2 = st.columns(2)
+    with header_col1:
+        st.subheader("Von der Skizze bis zum fertigen Produkt")
+    with header_col2:
+        st.subheader("Von der Idee bis zur Übergabe...")
+
+    content_col1, content_col2 = st.columns(2)
+
+    with content_col1:
+        kerze_files = [
+            "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
+            "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
+        ]
+        k_cols = st.columns(3) 
+        for idx, img_path in enumerate(kerze_files):
+            img = load_scaled_img(img_path, scale=0.35)
+            if img:
+                k_cols[idx % 3].image(img)
+
+    with content_col2:
+        project_configs = [
+            ("images/project1.jpg", 0), ("images/project2.jpeg", 0),
+            ("images/project3.jpeg", 90), ("images/project4.jpeg", 90),
+            ("images/project5.jpg", 0), ("images/project6.jpeg", -90)
+        ]
+        p_cols = st.columns(2)
+        for idx, (img_path, angle) in enumerate(project_configs):
+            img = load_scaled_img(img_path, angle, scale=0.42)
+            if img:
+                p_cols[idx % 2].image(img)
+
+    st.markdown("</div>", unsafe_allow_html=True) # Ende der skill-section
+
+st.divider()
+
+# --- QM & METHODIK (Bleibt Standard-Streamlit ohne spezielles CSS) ---
+st.subheader("📉 Expertise & Methodik")
+info_col1, info_col2 = st.columns(2)
+with info_col1:
+    st.info("**Qualitätsmanagement & Audits**\n\nISO 9001/17025 | CAPA-Coaching")
+with info_col2:
+    st.info("**Lean Management & Datenanalyse**\n\nSix Sigma | Prozessoptimierung")
+
+st.success("🐍 **Programmierkenntnisse:** Diese Seite wurde mit Python und Leidenschaft gebaut.")
