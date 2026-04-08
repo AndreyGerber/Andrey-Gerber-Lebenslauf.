@@ -1119,7 +1119,7 @@ st.markdown("""
 <style>
     .hobby-card {
         background: #f8fafc;
-        border: 1px solid #e2e8f0;
+        border: 2px solid #e2e8f0;
         border-radius: 15px;
         padding: 20px;
         height: 420px;
