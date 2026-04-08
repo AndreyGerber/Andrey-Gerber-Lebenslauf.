@@ -929,6 +929,8 @@ else:
 
 
 #2D-Lösung
+
+
 import streamlit as st
 import streamlit.components.v1 as components
 import os
@@ -938,88 +940,110 @@ import json
 # --- FUNKTION: BILDER LOKAL LADEN & KONVERTIEREN ---
 def get_base64_img(file_path):
     if os.path.exists(file_path):
-        with open(file_path, "rb") as f:
-            data = f.read()
-            return "data:image/jpeg;base64," + base64.b64encode(data).decode()
+        try:
+            with open(file_path, "rb") as f:
+                data = f.read()
+                # Wir nutzen f-strings für die Base64-Konvertierung
+                return f"data:image/jpeg;base64,{base64.b64encode(data).decode()}"
+        except Exception as e:
+            print(f"Fehler beim Laden von {file_path}: {e}")
     return None
 
 # --- BILDERLISTE VORBEREITEN ---
 IMAGE_DIR = "images"
-# Dynamisches Einlesen aller JPEGs aus deinem Ordner
-cert_files = [f for f in os.listdir(IMAGE_DIR) if f.endswith('.jpg')]
-cert_files.sort(key=lambda x: int(x.split('_')[0]) if x[0].isdigit() else 99)
-
 cert_b64_data = []
-for filename in cert_files:
-    path = os.path.join(IMAGE_DIR, filename)
-    b64 = get_base64_img(path)
-    if b64:
-        cert_b64_data.append(b64)
+
+if os.path.exists(IMAGE_DIR):
+    # Alle .jpg Dateien im Ordner finden und sortieren
+    cert_files = sorted([f for f in os.listdir(IMAGE_DIR) if f.lower().endswith('.jpg')])
+    for filename in cert_files:
+        path = os.path.join(IMAGE_DIR, filename)
+        b64 = get_base64_img(path)
+        if b64:
+            cert_b64_data.append(b64)
 
 def st_3d_wall(b64_list):
     canvas_height = 600
     urls_json = json.dumps(b64_list)
     
+    # HTML & JavaScript Teil
     three_js_code = f"""
-    <div id="container" style="width: 100%; height: {canvas_height}px; background: transparent;"></div>
+    <div id="container" style="width: 100%; height: {canvas_height}px; background-color: #0e1117; display: flex; align-items: center; justify-content: center;">
+        <p id="loading-text" style="color: white; font-family: sans-serif;">3D-Wand wird geladen...</p>
+    </div>
+    
     <script src="https://cloudflare.com"></script>
     <script src="https://jsdelivr.net"></script>
     
     <script>
         const container = document.getElementById('container');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(55, container.offsetWidth / {canvas_height}, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({{ antialias: true, alpha: true }});
-        renderer.setSize(container.offsetWidth, {canvas_height});
-        container.appendChild(renderer.domElement);
-
-        const loader = new THREE.TextureLoader();
         const images = {urls_json};
-        const radius = 7;
-        const totalAngle = Math.PI * 0.9;
-
-        images.forEach((b64, i) => {{
-            loader.load(b64, (texture) => {{
-                const geometry = new THREE.PlaneGeometry(2.2, 3);
-                const material = new THREE.MeshBasicMaterial({{ map: texture, side: THREE.DoubleSide }});
-                const mesh = new THREE.Mesh(geometry, material);
+        
+        if (images.length === 0) {{
+            document.getElementById('loading-text').innerText = "Keine Bilder gefunden. Bitte prüfe den 'images' Ordner.";
+        }} else {{
+            try {{
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(55, container.offsetWidth / {canvas_height}, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({{ antialias: true, alpha: true }});
+                renderer.setSize(container.offsetWidth, {canvas_height});
+                renderer.setClearColor(0x000000, 0); // Transparent
                 
-                const angle = (i / (images.length - 1) - 0.5) * totalAngle;
-                mesh.position.set(Math.sin(angle) * radius, (i % 2 === 0 ? 0.5 : -0.5), Math.cos(angle) * radius - radius);
-                mesh.rotation.y = angle;
-                
-                scene.add(mesh);
-            }});
-        }});
+                // Container leeren und Renderer hinzufügen
+                container.innerHTML = '';
+                container.appendChild(renderer.domElement);
 
-        camera.position.z = 4;
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.autoRotate = true;
-        controls.autoRotateSpeed = 0.5;
+                const loader = new THREE.TextureLoader();
+                const radius = 8;
+                const totalAngle = Math.PI * 0.8;
 
-        function animate() {{
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
+                images.forEach((b64, i) => {{
+                    loader.load(b64, (texture) => {{
+                        const geometry = new THREE.PlaneGeometry(2.5, 3.5);
+                        const material = new THREE.MeshBasicMaterial({{ map: texture, side: THREE.DoubleSide }});
+                        const mesh = new THREE.Mesh(geometry, material);
+                        
+                        const angle = (i / (images.length - 1) - 0.5) * totalAngle;
+                        mesh.position.set(Math.sin(angle) * radius, (i % 2 === 0 ? 0.6 : -0.6), Math.cos(angle) * radius - radius);
+                        mesh.rotation.y = angle;
+                        
+                        scene.add(mesh);
+                    }});
+                }});
+
+                camera.position.z = 5;
+                const controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.autoRotate = true;
+                controls.autoRotateSpeed = 0.5;
+
+                function animate() {{
+                    requestAnimationFrame(animate);
+                    controls.update();
+                    renderer.render(scene, camera);
+                }}
+                animate();
+
+                window.addEventListener('resize', () => {{
+                    camera.aspect = container.offsetWidth / {canvas_height};
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.offsetWidth, {canvas_height});
+                }});
+            }} catch (err) {{
+                document.getElementById('loading-text').innerText = "Fehler beim Initialisieren von 3D: " + err;
+            }}
         }}
-        animate();
-
-        window.addEventListener('resize', () => {{
-            camera.aspect = container.offsetWidth / {canvas_height};
-            camera.updateProjectionMatrix();
-            renderer.setSize(container.offsetWidth, {canvas_height});
-        }});
     </script>
     """
     components.html(three_js_code, height=canvas_height)
 
-# --- MAIN APP ---
-st.set_page_config(page_title="Andrey Gerber Lebenslauf", layout="wide")
-st.header("🎓 Zertifikate & Qualifikationen")
+# --- STREAMLIT UI ---
+st.title("🎓 Zertifikate & Qualifikationen")
 
 if cert_b64_data:
     st_3d_wall(cert_b64_data)
+    st.info("💡 Nutze die Maus zum Drehen (Klicken & Ziehen) und Zoomen (Mausrad).")
 else:
-    st.error("Keine Bilder im Ordner 'images' gefunden.")
-
-st.info("💡 Interaktive 3D-Wand: Nutze die Maus zum Drehen und Zoomen.")
+    st.error("Der Ordner 'images' wurde nicht gefunden oder enthält keine .jpg Dateien.")
+    st.write("Aktueller Pfad:", os.getcwd())
+    if os.path.exists(IMAGE_DIR):
+        st.write("Dateien im Ordner:", os.listdir(IMAGE_DIR))
