@@ -931,75 +931,77 @@ else:
 #2D-Lösung
 import streamlit as st
 import streamlit.components.v1 as components
-import json
+import os
 
-def st_3d_certificate_wall(image_urls):
-    # Konfiguration der Wand
-    canvas_height = 600
-    # Wir wandeln die Python-Liste in einen JSON-String für JavaScript um
-    js_image_urls = json.dumps(image_urls)
+# --- KONFIGURATION ---
+# Pfad zu deinem Bilder-Ordner (relativ zum Skript)
+IMAGE_DIR = "images" 
 
+# Liste deiner 17 Zertifikate basierend auf dem Screenshot
+cert_filenames = [
+    "1_Python_for_Data_Science.jpg",
+    "2_Exploratory_Statistics_with_Python.jpg",
+    "4_Data_Visualization_Matplotlib.jpg",
+    "5_Data_Visualization_with_Seaborn.jpg",
+    "6_Matplotlib_Complements.jpg",
+    "7_DataViz_with_Plotly.jpg",
+    "8_MCQ_Linux_and_Bash.jpg",
+    "9_Git_and_Github.jpg",
+    "10_Unit_Testing.jpg",
+    "11_Classification_with_scikit-learn.jpg",
+    "12_Regressionn_with_scikit-learn.jpg",
+    "13_Methodology_in_Data_Science.jpg",
+    "14_Feature_Engineering_and_Optimisation.jpg",
+    "15_Time_Series_Analysis_with_Python.jpg",
+    "16_Advanced_Classification_with_scikit-learn.jpg",
+    "17_Text_Mining.jpg"
+]
+
+# WICHTIG: Streamlit muss Zugriff auf lokale Dateien haben. 
+# Wir erstellen URLs, die für den Browser lesbar sind.
+cert_urls = [f"{IMAGE_DIR}/{name}" for name in cert_filenames]
+
+def st_3d_wall(urls):
+    canvas_height = 650
+    # JavaScript-Teil mit Three.js
     three_js_code = f"""
-    <div id="three-container" style="width: 100%; height: {canvas_height}px; background: transparent;"></div>
+    <div id="container" style="width: 100%; height: {canvas_height}px; cursor: move;"></div>
     <script src="https://cloudflare.com"></script>
-    <!-- OrbitControls für Maus-Interaktion -->
     <script src="https://jsdelivr.net"></script>
     
     <script>
-        const container = document.getElementById('three-container');
-        const images = {js_image_urls};
-        
-        // 1. Szene & Kamera
+        const container = document.getElementById('container');
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(50, container.offsetWidth / {canvas_height}, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(55, container.offsetWidth / {canvas_height}, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({{ antialias: true, alpha: true }});
         renderer.setSize(container.offsetWidth, {canvas_height});
-        renderer.setPixelRatio(window.devicePixelRatio);
         container.appendChild(renderer.domElement);
 
-        // 2. Beleuchtung
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-        scene.add(ambientLight);
-
-        // 3. Wand-Parameter
-        const radius = 8;        // Krümmungsradius
-        const wallSpread = 4.0;  // Wie weit die Wand "aufgefächert" ist (in Radianten)
-        
         const loader = new THREE.TextureLoader();
+        const urls = {urls};
+        const radius = 7; 
+        const totalAngle = Math.PI * 0.8; // Breite der Kurve
 
-        // 4. Zertifikate erstellen
-        images.forEach((url, i) => {{
+        urls.forEach((url, i) => {{
             loader.load(url, (texture) => {{
-                const geometry = new THREE.PlaneGeometry(2.5, 3.5); // Format eines Zertifikats
-                const material = new THREE.MeshBasicMaterial({{ 
-                    map: texture, 
-                    side: THREE.DoubleSide,
-                    transparent: true
-                }});
+                const geometry = new THREE.PlaneGeometry(2.2, 3);
+                const material = new THREE.MeshBasicMaterial({{ map: texture, side: THREE.DoubleSide }});
                 const mesh = new THREE.Mesh(geometry, material);
-
-                // Position auf der Kurve berechnen
-                const angle = (i / (images.length - 1) - 0.5) * wallSpread;
                 
-                mesh.position.x = Math.sin(angle) * radius;
-                mesh.position.z = Math.cos(angle) * radius - radius;
-                mesh.position.y = (i % 2 === 0 ? 0.5 : -0.5); // Leichtes Versetzen für Dynamik
-                
-                // Rotation zum Betrachter
+                // Verteilung auf der Kurve
+                const angle = (i / (urls.length - 1) - 0.5) * totalAngle;
+                mesh.position.set(Math.sin(angle) * radius, (i % 2 === 0 ? 0.4 : -0.4), Math.cos(angle) * radius - radius);
                 mesh.rotation.y = angle;
-
+                
                 scene.add(mesh);
             }});
         }});
 
-        camera.position.z = 5;
-        camera.position.y = 0;
-
-        // 5. Interaktion
+        camera.position.z = 4;
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableZoom = true;
-        controls.autoRotate = true; // Die Wand dreht sich langsam
-        controls.autoRotateSpeed = 0.5;
+        controls.enableDamping = true;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.6;
 
         function animate() {{
             requestAnimationFrame(animate);
@@ -1008,7 +1010,6 @@ def st_3d_certificate_wall(image_urls):
         }}
         animate();
 
-        // Resize Handling
         window.addEventListener('resize', () => {{
             camera.aspect = container.offsetWidth / {canvas_height};
             camera.updateProjectionMatrix();
@@ -1018,13 +1019,13 @@ def st_3d_certificate_wall(image_urls):
     """
     components.html(three_js_code, height=canvas_height)
 
-# --- Streamlit UI ---
-st.set_page_config(layout="wide")
-st.title("Diplome & Zertifikate (3D View)")
+# --- APP LAYOUT ---
+st.set_page_config(page_title="Data Science Portfolio", layout="wide")
+st.header("🎓 Meine Zertifizierungen")
 
-# Erstelle Liste mit 17 Beispiel-URLs (Ersetze diese durch deine Pfade)
-my_certs = [f"https://picsum.photos{i}" for i in range(17)]
+if cert_urls:
+    st_3d_wall(cert_urls)
+else:
+    st.error("Bilder konnten nicht geladen werden. Prüfe den 'images' Ordner.")
 
-st_3d_certificate_wall(my_certs)
-
-st.info("💡 Du kannst die Wand mit der Maus drehen und zoomen.")
+st.caption("Interaktive Ansicht: Du kannst die Wand mit der Maus drehen und zoomen.")
