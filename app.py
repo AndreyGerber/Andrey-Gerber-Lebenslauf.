@@ -1016,5 +1016,10 @@ with info_col1:
 with info_col2:
     st.info("**Lean Management & Datenanalyse**\n\nSix Sigma | Prozessoptimierung")
 
-st.success("🐍 **Programmierkenntnisse:** Diese Seite wurde mit Python gebaut.")
+st.success("""
+🐍 **ob ich programmieren kann:**  
+Das hier ist übrigens keine Agentur – diese Seite habe ich selbst programmiert.  
+Mit Python, Streamlit und der ein oder anderen Tasse Kaffee.
+Übrigens, das half mir **meinen** Wortschatz der Schimpfwörter und ihrer Kombinationen in mehreren Sprachen zu aktualisieren.
+""")
 
