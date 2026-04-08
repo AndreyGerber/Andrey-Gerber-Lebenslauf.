@@ -1316,9 +1316,9 @@ with book_col:
             }
         </style>
         
-        <div class="book-wrapper" title="📖 Work in Progress: Dieses Projekt befindet sich noch in der Entwurfsphase.">
+        <div class="book-wrapper" title="📖 Mein Buch: Dieses Projekt befindet sich in Arbeit.">
             <div class="book-icon">📖</div>
-            <div class="book-text">mein&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;Buch</div>
-            <div class="book-tag">Unvollendet</div>
+
+            <div class="book-tag">in Arbeit</div>
         </div>
     """, unsafe_allow_html=True)
