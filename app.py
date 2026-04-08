@@ -488,7 +488,7 @@ with st.container():
         </div>
     """, unsafe_allow_html=True)
 
-# --- PDF GALERIE mit HTML/CSS und Query Params ---
+# --- PDF GALERIE mit HTML/CSS und JavaScript (kein neuer Tab) ---
 if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
 
@@ -515,6 +515,22 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
+# JavaScript für Navigation ohne neuen Tab
+st.markdown("""
+<script>
+function setActiveDoc(docName) {
+    // URL aktualisieren ohne Seite neu zu laden
+    const url = new URL(window.location.href);
+    url.searchParams.set('doc', docName);
+    window.history.pushState({}, '', url);
+    
+    // Streamlit manuell mitteilen, dass sich die Query Params geändert haben
+    const event = new Event('popstate');
+    window.dispatchEvent(event);
+}
+</script>
+""", unsafe_allow_html=True)
+
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
@@ -530,33 +546,28 @@ with col_gallery:
         border_width = "2px" if is_active else "1px"
         text_color = "#0050b3" if is_active else "#475569"
         
-        # PDF Base64 für diesen Button
-        pdf_data = get_pdf_base64(doc['file'])
-        
         html_btn = f"""
-        <a href="?doc={doc['file']}" style="text-decoration: none;">
-            <div style="
-                height: 100px;
-                width: 100%;
-                border-radius: 16px;
-                background-color: {bg_color};
-                border: {border_width} solid {border_color};
-                cursor: pointer;
-                transition: all 0.3s ease;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                margin-bottom: 30px;
-                box-sizing: border-box;
-            "
-            onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#94a3b8';"
-            onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{border_color}';">
-                <span style="font-size: 28px; line-height: 1;">{doc['icon']}</span>
-                <span style="font-size: 20px; font-weight: 600; color: {text_color};">{doc['label']}</span>
-            </div>
-        </a>
+        <div onclick="setActiveDoc('{doc['file']}');" style="
+            height: 120px;
+            width: 100%;
+            border-radius: 16px;
+            background-color: {bg_color};
+            border: {border_width} solid {border_color};
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+            box-sizing: border-box;
+        "
+        onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#94a3b8';"
+        onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{border_color}';">
+            <span style="font-size: 48px; line-height: 1;">{doc['icon']}</span>
+            <span style="font-size: 16px; font-weight: 600; color: {text_color};">{doc['label']}</span>
+        </div>
         """
         st.markdown(html_btn, unsafe_allow_html=True)
     
@@ -572,32 +583,28 @@ with col_gallery:
             border_width = "2px" if is_active else "1px"
             text_color = "#0050b3" if is_active else "#475569"
             
-            # PDF Base64 wird nicht mehr benötigt, da wir Query Params verwenden
-            
             html_btn = f"""
-            <a href="?doc={doc['file']}" style="text-decoration: none;">
-                <div style="
-                    height: 100px;
-                    width: 100%;
-                    border-radius: 16px;
-                    background-color: {bg_color};
-                    border: {border_width} solid {border_color};
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 8px;
-                    margin-bottom: 15px;
-                    box-sizing: border-box;
-                "
-                onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#94a3b8';"
-                onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{border_color}';">
-                    <span style="font-size: 28px; line-height: 1;">{doc['icon']}</span>
-                    <span style="font-size: 26px; font-weight: 600; color: {text_color};">{doc['label']}</span>
-                </div>
-            </a>
+            <div onclick="setActiveDoc('{doc['file']}');" style="
+                height: 120px;
+                width: 100%;
+                border-radius: 16px;
+                background-color: {bg_color};
+                border: {border_width} solid {border_color};
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                margin-bottom: 15px;
+                box-sizing: border-box;
+            "
+            onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#94a3b8';"
+            onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{border_color}';">
+                <span style="font-size: 48px; line-height: 1;">{doc['icon']}</span>
+                <span style="font-size: 16px; font-weight: 600; color: {text_color};">{doc['label']}</span>
+            </div>
             """
             st.markdown(html_btn, unsafe_allow_html=True)
     
