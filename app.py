@@ -580,7 +580,7 @@ with col_gallery:
                 var iframe = parent.document.querySelector('#pdf-viewer');
                 iframe.src = 'data:application/pdf;base64,{pdf_data}';
             " style="
-                height: 120px;
+                height: 10px;
                 width: 100%;
                 border-radius: 16px;
                 background-color: {bg_color};
@@ -596,8 +596,8 @@ with col_gallery:
             "
             onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#3b82f6';"
             onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{('#1e293b' if is_active else '#e2e8f0')}';">
-                <span style="font-size: 48px; line-height: 1;">{doc['icon']}</span>
-                <span style="font-size: 16px; font-weight: 700; color: {text_color};">{doc['label']}</span>
+                <span style="font-size: 28px; line-height: 1;">{doc['icon']}</span>
+                <span style="font-size: 20px; font-weight: 700; color: {text_color};">{doc['label']}</span>
             </div>
             """
             st.markdown(html_btn, unsafe_allow_html=True)
