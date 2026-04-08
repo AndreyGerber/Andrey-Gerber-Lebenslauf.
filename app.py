@@ -941,19 +941,13 @@ def get_base64_img(file_path):
             return base64.b64encode(f.read()).decode()
     return None
 
-def st_certificate_wall(image_folder="images", images_per_row=8, rows=None):
-    """Erzeugt eine gekrümmte 2D-Wand mit 3D-Effekt in Reihen.
-    
-    Args:
-        image_folder: Ordner mit den Bildern
-        images_per_row: Anzahl Bilder pro Reihe (default: 8)
-        rows: Manuelle Reihenanzahl (optional, z.B. rows=2)
-    """
+def st_certificate_wall(image_folder="images", images_per_row=9):
+    """Erzeugt eine gekrümmte 2D-Wand mit 3D-Effekt in Reihen."""
     if not os.path.exists(image_folder):
         st.error(f"Ordner '{image_folder}' nicht gefunden.")
         return
 
-    # Deine spezifischen Zertifikatsdateien (korrigiert)
+    # Deine spezifischen Zertifikatsdateien (17 Stück)
     cert_filenames = [
         "1_Python_for_Data_Science.jpg",
         "2_Exploratory_Statistics_with_Python.jpg",
@@ -966,7 +960,7 @@ def st_certificate_wall(image_folder="images", images_per_row=8, rows=None):
         "9_Git_and_Github.jpg",
         "10_Unit_Testing.jpg",
         "11_Classification_with_scikit-learn.jpg",
-        "12_Regression_with_scikit-learn.jpg",  
+        "12_Regression_with_scikit-learn.jpg",
         "13_Methodology_in_Data_Science.jpg",
         "14_Feature_Engineering_and_Optimisation.jpg",
         "15_Time_Series_Analysis_with_Python.jpg",
@@ -974,46 +968,21 @@ def st_certificate_wall(image_folder="images", images_per_row=8, rows=None):
         "17_Text_Mining.jpg"
     ]
     
-    # Nur existierende Bilder filtern mit Debug-Info
+    # Nur existierende Bilder filtern
     valid_certs = []
-    missing_certs = []
-    
     for filename in cert_filenames:
         img_path = os.path.join(image_folder, filename)
         if os.path.exists(img_path):
             valid_certs.append(filename)
-            print(f"✅ Gefunden: {filename}")  # Für Debug (in Streamlit Logs)
-        else:
-            missing_certs.append(filename)
-            print(f"❌ Fehlt: {filename}")     # Für Debug
-    
-    # Zeige fehlende Bilder an
-    if missing_certs:
-        st.warning(f"⚠️ Folgende {len(missing_certs)} Bilder wurden nicht gefunden:")
-        for f in missing_certs:
-            st.write(f"   • {f}")
-        st.info("💡 Tipp: Überprüfe die genaue Schreibweise (Groß-/Kleinschreibung) und die Dateiendung (.jpg oder .png)")
     
     if not valid_certs:
-        st.error("Keine der angegebenen Bilder gefunden. Bitte überprüfe den Ordner 'images'.")
-        # Zeige alle Dateien im Ordner an
-        if os.path.exists(image_folder):
-            all_files = os.listdir(image_folder)
-            st.write(f"📁 Vorhandene Dateien in '{image_folder}':")
-            for f in all_files:
-                st.write(f"   • {f}")
+        st.error("Keine der angegebenen Bilder gefunden.")
         return
 
-    # Aufteilung in Reihen
-    if rows:
-        # Manuelle Reihenanzahl: Verteile Bilder gleichmäßig
-        images_per_row = (len(valid_certs) + rows - 1) // rows
-        rows_list = [valid_certs[i:i + images_per_row] for i in range(0, len(valid_certs), images_per_row)]
-    else:
-        # Automatisch: max. images_per_row pro Reihe
-        rows_list = [valid_certs[i:i + images_per_row] for i in range(0, len(valid_certs), images_per_row)]
-    
-    st.info(f"📸 {len(valid_certs)} Zertifikate geladen → {len(rows_list)} Reihen mit je max. {images_per_row} Bildern")
+    # 2 Reihen: erste Reihe 9 Bilder, zweite Reihe 8 Bilder
+    row1 = valid_certs[:9]
+    row2 = valid_certs[9:]
+    rows_list = [row1, row2]
     
     # CSS mit hellem Hintergrund
     html_content = """
@@ -1035,7 +1004,7 @@ def st_certificate_wall(image_folder="images", images_per_row=8, rows=None):
             width: 100%;
         }
         .cert-card {
-            width: 160px;
+            width: 150px;
             height: auto;
             transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             box-shadow: -3px 8px 15px rgba(0,0,0,0.15);
@@ -1058,14 +1027,14 @@ def st_certificate_wall(image_folder="images", images_per_row=8, rows=None):
         
         .cert-caption {
             text-align: center;
-            font-size: 11px;
+            font-size: 10px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #2c3e50;
             padding: 5px;
             background: rgba(255,255,255,0.9);
             border-radius: 0 0 8px 8px;
             margin-top: -4px;
-            max-width: 160px;
+            max-width: 150px;
             word-break: break-word;
         }
     </style>
@@ -1139,20 +1108,8 @@ def st_certificate_wall(image_folder="images", images_per_row=8, rows=None):
 
 # --- App Aufruf ---
 st.set_page_config(page_title="Lebenslauf Zertifikate", layout="wide")
-st.header("🎓 Meine Zertifikate & Qualifikationen")
 
-# Reihenanzahl einstellbar
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    rows_option = st.radio(
-        "📐 Anzahl der Reihen:",
-        ["Automatisch (max. 8 pro Reihe)", "2 Reihen", "3 Reihen"],
-        horizontal=True
-    )
+# Neuer Titel mit Smiley
+st.header("💻 ob ich programmieren kann... 👨‍💻")
 
-if rows_option == "2 Reihen":
-    st_certificate_wall(images_per_row=9, rows=2)  # 17 Bilder auf 2 Reihen
-elif rows_option == "3 Reihen":
-    st_certificate_wall(images_per_row=6, rows=3)  # 17 Bilder auf 3 Reihen
-else:
-    st_certificate_wall(images_per_row=8, rows=None)  # Automatisch
+st_certificate_wall()
