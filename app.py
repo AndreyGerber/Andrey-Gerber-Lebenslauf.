@@ -607,6 +607,15 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<br>", unsafe_allow_html=True)
 
 
+
+
+
+
+
+
+
+
+
 # ==================== 3D ZERTIFIKATE-GALERIE ====================
 st.markdown("<h2 style='text-align: center; margin-top: 50px;'>📜 Meine Zertifikate & Nachweise</h2>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ 3D-Galerie – klicke auf ein Zertifikat zum Vergrößern ✧</p>", unsafe_allow_html=True)
@@ -619,7 +628,7 @@ view_mode = st.radio(
     help="Variante A: Zertifikate wie an einer Wand. Variante D: Schweben im Raum."
 )
 
-# Deine 17 Zertifikatsnamen
+# Deine 17 Zertifikatsnamen mit Nummerierung
 cert_names = [
     "1_Python_for_Data_Science",
     "2_Exploratory_Statistics_with_Python",
@@ -642,13 +651,12 @@ cert_names = [
 
 num_certs = len(cert_names)
 
-# Ordner für Zertifikats-Bilder
-cert_folder = "certificates"
+# Ordner für Zertifikats-Bilder (images)
+cert_folder = "images"
 
-# Prüfe, ob Bilder existieren, sonst verwende Platzhalter
+# Prüfe, ob Bilder existieren
 cert_files = []
 for name in cert_names:
-    # Mögliche Dateinamen: Python_for_Data_Science.png, Python_for_Data_Science.jpg, etc.
     found = False
     for ext in ['.png', '.jpg', '.jpeg', '.PNG', '.JPG']:
         test_path = os.path.join(cert_folder, name + ext)
@@ -657,7 +665,6 @@ for name in cert_names:
             found = True
             break
     if not found:
-        # Platzhalter für fehlende Bilder
         cert_files.append(None)
         st.warning(f"⚠️ Bild für '{name}' nicht gefunden in '{cert_folder}/'")
 
@@ -676,18 +683,16 @@ if num_valid > 0:
         """Lädt Bild und konvertiert zu Base64 für Plotly"""
         try:
             img = Image.open(img_path)
-            # Bild skaliert für bessere Performance
             img.thumbnail((width, width), Image.Resampling.LANCZOS)
             buffered = BytesIO()
             img.save(buffered, format="PNG")
             return "data:image/png;base64," + base64.b64encode(buffered.getvalue()).decode()
         except Exception as e:
-            print(f"Fehler beim Laden von {img_path}: {e}")
+            print(f"Fehler bei {img_path}: {e}")
             return None
     
     # Positionen berechnen
     if view_mode == "🏛️ 3D-Galerie-Wand (Variante A)":
-        # Variante A: Zertifikate an einer Wand (x, y, z)
         cols_per_row = 5
         rows = (num_valid + cols_per_row - 1) // cols_per_row
         
@@ -701,28 +706,23 @@ if num_valid > 0:
             row = i // cols_per_row
             col = i % cols_per_row
             
-            # X: von -3 bis 3 (zentriert)
             x = (col - (cols_per_row - 1) / 2) * 1.3
-            # Y: Höhe (von oben nach unten)
             y = (rows - row - 1) * 1.5 - (rows - 1) * 0.75
-            # Z: leichte Tiefe (Wand-Effekt)
             z = 0
             
             x_positions.append(x)
             y_positions.append(y)
             z_positions.append(z)
             
-            # Formatierter Name für Anzeige (Unterstriche durch Leerzeichen ersetzen)
-            display_name = cert_name.replace('_', ' ').replace('with', 'with ').replace('and', '&')
+            # Entferne Nummerierung für Anzeige (z.B. "1_Python_for_Data_Science" -> "Python for Data Science")
+            display_name = cert_name.split('_', 1)[1].replace('_', ' ').replace('with', 'with ').replace('and', '&')
             texts.append(display_name)
             
             img_b64 = get_image_base64(os.path.join(cert_folder, cert_file), width=130)
             images_base64.append(img_b64)
         
-        # 3D Scatter Plot mit Bildern als Marker
         fig = go.Figure()
         
-        # Für jedes Zertifikat einen eigenen Trace (für individuelle Bilder beim Klick)
         for i in range(num_valid):
             fig.add_trace(go.Scatter3d(
                 x=[x_positions[i]],
@@ -770,19 +770,18 @@ if num_valid > 0:
         texts = []
         images_base64 = []
         
-        # Spiral-/Wellenförmige Anordnung (fließend)
         for i, (cert_file, cert_name) in enumerate(valid_certs):
-            angle = i * 0.65  # langsame Drehung pro Zertifikat
+            angle = i * 0.65
             radius = 4.5
             x = np.cos(angle) * radius
             z = np.sin(angle) * radius
-            y = (i - num_valid/2) * 0.4  # Höhe gestaffelt
+            y = (i - num_valid/2) * 0.4
             
             x_positions.append(x)
             y_positions.append(y)
             z_positions.append(z)
             
-            display_name = cert_name.replace('_', ' ').replace('with', 'with ').replace('and', '&')
+            display_name = cert_name.split('_', 1)[1].replace('_', ' ').replace('with', 'with ').replace('and', '&')
             texts.append(display_name)
             
             img_b64 = get_image_base64(os.path.join(cert_folder, cert_file), width=130)
@@ -830,7 +829,7 @@ if num_valid > 0:
         
         st.plotly_chart(fig, use_container_width=True)
 
-    # MODAL FÜR BEIDE VARIANTEN (Zoom/Lupe)
+    # MODAL FÜR ZOOM/LUPE
     st.markdown("""
     <style>
     .modal {
@@ -878,7 +877,6 @@ if num_valid > 0:
         modalImg.src = imgSrc;
     }
     
-    // Plotly Klick-Event abfangen
     document.addEventListener('DOMContentLoaded', function() {
         var plotElement = document.querySelector('.plotly-graph-div');
         if (plotElement) {
@@ -894,4 +892,4 @@ if num_valid > 0:
     """, unsafe_allow_html=True)
 
 else:
-    st.info(f"📂 Keine Zertifikats-Bilder gefunden. Lege PNG/JPG Dateien in den Ordner 'certificates/' mit folgenden Namen:\n\n" + "\n".join([f"• {name}.png" for name in cert_names]))
+    st.info(f"📂 Keine Zertifikats-Bilder gefunden. Lege PNG/JPG Dateien in den Ordner 'images/' mit folgenden Namen:\n\n" + "\n".join([f"• {name}.png" for name in cert_names]))
