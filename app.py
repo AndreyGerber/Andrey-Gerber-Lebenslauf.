@@ -652,8 +652,8 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 
 # ==================== FLIEßENDE 3D-WAND MIT THREE.JS ====================
-st.markdown("<h2 style='text-align: center; margin-top: 50px;'>📜 Meine Zertifikate & Nachweise</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Fließende 3D-Wand – Maus ziehen zum Drehen, Klick auf Zertifikat zum Vergrößern ✧</p>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center; margin-top: 50px;'>📜 Data Science & Machine Learning</h2>", unsafe_allow_html=True)
+#st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Fließende 3D-Wand – Maus ziehen zum Drehen, Klick auf Zertifikat zum Vergrößern ✧</p>", unsafe_allow_html=True)
 
 # Deine 17 Zertifikatsnamen mit Nummerierung
 cert_names = [
