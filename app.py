@@ -1242,7 +1242,7 @@ with col3:
 
 
 
-
+import base64
 #Mein Buch 
 # Hilfsfunktion für das Buch-Bild
 def get_base64_img(file_path):
