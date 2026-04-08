@@ -913,3 +913,208 @@ if num_certs > 0:
 else:
     st.warning(f"⚠️ Keine Zertifikats-Bilder gefunden. Lege PNG/JPG Dateien in den Ordner 'images/' mit folgenden Namen:\n\n" + 
                "\n".join([f"• {name}.png" for name in cert_names]))
+    
+
+
+
+
+
+#2D-Lösung
+# ==================== ZERTIFIKATE-GALERIE (2.5D mit Bildern) ====================
+st.markdown("<h2 style='text-align: center; margin-top: 50px;'>📜 Meine Zertifikate & Nachweise</h2>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Klicke auf ein Zertifikat zum Vergrößern ✧</p>", unsafe_allow_html=True)
+
+# Deine 17 Zertifikatsnamen mit Nummerierung
+cert_names = [
+    "1_Python_for_Data_Science",
+    "2_Exploratory_Statistics_with_Python",
+    "3_Data_Quality",
+    "4_Data_Visualization_Matplotlib",
+    "5_Data_Visualization_with_Seaborn",
+    "6_Matplotlib_Complements",
+    "7_DataViz_with_Plotly",
+    "8_MCQ_Linux_and_Bash",
+    "9_Git_and_Github",
+    "10_Unit_Testing",
+    "11_Classification_with_scikit-learn",
+    "12_Regressionn_with_scikit_learn",
+    "13_Methodology_in_Data_Science",
+    "14_Feature_Engineering_and_Optimisation",
+    "15_Time_Series_Analysis_with_Python",
+    "16_Advanced_Classification_with_scikit-learn",
+    "17_Text_Mining"
+]
+
+cert_folder = "images"
+
+# CSS für Karten-Layout
+st.markdown("""
+<style>
+.cert-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.cert-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 20px;
+    padding: 15px;
+    width: 200px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.cert-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15);
+    border-color: #69c0ff;
+}
+
+.cert-card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.cert-card p {
+    font-size: 13px;
+    font-weight: 600;
+    color: #01579b;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Modal für vergrößerte Ansicht */
+.cert-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.92);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.cert-modal-content {
+    max-width: 85%;
+    max-height: 85%;
+    border-radius: 16px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+    border: 3px solid white;
+}
+
+.cert-modal-close {
+    position: absolute;
+    top: 25px;
+    right: 40px;
+    color: white;
+    font-size: 55px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.cert-modal-close:hover {
+    color: #69c0ff;
+}
+
+.cert-modal-caption {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    background: rgba(0,0,0,0.6);
+    padding: 8px;
+    margin: 0 auto;
+    width: fit-content;
+    border-radius: 30px;
+    backdrop-filter: blur(4px);
+}
+</style>
+
+<div id="certModal" class="cert-modal" onclick="closeModal()">
+    <span class="cert-modal-close">&times;</span>
+    <img class="cert-modal-content" id="modalImage">
+    <div class="cert-modal-caption" id="modalCaption"></div>
+</div>
+
+<script>
+function openModal(imgSrc, caption) {
+    var modal = document.getElementById('certModal');
+    var modalImg = document.getElementById('modalImage');
+    var modalCaption = document.getElementById('modalCaption');
+    modal.style.display = 'flex';
+    modalImg.src = imgSrc;
+    modalCaption.textContent = caption;
+}
+
+function closeModal() {
+    var modal = document.getElementById('certModal');
+    modal.style.display = 'none';
+}
+
+// Escape-Taste schließt Modal
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeModal();
+    }
+});
+</script>
+""", unsafe_allow_html=True)
+
+# Sammle existierende Bilder
+import base64
+
+valid_certs = []
+for cert_name in cert_names:
+    for ext in ['.png', '.jpg', '.jpeg']:
+        img_path = os.path.join(cert_folder, cert_name + ext)
+        if os.path.exists(img_path):
+            with open(img_path, "rb") as f:
+                img_b64 = base64.b64encode(f.read()).decode()
+            display_name = cert_name.split('_', 1)[1].replace('_', ' ')
+            valid_certs.append({
+                "name": display_name,
+                "b64": img_b64,
+                "ext": ext
+            })
+            break
+
+if len(valid_certs) > 0:
+    # 3er-Grid mit Flexbox
+    st.markdown('<div class="cert-container">', unsafe_allow_html=True)
+    
+    for cert in valid_certs:
+        # HTML-Karte für jedes Zertifikat
+        st.markdown(f'''
+            <div class="cert-card" onclick="openModal('data:image/{cert["ext"]};base64,{cert["b64"]}', '{cert["name"]}')">
+                <img src="data:image/{cert["ext"]};base64,{cert["b64"]}" alt="{cert["name"]}">
+                <p>{cert["name"]}</p>
+            </div>
+        ''', unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Info wie viele Zertifikate geladen wurden
+    st.markdown(f"<p style='text-align: center; color: gray; margin-top: 30px;'>✨ {len(valid_certs)} Zertifikate geladen ✨</p>", unsafe_allow_html=True)
+
+else:
+    st.warning(f"⚠️ Keine Zertifikats-Bilder gefunden. Lege PNG/JPG Dateien in den Ordner 'images/' mit folgenden Namen:\n\n" + 
+               "\n".join([f"• {name}.png" for name in cert_names]))
