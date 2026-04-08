@@ -1006,7 +1006,7 @@ with st.container():
 
     st.markdown("</div>", unsafe_allow_html=True)
 
-st.divider()
+#st.divider()
 
 # --- EXPERTISE ABSCHNITT ---
 # CSS für bündige Ausrichtung und gleichen Block-Höhen
