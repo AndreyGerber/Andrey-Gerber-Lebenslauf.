@@ -930,7 +930,6 @@ else:
 
 #2D-Lösung
 
-
 import streamlit as st
 import os
 import base64
@@ -948,78 +947,167 @@ def st_certificate_wall(image_folder="images", images_per_row=8):
         st.error(f"Ordner '{image_folder}' nicht gefunden.")
         return
 
-    # Alle Zertifikate laden und sortieren
-    cert_files = sorted([f for f in os.listdir(image_folder) if f.lower().endswith('.jpg')])
+    # Deine spezifischen Zertifikatsdateien
+    cert_filenames = [
+        "1_Python_for_Data_Science.jpg",
+        "2_Exploratory_Statistics_with_Python.jpg",
+        "4_Data_Visualization_Matplotlib.jpg",
+        "5_Data_Visualization_with_Seaborn.jpg",
+        "6_Matplotlib_Complements.jpg",
+        "7_DataViz_with_Plotly.jpg",
+        "8_MCQ_Linux_and_Bash.jpg",
+        "9_Git_and_Github.jpg",
+        "10_Unit_Testing.jpg",
+        "11_Classification_with_scikit-learn.jpg",
+        "12_Regressionn_with_scikit-learn.jpg",
+        "13_Methodology_in_Data_Science.jpg",
+        "14_Feature_Engineering_and_Optimisation.jpg",
+        "15_Time_Series_Analysis_with_Python.jpg",
+        "16_Advanced_Classification_with_scikit-learn.jpg",
+        "17_Text_Mining.jpg"
+    ]
     
-    if not cert_files:
-        st.warning("Keine .jpg Bilder im Ordner gefunden.")
+    # Nur existierende Bilder filtern
+    valid_certs = []
+    for filename in cert_filenames:
+        img_path = os.path.join(image_folder, filename)
+        if os.path.exists(img_path):
+            valid_certs.append(filename)
+        else:
+            st.warning(f"⚠️ Bild nicht gefunden: {filename}")
+    
+    if not valid_certs:
+        st.warning("Keine der angegebenen Bilder gefunden.")
         return
 
     # Aufteilung in Reihen (max. 8 pro Reihe)
-    rows = [cert_files[i:i + images_per_row] for i in range(0, len(cert_files), images_per_row)]
+    rows = [valid_certs[i:i + images_per_row] for i in range(0, len(valid_certs), images_per_row)]
     
+    # CSS mit hellem Hintergrund
     html_content = """
     <style>
         .main-wall {
-            background: #0e1117; /* Dunkler Hintergrund für Kontrast */
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8edf5 100%);
             padding: 60px 0;
             display: flex;
             flex-direction: column;
-            gap: 100px; /* Großer Abstand für den 1.5x Zoom */
+            gap: 80px;
             align-items: center;
             overflow: visible;
+            border-radius: 20px;
         }
         .row-container {
             display: flex;
-            perspective: 1000px; /* Erzeugt die Tiefenwirkung */
+            perspective: 1200px;
             justify-content: center;
             width: 100%;
         }
         .cert-card {
-            width: 150px; /* Basisbreite */
+            width: 160px;
             height: auto;
             transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            box-shadow: -5px 10px 20px rgba(0,0,0,0.5);
+            box-shadow: -3px 8px 15px rgba(0,0,0,0.15);
             cursor: pointer;
             z-index: 1;
-            margin: 0 -10px; /* Überlappung für Wand-Effekt */
-            border-radius: 4px;
+            margin: 0 -8px;
+            border-radius: 8px;
+            background: white;
+            border: 2px solid #e0e6ed;
         }
         
-        /* Hover-Effekt: 1.5x Vergrößerung und Begradigung */
+        /* Hover-Effekt: 1.5x Vergrößerung */
         .cert-card:hover {
-            transform: scale(1.5) rotateY(0deg) translateZ(50px) !important;
+            transform: scale(1.5) rotateY(0deg) translateZ(60px) !important;
             z-index: 100;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.9);
-            margin: 0 50px; /* Schiebt Nachbarn beiseite */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            margin: 0 20px;
+            border-color: #4a90e2;
+        }
+        
+        /* Optional: Bildunterschrift */
+        .cert-caption {
+            text-align: center;
+            font-size: 11px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2c3e50;
+            padding: 5px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 0 0 8px 8px;
+            margin-top: -4px;
         }
     </style>
     <div class="main-wall">
     """
 
-    for row in rows:
+    for row_idx, row in enumerate(rows):
         html_content += '<div class="row-container">'
         mid = (len(row) - 1) / 2
+        
         for i, filename in enumerate(row):
             b64_data = get_base64_img(os.path.join(image_folder, filename))
             if b64_data:
-                # Berechnung der Krümmung: links positiv, rechts negativ rotieren
-                rotation = (mid - i) * 10 
+                # Anzeigename ohne Nummer und Endung
+                display_name = filename.split('_', 1)[1].replace('.jpg', '').replace('_', ' ')
+                
+                # Krümmung berechnen (sanfter für besseren Effekt)
+                rotation = (mid - i) * 8
+                
                 html_content += f'''
+                <div style="display: flex; flex-direction: column; align-items: center;">
                     <img src="data:image/jpeg;base64,{b64_data}" 
                          class="cert-card" 
                          style="transform: rotateY({rotation}deg);" 
-                         title="{filename}">
+                         title="{display_name}">
+                    <div class="cert-caption">{display_name}</div>
+                </div>
                 '''
         html_content += '</div>'
 
-    html_content += "</div>"
+    html_content += """
+    </div>
+    
+    <script>
+    // Optional: Klick auf Bild öffnet Modal (optional)
+    const images = document.querySelectorAll('.cert-card');
+    images.forEach(img => {
+        img.addEventListener('click', function() {
+            const caption = this.nextElementSibling;
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.backgroundColor = 'rgba(0,0,0,0.85)';
+            modal.style.zIndex = '10000';
+            modal.style.display = 'flex';
+            modal.style.justifyContent = 'center';
+            modal.style.alignItems = 'center';
+            modal.style.cursor = 'pointer';
+            
+            const modalImg = document.createElement('img');
+            modalImg.src = this.src;
+            modalImg.style.maxWidth = '85%';
+            modalImg.style.maxHeight = '85%';
+            modalImg.style.borderRadius = '12px';
+            modalImg.style.boxShadow = '0 0 40px rgba(0,0,0,0.5)';
+            
+            modal.appendChild(modalImg);
+            document.body.appendChild(modal);
+            
+            modal.onclick = function() {
+                document.body.removeChild(modal);
+            };
+        });
+    });
+    </script>
+    """
     
     # Anzeige in Streamlit
-    st.components.v1.html(html_content, height=1100, scrolling=True)
+    st.components.v1.html(html_content, height=900, scrolling=True)
 
 # --- App Aufruf ---
 st.set_page_config(page_title="Lebenslauf Zertifikate", layout="wide")
-st.header("🎓 Zertifikate & Qualifikationen")
+st.header("🎓 Meine Zertifikate & Qualifikationen")
 
 st_certificate_wall()
