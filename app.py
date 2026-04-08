@@ -1245,9 +1245,9 @@ with col3:
 # --- DAS BUCH-SYMBOL (Am Ende deiner App) ---
 
 st.write("") 
-st.write("") # Zusätzlicher Platz nach den Hobbies
+st.write("") 
 
-# Spalten-Verhältnis für die Platzierung rechts
+# Spalten für die Positionierung rechts
 spacer1, spacer2, book_col = st.columns([2, 1, 1])
 
 with book_col:
@@ -1264,33 +1264,45 @@ with book_col:
                 align-items: center;
                 cursor: help;
                 animation: float 4s ease-in-out infinite;
-                position: relative; /* Wichtig für die Text-Positionierung */
+                position: relative;
                 width: 120px;
             }
             .book-icon {
-                font-size: 100px; /* Etwas größer für bessere Text-Lesbarkeit */
+                font-size: 100px;
                 filter: drop-shadow(5px 10px 15px rgba(0,0,0,0.2));
-                transition: all 0.3s ease;
+                transition: all 0.4s ease-in-out;
             }
-            /* Der Text AUF dem Buch */
+            
+            /* Text AUF dem Buch - Initial unsichtbar */
             .book-text {
                 position: absolute;
-                top: 80px;      /* Zentrierung auf den Buchseiten */
+                top: 48px;
                 left: 55%;
-                transform: translate(-50%, -50%);
-                color: #1a1a1a; /* Ein schönes Rot für den Kontrast */
-                font-family: 'Brush Script MT', cursive; /* Handschrift-Stil */
-                font-size: 14px;
+                transform: translate(-50%, -50%) scale(0.5);
+                color: #1a1a1a;
+                font-family: 'Brush Script MT', cursive;
+                font-size: 15px;
                 font-weight: bold;
                 line-height: 1.1;
                 text-align: center;
-                pointer-events: none; /* Maus-Events gehen durch zum Icon */
-                width: 60px;
+                pointer-events: none;
+                width: 70px;
+                opacity: 0; /* Versteckt */
+                transition: all 0.4s ease-in-out;
             }
+
+            /* Hover-Effekte */
             .book-wrapper:hover .book-icon {
                 transform: scale(1.2) rotate(0deg);
                 filter: drop-shadow(2px 5px 5px rgba(0,0,0,0.1));
             }
+            
+            /* Text erscheint beim Hover */
+            .book-wrapper:hover .book-text {
+                opacity: 1; /* Sichtbar machen */
+                transform: translate(-50%, -50%) scale(1.1); /* Leicht mit-vergrößern */
+            }
+
             .book-tag {
                 background: #f1f5f9;
                 color: #64748b;
@@ -1306,7 +1318,7 @@ with book_col:
         
         <div class="book-wrapper" title="📖 Work in Progress: Dieses Projekt befindet sich noch in der Entwurfsphase.">
             <div class="book-icon">📖</div>
-            <div class="book-text">mein &nbsp;&nbsp;&nbsp;&nbsp <br> &nbsp;&nbsp;&nbsp  Buch</div>
-            <div class="book-tag">in Arbeit</div>
+            <div class="book-text">mein&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;Buch</div>
+            <div class="book-tag">Unvollendet</div>
         </div>
     """, unsafe_allow_html=True)
