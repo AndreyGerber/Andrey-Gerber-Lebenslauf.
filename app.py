@@ -931,23 +931,27 @@ st.markdown("<br>" * 3, unsafe_allow_html=True)  # Drei Umbrüche
 
 
 
-
 import streamlit as st
 import os
 from PIL import Image
 
+# --- FUNKTION ZUM SKALIEREN ---
 def load_scaled_img(path, degrees=0, scale_percent=40):
     if os.path.exists(path):
         img = Image.open(path)
         if degrees != 0:
             img = img.rotate(degrees, expand=True)
+        # Manuelle Skalierung über den Prozentwert im Code
         scale_factor = scale_percent / 100
         new_size = (int(img.width * scale_factor), int(img.height * scale_factor))
         return img.resize(new_size, Image.Resampling.LANCZOS)
     return None
 
-# --- CONTAINER FÜR FERTIGKEITEN ---
+# --- EINSTELLUNGEN (MANUELL IM CODE ANPASSEN) ---
+BILD_SKALIERUNG = 38  # Hier kannst du die Größe anpassen (z.B. 35, 40, 45)
+
 with st.container():
+    # CSS Isolation
     st.markdown("""
         <style>
             .skill-section img {
@@ -962,13 +966,9 @@ with st.container():
     """, unsafe_allow_html=True)
 
     st.title("🛠️ Meine Fertigkeiten")
-    
-    # Der Slider zur Feinjustierung (z.B. 35-40% passen meist perfekt bei 3 Spalten)
-    img_scale = st.slider("Bildgröße anpassen (%)", min_value=10, max_value=100, value=38)
-    
     st.divider()
 
-    # Überschriften bündig
+    # Überschriften
     h_col1, h_col2 = st.columns(2)
     h_col1.subheader("Von der Skizze bis zum fertigen Produkt")
     h_col2.subheader("Von der Idee bis zur Übergabe...")
@@ -981,23 +981,26 @@ with st.container():
             "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
             "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
         ]
-        # Links 3 Spalten
         k_cols = st.columns(3) 
         for idx, img_path in enumerate(kerze_files):
-            img = load_scaled_img(img_path, scale_percent=img_scale)
+            img = load_scaled_img(img_path, scale_percent=BILD_SKALIERUNG)
             if img:
                 k_cols[idx % 3].image(img)
 
     with content_col2:
+        # Hier wurden das 4. (project4) und 5. Bild (project5) in der Liste vertauscht
         project_configs = [
-            ("images/project1.jpg", 0), ("images/project2.jpeg", 0),
-            ("images/project3.jpeg", 90), ("images/project5.jpg", 0),
-            ("images/project4.jpeg", 90), ("images/project6.jpeg", -90)
+            ("images/project1.jpg", 0), 
+            ("images/project2.jpeg", 0),
+            ("images/project3.jpeg", 90), 
+            ("images/project5.jpg", 0),   # Vorher an Stelle 5
+            ("images/project4.jpeg", 90),  # Vorher an Stelle 4
+            ("images/project6.jpeg", -90)
         ]
-        # JETZT AUCH RECHTS 3 SPALTEN
+        
         p_cols = st.columns(3)
         for idx, (img_path, angle) in enumerate(project_configs):
-            img = load_scaled_img(img_path, angle, scale_percent=img_scale)
+            img = load_scaled_img(img_path, angle, scale_percent=BILD_SKALIERUNG)
             if img:
                 p_cols[idx % 3].image(img)
 
@@ -1005,7 +1008,7 @@ with st.container():
 
 st.divider()
 
-# --- QM & METHODIK ---
+# --- EXPERTISE ABSCHNITT ---
 st.subheader("📉 Expertise & Methodik")
 info_col1, info_col2 = st.columns(2)
 with info_col1:
