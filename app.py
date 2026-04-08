@@ -1143,50 +1143,57 @@ st.markdown("<br>" * 3, unsafe_allow_html=True)  # Drei Umbrüche
 #Fertigkeiten
 
 import streamlit as st
+import os
 
 st.divider()
 
 col1, col2 = st.columns(2)
 
+# --- SPALTE 1: KERZEN ---
 with col1:
     st.subheader("🛠️ 3D-Konstruktion & Prototyping")
-    st.write("Vom CAD-Modell zum physischen Produkt: Konstruktion von Kerzenformen, Guss und Herstellung.")
+    st.write("Vom CAD-Modell zum physischen Produkt.")
     
-    # Exakte Liste der Kerzen-Bilder laut deinem Explorer
     kerze_files = [
         "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
         "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
     ]
-    st.image(kerze_files, width=90, caption=[f"Schritt {i}" for i in range(len(kerze_files))])
+    
+    # Bilder einzeln prüfen und anzeigen
+    k_cols = st.columns(4) # Erzeugt ein kleines Raster innerhalb der Spalte
+    for idx, img_path in enumerate(kerze_files):
+        if os.path.exists(img_path):
+            k_cols[idx % 4].image(img_path, caption=f"Teil {idx}", use_container_width=True)
+        else:
+            st.error(f"Fehlt: {img_path}") # Zeigt dir genau an, welche Datei das Problem ist
 
+# --- SPALTE 2: PROJECT ---
 with col2:
     st.subheader("🏗️ Project Management")
-    st.write("Aufbau einer Akustik-Prüfkammer für Smart-Speaker: Von der Anforderung bis zur Abnahme.")
+    st.write("Aufbau einer Akustik-Prüfkammer.")
     
-    # Exakte Liste der Project-Bilder laut deinem Explorer (.jpg vs .jpeg beachten!)
     project_files = [
         "images/project1.jpg", "images/project2.jpeg", "images/project3.jpeg",
         "images/project4.jpeg", "images/project5.jpg", "images/project6.jpeg"
     ]
-    st.image(project_files, width=110, caption=[f"Phase {i}" for i in range(1, 7)])
+    
+    p_cols = st.columns(3)
+    for idx, img_path in enumerate(project_files):
+        if os.path.exists(img_path):
+            p_cols[idx % 3].image(img_path, caption=f"Phase {idx+1}", use_container_width=True)
+        else:
+            st.error(f"Fehlt: {img_path}")
 
 st.divider()
 
-# --- QM & LEAN ABSCHNITT (Wie gehabt) ---
+# --- QM & LEAN TEXTBLOCK ---
 st.subheader("📉 Expertise & Methodik")
-c1, c2 = st.columns(2)
+info_col1, info_col2 = st.columns(2)
 
-with c1:
-    st.info("**Qualitätsmanagement & Audits**\n\n"
-            "* Durchführung interner/externer Audits (ISO 9001 / 17025).\n"
-            "* Methodisches Coaching bei CAPA-Prozessen.\n"
-            "* Schulung von Mitarbeitern.")
+with info_col1:
+    st.info("**Qualitätsmanagement & Audits**\n\n* Durchführung Audits (ISO 9001/17025)\n* CAPA-Coaching & Schulungen")
 
-with c2:
-    st.info("**Lean Management & Datenanalyse**\n\n"
-            "* Schnelles Durchblicken komplexer Projekte.\n"
-            "* Beherrschung statistischer Methoden der Datenanalyse.\n"
-            "* Prozessoptimierung durch analytische Präzision.")
+with info_col2:
+    st.info("**Lean Management & Datenanalyse**\n\n* Schnelle Projekt-Analyse\n* Statistische Methoden & Six Sigma")
 
-# Humorvoller Abschluss
-st.success("🐍 **Programmierkenntnisse:** Falls Sie sich fragen, ob ich programmieren kann: Diese Website hat sich nicht durch bloßes Würfeln zusammengebaut. Sie ist das lebende Ergebnis aus Python, ein wenig Kaffee und dem Drang, Dinge digital zum Laufen zu bringen.")
+st.success("🐍 **Programmierkenntnisse:** Diese Seite ist das Ergebnis aus Python, ein wenig Kaffee und dem Drang, Dinge digital zum Laufen zu bringen.")
