@@ -1144,73 +1144,49 @@ st.markdown("<br>" * 3, unsafe_allow_html=True)  # Drei Umbrüche
 
 import streamlit as st
 
-# --- STYLING FÜR DIE KACHELN ---
-st.markdown("""
-<style>
-    .skill-card {
-        background-color: rgba(255, 255, 255, 0.05);
-        padding: 20px;
-        border-radius: 10px;
-        border-left: 5px solid #0078D7;
-        margin-bottom: 20px;
-    }
-    .project-header {
-        color: #0078D7;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-</style>
-""", unsafe_allow_html=True)
-
 st.divider()
 
-# --- ABSCHNITT 1: ENGINEERING & PROJECT MANAGEMENT ---
 col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("🛠️ 3D-Konstruktion & Prototyping")
-    st.write("Vom CAD-Modell zum fertigen Produkt: Konstruktion von Kerzenformen, Guss und Herstellung.")
-    # Bilderserie Kerze
-    kerze_images = [f"images/kerze{i}.png" for i in range(6)]
-    st.image(kerze_images, width=100, caption=[f"Schritt {i}" for i in range(6)])
+    st.write("Vom CAD-Modell zum physischen Produkt: Konstruktion von Kerzenformen, Guss und Herstellung.")
+    
+    # Exakte Liste der Kerzen-Bilder laut deinem Explorer
+    kerze_files = [
+        "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
+        "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
+    ]
+    st.image(kerze_files, width=90, caption=[f"Schritt {i}" for i in range(len(kerze_files))])
 
 with col2:
     st.subheader("🏗️ Project Management")
-    st.write("Aufbau einer Akustik-Prüfkammer für Smart-Speaker: Von der Anforderungsanalyse bis zur Abnahme.")
-    # Bilderserie Smartspeaker
-    project_images = [f"images/project{i}.png" for i in range(1, 7)]
-    st.image(project_images, width=100, caption=[f"Phase {i}" for i in range(1, 7)])
+    st.write("Aufbau einer Akustik-Prüfkammer für Smart-Speaker: Von der Anforderung bis zur Abnahme.")
+    
+    # Exakte Liste der Project-Bilder laut deinem Explorer (.jpg vs .jpeg beachten!)
+    project_files = [
+        "images/project1.jpg", "images/project2.jpeg", "images/project3.jpeg",
+        "images/project4.jpeg", "images/project5.jpg", "images/project6.jpeg"
+    ]
+    st.image(project_files, width=110, caption=[f"Phase {i}" for i in range(1, 7)])
 
 st.divider()
 
-# --- ABSCHNITT 2: QM & METHODIK ---
+# --- QM & LEAN ABSCHNITT (Wie gehabt) ---
 st.subheader("📉 Expertise & Methodik")
-
 c1, c2 = st.columns(2)
 
 with c1:
-    st.markdown(f"""
-    <div class="skill-card">
-        <div class="project-header">Qualitätsmanagement & Audits</div>
-        <ul>
-            <li>Durchführung und Begleitung interner/externer Audits (ISO 9001 / 17025).</li>
-            <li>Methodisches Coaching bei CAPA-Prozessen und Beschwerdemanagement.</li>
-            <li>Schulung von Mitarbeitern in qualitätsrelevanten Prozessen.</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
+    st.info("**Qualitätsmanagement & Audits**\n\n"
+            "* Durchführung interner/externer Audits (ISO 9001 / 17025).\n"
+            "* Methodisches Coaching bei CAPA-Prozessen.\n"
+            "* Schulung von Mitarbeitern.")
 
 with c2:
-    st.markdown(f"""
-    <div class="skill-card">
-        <div class="project-header">Lean Management & Datenanalyse</div>
-        <ul>
-            <li>Schnelles Durchblicken komplexer Projekte (Stärken-/Schwächen-Analyse).</li>
-            <li>Beherrschung statistischer Methoden der Datenanalyse (Six Sigma Ansatz).</li>
-            <li>Prozessoptimierung durch analytische Präzision.</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
+    st.info("**Lean Management & Datenanalyse**\n\n"
+            "* Schnelles Durchblicken komplexer Projekte.\n"
+            "* Beherrschung statistischer Methoden der Datenanalyse.\n"
+            "* Prozessoptimierung durch analytische Präzision.")
 
-# --- ABSCHNITT 3: PROGRAMMIERUNG (DER HUMORVOLLE ABSCHLUSS) ---
-st.info("🐍 **Programmierkenntnisse:** Falls Sie sich fragen, ob ich programmieren kann: Diese Website hat sich nicht durch bloßes Würfeln zusammengebaut. Sie ist das lebende Ergebnis aus Python, ein wenig Kaffee und dem Drang, Dinge digital zum Laufen zu bringen.")
+# Humorvoller Abschluss
+st.success("🐍 **Programmierkenntnisse:** Falls Sie sich fragen, ob ich programmieren kann: Diese Website hat sich nicht durch bloßes Würfeln zusammengebaut. Sie ist das lebende Ergebnis aus Python, ein wenig Kaffee und dem Drang, Dinge digital zum Laufen zu bringen.")
