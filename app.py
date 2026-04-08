@@ -1115,7 +1115,7 @@ hobby_path = "images/Hobbies"
 hobby_groups = [
     {"files": ["fussball1.png", "fussball2.jpeg"], "text": "⚽ Fußball & Teamgeist: Von Kindesbeinen an auf dem Platz."},
     {"files": ["hockey1.png", "hockey2.png", "hockey3.png"], "text": "🏒 Eishockey: Dynamik und Ausdauer auf dem Eis."},
-    {"files": ["yoga.jpg", "yoga2.jpg", "yoga3.jpg"], "text": "🧘 Yoga & Boxen: Balance zwischen innerer Ruhe und voller Kraft heute."}
+    {"files": ["yoga.jpg", "yoga2.jpg", "yoga3.png"], "text": "🧘 Yoga & Boxen: Balance zwischen innerer Ruhe und voller Kraft heute."}
 ]
 
 # Alle Bilder für das Karussell in Base64 umwandeln
