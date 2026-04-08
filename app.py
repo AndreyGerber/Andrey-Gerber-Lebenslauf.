@@ -566,8 +566,8 @@ with col_gallery:
         "
         onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#3b82f6';"
         onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{('#1e293b' if is_active else '#e2e8f0')}';">
-            <span style="font-size: 20px; line-height: 1;">{doc['icon']}</span>
-            <span style="font-size: 24px; font-weight: 700; color: {text_color};">{doc['label']}</span>
+            <span style="font-size: 28px; line-height: 1;">{doc['icon']}</span>
+            <span style="font-size: 20px; font-weight: 700; color: {text_color};">{doc['label']}</span>
         </div>
         """
         st.markdown(html_btn, unsafe_allow_html=True)
