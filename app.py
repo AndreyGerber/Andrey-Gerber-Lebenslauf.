@@ -1096,9 +1096,98 @@ st.markdown(f"""
 
 st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 
-st.subheader("Persönliche Metriken")
-m_col1, m_col2, m_col3 = st.columns(3)
+import streamlit as st
+import streamlit.components.v1 as components
+import os
+import base64
+import json
 
-m_col1.metric("Kaffee-Verbrauch", "Hoher Wirkungsgrad", "☕")
-m_col2.metric("Neugier-Level", "100%", "📈")
-m_col3.metric("Fehlertoleranz", "0.01mm", "📏")
+# --- FUNKTION: BILDER LOKAL LADEN & KONVERTIEREN ---
+def get_base64_img(file_path):
+    if os.path.exists(file_path):
+        with open(file_path, "rb") as f:
+            return "data:image/jpeg;base64," + base64.b64encode(f.read()).decode()
+    return None
+
+# --- DATEN VORBEREITEN ---
+hobby_path = "images/Hobbies"
+# Wir bündeln die Bilder nach Themen
+hobby_groups = [
+    {"files": ["fussball1.png", "fussball2.jpeg"], "text": "⚽ Fußball & Teamgeist: Von Kindesbeinen an auf dem Platz."},
+    {"files": ["hockey1.png", "hockey2.png", "hockey3.png"], "text": "🏒 Eishockey: Dynamik und Ausdauer auf dem Eis."},
+    {"files": ["yoga.jpg", "yoga2.jpg", "yoga3.jpg"], "text": "🧘 Yoga & Boxen: Balance zwischen innerer Ruhe und voller Kraft heute."}
+]
+
+# Alle Bilder für das Karussell in Base64 umwandeln
+carousel_data = []
+for group in hobby_groups:
+    for filename in group["files"]:
+        b64 = get_base64_img(os.path.join(hobby_path, filename))
+        if b64:
+            carousel_data.append({"img": b64, "text": group})
+
+def hobby_carousel(data):
+    hobbies_json = json.dumps(data)
+    custom_html = f"""
+    <div id="carousel-container" style="width: 100%; overflow: hidden; position: relative; border-radius: 20px; background: #f8fafc; padding: 20px; border: 1px solid #e2e8f0; height: 450px;">
+        <div id="slider" style="display: flex; transition: transform 0.8s ease-in-out; height: 350px;">
+            <!-- Bilder per JS -->
+        </div>
+        <div id="caption" style="text-align: center; margin-top: 15px; font-family: sans-serif; font-weight: bold; color: #1e293b; font-size: 1.1rem; line-height: 1.4;"></div>
+    </div>
+    <script>
+        const hobbies = {hobbies_json};
+        const slider = document.getElementById('slider');
+        const caption = document.getElementById('caption');
+        let currentIndex = 0;
+
+        hobbies.forEach(h => {{
+            const div = document.createElement('div');
+            div.style.minWidth = "100%";
+            div.style.display = "flex";
+            div.style.justifyContent = "center";
+            div.innerHTML = `<img src="${{h.img}}" style="max-height: 100%; max-width: 90%; border-radius: 12px; object-fit: contain; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">`;
+            slider.appendChild(div);
+        }});
+
+        function updateSlider() {{
+            slider.style.transform = `translateX(-${{currentIndex * 100}}%)`;
+            caption.innerText = hobbies[currentIndex].text;
+            currentIndex = (currentIndex + 1) % hobbies.length;
+        }}
+        setInterval(updateSlider, 3500);
+        updateSlider();
+    </script>
+    """
+    components.html(custom_html, height=500)
+
+# --- UI LAYOUT ---
+st.divider()
+st.markdown("<h2 style='text-align: center;'>🎯 Leidenschaften & Ausgleich</h2>", unsafe_allow_html=True)
+
+col_carousel, col_chess = st.columns([2, 1])
+
+with col_carousel:
+    if carousel_data:
+        hobby_carousel(carousel_data)
+    else:
+        st.error("Bilder im Ordner 'images/Hobbies' nicht gefunden.")
+
+with col_chess:
+    st.markdown("""
+        <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); padding: 30px; border-radius: 20px; color: white; height: 450px; display: flex; flex-direction: column; justify-content: center; border: 1px solid #475569;">
+            <h3 style="color: #fbbf24; margin-top: 0;">♟️ Das strategische Fundament</h3>
+            <p style="font-size: 1.1rem; line-height: 1.6;">
+                Schach begleite mich bereits seit meinem <b>6. Lebensjahr</b>. 
+                Was als Spiel begann, prägte früh mein analytisches Denken:
+            </p>
+            <ul style="color: #e2e8f0; line-height: 1.8;">
+                <li>Vorausplanen komplexer Szenarien</li>
+                <li>Geduld und taktische Präzision</li>
+                <li>Objektive Analyse unter Zeitdruck</li>
+            </ul>
+            <p style="font-style: italic; color: #94a3b8; margin-top: 20px;">
+                "Jeder Zug ist eine Entscheidung, jede Partie ein Prozess."
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
