@@ -951,7 +951,7 @@ def st_certificate_wall(image_folder="images", images_per_row=8):
     cert_filenames = [
         "1_Python_for_Data_Science.jpg",
         "2_Exploratory_Statistics_with_Python.jpg",
-        "3_Data_Quality.jpg"
+        "3_Data_Quality.jpg",
         "4_Data_Visualization_Matplotlib.jpg",
         "5_Data_Visualization_with_Seaborn.jpg",
         "6_Matplotlib_Complements.jpg",
