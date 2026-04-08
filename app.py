@@ -937,75 +937,62 @@ import streamlit as st
 import os
 from PIL import Image
 
-# --- FUNKTION ZUM SKALIEREN ---
-def load_scaled_img(path, degrees=0, scale_percent=40):
+def load_scaled_img(path, degrees=0, scale=0.4):
     if os.path.exists(path):
         img = Image.open(path)
         if degrees != 0:
             img = img.rotate(degrees, expand=True)
-        # Berechnung basierend auf Prozentwert vom Slider
-        scale_factor = scale_percent / 100
-        new_size = (int(img.width * scale_factor), int(img.height * scale_factor))
+        new_size = (int(img.width * scale), int(img.height * scale))
         return img.resize(new_size, Image.Resampling.LANCZOS)
     return None
 
-# --- CONTAINER FÜR FERTIGKEITEN ---
-with st.container():
-    # CSS Isolation: Wirkt NUR auf Bilder in diesem Block
-    st.markdown("""
-        <style>
-            .skill-section img {
-                border-radius: 10px !important;
-                box-shadow: 2px 2px 8px rgba(0,0,0,0.2) !important;
-                margin-bottom: 10px !important;
-                max-width: 100%; /* Verhindert Überlaufen */
-            }
-        </style>
-        <div class="skill-section">
-    """, unsafe_allow_html=True)
+st.title("🛠️ Meine Fertigkeiten")
+st.divider()
 
-    st.title("🛠️ Meine Fertigkeiten")
-    
-    # --- INTERAKTIVER SKALIERUNGS-REGLER ---
-    # Dieser Slider steuert die Größe aller Bilder in diesem Block
-    img_scale = st.slider("Bildgröße anpassen (%)", min_value=10, max_value=100, value=35)
-    
-    st.divider()
+# --- 1. SCHRITT: DIE ÜBERSCHRIFTEN IN EINER ZEILE ---
+header_col1, header_col2 = st.columns(2)
+with header_col1:
+    st.subheader("Von der Skizze bis zum fertigen Produkt")
+with header_col2:
+    st.subheader("Von der Idee bis zur Übergabe...")
 
-    # Überschriften bündig halten
-    h_col1, h_col2 = st.columns(2)
-    h_col1.subheader("Von der Skizze bis zum fertigen Produkt")
-    h_col2.subheader("Von der Idee bis zur Übergabe...")
+# --- 2. SCHRITT: DIE BILD-INHALTE ---
+content_col1, content_col2 = st.columns(2)
 
-    # Bild-Inhalte
-    content_col1, content_col2 = st.columns(2)
+with content_col1:
+    kerze_files = [
+        "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
+        "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
+    ]
+    k_cols = st.columns(3) 
+    for idx, img_path in enumerate(kerze_files):
+        img = load_scaled_img(img_path, scale=0.35)
+        if img:
+            k_cols[idx % 3].image(img)
 
-    with content_col1:
-        kerze_files = [
-            "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
-            "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
-        ]
-        # Wir nutzen 3 Spalten für eine kompakte Ansicht
-        k_cols = st.columns(3) 
-        for idx, img_path in enumerate(kerze_files):
-            img = load_scaled_img(img_path, scale_percent=img_scale)
-            if img:
-                k_cols[idx % 3].image(img)
+with content_col2:
+    project_configs = [
+        ("images/project1.jpg", 0), ("images/project2.jpeg", 0),
+        ("images/project3.jpeg", 90), ("images/project4.jpeg", 90),
+        ("images/project5.jpg", 0), ("images/project6.jpeg", -90)
+    ]
+    p_cols = st.columns(2)
+    for idx, (img_path, angle) in enumerate(project_configs):
+        img = load_scaled_img(img_path, angle, scale=0.42)
+        if img:
+            p_cols[idx % 2].image(img)
 
-    with content_col2:
-        project_configs = [
-            ("images/project1.jpg", 0), ("images/project2.jpeg", 0),
-            ("images/project3.jpeg", 90), ("images/project4.jpeg", 90),
-            ("images/project5.jpg", 0), ("images/project6.jpeg", -90)
-        ]
-        # 2 Spalten rechts, damit die Projektbilder (Hochkant) Platz haben
-        p_cols = st.columns(2)
-        for idx, (img_path, angle) in enumerate(project_configs):
-            img = load_scaled_img(img_path, angle, scale_percent=img_scale)
-            if img:
-                p_cols[idx % 2].image(img)
+# CSS für einheitliche Optik
+st.markdown("""
+<style>
+    img {
+        border-radius: 12px;
+        box-shadow: 3px 3px 12px rgba(0,0,0,0.2);
+        margin-bottom: 10px;
+    }
+</style>
+""", unsafe_allow_html=True)
 
-    st.markdown("</div>", unsafe_allow_html=True)
 
 st.divider()
 
