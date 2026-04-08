@@ -1278,7 +1278,7 @@ with book_col:
                 top: 80px;      /* Zentrierung auf den Buchseiten */
                 left: 55%;
                 transform: translate(-50%, -50%);
-                color: #e63946; /* Ein schönes Rot für den Kontrast */
+                color: #1a1a1a; /* Ein schönes Rot für den Kontrast */
                 font-family: 'Brush Script MT', cursive; /* Handschrift-Stil */
                 font-size: 14px;
                 font-weight: bold;
@@ -1306,7 +1306,7 @@ with book_col:
         
         <div class="book-wrapper" title="📖 Work in Progress: Dieses Projekt befindet sich noch in der Entwurfsphase.">
             <div class="book-icon">📖</div>
-            <div class="book-text">mein &nbsp;&nbsp;&nbsp;&nbsp;&nbsp <br> &nbsp;&nbsp;&nbsp  Buch</div>
+            <div class="book-text">mein &nbsp;&nbsp;&nbsp;&nbsp <br> &nbsp;&nbsp;&nbsp  Buch</div>
             <div class="book-tag">in Arbeit</div>
         </div>
     """, unsafe_allow_html=True)
