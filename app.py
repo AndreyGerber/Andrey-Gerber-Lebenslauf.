@@ -958,10 +958,10 @@ def st_3d_cert_wall(image_urls):
             requestAnimationFrame(animate);
             // Optional: Leichte Rotation oder Interaktion hier hinzufügen
             renderer.render(scene, camera);
-        }}mate();
+        }}
+        animate();
     </script>
     """
-        ani
     components.html(three_js_code, height=500)
 
 # Beispielaufruf mit deinen Bild-URLs
