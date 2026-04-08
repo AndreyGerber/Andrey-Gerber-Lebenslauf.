@@ -489,9 +489,16 @@ with st.container():
         </div>
     """, unsafe_allow_html=True)
 
-# --- PDF GALERIE (komplett original, unverändert) ---
+# --- PDF GALERIE mit HTML/CSS Buttons ---
 if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
+
+def get_pdf_base64(file_name):
+    path = os.path.join("documents", file_name)
+    if os.path.exists(path):
+        with open(path, "rb") as f:
+            return base64.b64encode(f.read()).decode('utf-8')
+    return None
 
 top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namensänderung"}
 other_docs = [
@@ -509,102 +516,120 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
+# JavaScript für PDF-Update
 st.markdown("""
-<style>
-    .custom-spacer-t { height: 30px !important; display: block; }
-    .custom-spacer-b { height: 80px !important; display: block; }
-
-    /* UNIVERSALER SELEKTOR - greift auf alle Button-Container zu */
-    .pdf-section-wrapper button {
-        height: 120px !important;
-        width: 100% !important;
-        border-radius: 16px !important;
-        background-color: white !important;
-        transition: all 0.3s ease !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 8px !important;
+<script>
+function loadPDF(filename) {
+    var iframe = parent.document.querySelector('#pdf-viewer');
+    if (iframe) {
+        iframe.src = 'data:application/pdf;base64,' + filename;
     }
-
-    /* Der Text im Button */
-    .pdf-section-wrapper button p {
-        margin: 0 !important;
-        font-size: 13px !important;
-        font-weight: 700 !important;
-        color: #475569 !important;
-        line-height: 1.1 !important;
-        text-align: center !important;
-    }
-
-    /* Icon-Größe - funktioniert wenn Icon als eigenständiges Element */
-    .pdf-section-wrapper button .stMarkdown {
-        font-size: 38px !important;
-    }
-    
-    /* Fallback: Erste Zeile im Button */
-    .pdf-section-wrapper button p:first-line {
-        font-size: 38px !important;
-        line-height: 1.5 !important;
-    }
-
-    /* Hover-Effekt */
-    .pdf-section-wrapper button:hover {
-        transform: translateY(-5px) !important;
-        border-color: #3b82f6 !important;
-        background-color: #f8fafc !important;
-    }
-
-    /* Aktiver Button */
-    .pdf-section-wrapper .active-btn button {
-        background: #1e293b !important;
-        border-color: #1e293b !important;
-    }
-    .pdf-section-wrapper .active-btn button p {
-        color: white !important;
-    }
-</style>
+}
+</script>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="pdf-section-wrapper">', unsafe_allow_html=True)
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
-    st.markdown('<div class="custom-spacer-t"></div>', unsafe_allow_html=True)
-
-    def render_btn(doc):
-        active = st.session_state.active_doc == doc['file']
-        if active: st.markdown('<div class="active-btn">', unsafe_allow_html=True)
+    st.markdown("<div style='height: 30px;'></div>", unsafe_allow_html=True)
+    
+    # Top-Dokument zentriert
+    c1, c2, c3 = st.columns([1, 1, 1])
+    with c2:
+        doc = top_doc
+        is_active = st.session_state.active_doc == doc['file']
+        bg_color = "#1e293b" if is_active else "white"
+        text_color = "white" if is_active else "#475569"
         
-        if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
-            st.session_state.active_doc = doc['file']
-            st.rerun()
+        html_btn = f"""
+        <div onclick="
+            fetch('/_stcore/stream/update_session_state?key=active_doc&value={doc['file']}')
+            .then(() => {{
+                var iframe = parent.document.querySelector('#pdf-viewer');
+                var pdfData = '{get_pdf_base64(doc['file'])}';
+                iframe.src = 'data:application/pdf;base64,' + pdfData;
+            }})
+        " style="
+            height: 120px;
+            width: 100%;
+            border-radius: 16px;
+            background-color: {bg_color};
+            border: 2px solid {'#1e293b' if is_active else '#e2e8f0'};
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+        "
+        onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#3b82f6';"
+        onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{('#1e293b' if is_active else '#e2e8f0')}';">
+            <span style="font-size: 38px; line-height: 1;">{doc['icon']}</span>
+            <span style="font-size: 13px; font-weight: 700; color: {text_color};">{doc['label']}</span>
+        </div>
+        """
+        st.markdown(html_btn, unsafe_allow_html=True)
+    
+    # Andere Dokumente im Grid
+    st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+    
+    # 3er-Grid für die restlichen Dokumente
+    cols = st.columns(3)
+    for i, doc in enumerate(other_docs):
+        with cols[i % 3]:
+            is_active = st.session_state.active_doc == doc['file']
+            bg_color = "#1e293b" if is_active else "white"
+            text_color = "white" if is_active else "#475569"
             
-        if active: st.markdown('</div>', unsafe_allow_html=True)
-
-    t_c1, t_c2, t_c3 = st.columns(3)
-    with t_c2: render_btn(top_doc)
-
-    grid_cols = st.columns(3)
-    for i, d in enumerate(other_docs):
-        with grid_cols[i % 3]: render_btn(d)
-
-    st.markdown('<div class="custom-spacer-b"></div>', unsafe_allow_html=True)
+            # PDF Base64 für diesen Button
+            pdf_data = get_pdf_base64(doc['file'])
+            
+            html_btn = f"""
+            <div onclick="
+                fetch('/_stcore/stream/update_session_state?key=active_doc&value={doc['file']}')
+                .then(() => {{
+                    var iframe = parent.document.querySelector('#pdf-viewer');
+                    iframe.src = 'data:application/pdf;base64,{pdf_data}';
+                }})
+            " style="
+                height: 120px;
+                width: 100%;
+                border-radius: 16px;
+                background-color: {bg_color};
+                border: 2px solid {'#1e293b' if is_active else '#e2e8f0'};
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                margin-bottom: 15px;
+            "
+            onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#3b82f6';"
+            onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{('#1e293b' if is_active else '#e2e8f0')}';">
+                <span style="font-size: 38px; line-height: 1;">{doc['icon']}</span>
+                <span style="font-size: 13px; font-weight: 700; color: {text_color};">{doc['label']}</span>
+            </div>
+            """
+            st.markdown(html_btn, unsafe_allow_html=True)
+    
+    st.markdown("<div style='height: 80px;'></div>", unsafe_allow_html=True)
 
 with col_viewer:
-    def get_pdf_base64(file_name):
-        path = os.path.join("documents", file_name)
-        if os.path.exists(path):
-            with open(path, "rb") as f:
-                return base64.b64encode(f.read()).decode('utf-8')
-        return None
-    
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     if pdf_b64:
-        st.markdown(f'<iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" width="100%" height="850px" style="border-radius:15px; border:2px solid #1e293b;"></iframe>', unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(f'''
+            <iframe 
+                id="pdf-viewer"
+                src="data:application/pdf;base64,{pdf_b64}#toolbar=0" 
+                width="100%" 
+                height="850px" 
+                style="border-radius:15px; border:2px solid #1e293b;">
+            </iframe>
+        ''', unsafe_allow_html=True)
 
 st.write("")
 st.markdown("<br>", unsafe_allow_html=True)
