@@ -1157,7 +1157,14 @@ def load_processed_img(path, degrees=0, scale=0.5):
     return None
 
 st.title("🛠️ Meine Fertigkeiten")
-
+st.markdown("""
+<style>
+    img {
+        border-radius: 10px; /* Abgerundete Ecken wie im Screenshot */
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.3); /* Ein leichter Schatten gibt Tiefe */
+    }
+</style>
+""", unsafe_allow_html=True)
 # --- MAẞSTAB / SKALIERUNG (Hier kannst du die Größe anpassen) ---
 # 1.0 = Original, 0.5 = Halbe Größe, 0.3 = Sehr kompakt
 scale_factor = 0.4 
