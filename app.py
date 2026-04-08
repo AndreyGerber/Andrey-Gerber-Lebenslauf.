@@ -1237,4 +1237,4 @@ with col3:
     """, unsafe_allow_html=True)
 
 
-    st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
