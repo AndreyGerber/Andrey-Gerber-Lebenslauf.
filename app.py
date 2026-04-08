@@ -1096,98 +1096,105 @@ st.markdown(f"""
 
 st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 
-import streamlit as st
-import streamlit.components.v1 as components
-import os
-import base64
-import json
 
-# --- FUNKTION: BILDER LOKAL LADEN & KONVERTIEREN ---
+
+
+
+# Hobbies 
+
+
+
 def get_base64_img(file_path):
     if os.path.exists(file_path):
         with open(file_path, "rb") as f:
-            return "data:image/jpeg;base64," + base64.b64encode(f.read()).decode()
+            return base64.b64encode(f.read()).decode()
     return None
 
-# --- DATEN VORBEREITEN ---
-hobby_path = "images/Hobbies"
-# Wir bündeln die Bilder nach Themen
-hobby_groups = [
-    {"files": ["fussball1.png", "fussball2.jpeg"], "text": "⚽ Fußball & Teamgeist: Von Kindesbeinen an auf dem Platz."},
-    {"files": ["hockey1.png", "hockey2.png", "hockey3.png"], "text": "🏒 Eishockey: Dynamik und Ausdauer auf dem Eis."},
-    {"files": ["yoga.jpg", "yoga2.jpg", "yoga3.png"], "text": "🧘 Yoga & Boxen: Balance zwischen innerer Ruhe und voller Kraft heute."}
-]
-
-# Alle Bilder für das Karussell in Base64 umwandeln
-carousel_data = []
-for group in hobby_groups:
-    for filename in group["files"]:
-        b64 = get_base64_img(os.path.join(hobby_path, filename))
-        if b64:
-            carousel_data.append({"img": b64, "text": group})
-
-def hobby_carousel(data):
-    hobbies_json = json.dumps(data)
-    custom_html = f"""
-    <div id="carousel-container" style="width: 100%; overflow: hidden; position: relative; border-radius: 20px; background: #f8fafc; padding: 20px; border: 1px solid #e2e8f0; height: 450px;">
-        <div id="slider" style="display: flex; transition: transform 0.8s ease-in-out; height: 350px;">
-            <!-- Bilder per JS -->
-        </div>
-        <div id="caption" style="text-align: center; margin-top: 15px; font-family: sans-serif; font-weight: bold; color: #1e293b; font-size: 1.1rem; line-height: 1.4;"></div>
-    </div>
-    <script>
-        const hobbies = {hobbies_json};
-        const slider = document.getElementById('slider');
-        const caption = document.getElementById('caption');
-        let currentIndex = 0;
-
-        hobbies.forEach(h => {{
-            const div = document.createElement('div');
-            div.style.minWidth = "100%";
-            div.style.display = "flex";
-            div.style.justifyContent = "center";
-            div.innerHTML = `<img src="${{h.img}}" style="max-height: 100%; max-width: 90%; border-radius: 12px; object-fit: contain; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">`;
-            slider.appendChild(div);
-        }});
-
-        function updateSlider() {{
-            slider.style.transform = `translateX(-${{currentIndex * 100}}%)`;
-            caption.innerText = hobbies[currentIndex].text;
-            currentIndex = (currentIndex + 1) % hobbies.length;
-        }}
-        setInterval(updateSlider, 3500);
-        updateSlider();
-    </script>
-    """
-    components.html(custom_html, height=500)
-
-# --- UI LAYOUT ---
 st.divider()
 st.markdown("<h2 style='text-align: center;'>🎯 Leidenschaften & Ausgleich</h2>", unsafe_allow_html=True)
 
-col_carousel, col_chess = st.columns([2, 1])
+# CSS für einheitliche Hobby-Karten (statisch & harmonisch)
+st.markdown("""
+<style>
+    .hobby-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 20px;
+        height: 420px;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s ease;
+    }
+    .hobby-icon { font-size: 30px; margin-bottom: 10px; }
+    .hobby-title { font-weight: bold; font-size: 1.2rem; color: #1e293b; margin-bottom: 10px; }
+    .hobby-text { font-size: 0.95rem; color: #475569; line-height: 1.5; flex-grow: 1; }
+    .hobby-img-area { 
+        display: flex; gap: 8px; margin-top: 15px; height: 110px; 
+    }
+    .hobby-img-area img { 
+        width: 31%; object-fit: cover; border-radius: 8px; border: 1px solid #eee;
+    }
+</style>
+""", unsafe_allow_html=True)
 
-with col_carousel:
-    if carousel_data:
-        hobby_carousel(carousel_data)
-    else:
-        st.error("Bilder im Ordner 'images/Hobbies' nicht gefunden.")
+col1, col2, col3 = st.columns(3)
 
-with col_chess:
+with col1:
+    # --- SCHACH ---
     st.markdown("""
-        <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); padding: 30px; border-radius: 20px; color: white; height: 450px; display: flex; flex-direction: column; justify-content: center; border: 1px solid #475569;">
-            <h3 style="color: #fbbf24; margin-top: 0;">♟️ Das strategische Fundament</h3>
-            <p style="font-size: 1.1rem; line-height: 1.6;">
-                Schach begleite mich bereits seit meinem <b>6. Lebensjahr</b>. 
-                Was als Spiel begann, prägte früh mein analytisches Denken:
-            </p>
-            <ul style="color: #e2e8f0; line-height: 1.8;">
-                <li>Vorausplanen komplexer Szenarien</li>
-                <li>Geduld und taktische Präzision</li>
-                <li>Objektive Analyse unter Zeitdruck</li>
-            </ul>
-            <p style="font-style: italic; color: #94a3b8; margin-top: 20px;">
-                "Jeder Zug ist eine Entscheidung, jede Partie ein Prozess."
-            </p>
+    <div class="hobby-card">
+        <div class="hobby-icon">♟️</div>
+        <div class="hobby-title">Schach</div>
+        <div class="hobby-text">
+            Seit meinem 6. Lebensjahr ein fester Teil meines Lebens. Es schult das vorausschauende Denken und die objektive Analyse unter Zeitdruck. 
+            Für mich ist jede Partie ein Prozess der strategischen Entscheidungsfindung.
         </div>
+        <!-- Platzhalter für die visuelle Balance zu den anderen Karten -->
+        <div style="height: 110px; display: flex; align-items: center; justify-content: center; opacity: 0.15; font-size: 50px;">
+            ♔ ♕ ♖
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    # --- TEAMSPORT (Exakte Namen laut Screenshot) ---
+    img_f2 = get_base64_img("images/Hobbies/fussball2.jpeg")
+    img_h1 = get_base64_img("images/Hobbies/hockey1.png")
+    img_h3 = get_base64_img("images/Hobbies/hockey3.png")
+    
+    st.markdown(f"""
+    <div class="hobby-card">
+        <div class="hobby-icon">🏒</div>
+        <div class="hobby-title">Eishockey & Fußball</div>
+        <div class="hobby-text">
+            In Mannschaftssportarten habe ich früh gelernt, was Teamgeist und Ausdauer bedeuten. Die Dynamik auf dem Eis und auf dem Rasen ist der ideale Ausgleich zum Kopfsport.
+        </div>
+        <div class="hobby-img-area">
+            <img src="data:image/jpeg;base64,{img_f2}">
+            <img src="data:image/png;base64,{img_h1}">
+            <img src="data:image/png;base64,{img_h3}">
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    # --- YOGA & BOXEN (Exakte Namen laut Screenshot) ---
+    img_y1 = get_base64_img("images/Hobbies/yoga.jpg")
+    img_y2 = get_base64_img("images/Hobbies/yoga2.jpg")
+    img_y3 = get_base64_img("images/Hobbies/yoga3.png")
+
+    st.markdown(f"""
+    <div class="hobby-card">
+        <div class="hobby-icon">🧘</div>
+        <div class="hobby-title">Yoga & Boxen</div>
+        <div class="hobby-text">
+            Heute finde ich meine Balance in der Kombination aus Kraft und Ruhe. Boxen für den Fokus und die Schnelligkeit, Yoga für die Mobilität und innere Zentrierung.
+        </div>
+        <div class="hobby-img-area">
+            <img src="data:image/jpeg;base64,{img_y1}">
+            <img src="data:image/jpeg;base64,{img_y2}">
+            <img src="data:image/png;base64,{img_y3}">
+        </div>
+    </div>
     """, unsafe_allow_html=True)
