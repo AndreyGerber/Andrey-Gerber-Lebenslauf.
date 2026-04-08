@@ -1238,3 +1238,64 @@ with col3:
 
 
     st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
+
+
+
+
+
+#Mein Buch 
+# Hilfsfunktion für das Buch-Bild
+def get_base64_img(file_path):
+    if os.path.exists(file_path):
+        with open(file_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    return None
+
+# --- DEIN BUCH-PROJEKT ---
+# Ersetze 'images/mein_buch.png' durch deinen echten Pfad
+buch_base64 = get_base64_img("images/mein_buch.png") 
+
+if buch_base64:
+    st.markdown(f"""
+        <style>
+            .book-container {{
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 250px; /* Breite des Buchs anpassen */
+                z-index: 1000;
+                transition: transform 0.3s ease;
+                cursor: help;
+            }}
+            .book-container:hover {{
+                transform: scale(1.1) rotate(-5deg);
+            }}
+            .book-tooltip {{
+                visibility: hidden;
+                background-color: #334155;
+                color: #fff;
+                text-align: center;
+                padding: 10px;
+                border-radius: 8px;
+                position: absolute;
+                bottom: 110%;
+                right: 0;
+                width: 200px;
+                font-size: 0.85rem;
+                opacity: 0;
+                transition: opacity 0.3s;
+            }}
+            .book-container:hover .book-tooltip {{
+                visibility: visible;
+                opacity: 1;
+            }}
+        </style>
+        
+        <div class="book-container">
+            <div class="book-tooltip">
+                📖 <strong>Work in Progress</strong><br>
+                Noch nicht ganz fertig, aber die Geschichte schreibt sich bereits...
+            </div>
+            <img src="data:image/png;base64,{buch_base64}" style="width: 100%; filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.3));">
+        </div>
+    """, unsafe_allow_html=True)
