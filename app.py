@@ -1316,7 +1316,7 @@ with book_col:
             }
         </style>
         
-        <div class="book-wrapper" title="📖 Mein Buch: Dieses Projekt befindet sich gerade in Arbeit &ndash; <i>die Geschichte schreibt sich von Tag zu Tag weiter.">
+        <div class="book-wrapper" title="📖 Mein Buch: Dieses Projekt befindet sich gerade in Arbeit &ndash; die Geschichte schreibt sich von Tag zu Tag weiter.">
             <div class="book-icon">📖</div>
             <div class="book-tag">in Arbeit</div>
         </div>
