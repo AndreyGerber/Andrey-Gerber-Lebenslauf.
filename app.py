@@ -521,7 +521,7 @@ st.markdown("""
 <style>
     /* Zwingt die Buttons in eine Spalten-Layout */
     .stButton > button {
-        height: 120px !important;
+        height: 100px !important;
         width: 100% !important;
         border-radius: 16px !important;
         background-color: white !important;
@@ -624,7 +624,7 @@ with col_viewer:
             </iframe>
         ''', unsafe_allow_html=True)
 
-        
+
 
 st.write("")
 st.markdown("<br>", unsafe_allow_html=True)
