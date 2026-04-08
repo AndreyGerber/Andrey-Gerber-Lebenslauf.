@@ -519,7 +519,7 @@ other_docs = [
 st.markdown("""
 <style>
     .stButton > button {
-        height: 120px !important;
+        height: 100px !important;
         width: 100% !important;
         border-radius: 16px !important;
         background-color: #f8fafc !important;
