@@ -488,7 +488,7 @@ with st.container():
         </div>
     """, unsafe_allow_html=True)
 
-# --- PDF GALERIE mit HTML/CSS und JavaScript (kein neuer Tab) ---
+# --- PDF GALERIE mit st.link_button (bleibt im selben Tab) ---
 if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
 
@@ -515,20 +515,32 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# JavaScript für Navigation ohne neuen Tab
+# CSS für st.link_button
 st.markdown("""
-<script>
-function setActiveDoc(docName) {
-    // URL aktualisieren ohne Seite neu zu laden
-    const url = new URL(window.location.href);
-    url.searchParams.set('doc', docName);
-    window.history.pushState({}, '', url);
+<style>
+    /* Nur für st.link_button im PDF-Bereich */
+    .stLinkButton > button {
+        height: 120px !important;
+        width: 100% !important;
+        border-radius: 16px !important;
+        background-color: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        transition: all 0.3s ease !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        padding: 10px !important;
+        white-space: normal !important;
+    }
     
-    // Streamlit manuell mitteilen, dass sich die Query Params geändert haben
-    const event = new Event('popstate');
-    window.dispatchEvent(event);
-}
-</script>
+    .stLinkButton > button:hover {
+        transform: translateY(-5px) !important;
+        border-color: #94a3b8 !important;
+        background-color: #f1f5f9 !important;
+    }
+</style>
 """, unsafe_allow_html=True)
 
 col_gallery, col_viewer = st.columns([1, 1.4])
@@ -541,35 +553,27 @@ with col_gallery:
     with c2:
         doc = top_doc
         is_active = st.session_state.active_doc == doc['file']
-        bg_color = "#e6f7ff" if is_active else "#f8fafc"
-        border_color = "#69c0ff" if is_active else "#e2e8f0"
-        border_width = "2px" if is_active else "1px"
-        text_color = "#0050b3" if is_active else "#475569"
         
-        html_btn = f"""
-        <div onclick="setActiveDoc('{doc['file']}');" style="
-            height: 120px;
-            width: 100%;
-            border-radius: 16px;
-            background-color: {bg_color};
-            border: {border_width} solid {border_color};
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 30px;
-            box-sizing: border-box;
-        "
-        onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#94a3b8';"
-        onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{border_color}';">
-            <span style="font-size: 48px; line-height: 1;">{doc['icon']}</span>
-            <span style="font-size: 16px; font-weight: 600; color: {text_color};">{doc['label']}</span>
-        </div>
-        """
-        st.markdown(html_btn, unsafe_allow_html=True)
+        # Link-Button mit Query Param
+        st.link_button(
+            f"{doc['icon']}\n\n{doc['label']}",
+            f"?doc={doc['file']}",
+            use_container_width=True,
+            type="secondary"
+        )
+        
+        if is_active:
+            st.markdown("""
+                <style>
+                    div:has(> a[href="?doc=Namensaenderung.pdf"]) button {
+                        background-color: #e6f7ff !important;
+                        border: 2px solid #69c0ff !important;
+                    }
+                    div:has(> a[href="?doc=Namensaenderung.pdf"]) button p {
+                        color: #0050b3 !important;
+                    }
+                </style>
+            """, unsafe_allow_html=True)
     
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     
@@ -578,35 +582,26 @@ with col_gallery:
     for i, doc in enumerate(other_docs):
         with cols[i % 3]:
             is_active = st.session_state.active_doc == doc['file']
-            bg_color = "#e6f7ff" if is_active else "#f8fafc"
-            border_color = "#69c0ff" if is_active else "#e2e8f0"
-            border_width = "2px" if is_active else "1px"
-            text_color = "#0050b3" if is_active else "#475569"
             
-            html_btn = f"""
-            <div onclick="setActiveDoc('{doc['file']}');" style="
-                height: 120px;
-                width: 100%;
-                border-radius: 16px;
-                background-color: {bg_color};
-                border: {border_width} solid {border_color};
-                cursor: pointer;
-                transition: all 0.3s ease;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                margin-bottom: 15px;
-                box-sizing: border-box;
-            "
-            onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#94a3b8';"
-            onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{border_color}';">
-                <span style="font-size: 48px; line-height: 1;">{doc['icon']}</span>
-                <span style="font-size: 16px; font-weight: 600; color: {text_color};">{doc['label']}</span>
-            </div>
-            """
-            st.markdown(html_btn, unsafe_allow_html=True)
+            st.link_button(
+                f"{doc['icon']}\n\n{doc['label']}",
+                f"?doc={doc['file']}",
+                use_container_width=True,
+                type="secondary"
+            )
+            
+            if is_active:
+                st.markdown(f"""
+                    <style>
+                        div:has(> a[href="?doc={doc['file']}"]) button {{
+                            background-color: #e6f7ff !important;
+                            border: 2px solid #69c0ff !important;
+                        }}
+                        div:has(> a[href="?doc={doc['file']}"]) button p {{
+                            color: #0050b3 !important;
+                        }}
+                    </style>
+                """, unsafe_allow_html=True)
     
     st.markdown("<div style='height: 80px;'></div>", unsafe_allow_html=True)
 
@@ -626,7 +621,6 @@ with col_viewer:
                 style="border-radius:15px; border:1px solid #e2e8f0;">
             </iframe>
         ''', unsafe_allow_html=True)
-
 
 
 st.write("")
