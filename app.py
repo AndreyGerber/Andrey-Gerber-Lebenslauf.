@@ -488,7 +488,7 @@ with st.container():
         </div>
     """, unsafe_allow_html=True)
 
-# --- PDF GALERIE ---
+# --- PDF GALERIE mit HTML/CSS und Query Params ---
 if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
 
@@ -515,114 +515,100 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# CSS NUR für PDF-Buttons - mit eigener Klasse
-st.markdown("""
-<style>
-    /* Nur Buttons innerhalb von .pdf-gallery werden gestylt */
-    .pdf-gallery .stButton > button {
-        height: 120px !important;
-        width: 100% !important;
-        border-radius: 16px !important;
-        background-color: #f8fafc !important;
-        border: 1px solid #e2e8f0 !important;
-        transition: all 0.3s ease !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        white-space: pre-wrap !important;
-        word-break: break-word !important;
-        padding: 10px !important;
-    }
-    
-    .pdf-gallery .stButton > button .stMarkdown {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 100% !important;
-    }
-    
-    .pdf-gallery .stButton > button p {
-        margin: 0 !important;
-        font-size: 13px !important;
-        font-weight: 600 !important;
-        color: #475569 !important;
-        line-height: 1.3 !important;
-        text-align: center !important;
-        width: 100% !important;
-    }
-    
-    .pdf-gallery .stButton > button p::first-line {
-        font-size: 38px !important;
-        line-height: 1.5 !important;
-    }
-    
-    .pdf-gallery .stButton > button:hover {
-        transform: translateY(-5px) !important;
-        border-color: #94a3b8 !important;
-        background-color: #f1f5f9 !important;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# Wrapper div mit der Klasse .pdf-gallery
-st.markdown('<div class="pdf-gallery">', unsafe_allow_html=True)
-
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
     st.markdown("<div style='height: 30px;'></div>", unsafe_allow_html=True)
     
     # Top-Dokument zentriert
-    t_c1, t_c2, t_c3 = st.columns(3)
-    with t_c2:
-        is_active = st.session_state.active_doc == top_doc['file']
+    c1, c2, c3 = st.columns([1, 1, 1])
+    with c2:
+        doc = top_doc
+        is_active = st.session_state.active_doc == doc['file']
+        bg_color = "#e6f7ff" if is_active else "#f8fafc"
+        border_color = "#69c0ff" if is_active else "#e2e8f0"
+        border_width = "2px" if is_active else "1px"
+        text_color = "#0050b3" if is_active else "#475569"
         
-        if st.button(f"{top_doc['icon']}\n{top_doc['label']}", key=f"btn_{top_doc['file']}", use_container_width=True):
-            st.session_state.active_doc = top_doc['file']
-            st.rerun()
+        # PDF Base64 für diesen Button
+        pdf_data = get_pdf_base64(doc['file'])
         
-        if is_active:
-            st.markdown("""
-                <style>
-                    .pdf-gallery div:has(> button[key="btn_Namensaenderung.pdf"]) > button {
-                        background-color: #e6f7ff !important;
-                        border: 2px solid #69c0ff !important;
-                    }
-                    .pdf-gallery div:has(> button[key="btn_Namensaenderung.pdf"]) > button p {
-                        color: #0050b3 !important;
-                    }
-                </style>
-            """, unsafe_allow_html=True)
+        html_btn = f"""
+        <a href="?doc={doc['file']}" style="text-decoration: none;">
+            <div style="
+                height: 120px;
+                width: 100%;
+                border-radius: 16px;
+                background-color: {bg_color};
+                border: {border_width} solid {border_color};
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                margin-bottom: 30px;
+                box-sizing: border-box;
+            "
+            onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#94a3b8';"
+            onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{border_color}';">
+                <span style="font-size: 48px; line-height: 1;">{doc['icon']}</span>
+                <span style="font-size: 16px; font-weight: 600; color: {text_color};">{doc['label']}</span>
+            </div>
+        </a>
+        """
+        st.markdown(html_btn, unsafe_allow_html=True)
     
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     
     # Andere Dokumente im 3er-Grid
-    grid_cols = st.columns(3)
+    cols = st.columns(3)
     for i, doc in enumerate(other_docs):
-        with grid_cols[i % 3]:
+        with cols[i % 3]:
             is_active = st.session_state.active_doc == doc['file']
+            bg_color = "#e6f7ff" if is_active else "#f8fafc"
+            border_color = "#69c0ff" if is_active else "#e2e8f0"
+            border_width = "2px" if is_active else "1px"
+            text_color = "#0050b3" if is_active else "#475569"
             
-            if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
-                st.session_state.active_doc = doc['file']
-                st.rerun()
+            # PDF Base64 wird nicht mehr benötigt, da wir Query Params verwenden
             
-            if is_active:
-                st.markdown(f"""
-                    <style>
-                        .pdf-gallery div:has(> button[key="btn_{doc['file']}"]) > button {{
-                            background-color: #e6f7ff !important;
-                            border: 2px solid #69c0ff !important;
-                        }}
-                        .pdf-gallery div:has(> button[key="btn_{doc['file']}"]) > button p {{
-                            color: #0050b3 !important;
-                        }}
-                    </style>
-                """, unsafe_allow_html=True)
+            html_btn = f"""
+            <a href="?doc={doc['file']}" style="text-decoration: none;">
+                <div style="
+                    height: 120px;
+                    width: 100%;
+                    border-radius: 16px;
+                    background-color: {bg_color};
+                    border: {border_width} solid {border_color};
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    margin-bottom: 15px;
+                    box-sizing: border-box;
+                "
+                onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#94a3b8';"
+                onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{border_color}';">
+                    <span style="font-size: 48px; line-height: 1;">{doc['icon']}</span>
+                    <span style="font-size: 16px; font-weight: 600; color: {text_color};">{doc['label']}</span>
+                </div>
+            </a>
+            """
+            st.markdown(html_btn, unsafe_allow_html=True)
     
     st.markdown("<div style='height: 80px;'></div>", unsafe_allow_html=True)
 
 with col_viewer:
+    # Query Parameter auslesen
+    query_params = st.query_params
+    if "doc" in query_params:
+        st.session_state.active_doc = query_params["doc"]
+    
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     if pdf_b64:
         st.markdown(f'''
@@ -633,8 +619,6 @@ with col_viewer:
                 style="border-radius:15px; border:1px solid #e2e8f0;">
             </iframe>
         ''', unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
 
 
 
