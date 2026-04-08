@@ -1170,7 +1170,7 @@ with col1:
     # Die Reihenfolge hier bestimmt die Position (Index 0 = oben links)
     kerze_files = [
         "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
-        "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
+        "images/kerze5.jpg", "images/kerze4.jpg", "images/kerze3.png", "images/kerze6.jpg"
     ]
     
     # Mehr Spalten = kleinere Bilder (4 Spalten pro Seite)
@@ -1188,8 +1188,8 @@ with col2:
         ("images/project1.jpg", 0),
         ("images/project2.jpeg", 0),
         ("images/project3.jpeg", 90), 
-        ("images/project4.jpeg", 90),
         ("images/project5.jpg", 0),
+        ("images/project4.jpeg", 90),
         ("images/project6.jpeg", -90)
     ]
     
