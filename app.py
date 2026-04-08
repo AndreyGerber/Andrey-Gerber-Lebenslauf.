@@ -515,15 +515,16 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# Sanftes CSS ohne aggressive Farben
+# CSS NUR für PDF-Buttons - mit eigener Klasse
 st.markdown("""
 <style>
-    .stButton > button {
-        height: 100px !important;
+    /* Nur Buttons innerhalb von .pdf-gallery werden gestylt */
+    .pdf-gallery .stButton > button {
+        height: 120px !important;
         width: 100% !important;
         border-radius: 16px !important;
         background-color: #f8fafc !important;
-        border: 2px solid #94a3b8 !important;
+        border: 1px solid #e2e8f0 !important;
         transition: all 0.3s ease !important;
         display: flex !important;
         align-items: center !important;
@@ -533,7 +534,7 @@ st.markdown("""
         padding: 10px !important;
     }
     
-    .stButton > button .stMarkdown {
+    .pdf-gallery .stButton > button .stMarkdown {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
@@ -541,9 +542,9 @@ st.markdown("""
         width: 100% !important;
     }
     
-    .stButton > button p {
+    .pdf-gallery .stButton > button p {
         margin: 0 !important;
-        font-size: 20px !important;
+        font-size: 13px !important;
         font-weight: 600 !important;
         color: #475569 !important;
         line-height: 1.3 !important;
@@ -551,18 +552,21 @@ st.markdown("""
         width: 100% !important;
     }
     
-    .stButton > button p::first-line {
-        font-size: 28px !important;
+    .pdf-gallery .stButton > button p::first-line {
+        font-size: 38px !important;
         line-height: 1.5 !important;
     }
     
-    .stButton > button:hover {
+    .pdf-gallery .stButton > button:hover {
         transform: translateY(-5px) !important;
         border-color: #94a3b8 !important;
         background-color: #f1f5f9 !important;
     }
 </style>
 """, unsafe_allow_html=True)
+
+# Wrapper div mit der Klasse .pdf-gallery
+st.markdown('<div class="pdf-gallery">', unsafe_allow_html=True)
 
 col_gallery, col_viewer = st.columns([1, 1.4])
 
@@ -578,15 +582,14 @@ with col_gallery:
             st.session_state.active_doc = top_doc['file']
             st.rerun()
         
-        # Sanfter Rahmen für aktiven Button
         if is_active:
             st.markdown("""
                 <style>
-                    div:has(> button[key="btn_Namensaenderung.pdf"]) > button {
+                    .pdf-gallery div:has(> button[key="btn_Namensaenderung.pdf"]) > button {
                         background-color: #e6f7ff !important;
                         border: 2px solid #69c0ff !important;
                     }
-                    div:has(> button[key="btn_Namensaenderung.pdf"]) > button p {
+                    .pdf-gallery div:has(> button[key="btn_Namensaenderung.pdf"]) > button p {
                         color: #0050b3 !important;
                     }
                 </style>
@@ -604,15 +607,14 @@ with col_gallery:
                 st.session_state.active_doc = doc['file']
                 st.rerun()
             
-            # Sanfter Rahmen für aktiven Button
             if is_active:
                 st.markdown(f"""
                     <style>
-                        div:has(> button[key="btn_{doc['file']}"]) > button {{
+                        .pdf-gallery div:has(> button[key="btn_{doc['file']}"]) > button {{
                             background-color: #e6f7ff !important;
                             border: 2px solid #69c0ff !important;
                         }}
-                        div:has(> button[key="btn_{doc['file']}"]) > button p {{
+                        .pdf-gallery div:has(> button[key="btn_{doc['file']}"]) > button p {{
                             color: #0050b3 !important;
                         }}
                     </style>
@@ -631,6 +633,8 @@ with col_viewer:
                 style="border-radius:15px; border:1px solid #e2e8f0;">
             </iframe>
         ''', unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
 
 
 
