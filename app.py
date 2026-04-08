@@ -381,7 +381,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
         st.plotly_chart(fig_flight, use_container_width=True, key="flight_landing_final_fix")
 
     elif jahr_aktiv == 2010:
-        MASSSTAB_STUDIUM = 0.5
+        MASSSTAB_STUDIUM = 0.8  # 0.8 = 80% der Originalgröße, ändere diesen Wert zum Skalieren
         OBEN_ABSTAND = "50px"
 
         col_text, col_foto = st.columns([1, 2.5])
@@ -399,10 +399,14 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 """, unsafe_allow_html=True)
 
         with col_foto:
-            img_haw = lade_formatiertes_bild("haw.png", max_width=int(1000 * MASSSTAB_STUDIUM))  # SKALIERBAR!
+            img_haw = lade_formatiertes_bild("haw.png")
             if img_haw:
                 st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
-                st.image(img_haw, use_container_width=True)
+                
+                # MASSSTAB_STUDIUM wird hier angewendet
+                original_breite = img_haw.size[0]
+                neue_breite = int(original_breite * MASSSTAB_STUDIUM)
+                st.image(img_haw, width=neue_breite)
             else:
                 st.error("Bild 'haw.png' konnte nicht geladen werden.")
 
