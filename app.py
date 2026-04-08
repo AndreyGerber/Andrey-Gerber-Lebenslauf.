@@ -381,7 +381,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
         st.plotly_chart(fig_flight, use_container_width=True, key="flight_landing_final_fix")
 
     elif jahr_aktiv == 2010:
-        MASSSTAB_STUDIUM = 0.8
+        MASSSTAB_STUDIUM = 0.5
         OBEN_ABSTAND = "50px"
 
         col_text, col_foto = st.columns([1, 2.5])
