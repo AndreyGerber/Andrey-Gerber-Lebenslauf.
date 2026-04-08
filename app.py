@@ -1033,10 +1033,9 @@ with exp_col2:
     <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 20px; border-radius: 16px; border-left: 4px solid #4a90e2; height: 100%;">
         <h4 style="color: #01579b; margin-top: 0;">📋 Methodiken & Fachliche Kompetenzen</h4>
         <ul style="margin-bottom: 0; line-height: 1.8;">
-            <li><strong>Qualitätsmanagement:</strong> ISO 9001, ISO 17025, CAPA, 8D, Ishikawa, FMEA</li>
-            <li><strong>Lean Management & Six Sigma:</strong> Prozessoptimierung, KVP, statistische Analysen</li>
-            <li><strong>Audit Management:</strong> Interne & externe Audits, Management Reviews</li>
-            <li><strong>Projektmanagement:</strong> Risikomanagement, Verifizierung & Validierung</li>
+            <li><strong>Qualitätsmanagement, <strong>Lean Management & Six Sigma, <strong>Audits, </strong> Risikomanagement
+            <li></strong> ISO 9001, </strong>ISO 17025, </strong> CAPA oder 8D, <strong> DMAIC oder PDCA
+            Hier müssen wir zunächst die Begriffe definieren, bevor aneinader gespochen wird. 
         </ul>
     </div>
     """, unsafe_allow_html=True)
