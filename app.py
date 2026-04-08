@@ -1191,18 +1191,18 @@ with col2:
     <div class="hobby-card">
         <div class="hobby-icon">🏒</div>
         <div class="hobby-title">Eishockey & Fußball</div>
-        <div class="hobby-text">Nichts ist besser als ein Gefühl, zum Erfolg des anderen beigetragen zu haben.</div>
+        <div class="hobby-text">Nichts ist besser als das Gefühl, zum Erfolg des anderen beigetragen zu haben.</div>
         <div class="hobby-img-area">
             <div class="hobby-img-wrapper">
-                <img src="data:image/jpeg;base64,{img_f2}" title="einmal Gold">
+                <img src="data:image/jpeg;base64,{img_f2}" title="Einmal Gold">
                 <span class="img-label">Fußball</span>
             </div>
             <div class="hobby-img-wrapper">
-                <img src="data:image/png;base64,{img_h1}" title="auch hier auf dem Podest ">
+                <img src="data:image/png;base64,{img_h1}" title="Auch hier auf dem Podest">
                 <span class="img-label">Eishockey</span>
             </div>
             <div class="hobby-img-wrapper">
-                <img src="data:image/png;base64,{img_h3}" title="Blick hinter der Kulissen">
+                <img src="data:image/png;base64,{img_h3}" title="Blick hinter die Kulissen">
                 <span class="img-label">Schmiede</span>
             </div>
         </div>
@@ -1221,15 +1221,15 @@ with col3:
         <div class="hobby-text">Schnell reagieren und trotzdem gelassen bleiben.</div>
         <div class="hobby-img-area">
             <div class="hobby-img-wrapper">
-                <img src="data:image/jpeg;base64,{img_y1}" title="es ist entsprannt, haben sie gesagt">
+                <img src="data:image/jpeg;base64,{img_y1}" title="Es ist entspannt, haben sie gesagt">
                 <span class="img-label">Yoga</span>
             </div>
             <div class="hobby-img-wrapper">
-                <img src="data:image/jpeg;base64,{img_y2}" title="ist einfach, mach'">
+                <img src="data:image/jpeg;base64,{img_y2}" title="Ist einfach, mach es">
                 <span class="img-label">Balance</span>
             </div>
             <div class="hobby-img-wrapper">
-                <img src="data:image/png;base64,{img_y3}" title="Wichtig für das Leben">
+                <img src="data:image/png;base64,{img_y3}" title="Wenn du der einzige bist, der es richtig macht">
                 <span class="img-label">Kraft</span>
             </div>
         </div>
