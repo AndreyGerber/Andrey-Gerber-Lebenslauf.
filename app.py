@@ -489,7 +489,7 @@ with st.container():
         </div>
     """, unsafe_allow_html=True)
 
-# --- PDF GALERIE mit funktionierenden HTML/CSS Buttons ---
+# --- PDF GALERIE mit funktionierenden st.button ---
 if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
 
@@ -516,91 +516,99 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
+# WICHTIG: Das CSS muss stärker sein - mit !important und spezifischen Selektoren
+st.markdown("""
+<style>
+    /* Zwingt die Buttons in eine Spalten-Layout */
+    .stButton > button {
+        height: 120px !important;
+        width: 100% !important;
+        border-radius: 16px !important;
+        background-color: white !important;
+        transition: all 0.3s ease !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        white-space: pre-wrap !important;
+        word-break: break-word !important;
+        padding: 10px !important;
+    }
+    
+    /* Der Inhalt des Buttons */
+    .stButton > button .stMarkdown {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
+    
+    /* Icon und Text formatieren */
+    .stButton > button p {
+        margin: 0 !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        color: #475569 !important;
+        line-height: 1.3 !important;
+        text-align: center !important;
+        width: 100% !important;
+    }
+    
+    /* Die erste Zeile (Icon) */
+    .stButton > button p::first-line {
+        font-size: 38px !important;
+        line-height: 1.5 !important;
+    }
+    
+    /* Hover Effekt */
+    .stButton > button:hover {
+        transform: translateY(-5px) !important;
+        border-color: #3b82f6 !important;
+        background-color: #f8fafc !important;
+    }
+    
+    /* Aktiver Button */
+    div:has(> div > div > div > div > div > button[kind="secondary"]) .stButton > button {
+        background-color: #1e293b !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
     st.markdown("<div style='height: 30px;'></div>", unsafe_allow_html=True)
     
     # Top-Dokument zentriert
-    c1, c2, c3 = st.columns([1, 1, 1])
-    with c2:
-        doc = top_doc
-        is_active = st.session_state.active_doc == doc['file']
-        bg_color = "#1e293b" if is_active else "white"
-        text_color = "white" if is_active else "#475569"
+    t_c1, t_c2, t_c3 = st.columns(3)
+    with t_c2:
+        is_active = st.session_state.active_doc == top_doc['file']
+        if is_active:
+            st.markdown('<div style="background-color: #1e293b; border-radius: 16px;">', unsafe_allow_html=True)
         
-        # PDF Base64 für diesen Button
-        pdf_data = get_pdf_base64(doc['file'])
+        if st.button(f"{top_doc['icon']}\n{top_doc['label']}", key=f"btn_{top_doc['file']}", use_container_width=True):
+            st.session_state.active_doc = top_doc['file']
+            st.rerun()
         
-        html_btn = f"""
-        <div onclick="
-            var iframe = parent.document.querySelector('#pdf-viewer');
-            iframe.src = 'data:application/pdf;base64,{pdf_data}';
-            // Session State Update über Streamlit
-            parent.document.querySelector('iframe').dispatchEvent(new Event('load'));
-        " style="
-            height: 100px;
-            width: 100%;
-            border-radius: 16px;
-            background-color: {bg_color};
-            border: 2px solid {'#1e293b' if is_active else '#e2e8f0'};
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 30px;
-        "
-        onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#3b82f6';"
-        onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{('#1e293b' if is_active else '#e2e8f0')}';">
-            <span style="font-size: 28px; line-height: 1;">{doc['icon']}</span>
-            <span style="font-size: 20px; font-weight: 700; color: {text_color};">{doc['label']}</span>
-        </div>
-        """
-        st.markdown(html_btn, unsafe_allow_html=True)
+        if is_active:
+            st.markdown('</div>', unsafe_allow_html=True)
     
-    # Andere Dokumente im Grid
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     
-    # 3er-Grid für die restlichen Dokumente
-    cols = st.columns(3)
+    # Andere Dokumente im 3er-Grid
+    grid_cols = st.columns(3)
     for i, doc in enumerate(other_docs):
-        with cols[i % 3]:
+        with grid_cols[i % 3]:
             is_active = st.session_state.active_doc == doc['file']
-            bg_color = "#1e293b" if is_active else "white"
-            text_color = "white" if is_active else "#475569"
+            if is_active:
+                st.markdown('<div style="background-color: #1e293b; border-radius: 16px;">', unsafe_allow_html=True)
             
-            # PDF Base64 für diesen Button
-            pdf_data = get_pdf_base64(doc['file'])
+            if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
+                st.session_state.active_doc = doc['file']
+                st.rerun()
             
-            html_btn = f"""
-            <div onclick="
-                var iframe = parent.document.querySelector('#pdf-viewer');
-                iframe.src = 'data:application/pdf;base64,{pdf_data}';
-            " style="
-                height: 100px;
-                width: 100%;
-                border-radius: 16px;
-                background-color: {bg_color};
-                border: 2px solid {'#1e293b' if is_active else '#e2e8f0'};
-                cursor: pointer;
-                transition: all 0.3s ease;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                margin-bottom: 15px;
-            "
-            onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#3b82f6';"
-            onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{('#1e293b' if is_active else '#e2e8f0')}';">
-                <span style="font-size: 28px; line-height: 1;">{doc['icon']}</span>
-                <span style="font-size: 20px; font-weight: 700; color: {text_color};">{doc['label']}</span>
-            </div>
-            """
-            st.markdown(html_btn, unsafe_allow_html=True)
+            if is_active:
+                st.markdown('</div>', unsafe_allow_html=True)
     
     st.markdown("<div style='height: 80px;'></div>", unsafe_allow_html=True)
 
@@ -609,7 +617,6 @@ with col_viewer:
     if pdf_b64:
         st.markdown(f'''
             <iframe 
-                id="pdf-viewer"
                 src="data:application/pdf;base64,{pdf_b64}#toolbar=0" 
                 width="100%" 
                 height="850px" 
@@ -617,13 +624,7 @@ with col_viewer:
             </iframe>
         ''', unsafe_allow_html=True)
 
-# Streamlit Session State manuell updaten mit versteckten Buttons
-import streamlit as st
-
-# Versteckte Buttons für Session State Updates
-for doc in [top_doc] + other_docs:
-    if st.button(f"_update_{doc['file']}", key=f"hidden_{doc['file']}", help="", args=(doc['file'],), on_click=lambda f=doc['file']: st.session_state.update({"active_doc": f}), hide_icon=True):
-        pass
+        
 
 st.write("")
 st.markdown("<br>", unsafe_allow_html=True)
