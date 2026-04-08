@@ -468,7 +468,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             st.subheader(f"⚙️ {jahr_aktiv} – 2025: Ferchau GmbH")
             
             st.markdown(f"""
-                <p style='font-size: 24px; color: #0055A5; margin-bottom: 5px;'><strong>Test & Measurement Engineer</strong></p>
+                <p style='font-size: 24px; color: #0055A5; margin-bottom: 5px;'><strong>Prozesstechnologe bie Siemens Healthineers</strong></p>
                 <ul style='font-size: 20px; color: #333; line-height: 1.6;'>
                     <li>Wartung und Reparatur bestehender Anlagen für <b>akustische und Vibrationsmessungen</b></li>
                     <li>Betreuung vom Aufbau von mehreren <b> Prüfkammern für akustische und Vibrationsmessungen</b> an dem neuen Produktionsstandort</li>
