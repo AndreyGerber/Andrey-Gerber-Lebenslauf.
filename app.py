@@ -1141,9 +1141,12 @@ st.markdown("<br>" * 3, unsafe_allow_html=True)  # Drei Umbrüche
 
 
 #Fertigkeiten
+
 # ==================== PROJEKTE & KOMPETENZEN ====================
 st.markdown("<h2 style='text-align: center; margin-top: 60px;'>🛠️ Projekte & Kompetenzen</h2>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Konkrete Beispiele meiner Arbeit – mit Bildern ✧</p>", unsafe_allow_html=True)
+
+import json
 
 # Projekt-Daten
 projects = [
@@ -1156,29 +1159,22 @@ projects = [
             handwerkliches Geschick und Kreativität zusammen.
         """,
         "skills": ["3D-Konstruktion", "Formenbau", "Fertigung", "Kreativität"],
-        "images": []  # Hier später Bilddateien einfügen
+        "images": [f"kerze{i}.png" for i in range(6)]  # kerze0.png bis kerze5.png
     },
     {
-        "title": "🔊 Smart Speaker Messraum",
+        "title": "📋 Projektmanagement & Smart Speaker Messraum",
         "short_desc": "Von der Anforderung bis zur Abnahme – für TÜV Rheinland",
         "long_desc": """
             Für TÜV Rheinland habe ich einen vollwertigen Messraum für Smart Speaker 
             konzipiert, aufgebaut und in Betrieb genommen. Von der ersten Anforderungsanalyse 
             bis zur finalen Abnahme – inklusive Entwicklung der Messmethode.
+            
+            • Projektleitung für den Aufbau der Prüfkammer
+            • Prozessdefinition & Prozessfähigkeitsanalysen
+            • Übergabe in den Serienbetrieb
         """,
         "skills": ["Projektmanagement", "Prüfmethodenentwicklung", "Inbetriebnahme", "Akustik"],
-        "images": []
-    },
-    {
-        "title": "🏭 Siemens Prüfkammer",
-        "short_desc": "Fachliche Leitung & Abnahme bei Siemens Healthineers",
-        "long_desc": """
-            Bei Siemens Healthineers begann ich als Unterstützung, übernahm später die 
-            fachlichen Diskussionen, die Angebotsüberprüfung und die fachliche Abnahme 
-            der Prüfkammer. Zusätzlich entwickelte ich die Messmethode weiter.
-        """,
-        "skills": ["Fachliche Leitung", "Angebotsprüfung", "Abnahme", "Messmethoden"],
-        "images": []
+        "images": [f"project{i}.png" for i in range(1, 7)]  # project1.png bis project6.png
     },
     {
         "title": "📋 Qualitätsmanagement & Audits",
@@ -1192,19 +1188,27 @@ projects = [
             • ISO 9001 & ISO 17025
         """,
         "skills": ["Audit Management", "CAPA", "Schulungen", "Lean Six Sigma"],
-        "images": []
+        "images": []  # Später ergänzen
     }
 ]
 
 # Humorvoller Satz zum Programmieren
 st.info("💡 **Übrigens:** Das hier ist keine Agentur – diese Seite habe ich selbst programmiert. Mit Python, Streamlit und der ein oder anderen Tasse Kaffee. ☕")
 
+# Funktion zum Laden der Bilder als Base64
+def get_image_base64(img_path):
+    """Lädt Bild und konvertiert zu Base64"""
+    if os.path.exists(img_path):
+        with open(img_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    return None
+
 # CSS für Projekt-Kacheln
 st.markdown("""
 <style>
 .project-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 25px;
     margin-top: 20px;
     margin-bottom: 40px;
@@ -1253,7 +1257,7 @@ st.markdown("""
 <div class="project-container">
 """, unsafe_allow_html=True)
 
-# Modal für Projektdetails (JavaScript)
+# Modal für Projektdetails
 st.markdown("""
 <div id="projectModal" class="project-modal" style="display: none;">
     <div class="project-modal-content">
@@ -1276,7 +1280,7 @@ st.markdown("""
 }
 .project-modal-content {
     background: white;
-    max-width: 600px;
+    max-width: 650px;
     width: 90%;
     border-radius: 20px;
     padding: 30px;
@@ -1307,9 +1311,11 @@ st.markdown("""
     color: #333;
     line-height: 1.6;
     margin-bottom: 20px;
+    white-space: pre-line;
 }
 .project-modal-skills {
     margin-top: 15px;
+    margin-bottom: 20px;
 }
 .project-modal-skill {
     display: inline-block;
@@ -1324,12 +1330,18 @@ st.markdown("""
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
+    justify-content: center;
     margin-top: 20px;
 }
 .project-modal-images img {
-    max-width: 100%;
+    max-width: 180px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.project-modal-images img:hover {
+    transform: scale(1.05);
 }
 </style>
 
@@ -1340,16 +1352,17 @@ function openProjectModal(projectId) {
     const modal = document.getElementById('projectModal');
     const modalBody = document.getElementById('projectModalBody');
     
-    let imagesHtml = '';
+    // Bilder als Base64 laden (müssen im Voraus geladen werden)
+    // Wir verwenden Platzhalter, die später durch echte Base64 ersetzt werden
+    let imagesHtml = '<div class="project-modal-images">';
     if (project.images && project.images.length > 0) {
-        imagesHtml = '<div class="project-modal-images">';
-        project.images.forEach(img => {
-            imagesHtml += `<img src="data:image/jpeg;base64,${img}" style="max-width: 200px;">`;
+        project.images.forEach(imgName => {
+            imagesHtml += `<div style="text-align: center;"><img src="" data-img="${imgName}" style="width: 150px; background: #f0f0f0; padding: 20px;">📸 ${imgName}</div>`;
         });
-        imagesHtml += '</div>';
     } else {
-        imagesHtml = '<p style="color: #888; font-style: italic;">📸 Bilder folgen demnächst</p>';
+        imagesHtml += '<p style="color: #888; font-style: italic;">📸 Bilder folgen demnächst</p>';
     }
+    imagesHtml += '</div>';
     
     let skillsHtml = '<div class="project-modal-skills">';
     project.skills.forEach(skill => {
@@ -1366,6 +1379,21 @@ function openProjectModal(projectId) {
     
     modal.style.display = 'flex';
     
+    // Bilder nachladen (Base64 von Python-Seite)
+    for (let i = 0; i < project.images.length; i++) {
+        const imgName = project.images[i];
+        fetch(`/get_image?img=${imgName}`)
+            .then(response => response.json())
+            .then(data => {
+                const imgElements = document.querySelectorAll(`.project-modal-images img[data-img="${imgName}"]`);
+                imgElements.forEach(img => {
+                    img.src = `data:image/png;base64,${data.b64}`;
+                    img.style.background = 'none';
+                    img.style.padding = '0';
+                });
+            });
+    }
+    
     // Close event
     document.querySelector('.project-modal-close').onclick = () => {
         modal.style.display = 'none';
@@ -1379,7 +1407,7 @@ function openProjectModal(projectId) {
 
 # Kacheln generieren
 for i, project in enumerate(projects):
-    # Skills als Tags
+    # Skills als Tags (max 3 für die Kachel)
     skills_html = ''.join([f'<span class="skill-tag">{skill}</span>' for skill in project["skills"][:3]])
     
     st.markdown(f'''
@@ -1392,3 +1420,14 @@ for i, project in enumerate(projects):
     ''', unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
+
+# Bild-Endpoint für Streamlit (damit Bilder im Modal geladen werden können)
+@st.experimental_dialog
+def get_image_endpoint():
+    query_params = st.query_params
+    if "img" in query_params:
+        img_name = query_params["img"]
+        img_path = os.path.join("images", img_name)
+        b64 = get_image_base64(img_path)
+        if b64:
+            st.json({"b64": b64})
