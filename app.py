@@ -1009,7 +1009,7 @@ with st.container():
 st.divider()
 
 # --- EXPERTISE ABSCHNITT ---
-st.subheader("📉 Expertise & Methodik")
+st.subheader("📉 Tools und Methodiken")
 info_col1, info_col2 = st.columns(2)
 with info_col1:
     st.info("**Qualitätsmanagement & Audits**\n\nISO 9001/17025 | CAPA-Coaching")
