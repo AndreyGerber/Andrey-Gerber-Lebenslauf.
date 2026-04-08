@@ -311,7 +311,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             st.error(f"Fehler: {e}")
 
     elif jahr_aktiv == 1996:
-        MASSSTAB = 0.7  # 0.7 = 70% der Originalgröße, ändere diesen Wert zum Skalieren
+        MASSSTAB = 1.2  # 0.7 = 70% der Originalgröße, ändere diesen Wert zum Skalieren
         OBEN_ABSTAND = "200px"
 
         col_text, col_foto = st.columns([1, 2.5])
