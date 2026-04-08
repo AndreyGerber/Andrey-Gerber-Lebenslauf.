@@ -947,50 +947,52 @@ cert_names = [
 
 cert_folder = "images"
 
-# CSS für Karten-Layout
+# CSS für Karten-Layout mit 8 Spalten
 st.markdown("""
 <style>
 .cert-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 25px;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 15px;
     margin-top: 20px;
 }
 
 .cert-card {
     background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border-radius: 20px;
-    padding: 15px;
-    width: 200px;
+    border-radius: 12px;
+    padding: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     border: 1px solid #e2e8f0;
     text-align: center;
 }
 
 .cert-card:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15);
+    transform: scale(1.5);
+    box-shadow: 0 15px 25px -8px rgba(0,0,0,0.2);
     border-color: #69c0ff;
+    background: white;
+    z-index: 10;
+    position: relative;
 }
 
 .cert-card img {
     width: 100%;
-    height: 140px;
+    height: 100px;
     object-fit: cover;
-    border-radius: 12px;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
 }
 
 .cert-card p {
-    font-size: 13px;
+    font-size: 10px;
     font-weight: 600;
     color: #01579b;
     margin: 0;
-    line-height: 1.4;
+    line-height: 1.3;
+    word-break: break-word;
 }
 
 /* Modal für vergrößerte Ansicht */
@@ -1047,6 +1049,23 @@ st.markdown("""
     border-radius: 30px;
     backdrop-filter: blur(4px);
 }
+
+/* Responsive: Bei schmalen Bildschirmen weniger Spalten */
+@media (max-width: 1200px) {
+    .cert-container {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+@media (max-width: 900px) {
+    .cert-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+@media (max-width: 600px) {
+    .cert-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
 </style>
 
 <div id="certModal" class="cert-modal" onclick="closeModal()">
@@ -1098,7 +1117,7 @@ for cert_name in cert_names:
             break
 
 if len(valid_certs) > 0:
-    # 3er-Grid mit Flexbox
+    # Grid mit 8 Spalten
     st.markdown('<div class="cert-container">', unsafe_allow_html=True)
     
     for cert in valid_certs:
