@@ -489,7 +489,7 @@ with st.container():
         </div>
     """, unsafe_allow_html=True)
 
-# --- PDF GALERIE mit HTML/CSS Buttons ---
+# --- PDF GALERIE mit funktionierenden HTML/CSS Buttons ---
 if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
 
@@ -516,18 +516,6 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# JavaScript für PDF-Update
-st.markdown("""
-<script>
-function loadPDF(filename) {
-    var iframe = parent.document.querySelector('#pdf-viewer');
-    if (iframe) {
-        iframe.src = 'data:application/pdf;base64,' + filename;
-    }
-}
-</script>
-""", unsafe_allow_html=True)
-
 col_gallery, col_viewer = st.columns([1, 1.4])
 
 with col_gallery:
@@ -541,16 +529,17 @@ with col_gallery:
         bg_color = "#1e293b" if is_active else "white"
         text_color = "white" if is_active else "#475569"
         
+        # PDF Base64 für diesen Button
+        pdf_data = get_pdf_base64(doc['file'])
+        
         html_btn = f"""
         <div onclick="
-            fetch('/_stcore/stream/update_session_state?key=active_doc&value={doc['file']}')
-            .then(() => {{
-                var iframe = parent.document.querySelector('#pdf-viewer');
-                var pdfData = '{get_pdf_base64(doc['file'])}';
-                iframe.src = 'data:application/pdf;base64,' + pdfData;
-            }})
+            var iframe = parent.document.querySelector('#pdf-viewer');
+            iframe.src = 'data:application/pdf;base64,{pdf_data}';
+            // Session State Update über Streamlit
+            parent.document.querySelector('iframe').dispatchEvent(new Event('load'));
         " style="
-            height: 100px;
+            height: 120px;
             width: 100%;
             border-radius: 16px;
             background-color: {bg_color};
@@ -566,8 +555,8 @@ with col_gallery:
         "
         onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#3b82f6';"
         onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{('#1e293b' if is_active else '#e2e8f0')}';">
-            <span style="font-size: 28px; line-height: 1;">{doc['icon']}</span>
-            <span style="font-size: 20px; font-weight: 700; color: {text_color};">{doc['label']}</span>
+            <span style="font-size: 48px; line-height: 1;">{doc['icon']}</span>
+            <span style="font-size: 16px; font-weight: 700; color: {text_color};">{doc['label']}</span>
         </div>
         """
         st.markdown(html_btn, unsafe_allow_html=True)
@@ -588,11 +577,8 @@ with col_gallery:
             
             html_btn = f"""
             <div onclick="
-                fetch('/_stcore/stream/update_session_state?key=active_doc&value={doc['file']}')
-                .then(() => {{
-                    var iframe = parent.document.querySelector('#pdf-viewer');
-                    iframe.src = 'data:application/pdf;base64,{pdf_data}';
-                }})
+                var iframe = parent.document.querySelector('#pdf-viewer');
+                iframe.src = 'data:application/pdf;base64,{pdf_data}';
             " style="
                 height: 120px;
                 width: 100%;
@@ -610,8 +596,8 @@ with col_gallery:
             "
             onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#3b82f6';"
             onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{('#1e293b' if is_active else '#e2e8f0')}';">
-                <span style="font-size: 38px; line-height: 1;">{doc['icon']}</span>
-                <span style="font-size: 13px; font-weight: 700; color: {text_color};">{doc['label']}</span>
+                <span style="font-size: 48px; line-height: 1;">{doc['icon']}</span>
+                <span style="font-size: 16px; font-weight: 700; color: {text_color};">{doc['label']}</span>
             </div>
             """
             st.markdown(html_btn, unsafe_allow_html=True)
@@ -630,6 +616,14 @@ with col_viewer:
                 style="border-radius:15px; border:2px solid #1e293b;">
             </iframe>
         ''', unsafe_allow_html=True)
+
+# Streamlit Session State manuell updaten mit versteckten Buttons
+import streamlit as st
+
+# Versteckte Buttons für Session State Updates
+for doc in [top_doc] + other_docs:
+    if st.button(f"_update_{doc['file']}", key=f"hidden_{doc['file']}", help="", args=(doc['file'],), on_click=lambda f=doc['file']: st.session_state.update({"active_doc": f}), hide_icon=True):
+        pass
 
 st.write("")
 st.markdown("<br>", unsafe_allow_html=True)
