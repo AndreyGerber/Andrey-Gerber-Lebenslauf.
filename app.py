@@ -1077,15 +1077,19 @@ with exp_col2:
         """, unsafe_allow_html=True)
 
 
-
-
-
-st.success("""
-🐍 **ob ich programmieren kann:**  
-
-Das hier ist übrigens keine Agentur – diese Seite habe ich selbst programmiert.  
-Mit Python, Streamlit und der ein oder anderen Tasse Kaffee.
-
-Übrigens, das half mir meinen Wortschatz der Schimpfwörter und ihrer Kombinationen in mehreren Sprachen zu aktualisieren.
-""")
-
+st.markdown(f"""
+    <div style="
+        background-color: #d1e7dd; /* Ein dunkleres, satteres Grün als Standard */
+        padding: 25px; 
+        border-radius: 15px; 
+        border-left: 6px solid #0f5132;
+        color: #0f5132;
+        font-size: 1.1rem; /* Vergrößerte Schrift */
+        line-height: 1.6;
+    ">
+        <span style="font-size: 1.5rem;">🐍</span> <strong>ob ich programmieren kann:</strong><br><br>
+        Das hier ist übrigens keine Agentur – diese Seite habe ich selbst programmiert.<br>
+        Mit Python, Streamlit und der ein oder anderen Tasse Kaffee.<br><br>
+        <i>Übrigens, das half mir meinen Wortschatz der Schimpfwörter und ihrer Kombinationen in mehreren Sprachen zu aktualisieren.</i>
+    </div>
+    """, unsafe_allow_html=True)
