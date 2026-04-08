@@ -520,7 +520,7 @@ st.markdown("""
 <style>
     /* Alle Buttons in der App */
     .stButton > button {
-        height: 60px !important;
+        height: 70px !important;
         width: 100% !important;
         border-radius: 16px !important;
         background-color: #f1f5f9 !important;
@@ -549,7 +549,7 @@ st.markdown("""
     
     /* Icon (erste Zeile) */
     .stButton > button p::first-line {
-        font-size: 28px !important;
+        font-size: 25px !important;
         line-height: 1.5 !important;
     }
     
