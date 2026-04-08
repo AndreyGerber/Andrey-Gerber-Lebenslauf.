@@ -460,6 +460,18 @@ st.markdown('<div style="margin-top: 150px;"></div>', unsafe_allow_html=True)
 
 st.write("")
 
+
+
+
+
+
+
+
+
+#ab hier beginnt dre Abschnitt mit Zeugnissen
+
+
+
 with st.container():
     st.markdown("""
         <div style="background-color: #e1f5fe; padding: 20px; border-radius: 15px; border-left: 5px solid #01579b; margin-bottom: 20px;">
@@ -502,45 +514,54 @@ st.markdown("""
     .custom-spacer-t { height: 30px !important; display: block; }
     .custom-spacer-b { height: 80px !important; display: block; }
 
-    .pdf-section-wrapper div.stButton > button {
+    /* UNIVERSALER SELEKTOR - greift auf alle Button-Container zu */
+    .pdf-section-wrapper button {
         height: 120px !important;
         width: 100% !important;
         border-radius: 16px !important;
         background-color: white !important;
         transition: all 0.3s ease !important;
-    }
-
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p,
-    .pdf-section-wrapper div.stButton > button div[data-testid="stMarkdownContainer"] p span {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        white-space: pre-wrap !important;
+        gap: 8px !important;
     }
 
-    .pdf-section-wrapper div.stButton > button p::first-line {
-        font-size: 38px !important; 
-        line-height: 1.5 !important;
-    }
-
-    .pdf-section-wrapper div.stButton > button p {
+    /* Der Text im Button */
+    .pdf-section-wrapper button p {
+        margin: 0 !important;
         font-size: 13px !important;
         font-weight: 700 !important;
         color: #475569 !important;
         line-height: 1.1 !important;
+        text-align: center !important;
     }
 
-    .pdf-section-wrapper div.stButton > button:hover {
+    /* Icon-Größe - funktioniert wenn Icon als eigenständiges Element */
+    .pdf-section-wrapper button .stMarkdown {
+        font-size: 38px !important;
+    }
+    
+    /* Fallback: Erste Zeile im Button */
+    .pdf-section-wrapper button p:first-line {
+        font-size: 38px !important;
+        line-height: 1.5 !important;
+    }
+
+    /* Hover-Effekt */
+    .pdf-section-wrapper button:hover {
         transform: translateY(-5px) !important;
         border-color: #3b82f6 !important;
+        background-color: #f8fafc !important;
     }
 
-    .pdf-section-wrapper .active-btn div.stButton > button {
+    /* Aktiver Button */
+    .pdf-section-wrapper .active-btn button {
         background: #1e293b !important;
         border-color: #1e293b !important;
     }
-    .pdf-section-wrapper .active-btn div.stButton > button p {
+    .pdf-section-wrapper .active-btn button p {
         color: white !important;
     }
 </style>
