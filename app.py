@@ -1215,3 +1215,16 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+
+st.divider()
+
+# --- QM & METHODIK (Kompakter) ---
+st.subheader("📉 Expertise & Methodik")
+info_col1, info_col2 = st.columns(2)
+with info_col1:
+    st.info("**Qualitätsmanagement & Audits**\n\nISO 9001/17025 | CAPA-Coaching")
+with info_col2:
+    st.info("**Lean Management & Datenanalyse**\n\nSix Sigma | Prozessoptimierung")
+
+st.success("🐍 **Programmierkenntnisse:** Diese Seite wurde mit Python und Leidenschaft gebaut.")
