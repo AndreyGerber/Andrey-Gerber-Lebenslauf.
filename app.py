@@ -935,64 +935,78 @@ import streamlit as st
 import os
 import base64
 
-# --- FUNKTION: BILDER LOKAL LADEN ---
 def get_base64_img(file_path):
     if os.path.exists(file_path):
         with open(file_path, "rb") as f:
-            data = f.read()
-            return base64.b64encode(data).decode()
+            return base64.b64encode(f.read()).decode()
     return None
 
-# --- UI SETUP ---
 st.set_page_config(layout="wide")
 st.title("🎓 Zertifikate & Qualifikationen")
 
 IMAGE_DIR = "images"
 if os.path.exists(IMAGE_DIR):
+    # Alle 17 Zertifikate laden
     cert_files = sorted([f for f in os.listdir(IMAGE_DIR) if f.lower().endswith('.jpg')])
+    total = len(cert_files)
     
-    # CSS für den gekrümmten Effekt
-    # Jedes Bild wird leicht um die Y-Achse rotiert
     gallery_html = """
     <style>
-        .scroll-container {
-            display: flex;
-            padding: 50px;
-            overflow-x: auto;
-            perspective: 1000px; /* Erzeugt den Tiefeneffekt */
+        .wall-wrapper {
             background: #0e1117;
-            gap: -20px; /* Lässt Bilder leicht überlappen für den Wand-Effekt */
+            padding: 80px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: visible;
+            perspective: 1200px; /* Tiefe des Raums */
+        }
+        .cert-container {
+            display: flex;
+            gap: -15px; /* Engeres Zusammenrücken für Wand-Effekt */
         }
         .cert-card {
-            min-width: 200px;
-            height: 280px;
-            transition: transform 0.5s, margin 0.5s;
-            transform: rotateY(25deg); /* Die Krümmung nach innen */
-            box-shadow: -10px 10px 20px rgba(0,0,0,0.5);
-            border-radius: 5px;
-            border: 1px solid #333;
-            background: white;
+            width: 140px; /* Etwas schmaler, damit alle 17 passen */
+            height: auto;
+            transition: all 0.4s ease-in-out;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
             cursor: pointer;
+            z-index: 1;
         }
+        
+        /* Hover-Effekt: Vergrößerung auf 1.5 und Begradigung */
         .cert-card:hover {
-            transform: rotateY(0deg) scale(1.1); /* Begradigung beim Drüberfahren */
-            margin: 0 40px;
-            z-index: 100;
+            transform: scale(1.5) rotateY(0deg) !important;
+            z-index: 999;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            margin: 0 40px; /* Platz schaffen für den Zoom */
         }
     </style>
-    <div class="scroll-container">
+    <div class="wall-wrapper">
+        <div class="cert-container">
     """
 
-    for filename in cert_files:
+    for i, filename in enumerate(cert_files):
         b64_data = get_base64_img(os.path.join(IMAGE_DIR, filename))
         if b64_data:
-            gallery_html += f'<img src="data:image/jpeg;base64,{b64_data}" class="cert-card" title="{filename}">'
+            # Berechnung der Krümmung basierend auf der Position (i)
+            # Links positive Rotation, rechts negative
+            mid = total / 2
+            rotation = (mid - i) * 5 # Erzeugt den Bogen-Effekt
+            
+            gallery_html += f'''
+                <img src="data:image/jpeg;base64,{b64_data}" 
+                     class="cert-card" 
+                     style="transform: rotateY({rotation}deg);" 
+                     title="{filename}">
+            '''
 
-    gallery_html += "</div>"
+    gallery_html += "</div></div>"
     
-    # HTML in Streamlit anzeigen
-    st.components.v1.html(gallery_html, height=450, scrolling=True)
+    # Höhe des iFrames vergrößern, damit der 1.5x Zoom nicht abgeschnitten wird
+    st.components.v1.html(gallery_html, height=650)
 else:
     st.error("Ordner 'images' nicht gefunden.")
 
-st.info("💡 **Tipp:** Fahre mit der Maus über die Zertifikate, um sie 'geradezurücken' und zu vergrößern.")
+st.info("🔍 **Interaktion:** Bewege die Maus über ein Zertifikat für den **1.5x Zoom**.")
