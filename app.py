@@ -920,7 +920,6 @@ else:
 
 
 #2D-Lösung
-
 # ==================== GEKRÜMMTE 3D-WAND MIT ZERTIFIKATEN ====================
 st.markdown("<h2 style='text-align: center; margin-top: 50px;'>📜 Meine Zertifikate & Nachweise</h2>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Gekrümmte 3D-Wand – Maus ziehen zum Drehen, Hover = Vergrößerung (1.5x), Klick = Vollbild ✧</p>", unsafe_allow_html=True)
@@ -971,35 +970,48 @@ num_certs = len(cert_data)
 
 if num_certs > 0:
     # Positionen auf gekrümmter Wand berechnen
-    # Radius der Krümmung
     radius = 6.0
-    # 8 Stück pro Reihe, 3 Reihen (17 Stück → 8 + 8 + 1)
     cols_per_row = 8
     rows = 3
     
     positions = []
-    for i, cert in enumerate(cert_data):
+    for i in range(num_certs):
         row = i // cols_per_row
         col = i % cols_per_row
         
-        # Winkel basierend auf Spalte (von -45° bis +45°)
-        angle_min = -0.8  # -45° in rad
-        angle_max = 0.8   # +45° in rad
-        angle = angle_min + (col / (cols_per_row - 1)) * (angle_max - angle_min) if cols_per_row > 1 else 0
+        angle_min = -0.8
+        angle_max = 0.8
+        if cols_per_row > 1:
+            angle = angle_min + (col / (cols_per_row - 1)) * (angle_max - angle_min)
+        else:
+            angle = 0
         
-        # Position auf Kreisbogen
         x = math.sin(angle) * radius
         z = math.cos(angle) * radius - radius * 0.3
-        y = (1 - row) * 1.8  # Reihen von oben nach unten
+        y = (1 - row) * 1.8
         
         positions.append({
             "x": x,
             "y": y,
-            "z": z,
-            "angle": angle
+            "z": z
         })
     
-    # Three.js HTML mit gekrümmter Wand
+    # JSON-Daten für JavaScript manuell erstellen
+    certs_list = []
+    for i in range(num_certs):
+        certs_list.append({
+            "name": cert_data[i]["name"],
+            "b64": cert_data[i]["b64"],
+            "ext": cert_data[i]["ext"],
+            "x": positions[i]["x"],
+            "y": positions[i]["y"],
+            "z": positions[i]["z"]
+        })
+    
+    import json
+    certs_json = json.dumps(certs_list)
+    
+    # Three.js HTML
     threejs_html = f"""
     <!DOCTYPE html>
     <html>
@@ -1088,35 +1100,21 @@ if num_certs > 0:
             import {{ OrbitControls }} from 'three/addons/controls/OrbitControls.js';
             import {{ CSS2DRenderer, CSS2DObject }} from 'three/addons/renderers/CSS2DRenderer.js';
             
-            // Zertifikatsdaten mit Positionen
-            const certsData = {[
-                {{
-                    name: cert_data[i]["name"],
-                    b64: cert_data[i]["b64"],
-                    ext: cert_data[i]["ext"],
-                    x: positions[i]["x"],
-                    y: positions[i]["y"],
-                    z: positions[i]["z"]
-                }} for i in range(num_certs)
-            ]};
+            const certsData = {certs_json};
             
-            // Szene
             const scene = new THREE.Scene();
             scene.background = new THREE.Color(0x0a0a2a);
             scene.fog = new THREE.FogExp2(0x0a0a2a, 0.008);
             
-            // Kamera
             const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(0, 2, 10);
             camera.lookAt(0, 0, 0);
             
-            // Renderer
             const renderer = new THREE.WebGLRenderer({{ antialias: true }});
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMap.enabled = true;
             document.body.appendChild(renderer.domElement);
             
-            // CSS2DRenderer für Text
             const labelRenderer = new CSS2DRenderer();
             labelRenderer.setSize(window.innerWidth, window.innerHeight);
             labelRenderer.domElement.style.position = 'absolute';
@@ -1125,7 +1123,6 @@ if num_certs > 0:
             labelRenderer.domElement.style.pointerEvents = 'none';
             document.body.appendChild(labelRenderer.domElement);
             
-            // Controls
             const controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
@@ -1133,7 +1130,6 @@ if num_certs > 0:
             controls.zoomSpeed = 1.0;
             controls.panSpeed = 0.5;
             
-            // Licht
             const ambientLight = new THREE.AmbientLight(0x404060, 0.6);
             scene.add(ambientLight);
             const mainLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -1147,22 +1143,12 @@ if num_certs > 0:
             backLight.position.set(0, 2, -4);
             scene.add(backLight);
             
-            // Gekrümmte Wand (transparente Referenz)
-            const wallCurve = new THREE.EllipseCurve(0, 0, 6.2, 6.2, -0.9, 0.9, false, 0);
-            const wallPoints = wallCurve.getPoints(30);
-            const wallGeometry = new THREE.BufferGeometry().setFromPoints(wallPoints.map(p => new THREE.Vector3(p.x, -1.5, p.y - 5.5)));
-            const wallMaterial = new THREE.LineBasicMaterial({{ color: 0x3366aa, opacity: 0.15, transparent: true }});
-            const wallLine = new THREE.Line(wallGeometry, wallMaterial);
-            scene.add(wallLine);
-            
-            // Bodenraster
             const gridHelper = new THREE.GridHelper(14, 20, 0x4488aa, 0x335577);
             gridHelper.position.y = -1.8;
             gridHelper.material.transparent = true;
             gridHelper.material.opacity = 0.3;
             scene.add(gridHelper);
             
-            // Sterne im Hintergrund (dekorativ)
             const starGeometry = new THREE.BufferGeometry();
             const starCount = 800;
             const starPositions = new Float32Array(starCount * 3);
@@ -1176,7 +1162,6 @@ if num_certs > 0:
             const stars = new THREE.Points(starGeometry, starMaterial);
             scene.add(stars);
             
-            // Zertifikate erstellen
             const certificates = [];
             
             certsData.forEach((cert, idx) => {{
@@ -1201,21 +1186,17 @@ if num_certs > 0:
                     plane.position.set(cert.x, cert.y, cert.z);
                     plane.userData = {{
                         imageSrc: `data:image/${{cert.ext}};base64,${{cert.b64}}`,
-                        name: cert.name,
-                        originalScale: 1,
-                        targetScale: 1
+                        name: cert.name
                     }};
                     plane.castShadow = true;
                     scene.add(plane);
                     
-                    // Rahmen
                     const borderGeometry = new THREE.BoxGeometry(width + 0.07, height + 0.07, 0.04);
                     const borderMaterial = new THREE.MeshStandardMaterial({{ color: 0xc9a03d, metalness: 0.4, roughness: 0.3 }});
                     const border = new THREE.Mesh(borderGeometry, borderMaterial);
                     border.position.set(cert.x, cert.y, cert.z - 0.02);
                     scene.add(border);
                     
-                    // Text unter dem Bild
                     const div = document.createElement('div');
                     div.textContent = cert.name;
                     div.style.color = '#ccddff';
@@ -1236,7 +1217,6 @@ if num_certs > 0:
                 }};
             }});
             
-            // Hover-Effekt mit Raycaster
             const raycaster = new THREE.Raycaster();
             const mouse = new THREE.Vector2();
             let hoveredObject = null;
@@ -1286,7 +1266,6 @@ if num_certs > 0:
             window.addEventListener('mousemove', onMouseMove, false);
             window.addEventListener('click', onMouseClick, false);
             
-            // Animation
             function animate() {{
                 requestAnimationFrame(animate);
                 controls.update();
@@ -1295,7 +1274,6 @@ if num_certs > 0:
             }}
             animate();
             
-            // Fenster anpassen
             window.addEventListener('resize', onWindowResize, false);
             function onWindowResize() {{
                 camera.aspect = window.innerWidth / window.innerHeight;
@@ -1311,5 +1289,4 @@ if num_certs > 0:
     st.components.v1.html(threejs_html, height=700, width=None)
     
 else:
-    st.warning(f"⚠️ Keine Zertifikats-Bilder gefunden. Lege PNG/JPG Dateien in den Ordner 'images/' mit folgenden Namen:\n\n" + 
-               "\n".join([f"• {name}.png" for name in cert_names]))
+    st.warning(f"⚠️ Keine Zertifikats-Bilder gefunden. Lege PNG/JPG Dateien in den Ordner 'images/'")
