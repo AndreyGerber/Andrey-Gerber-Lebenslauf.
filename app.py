@@ -520,7 +520,7 @@ st.markdown("""
 <style>
     /* Alle Buttons in der App */
     .stButton > button {
-        height: 80px !important;
+        height: 60px !important;
         width: 100% !important;
         border-radius: 16px !important;
         background-color: #f1f5f9 !important;
