@@ -616,16 +616,15 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 
 
-# ==================== 3D ZERTIFIKATE-GALERIE ====================
+# ==================== 3D ZERTIFIKATE-GALERIE MIT THREE.JS ====================
 st.markdown("<h2 style='text-align: center; margin-top: 50px;'>📜 Meine Zertifikate & Nachweise</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ 3D-Galerie – klicke auf ein Zertifikat zum Vergrößern ✧</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ 3D-Galerie – Maus ziehen zum Drehen, Klick auf Zertifikat zum Vergrößern ✧</p>", unsafe_allow_html=True)
 
 # Auswahl der Darstellungsart
 view_mode = st.radio(
     "🎨 Darstellungsart wählen:",
     ["🏛️ 3D-Galerie-Wand (Variante A)", "🌀 Fließende 3D-Wand (Variante D)"],
     horizontal=True,
-    help="Variante A: Zertifikate wie an einer Wand. Variante D: Schweben im Raum."
 )
 
 # Deine 17 Zertifikatsnamen mit Nummerierung
@@ -649,247 +648,296 @@ cert_names = [
     "17_Text_Mining"
 ]
 
-num_certs = len(cert_names)
-
-# Ordner für Zertifikats-Bilder (images)
 cert_folder = "images"
 
-# Prüfe, ob Bilder existieren
-cert_files = []
-for name in cert_names:
-    found = False
-    for ext in ['.png', '.jpg', '.jpeg', '.PNG', '.JPG']:
-        test_path = os.path.join(cert_folder, name + ext)
-        if os.path.exists(test_path):
-            cert_files.append(name + ext)
-            found = True
+# Sammle existierende Bilder mit Base64
+import base64
+import json
+
+cert_data = []
+for cert_name in cert_names:
+    for ext in ['.png', '.jpg', '.jpeg']:
+        img_path = os.path.join(cert_folder, cert_name + ext)
+        if os.path.exists(img_path):
+            with open(img_path, "rb") as f:
+                img_b64 = base64.b64encode(f.read()).decode()
+            display_name = cert_name.split('_', 1)[1].replace('_', ' ')
+            cert_data.append({
+                "name": display_name,
+                "b64": img_b64,
+                "ext": ext[1:]
+            })
             break
-    if not found:
-        cert_files.append(None)
-        st.warning(f"⚠️ Bild für '{name}' nicht gefunden in '{cert_folder}/'")
 
-# Nur vorhandene Zertifikate anzeigen
-valid_certs = [(cert_files[i], cert_names[i]) for i in range(num_certs) if cert_files[i] is not None]
-num_valid = len(valid_certs)
+num_certs = len(cert_data)
 
-if num_valid > 0:
-    import plotly.graph_objects as go
-    from PIL import Image
-    import base64
-    from io import BytesIO
-    import numpy as np
+if num_certs > 0:
+    # Positionen berechnen (JSON für JavaScript)
+    positions = []
     
-    def get_image_base64(img_path, width=150):
-        """Lädt Bild und konvertiert zu Base64 für Plotly"""
-        try:
-            img = Image.open(img_path)
-            img.thumbnail((width, width), Image.Resampling.LANCZOS)
-            buffered = BytesIO()
-            img.save(buffered, format="PNG")
-            return "data:image/png;base64," + base64.b64encode(buffered.getvalue()).decode()
-        except Exception as e:
-            print(f"Fehler bei {img_path}: {e}")
-            return None
-    
-    # Positionen berechnen
     if view_mode == "🏛️ 3D-Galerie-Wand (Variante A)":
         cols_per_row = 5
-        rows = (num_valid + cols_per_row - 1) // cols_per_row
+        rows = (num_certs + cols_per_row - 1) // cols_per_row
         
-        x_positions = []
-        y_positions = []
-        z_positions = []
-        texts = []
-        images_base64 = []
-        
-        for i, (cert_file, cert_name) in enumerate(valid_certs):
+        for i in range(num_certs):
             row = i // cols_per_row
             col = i % cols_per_row
-            
-            x = (col - (cols_per_row - 1) / 2) * 1.3
-            y = (rows - row - 1) * 1.5 - (rows - 1) * 0.75
+            # X: von -3 bis 3, Y: von oben nach unten, Z: 0
+            x = (col - (cols_per_row - 1) / 2) * 1.2
+            y = (rows - row - 1) * 1.2 - (rows - 1) * 0.6
             z = 0
-            
-            x_positions.append(x)
-            y_positions.append(y)
-            z_positions.append(z)
-            
-            # Entferne Nummerierung für Anzeige (z.B. "1_Python_for_Data_Science" -> "Python for Data Science")
-            display_name = cert_name.split('_', 1)[1].replace('_', ' ').replace('with', 'with ').replace('and', '&')
-            texts.append(display_name)
-            
-            img_b64 = get_image_base64(os.path.join(cert_folder, cert_file), width=130)
-            images_base64.append(img_b64)
-        
-        fig = go.Figure()
-        
-        for i in range(num_valid):
-            fig.add_trace(go.Scatter3d(
-                x=[x_positions[i]],
-                y=[y_positions[i]],
-                z=[z_positions[i]],
-                mode='markers+text',
-                name=texts[i],
-                text=[texts[i]],
-                textposition="bottom center",
-                textfont=dict(size=9, color="#475569"),
-                marker=dict(
-                    size=32,
-                    symbol='square',
-                    color='#e6f7ff',
-                    opacity=0.9,
-                    line=dict(color='#69c0ff', width=2)
-                ),
-                customdata=[images_base64[i]],
-                hovertemplate=f"<b>{texts[i]}</b><br>📸 Klicken zum Vergrößern<extra></extra>"
-            ))
-        
-        fig.update_layout(
-            title=dict(text="🏛️ 3D-Galerie-Wand – Meine Zertifikate", font=dict(size=20, color="#01579b")),
-            scene=dict(
-                xaxis=dict(title="", showticklabels=False, showgrid=True, gridcolor='#e2e8f0'),
-                yaxis=dict(title="", showticklabels=False, showgrid=True, gridcolor='#e2e8f0'),
-                zaxis=dict(title="", showticklabels=False, showgrid=True, gridcolor='#e2e8f0'),
-                camera=dict(
-                    eye=dict(x=1.5, y=1.5, z=1.2),
-                    up=dict(x=0, y=1, z=0)
-                ),
-                bgcolor="#f8fafc"
-            ),
-            height=700,
-            margin=dict(l=0, r=0, t=60, b=0),
-            showlegend=False
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
-    
-    else:  # Variante D: Fließende 3D-Wand
-        x_positions = []
-        y_positions = []
-        z_positions = []
-        texts = []
-        images_base64 = []
-        
-        for i, (cert_file, cert_name) in enumerate(valid_certs):
+            positions.append({"x": x, "y": y, "z": z})
+    else:
+        # Variante D: Fließende Spirale
+        import math
+        for i in range(num_certs):
             angle = i * 0.65
-            radius = 4.5
-            x = np.cos(angle) * radius
-            z = np.sin(angle) * radius
-            y = (i - num_valid/2) * 0.4
-            
-            x_positions.append(x)
-            y_positions.append(y)
-            z_positions.append(z)
-            
-            display_name = cert_name.split('_', 1)[1].replace('_', ' ').replace('with', 'with ').replace('and', '&')
-            texts.append(display_name)
-            
-            img_b64 = get_image_base64(os.path.join(cert_folder, cert_file), width=130)
-            images_base64.append(img_b64)
-        
-        fig = go.Figure()
-        
-        for i in range(num_valid):
-            fig.add_trace(go.Scatter3d(
-                x=[x_positions[i]],
-                y=[y_positions[i]],
-                z=[z_positions[i]],
-                mode='markers+text',
-                name=texts[i],
-                text=[texts[i]],
-                textposition="top center",
-                textfont=dict(size=9, color="#475569"),
-                marker=dict(
-                    size=30,
-                    symbol='circle',
-                    color='#e6f7ff',
-                    opacity=0.9,
-                    line=dict(color='#69c0ff', width=2)
-                ),
-                customdata=[images_base64[i]],
-                hovertemplate=f"<b>{texts[i]}</b><br>📸 Klicken zum Vergrößern<extra></extra>"
-            ))
-        
-        fig.update_layout(
-            title=dict(text="🌀 Fließende 3D-Wand – Meine Zertifikate", font=dict(size=20, color="#01579b")),
-            scene=dict(
-                xaxis=dict(title="", showticklabels=False, showgrid=True, gridcolor='#e2e8f0'),
-                yaxis=dict(title="", showticklabels=False, showgrid=True, gridcolor='#e2e8f0'),
-                zaxis=dict(title="", showticklabels=False, showgrid=True, gridcolor='#e2e8f0'),
-                camera=dict(
-                    eye=dict(x=2.0, y=1.8, z=1.5),
-                    up=dict(x=0, y=1, z=0)
-                ),
-                bgcolor="#f8fafc"
-            ),
-            height=700,
-            margin=dict(l=0, r=0, t=60, b=0),
-            showlegend=False
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
-
-    # MODAL FÜR ZOOM/LUPE
-    st.markdown("""
-    <style>
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.9);
-        justify-content: center;
-        align-items: center;
-    }
-    .modal-content {
-        max-width: 80%;
-        max-height: 80%;
-        border-radius: 10px;
-        box-shadow: 0 0 30px rgba(0,0,0,0.5);
-    }
-    .close {
-        position: absolute;
-        top: 20px;
-        right: 40px;
-        color: white;
-        font-size: 50px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    .close:hover {
-        color: #69c0ff;
-    }
-    </style>
+            radius = 3.5
+            x = math.cos(angle) * radius
+            z = math.sin(angle) * radius
+            y = (i - num_certs/2) * 0.35
+            positions.append({"x": x, "y": y, "z": z})
     
-    <div id="certModal" class="modal" onclick="this.style.display='none'">
-        <span class="close">&times;</span>
-        <img class="modal-content" id="modalImage">
-    </div>
+    # Konvertiere zu JSON
+    certs_json = json.dumps([{
+        "name": cert_data[i]["name"],
+        "b64": cert_data[i]["b64"],
+        "ext": cert_data[i]["ext"],
+        "x": positions[i]["x"],
+        "y": positions[i]["y"],
+        "z": positions[i]["z"]
+    } for i in range(num_certs)])
     
-    <script>
-    function showCertModal(imgSrc) {
-        var modal = document.getElementById('certModal');
-        var modalImg = document.getElementById('modalImage');
-        modal.style.display = 'flex';
-        modalImg.src = imgSrc;
-    }
+    # Three.js HTML/CSS/JS
+    threejs_html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }}
+            #info {{
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                color: white;
+                background: rgba(0,0,0,0.6);
+                padding: 8px 15px;
+                border-radius: 8px;
+                pointer-events: none;
+                z-index: 10;
+                font-size: 14px;
+            }}
+            #modal {{
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.9);
+                justify-content: center;
+                align-items: center;
+            }}
+            #modal img {{
+                max-width: 90%;
+                max-height: 90%;
+                border-radius: 10px;
+                box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            }}
+            #modal .close {{
+                position: absolute;
+                top: 20px;
+                right: 40px;
+                color: white;
+                font-size: 50px;
+                font-weight: bold;
+                cursor: pointer;
+            }}
+            #modal .close:hover {{ color: #69c0ff; }}
+        </style>
+    </head>
+    <body>
+        <div id="info">
+            🖱️ Maus ziehen = drehen | Rechtsklick ziehen = schwenken | Scrollen = zoomen | Klick auf Zertifikat = vergrößern
+        </div>
+        <div id="modal" onclick="this.style.display='none'">
+            <span class="close">&times;</span>
+            <img id="modalImage" src="">
+        </div>
+        
+        <script type="importmap">
+            {{
+                "imports": {{
+                    "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                    "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+                }}
+            }}
+        </script>
+        
+        <script type="module">
+            import * as THREE from 'three';
+            import {{ OrbitControls }} from 'three/addons/controls/OrbitControls.js';
+            import {{ CSS2DRenderer, CSS2DObject }} from 'three/addons/renderers/CSS2DRenderer.js';
+            
+            const certsData = {certs_json};
+            
+            // Szene, Kamera, Renderer
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf8fafc);
+            
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(5, 4, 8);
+            camera.lookAt(0, 0, 0);
+            
+            const renderer = new THREE.WebGLRenderer({{ antialias: true }});
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            document.body.appendChild(renderer.domElement);
+            
+            // CSS2DRenderer für Text
+            const labelRenderer = new CSS2DRenderer();
+            labelRenderer.setSize(window.innerWidth, window.innerHeight);
+            labelRenderer.domElement.style.position = 'absolute';
+            labelRenderer.domElement.style.top = '0px';
+            labelRenderer.domElement.style.left = '0px';
+            labelRenderer.domElement.style.pointerEvents = 'none';
+            document.body.appendChild(labelRenderer.domElement);
+            
+            // Orbit Controls
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.rotateSpeed = 1.0;
+            controls.zoomSpeed = 1.2;
+            controls.panSpeed = 0.8;
+            controls.enableZoom = true;
+            controls.enablePan = true;
+            
+            // Licht
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 10, 7);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+            const backLight = new THREE.DirectionalLight(0xffffff, 0.3);
+            backLight.position.set(-3, 2, -4);
+            scene.add(backLight);
+            
+            // Boden-Raster (optional)
+            const gridHelper = new THREE.GridHelper(15, 20, 0xcccccc, 0xe0e0e0);
+            gridHelper.position.y = -1.5;
+            scene.add(gridHelper);
+            
+            // Zertifikate erstellen
+            const certificates = [];
+            
+            certsData.forEach((cert, idx) => {{
+                // Canvas für Bildtextur
+                const img = new Image();
+                img.src = `data:image/${{cert.ext}};base64,${{cert.b64}}`;
+                
+                img.onload = () => {{
+                    // Textur erstellen
+                    const texture = new THREE.CanvasTexture(img);
+                    
+                    // Material mit Bild
+                    const material = new THREE.MeshStandardMaterial({{
+                        map: texture,
+                        side: THREE.DoubleSide,
+                        roughness: 0.3,
+                        metalness: 0.1,
+                        emissive: 0x000000
+                    }});
+                    
+                    // Plane Geometry (Breite/Höhe an Bild anpassen)
+                    const aspect = img.width / img.height;
+                    const width = 1.6;
+                    const height = width / aspect;
+                    const geometry = new THREE.PlaneGeometry(width, height);
+                    const plane = new THREE.Mesh(geometry, material);
+                    plane.position.set(cert.x, cert.y, cert.z);
+                    plane.userData = {{ imageSrc: `data:image/${{cert.ext}};base64,${{cert.b64}}`, name: cert.name }};
+                    plane.castShadow = true;
+                    plane.receiveShadow = false;
+                    scene.add(plane);
+                    
+                    // Weißer Rahmen
+                    const borderGeometry = new THREE.BoxGeometry(width + 0.08, height + 0.08, 0.03);
+                    const borderMaterial = new THREE.MeshStandardMaterial({{ color: 0xffffff, metalness: 0.2, roughness: 0.4 }});
+                    const border = new THREE.Mesh(borderGeometry, borderMaterial);
+                    border.position.set(cert.x, cert.y, cert.z - 0.02);
+                    scene.add(border);
+                    
+                    // CSS2D Text unter dem Bild
+                    const div = document.createElement('div');
+                    div.textContent = cert.name;
+                    div.style.color = '#475569';
+                    div.style.fontSize = '12px';
+                    div.style.fontWeight = '600';
+                    div.style.textAlign = 'center';
+                    div.style.backgroundColor = 'rgba(255,255,255,0.8)';
+                    div.style.padding = '4px 8px';
+                    div.style.borderRadius = '20px';
+                    div.style.border = '1px solid #e2e8f0';
+                    div.style.pointerEvents = 'none';
+                    
+                    const label = new CSS2DObject(div);
+                    label.position.set(cert.x, cert.y - height/2 - 0.15, cert.z);
+                    scene.add(label);
+                    
+                    certificates.push(plane);
+                }};
+            }});
+            
+            // Raycaster für Klick-Interaktion
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+            
+            function onMouseClick(event) {{
+                mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+                mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+                
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObjects(certificates);
+                
+                if (intersects.length > 0) {{
+                    const selected = intersects[0].object;
+                    const modal = document.getElementById('modal');
+                    const modalImg = document.getElementById('modalImage');
+                    modal.style.display = 'flex';
+                    modalImg.src = selected.userData.imageSrc;
+                }}
+            }}
+            
+            window.addEventListener('click', onMouseClick, false);
+            
+            // Animation
+            function animate() {{
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+                labelRenderer.render(scene, camera);
+            }}
+            animate();
+            
+            // Fenster-Größe anpassen
+            window.addEventListener('resize', onWindowResize, false);
+            function onWindowResize() {{
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                labelRenderer.setSize(window.innerWidth, window.innerHeight);
+            }}
+        </script>
+    </body>
+    </html>
+    """
     
-    document.addEventListener('DOMContentLoaded', function() {
-        var plotElement = document.querySelector('.plotly-graph-div');
-        if (plotElement) {
-            plotElement.on('plotly_click', function(data) {
-                var customdata = data.points[0].customdata;
-                if (customdata && customdata[0]) {
-                    showCertModal(customdata[0]);
-                }
-            });
-        }
-    });
-    </script>
-    """, unsafe_allow_html=True)
-
+    # HTML in Streamlit einbetten
+    st.components.v1.html(threejs_html, height=700, width=None)
+    
 else:
-    st.info(f"📂 Keine Zertifikats-Bilder gefunden. Lege PNG/JPG Dateien in den Ordner 'images/' mit folgenden Namen:\n\n" + "\n".join([f"• {name}.png" for name in cert_names]))
+    st.warning(f"⚠️ Keine Zertifikats-Bilder gefunden. Lege PNG/JPG Dateien in den Ordner 'images/' mit folgenden Namen:\n\n" + 
+               "\n".join([f"• {name}.png" for name in cert_names]))
