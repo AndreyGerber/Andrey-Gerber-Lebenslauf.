@@ -1058,8 +1058,9 @@ with exp_col1:
                 <li><strong>ob 3D Modelle mit CATIA V5 oder AutoCAD erstellen,</strong></li>
                 <li><strong>ob Sensorik anschließen, einstellen und Objekte vermessen mit Technik von B&K oder Head Acoustics,</strong></li>
                 <li><strong>ob Daten mit Minitab oder selbst erstellten statistischen Methoden analysieren,</strong></li>
-                <li><strong>sollte machbar sein. SAP kann jeder und niemand gleichzeitig.</strong></li>
+                
             </ul>
+            <div class="no-bullet"><strong>sollte machbar sein. SAP kann jeder und niemand gleichzeitig.</strong></li>
             <div class="no-bullet">Von MS Produkten spricht heutzutage doch niemand mehr.</div>
         </div>
         """, unsafe_allow_html=True)
