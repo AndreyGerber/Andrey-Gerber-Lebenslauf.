@@ -1009,10 +1009,7 @@ with st.container():
 st.divider()
 
 # --- EXPERTISE ABSCHNITT ---
-st.markdown("<h2 style='text-align: center; margin-top: 40px;'>🛠️ Tools & Methodiken</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Software & Fachliche Kompetenzen ✧</p>", unsafe_allow_html=True)
-
-# CSS, um die Spaltenhöhe anzugleichen
+# CSS für bündige Ausrichtung und gleichen Block-Höhen
 st.markdown("""
     <style>
         [data-testid="stHorizontalBlock"] {
@@ -1029,10 +1026,27 @@ st.markdown("""
             flex-direction: column;
         }
         .exp-box h4 { color: #01579b; margin-top: 0; margin-bottom: 15px; }
-        .exp-box ul { margin-bottom: 10px; line-height: 1.8; flex-grow: 1; }
-        .no-bullet { list-style-type: none; margin-left: -20px; font-weight: bold; }
+        
+        /* Liste bündig machen */
+        .exp-box ul { 
+            margin-bottom: 10px; 
+            line-height: 1.8; 
+            flex-grow: 1;
+            padding-left: 1.2rem; /* Einzug für die Aufzählungspunkte */
+        }
+        
+        /* Der Text ohne Punkt erhält exakt denselben Einzug wie der Text neben den Bullets */
+        .no-bullet { 
+            list-style-type: none; 
+            padding-left: 1.2rem; 
+            font-weight: bold;
+            margin-top: 5px;
+        }
     </style>
     """, unsafe_allow_html=True)
+
+st.markdown("<h2 style='text-align: center; margin-top: 40px;'>🛠️ Tools & Methodiken</h2>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Software & Fachliche Kompetenzen ✧</p>", unsafe_allow_html=True)
 
 exp_col1, exp_col2 = st.columns(2)
 
@@ -1046,7 +1060,7 @@ with exp_col1:
                 <li><strong>ob Daten mit Minitab oder selbst erstellten statistischen Methoden analysieren,</strong></li>
                 <li><strong>sollte machbar sein. SAP kann jeder und niemand gleichzeitig.</strong></li>
             </ul>
-            <div class="no-bullet"><strong>Von MS Produkten spricht heutzutage doch niemand mehr.</strong></div>
+            <div class="no-bullet">Von MS Produkten spricht heutzutage doch niemand mehr.</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1058,9 +1072,13 @@ with exp_col2:
                 <li><strong>Qualitätsmanagement | Lean Management & Six Sigma | Audits | Risikomanagement</strong></li>
                 <li><strong>ISO 9001 oder IATF 16949, CAPA oder 8D, DMAIC oder PDCA</strong></li>
             </ul>
-            <div class="no-bullet"><strong>Hier müssen wir zunächst die Begriffe definieren, bevor aneinander gesprochen wird.</strong></div>
+            <div class="no-bullet">Hier müssen wir zunächst die Begriffe definieren, bevor aneinander gesprochen wird.</div>
         </div>
         """, unsafe_allow_html=True)
+
+
+
+
 
 st.success("""
 🐍 **ob ich programmieren kann:**  
