@@ -1104,6 +1104,7 @@ st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 
 
 
+
 def get_base64_img(file_path):
     if os.path.exists(file_path):
         with open(file_path, "rb") as f:
@@ -1113,7 +1114,7 @@ def get_base64_img(file_path):
 st.divider()
 st.markdown("<h2 style='text-align: center;'>🎯 Leidenschaften & Ausgleich</h2>", unsafe_allow_html=True)
 
-# CSS für einheitliche Hobby-Karten (statisch & harmonisch)
+# Erweitertes CSS für Zoom-Effekt und Bild-Titel
 st.markdown("""
 <style>
     .hobby-card {
@@ -1129,11 +1130,36 @@ st.markdown("""
     .hobby-icon { font-size: 30px; margin-bottom: 10px; }
     .hobby-title { font-weight: bold; font-size: 1.2rem; color: #1e293b; margin-bottom: 10px; }
     .hobby-text { font-size: 0.95rem; color: #475569; line-height: 1.5; flex-grow: 1; }
+    
+    /* Container für Bilder */
     .hobby-img-area { 
         display: flex; gap: 8px; margin-top: 15px; height: 110px; 
+        overflow: visible; /* Wichtig für den Zoom */
     }
-    .hobby-img-area img { 
-        width: 31%; object-fit: cover; border-radius: 8px; border: 1px solid #eee;
+    
+    /* Einzelnes Bild-Styling mit Zoom */
+    .hobby-img-wrapper {
+        width: 31%;
+        position: relative;
+    }
+    
+    .hobby-img-wrapper img { 
+        width: 100%; height: 110px; object-fit: cover; border-radius: 8px; 
+        border: 1px solid #eee; transition: all 0.3s ease;
+        cursor: zoom-in;
+    }
+
+    /* Zoom-Effekt auf Faktor 2 */
+    .hobby-img-wrapper img:hover {
+        transform: scale(2);
+        z-index: 999;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Bildunterschrift im Tooltip-Stil oder Text darunter */
+    .img-label {
+        font-size: 10px; color: #94a3b8; text-align: center; margin-top: 4px;
+        display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -1141,25 +1167,23 @@ st.markdown("""
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    # --- SCHACH ---
     st.markdown("""
     <div class="hobby-card">
         <div class="hobby-icon">♟️</div>
         <div class="hobby-title">Schach</div>
         <div class="hobby-text">
-            Seit meinem 6. Lebensjahr ein fester Teil meines Lebens. Es schult das vorausschauende Denken und die objektive Analyse unter Zeitdruck. 
-            Für mich ist jede Partie ein Prozess der strategischen Entscheidungsfindung.
+            Ein Mann hat seinen Kindern ein Schachspiel gekauft. Nach einem Jahr konnte er mit uns nicht mehr mithalten.
+            Ich sehe nicht nur meine Züge voraus, sondern auch die Züge des Mitspielers. 
         </div>
-        <!-- Platzhalter für die visuelle Balance zu den anderen Karten -->
-        <div style="height: 110px; display: flex; align-items: center; justify-content: center; opacity: 0.15; font-size: 50px;">
-            ♔ ♕ ♖
+        <div style="height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.2; font-size: 14px; text-align: center;">
+            Wo es bei mir mit Schach begann, gab's bei uns im Ort wahrscheinlich drei Personen mit Kameras.<br>
+            <span style="font-size: 40px;">♔ ♕ ♖</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 with col2:
-    # --- TEAMSPORT (Exakte Namen laut Screenshot) ---
-    img_f2 = get_base64_img("images/Hobbies/fussball2.jpeg")
+    img_f2 = get_base64_img("images/Hobbies/fussball1.jpeg")
     img_h1 = get_base64_img("images/Hobbies/hockey1.png")
     img_h3 = get_base64_img("images/Hobbies/hockey3.png")
     
@@ -1167,19 +1191,25 @@ with col2:
     <div class="hobby-card">
         <div class="hobby-icon">🏒</div>
         <div class="hobby-title">Eishockey & Fußball</div>
-        <div class="hobby-text">
-            In Mannschaftssportarten habe ich früh gelernt, was Teamgeist und Ausdauer bedeuten. Die Dynamik auf dem Eis und auf dem Rasen ist der ideale Ausgleich zum Kopfsport.
-        </div>
+        <div class="hobby-text">Nichts ist besser als ein Gefühl, zum Erfolg des anderen beigetragen zu haben.</div>
         <div class="hobby-img-area">
-            <img src="data:image/jpeg;base64,{img_f2}">
-            <img src="data:image/png;base64,{img_h1}">
-            <img src="data:image/png;base64,{img_h3}">
+            <div class="hobby-img-wrapper">
+                <img src="data:image/jpeg;base64,{img_f2}" title="Fußball am Rasen">
+                <span class="img-label">Fußball</span>
+            </div>
+            <div class="hobby-img-wrapper">
+                <img src="data:image/png;base64,{img_h1}" title="Erstes Training">
+                <span class="img-label">Eishockey</span>
+            </div>
+            <div class="hobby-img-wrapper">
+                <img src="data:image/png;base64,{img_h3}" title="Team-Sieg">
+                <span class="img-label">Turnier</span>
+            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 with col3:
-    # --- YOGA & BOXEN (Exakte Namen laut Screenshot) ---
     img_y1 = get_base64_img("images/Hobbies/yoga.jpg")
     img_y2 = get_base64_img("images/Hobbies/yoga2.jpg")
     img_y3 = get_base64_img("images/Hobbies/yoga3.png")
@@ -1188,13 +1218,20 @@ with col3:
     <div class="hobby-card">
         <div class="hobby-icon">🧘</div>
         <div class="hobby-title">Yoga & Boxen</div>
-        <div class="hobby-text">
-            Heute finde ich meine Balance in der Kombination aus Kraft und Ruhe. Boxen für den Fokus und die Schnelligkeit, Yoga für die Mobilität und innere Zentrierung.
-        </div>
+        <div class="hobby-text">Schnell reagieren und trotzdem gelassen bleiben.</div>
         <div class="hobby-img-area">
-            <img src="data:image/jpeg;base64,{img_y1}">
-            <img src="data:image/jpeg;base64,{img_y2}">
-            <img src="data:image/png;base64,{img_y3}">
+            <div class="hobby-img-wrapper">
+                <img src="data:image/jpeg;base64,{img_y1}" title="Morgendliches Yoga">
+                <span class="img-label">Fokus</span>
+            </div>
+            <div class="hobby-img-wrapper">
+                <img src="data:image/jpeg;base64,{img_y2}" title="Box-Training">
+                <span class="img-label">Kraft</span>
+            </div>
+            <div class="hobby-img-wrapper">
+                <img src="data:image/png;base64,{img_y3}" title="Gleichgewicht">
+                <span class="img-label">Balance</span>
+            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
