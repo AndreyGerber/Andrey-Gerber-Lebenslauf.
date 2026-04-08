@@ -1211,7 +1211,7 @@ with col1:
             Ich sehe nicht nur meine Züge voraus, sondern auch die Züge des Mitspielers. 
         </div>
         <div style="height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.2; font-size: 14px; text-align: center;">
-            Wo es bei mir mit Schach begann, gab's bei uns im Ort wahrscheinlich drei Personen mit Kameras.<br>
+            Wo es bei mir mit Schach losging, gab's bei uns im Ort wahrscheinlich drei Personen mit Kameras. Von daher leider keine Bilder von damals.<br>
             <span style="font-size: 40px;">♔ ♕ ♖</span>
         </div>
     </div>
