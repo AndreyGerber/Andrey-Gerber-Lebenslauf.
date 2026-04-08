@@ -1183,7 +1183,7 @@ with col1:
     """, unsafe_allow_html=True)
 
 with col2:
-    img_f2 = get_base64_img("images/Hobbies/fussball1.jpeg")
+    img_f2 = get_base64_img("images/Hobbies/fussball1.png")
     img_h1 = get_base64_img("images/Hobbies/hockey1.png")
     img_h3 = get_base64_img("images/Hobbies/hockey3.png")
     
