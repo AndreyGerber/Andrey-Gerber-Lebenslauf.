@@ -415,7 +415,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 st.error("Bild 'haw.png' konnte nicht geladen werden.")
 
     elif jahr_aktiv == 2017:
-        MASSSTAB_TUV = 1.15
+        MASSSTAB_TUV = 1.15  # 1.15 = 115% der Originalgröße, ändere diesen Wert zum Skalieren
         OBEN_ABSTAND_TEXT = "10px" 
 
         col_text, col_foto = st.columns([1, 1.8])
@@ -445,10 +445,14 @@ with st.container(height=BLOCK_HOEHE, border=True):
             """, unsafe_allow_html=True)
 
         with col_foto:
-            img_tuv = lade_formatiertes_bild("tuev.png", max_width=400)  # SKALIERBAR!
+            img_tuv = lade_formatiertes_bild("tuev.png")
             if img_tuv:
                 st.markdown("<div style='margin-top: 5px;'></div>", unsafe_allow_html=True)
-                st.image(img_tuv, use_container_width=True)
+                
+                # MASSSTAB_TUV wird hier angewendet
+                original_breite = img_tuv.size[0]
+                neue_breite = int(original_breite * MASSSTAB_TUV)
+                st.image(img_tuv, width=neue_breite)
             else:
                 st.error("Datei 'images/tuev.png' nicht gefunden.")
 
