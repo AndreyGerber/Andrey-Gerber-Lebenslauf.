@@ -1018,7 +1018,7 @@ def st_certificate_wall(image_folder="images", images_per_row=9):
         
         /* Hover-Effekt: 1.5x Vergrößerung */
         .cert-card:hover {
-            transform: scale(2.5) rotateY(0deg) translateZ(60px) !important;
+            transform: scale(3.5) rotateY(0deg) translateZ(60px) !important;
             z-index: 100;
             box-shadow: 0 20px 40px rgba(0,0,0,0.25);
             margin: 0 20px;
