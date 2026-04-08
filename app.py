@@ -1055,12 +1055,12 @@ with exp_col1:
         <div class="exp-box">
             <h4>💻 Tools & Software</h4>
             <ul>
-                <li>ob 3D Modelle mit CATIA V5 oder AutoCAD erstellen,</li>
-                <li>ob Sensorik anschließen, einstellen und Objekte vermessen mit Technik von B&K oder Head Acoustics,</li>
-                <li>ob Daten mit Minitab oder selbst erstellten statistischen Methoden analysieren,</li>
+                <li><strong>ob 3D Modelle mit CATIA V5 oder AutoCAD erstellen,</strong></li>
+                <li><strong>ob Sensorik anschließen, einstellen und Objekte vermessen mit Technik von B&K oder Head Acoustics,</strong></li>
+                <li><strong>ob Daten mit Minitab oder selbst erstellten statistischen Methoden analysieren,</strong></li>
             </ul>
-            <div class="no-bullet">sollte machbar sein. SAP kann jeder und niemand gleichzeitig.</div>
-            <div class="no-bullet">Von MS Produkten spricht heutzutage doch niemand mehr.</div>
+            <div class="no-bullet"><strong>sollte machbar sein. SAP kann jeder und niemand gleichzeitig.</strong></div>
+            <div class="no-bullet"><strong>Von MS Produkten spricht heutzutage doch niemand mehr.</strong></div>
         </div>
         """, unsafe_allow_html=True)
 
