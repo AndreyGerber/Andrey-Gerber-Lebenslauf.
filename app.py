@@ -1142,294 +1142,75 @@ st.markdown("<br>" * 3, unsafe_allow_html=True)  # Drei Umbrüche
 
 #Fertigkeiten
 
-# ==================== PROJEKTE & KOMPETENZEN ====================
-st.markdown("<h2 style='text-align: center; margin-top: 60px;'>🛠️ Projekte & Kompetenzen</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Konkrete Beispiele meiner Arbeit – mit Bildern ✧</p>", unsafe_allow_html=True)
+import streamlit as st
 
-import json
-import base64
-import os
-
-# Funktion zum Laden der Bilder als Base64
-def get_image_base64(img_path):
-    """Lädt Bild und konvertiert zu Base64"""
-    if os.path.exists(img_path):
-        with open(img_path, "rb") as f:
-            return base64.b64encode(f.read()).decode()
-    return None
-
-# Projekt-Daten
-projects = [
-    {
-        "title": "🕯️ Kerzen-Design & 3D-Konstruktion",
-        "short_desc": "Konstruktion, Formenbau & Fertigung eigener Kerzen",
-        "long_desc": """
-            Neben meinem Studium habe ich Kerzen konstruiert, Formen dafür gegossen 
-            und die Kerzen selbst hergestellt. Dabei kamen 3D-Konstruktionskenntnisse, 
-            handwerkliches Geschick und Kreativität zusammen.
-        """,
-        "skills": ["3D-Konstruktion", "Formenbau", "Fertigung", "Kreativität"],
-        "images": [f"kerze{i}.png" for i in range(6)]  # kerze0.png bis kerze5.png
-    },
-    {
-        "title": "📋 Projektmanagement & Smart Speaker Messraum",
-        "short_desc": "Von der Anforderung bis zur Abnahme – für TÜV Rheinland",
-        "long_desc": """
-            Für TÜV Rheinland habe ich einen vollwertigen Messraum für Smart Speaker 
-            konzipiert, aufgebaut und in Betrieb genommen. Von der ersten Anforderungsanalyse 
-            bis zur finalen Abnahme – inklusive Entwicklung der Messmethode.
-            
-            • Projektleitung für den Aufbau der Prüfkammer
-            • Prozessdefinition & Prozessfähigkeitsanalysen
-            • Übergabe in den Serienbetrieb
-        """,
-        "skills": ["Projektmanagement", "Prüfmethodenentwicklung", "Inbetriebnahme", "Akustik"],
-        "images": [f"project{i}.png" for i in range(1, 7)]  # project1.png bis project6.png
-    },
-    {
-        "title": "📋 Qualitätsmanagement & Audits",
-        "short_desc": "Auditführung, Schulungen, CAPA & Beschwerdemanagement",
-        "long_desc": """
-            Ich führe Audits durch und vertrete Unternehmen im Audit. Zudem schule ich 
-            Mitarbeiter und unterstütze methodisch bei CAPA-Prozessen und Beschwerden.
-            
-            • Lean Management & Six Sigma – Schnelle Erkennung von Schwächen & Stärken
-            • Statistische Methoden der Datenanalyse
-            • ISO 9001 & ISO 17025
-        """,
-        "skills": ["Audit Management", "CAPA", "Schulungen", "Lean Six Sigma"],
-        "images": []  # Später ergänzen
-    }
-]
-
-# Humorvoller Satz zum Programmieren
-st.info("💡 **Übrigens:** Das hier ist keine Agentur – diese Seite habe ich selbst programmiert. Mit Python, Streamlit und der ein oder anderen Tasse Kaffee. ☕")
-
-# CSS für Projekt-Kacheln
+# --- STYLING FÜR DIE KACHELN ---
 st.markdown("""
 <style>
-.project-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-    margin-top: 20px;
-    margin-bottom: 40px;
-}
-.project-card {
-    background: white;
-    border-radius: 16px;
-    padding: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    border: 1px solid #e2e8f0;
-    text-align: center;
-}
-.project-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15);
-    border-color: #4a90e2;
-}
-.project-icon {
-    font-size: 48px;
-    margin-bottom: 15px;
-}
-.project-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #01579b;
-    margin-bottom: 10px;
-}
-.project-short-desc {
-    font-size: 13px;
-    color: #475569;
-    line-height: 1.4;
-}
-.skill-tag {
-    display: inline-block;
-    background: #e6f7ff;
-    color: #0050b3;
-    font-size: 10px;
-    padding: 3px 8px;
-    border-radius: 20px;
-    margin: 4px 3px;
-}
+    .skill-card {
+        background-color: rgba(255, 255, 255, 0.05);
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 5px solid #0078D7;
+        margin-bottom: 20px;
+    }
+    .project-header {
+        color: #0078D7;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
 </style>
-
-<div class="project-container">
 """, unsafe_allow_html=True)
 
-# Kacheln generieren
-for i, project in enumerate(projects):
-    # Skills als Tags (max 3 für die Kachel)
-    skills_html = ''.join([f'<span class="skill-tag">{skill}</span>' for skill in project["skills"][:3]])
-    
-    # Bilder als Base64 für die Vorschau (optional)
-    preview_img = ""
-    if project["images"]:
-        img_path = os.path.join("images", project["images"][0])
-        b64 = get_image_base64(img_path)
-        if b64:
-            preview_img = f'<img src="data:image/png;base64,{b64}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">'
-    
-    st.markdown(f'''
-        <div class="project-card" onclick="openProjectModal({i})">
-            {preview_img}
-            <div class="project-icon">{project["title"].split()[0]}</div>
-            <div class="project-title">{project["title"]}</div>
-            <div class="project-short-desc">{project["short_desc"]}</div>
-            <div style="margin-top: 12px;">{skills_html}</div>
-        </div>
-    ''', unsafe_allow_html=True)
+st.divider()
 
-st.markdown('</div>', unsafe_allow_html=True)
+# --- ABSCHNITT 1: ENGINEERING & PROJECT MANAGEMENT ---
+col1, col2 = st.columns(2)
 
-# JavaScript/HTML für Modal (mit eingebetteten Bildern)
-# Erstelle eine Liste aller Bilder als Base64 für JavaScript
-all_images_base64 = {}
-for project in projects:
-    for img_name in project["images"]:
-        img_path = os.path.join("images", img_name)
-        b64 = get_image_base64(img_path)
-        if b64:
-            all_images_base64[img_name] = b64
+with col1:
+    st.subheader("🛠️ 3D-Konstruktion & Prototyping")
+    st.write("Vom CAD-Modell zum fertigen Produkt: Konstruktion von Kerzenformen, Guss und Herstellung.")
+    # Bilderserie Kerze
+    kerze_images = [f"images/kerze{i}.png" for i in range(6)]
+    st.image(kerze_images, width=100, caption=[f"Schritt {i}" for i in range(6)])
 
-images_json = json.dumps(all_images_base64)
+with col2:
+    st.subheader("🏗️ Project Management")
+    st.write("Aufbau einer Akustik-Prüfkammer für Smart-Speaker: Von der Anforderungsanalyse bis zur Abnahme.")
+    # Bilderserie Smartspeaker
+    project_images = [f"images/project{i}.png" for i in range(1, 7)]
+    st.image(project_images, width=100, caption=[f"Phase {i}" for i in range(1, 7)])
 
-# Modal HTML/JS
-st.markdown(f"""
-<div id="projectModal" class="project-modal" style="display: none;">
-    <div class="project-modal-content">
-        <span class="project-modal-close">&times;</span>
-        <div id="projectModalBody"></div>
+st.divider()
+
+# --- ABSCHNITT 2: QM & METHODIK ---
+st.subheader("📉 Expertise & Methodik")
+
+c1, c2 = st.columns(2)
+
+with c1:
+    st.markdown(f"""
+    <div class="skill-card">
+        <div class="project-header">Qualitätsmanagement & Audits</div>
+        <ul>
+            <li>Durchführung und Begleitung interner/externer Audits (ISO 9001 / 17025).</li>
+            <li>Methodisches Coaching bei CAPA-Prozessen und Beschwerdemanagement.</li>
+            <li>Schulung von Mitarbeitern in qualitätsrelevanten Prozessen.</li>
+        </ul>
     </div>
-</div>
+    """, unsafe_allow_html=True)
 
-<style>
-.project-modal {{
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.85);
-    justify-content: center;
-    align-items: center;
-}}
-.project-modal-content {{
-    background: white;
-    max-width: 650px;
-    width: 90%;
-    border-radius: 20px;
-    padding: 30px;
-    max-height: 85%;
-    overflow-y: auto;
-    position: relative;
-}}
-.project-modal-close {{
-    position: absolute;
-    top: 15px;
-    right: 25px;
-    font-size: 35px;
-    font-weight: bold;
-    cursor: pointer;
-    color: #666;
-}}
-.project-modal-close:hover {{
-    color: #000;
-}}
-.project-modal-title {{
-    font-size: 24px;
-    font-weight: 700;
-    color: #01579b;
-    margin-bottom: 20px;
-}}
-.project-modal-desc {{
-    font-size: 15px;
-    color: #333;
-    line-height: 1.6;
-    margin-bottom: 20px;
-    white-space: pre-line;
-}}
-.project-modal-skills {{
-    margin-top: 15px;
-    margin-bottom: 20px;
-}}
-.project-modal-skill {{
-    display: inline-block;
-    background: #e6f7ff;
-    color: #0050b3;
-    font-size: 12px;
-    padding: 5px 12px;
-    border-radius: 20px;
-    margin: 5px;
-}}
-.project-modal-images {{
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 20px;
-}}
-.project-modal-images img {{
-    max-width: 180px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    cursor: pointer;
-    transition: transform 0.2s;
-}}
-.project-modal-images img:hover {{
-    transform: scale(1.05);
-}}
-</style>
+with c2:
+    st.markdown(f"""
+    <div class="skill-card">
+        <div class="project-header">Lean Management & Datenanalyse</div>
+        <ul>
+            <li>Schnelles Durchblicken komplexer Projekte (Stärken-/Schwächen-Analyse).</li>
+            <li>Beherrschung statistischer Methoden der Datenanalyse (Six Sigma Ansatz).</li>
+            <li>Prozessoptimierung durch analytische Präzision.</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
 
-<script>
-const allImages = {images_json};
-
-function openProjectModal(projectId) {{
-    const projects = {json.dumps(projects)};
-    const project = projects[projectId];
-    const modal = document.getElementById('projectModal');
-    const modalBody = document.getElementById('projectModalBody');
-    
-    let imagesHtml = '<div class="project-modal-images">';
-    if (project.images && project.images.length > 0) {{
-        project.images.forEach(imgName => {{
-            const imgData = allImages[imgName];
-            if (imgData) {{
-                imagesHtml += `<img src="data:image/png;base64,${{imgData}}" style="width: 150px;">`;
-            }} else {{
-                imagesHtml += `<div style="width: 150px; text-align: center;">📸 ${{imgName}}</div>`;
-            }}
-        }});
-    }} else {{
-        imagesHtml += '<p style="color: #888; font-style: italic;">📸 Bilder folgen demnächst</p>';
-    }}
-    imagesHtml += '</div>';
-    
-    let skillsHtml = '<div class="project-modal-skills">';
-    project.skills.forEach(skill => {{
-        skillsHtml += `<span class="project-modal-skill">${{skill}}</span>`;
-    }});
-    skillsHtml += '</div>';
-    
-    modalBody.innerHTML = `
-        <div class="project-modal-title">${{project.title}}</div>
-        <div class="project-modal-desc">${{project.long_desc}}</div>
-        ${{skillsHtml}}
-        ${{imagesHtml}}
-    `;
-    
-    modal.style.display = 'flex';
-    
-    // Close event
-    document.querySelector('.project-modal-close').onclick = () => {{
-        modal.style.display = 'none';
-    }};
-    modal.onclick = (e) => {{
-        if (e.target === modal) modal.style.display = 'none';
-    }};
-}}
-</script>
-""", unsafe_allow_html=True)
+# --- ABSCHNITT 3: PROGRAMMIERUNG (DER HUMORVOLLE ABSCHLUSS) ---
+st.info("🐍 **Programmierkenntnisse:** Falls Sie sich fragen, ob ich programmieren kann: Diese Website hat sich nicht durch bloßes Würfeln zusammengebaut. Sie ist das lebende Ergebnis aus Python, ein wenig Kaffee und dem Drang, Dinge digital zum Laufen zu bringen.")
