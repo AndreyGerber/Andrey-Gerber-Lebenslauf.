@@ -1019,7 +1019,7 @@ with info_col2:
 st.success("""
 🐍 **ob ich programmieren kann:**  
 Das hier ist übrigens keine Agentur – diese Seite habe ich selbst programmiert.  
-Mit Python, Streamlit und der ein oder anderen Tasse Kaffee.
-Übrigens, das half mir **meinen** Wortschatz der Schimpfwörter und ihrer Kombinationen in mehreren Sprachen zu aktualisieren.
+Mit Python, Streamlit und der ein oder anderen Tasse Kaffee.<br>
+Übrigens, das half mir meinen Wortschatz der Schimpfwörter und ihrer Kombinationen in mehreren Sprachen zu aktualisieren.
 """)
 
