@@ -1019,10 +1019,10 @@ with exp_col1:
     <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 20px; border-radius: 16px; border-left: 4px solid #4a90e2; height: 100%;">
         <h4 style="color: #01579b; margin-top: 0;">💻 Tools & Software</h4>
         <ul style="margin-bottom: 0; line-height: 1.8;">
-            <li><strong>CAD:</strong> CATIA V5, AutoCAD</li>
-            <li><strong>Akustik & Messtechnik:</strong> PULSE (Brüel & Kjær), ArtemiS Suite (HEAD acoustics)</li>
-            <li><strong>Datenanalyse & Statistik:</strong> Minitab</li>
-            <li><strong>ERP & Office:</strong> SAP, Microsoft Office</li>
+            <li><strong>ob 3D Modelle mit CATIVA V5 oder AutoCAD erstellen</li>
+            <li><strong>ob Sensorik anschließen, einstellen und Objekte vermessen mit Technik von B&K oder Head Acoustics</li>
+            <li><strong>ob Daten mit Minitab oder selbst erstellten statistischen Methoden analysieren</li>
+            <li><strong>sollte machbar sein. SAP kann jeder und niemand gleichzeitig. Von MS Produkten spricht heutzutage doch niemand mehr.</li>
         </ul>
     </div>
     """, unsafe_allow_html=True)
@@ -1040,7 +1040,7 @@ with exp_col2:
     </div>
     """, unsafe_allow_html=True)
 
-    
+
 st.success("""
 🐍 **ob ich programmieren kann:**  
 
