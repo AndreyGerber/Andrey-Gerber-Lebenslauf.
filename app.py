@@ -267,11 +267,11 @@ if 'info_idx' not in st.session_state:
 
 c_nav1, c_nav2, c_nav3 = st.columns([1, 4, 1])
 with c_nav1:
-    if st.button("⬅️ Vorheriges", key="nav_prev", disabled=(st.session_state.info_idx == 0)):
+    if st.button("⬅️ Prev", key="nav_prev", disabled=(st.session_state.info_idx == 0)):
         st.session_state.info_idx -= 1
         st.rerun()
 with c_nav3:
-    if st.button("Nächstes ➡️", key="nav_next", disabled=(st.session_state.info_idx == len(highlights) - 1)):
+    if st.button("Next ➡️", key="nav_next", disabled=(st.session_state.info_idx == len(highlights) - 1)):
         st.session_state.info_idx += 1
         st.rerun()
 
