@@ -1318,7 +1318,6 @@ with book_col:
         
         <div class="book-wrapper" title="📖 Mein Buch: Dieses Projekt befindet sich in Arbeit.">
             <div class="book-icon">📖</div>
-
             <div class="book-tag">in Arbeit</div>
         </div>
     """, unsafe_allow_html=True)
