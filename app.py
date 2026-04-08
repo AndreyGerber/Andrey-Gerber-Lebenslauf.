@@ -564,7 +564,7 @@ st.markdown("""
     .stButton > button:hover {
         transform: translateY(-5px) !important;
         border-color: #3b82f6 !important;
-        background-color: #f8fafc !important;
+        background-color: #f1f5f9 !important;
     }
     
     /* Aktiver Button */
