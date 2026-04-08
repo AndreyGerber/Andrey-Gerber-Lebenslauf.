@@ -1009,13 +1009,38 @@ with st.container():
 st.divider()
 
 # --- EXPERTISE ABSCHNITT ---
-st.subheader("📉 Tools und Methodiken")
-info_col1, info_col2 = st.columns(2)
-with info_col1:
-    st.info("**Qualitätsmanagement & Audits**\n\nISO 9001/17025 | CAPA-Coaching")
-with info_col2:
-    st.info("**Lean Management & Datenanalyse**\n\nSix Sigma | Prozessoptimierung")
+st.markdown("<h2 style='text-align: center; margin-top: 40px;'>🛠️ Tools & Methodiken</h2>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Software & Fachliche Kompetenzen ✧</p>", unsafe_allow_html=True)
 
+exp_col1, exp_col2 = st.columns(2)
+
+with exp_col1:
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 20px; border-radius: 16px; border-left: 4px solid #4a90e2; height: 100%;">
+        <h4 style="color: #01579b; margin-top: 0;">💻 Tools & Software</h4>
+        <ul style="margin-bottom: 0; line-height: 1.8;">
+            <li><strong>CAD:</strong> CATIA V5, AutoCAD</li>
+            <li><strong>Akustik & Messtechnik:</strong> PULSE (Brüel & Kjær), ArtemiS Suite (HEAD acoustics)</li>
+            <li><strong>Datenanalyse & Statistik:</strong> Minitab</li>
+            <li><strong>ERP & Office:</strong> SAP, Microsoft Office</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+with exp_col2:
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 20px; border-radius: 16px; border-left: 4px solid #4a90e2; height: 100%;">
+        <h4 style="color: #01579b; margin-top: 0;">📋 Methodiken & Fachliche Kompetenzen</h4>
+        <ul style="margin-bottom: 0; line-height: 1.8;">
+            <li><strong>Qualitätsmanagement:</strong> ISO 9001, ISO 17025, CAPA, 8D, Ishikawa, FMEA</li>
+            <li><strong>Lean Management & Six Sigma:</strong> Prozessoptimierung, KVP, statistische Analysen</li>
+            <li><strong>Audit Management:</strong> Interne & externe Audits, Management Reviews</li>
+            <li><strong>Projektmanagement:</strong> Risikomanagement, Verifizierung & Validierung</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+    
 st.success("""
 🐍 **ob ich programmieren kann:**  
 
