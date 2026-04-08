@@ -991,8 +991,8 @@ with st.container():
     with content_col2:
         project_configs = [
             ("images/project1.jpg", 0), ("images/project2.jpeg", 0),
-            ("images/project3.jpeg", 90), ("images/project4.jpeg", 90),
-            ("images/project5.jpg", 0), ("images/project6.jpeg", -90)
+            ("images/project3.jpeg", 90), ("images/project5.jpg", 0),
+            ("images/project4.jpeg", 90), ("images/project6.jpeg", -90)
         ]
         # JETZT AUCH RECHTS 3 SPALTEN
         p_cols = st.columns(3)
