@@ -1043,8 +1043,8 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-st.markdown("<h2 style='text-align: center; margin-top: 40px;'>🛠️ Tools & Methodiken</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Software & Fachliche Kompetenzen ✧</p>", unsafe_allow_html=True)
+#st.markdown("<h2 style='text-align: center; margin-top: 40px;'>🛠️ Tools & Methodiken</h2>", unsafe_allow_html=True)
+#st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Software & Fachliche Kompetenzen ✧</p>", unsafe_allow_html=True)
 
 exp_col1, exp_col2 = st.columns(2)
 
