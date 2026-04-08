@@ -1242,60 +1242,52 @@ with col3:
 
 
 
-import base64
-#Mein Buch 
-# Hilfsfunktion für das Buch-Bild
-def get_base64_img(file_path):
-    if os.path.exists(file_path):
-        with open(file_path, "rb") as f:
-            return base64.b64encode(f.read()).decode()
-    return None
+# --- DAS BUCH-SYMBOL (Am Ende deiner App) ---
+st.write("") 
+st.write("") # Zusätzlicher Platz nach den Hobbies
 
-# --- DEIN BUCH-PROJEKT ---
-# Ersetze 'images/mein_buch.png' durch deinen echten Pfad
-buch_base64 = get_base64_img("images/mein_buch.png") 
+# Wir nutzen Spalten, um das Buch ganz nach rechts zu schieben
+spacer1, spacer2, book_col = st.columns([2, 1, 1])
 
-if buch_base64:
-    st.markdown(f"""
+with book_col:
+    st.markdown("""
         <style>
-            .book-container {{
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                width: 250px; /* Breite des Buchs anpassen */
-                z-index: 1000;
-                transition: transform 0.3s ease;
+            @keyframes float {
+                0% { transform: translateY(0px) rotate(15deg); }
+                50% { transform: translateY(-10px) rotate(10deg); }
+                100% { transform: translateY(0px) rotate(15deg); }
+            }
+            .book-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
                 cursor: help;
-            }}
-            .book-container:hover {{
-                transform: scale(1.1) rotate(-5deg);
-            }}
-            .book-tooltip {{
-                visibility: hidden;
-                background-color: #334155;
-                color: #fff;
-                text-align: center;
-                padding: 10px;
-                border-radius: 8px;
-                position: absolute;
-                bottom: 110%;
-                right: 0;
-                width: 200px;
-                font-size: 0.85rem;
-                opacity: 0;
-                transition: opacity 0.3s;
-            }}
-            .book-container:hover .book-tooltip {{
-                visibility: visible;
-                opacity: 1;
-            }}
+                animation: float 4s ease-in-out infinite; /* Es schwebt leicht */
+            }
+            .book-icon {
+                font-size: 80px; /* Schön groß */
+                filter: drop-shadow(5px 10px 15px rgba(0,0,0,0.2));
+                transition: all 0.3s ease;
+            }
+            .book-wrapper:hover .book-icon {
+                transform: scale(1.2) rotate(0deg);
+                filter: drop-shadow(2px 5px 5px rgba(0,0,0,0.1));
+            }
+            .book-tag {
+                background: #f1f5f9;
+                color: #64748b;
+                padding: 4px 12px;
+                border-radius: 20px;
+                font-size: 0.75rem;
+                font-weight: bold;
+                margin-top: -10px;
+                border: 1px solid #e2e8f0;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            }
         </style>
         
-        <div class="book-container">
-            <div class="book-tooltip">
-                📖 <strong>Work in Progress</strong><br>
-                Noch nicht ganz fertig, aber die Geschichte schreibt sich bereits...
-            </div>
-            <img src="data:image/png;base64,{buch_base64}" style="width: 100%; filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.3));">
+        <div class="book-wrapper" title="📖 Work in Progress: Dieses Projekt befindet sich noch in der Entwurfsphase.">
+            <div class="book-icon">📖</div>
+            <div class="book-tag">Unvollendet</div>
         </div>
     """, unsafe_allow_html=True)
