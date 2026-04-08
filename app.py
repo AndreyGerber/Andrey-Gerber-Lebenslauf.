@@ -1293,7 +1293,7 @@ with book_col:
 
             /* Hover-Effekte */
             .book-wrapper:hover .book-icon {
-                transform: scale(1.2) rotate(0deg);
+                transform: scale(1.0) rotate(0deg);
                 filter: drop-shadow(2px 5px 5px rgba(0,0,0,0.1));
             }
             
