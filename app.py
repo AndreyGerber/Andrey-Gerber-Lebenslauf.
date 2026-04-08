@@ -966,7 +966,7 @@ def st_certificate_wall(image_folder="images", images_per_row=8, rows=None):
         "9_Git_and_Github.jpg",
         "10_Unit_Testing.jpg",
         "11_Classification_with_scikit-learn.jpg",
-        "12_Regression_with_scikit-learn.jpg",  # Korrigiert!
+        "12_Regression_with_scikit-learn.jpg",  
         "13_Methodology_in_Data_Science.jpg",
         "14_Feature_Engineering_and_Optimisation.jpg",
         "15_Time_Series_Analysis_with_Python.jpg",
