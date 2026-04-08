@@ -322,7 +322,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             st.markdown(f"<p style='font-size: {INFO_FONT_SIZE}; color: #4B0082;'>So schnell vergehen 10 Jahre.</p>", unsafe_allow_html=True)
 
         with col_foto:
-            img_schule = lade_formatiertes_bild("schule2.png", max_width=500)  # SKALIERBAR!
+            img_schule = lade_formatiertes_bild("schule2.png", max_width=450)  # SKALIERBAR!
             if img_schule:
                 st.markdown(f"<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
                 st.image(img_schule, use_container_width=True)
