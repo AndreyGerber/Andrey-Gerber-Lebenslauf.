@@ -1189,7 +1189,7 @@ with col2:
     
     st.markdown(f"""
     <div class="hobby-card">
-        <div class="hobby-icon">🏒</div>
+        <div class="hobby-icon">🏒 & ⚽</div>
         <div class="hobby-title">Eishockey & Fußball</div>
         <div class="hobby-text">Nichts ist besser als das Gefühl, zum Erfolg des anderen beigetragen zu haben.</div>
         <div class="hobby-img-area">
@@ -1216,7 +1216,7 @@ with col3:
 
     st.markdown(f"""
     <div class="hobby-card">
-        <div class="hobby-icon">🧘</div>
+        <div class="hobby-icon">🧘 & 🥊</div>
         <div class="hobby-title">Yoga & Boxen</div>
         <div class="hobby-text">Schnell reagieren und trotzdem gelassen bleiben.</div>
         <div class="hobby-img-area">
