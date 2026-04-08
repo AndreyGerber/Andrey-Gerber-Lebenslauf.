@@ -543,7 +543,7 @@ st.markdown("""
     
     .stButton > button p {
         margin: 0 !important;
-        font-size: 13px !important;
+        font-size: 20px !important;
         font-weight: 600 !important;
         color: #475569 !important;
         line-height: 1.3 !important;
@@ -552,7 +552,7 @@ st.markdown("""
     }
     
     .stButton > button p::first-line {
-        font-size: 38px !important;
+        font-size: 28px !important;
         line-height: 1.5 !important;
     }
     
