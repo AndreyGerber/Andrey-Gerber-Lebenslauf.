@@ -1072,7 +1072,7 @@ with exp_col2:
                 <li><strong>Qualitätsmanagement | Lean Management & Six Sigma | Audits | Risikomanagement</strong></li>
                 <li><strong>ISO 9001 oder IATF 16949, CAPA oder 8D, DMAIC oder PDCA</strong></li>
             </ul>
-            <div class="no-bullet">Hier müssen wir zunächst die Begriffe definieren, bevor aneinander gesprochen wird.</div>
+            <div class="no-bullet", style="margin-bottom: 55px;">Hier müssen wir zunächst die Begriffe definieren, bevor aneinander gesprochen wird.</div>
         </div>
         """, unsafe_allow_html=True)
 
