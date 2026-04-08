@@ -1146,74 +1146,72 @@ import streamlit as st
 import os
 from PIL import Image
 
-def load_processed_img(path, degrees=0, scale=0.5):
+# --- FUNKTION FÜR EINHEITLICHE HÖHE ---
+def load_fixed_height_img(path, degrees=0, target_height=250):
     if os.path.exists(path):
         img = Image.open(path)
+        # 1. Drehung anwenden
         if degrees != 0:
             img = img.rotate(degrees, expand=True)
-        # Hier wird das Bild skaliert, um die Höhe zu kontrollieren
-        new_size = (int(img.width * scale), int(img.height * scale))
-        return img.resize(new_size)
+        
+        # 2. Proportionen berechnen für feste Höhe
+        aspect_ratio = img.width / img.height
+        target_width = int(target_height * aspect_ratio)
+        
+        # 3. Größe anpassen
+        return img.resize((target_width, target_height), Image.Resampling.LANCZOS)
     return None
 
 st.title("🛠️ Meine Fertigkeiten")
-st.markdown("""
-<style>
-    img {
-        border-radius: 10px; /* Abgerundete Ecken wie im Screenshot */
-        box-shadow: 2px 2px 10px rgba(0,0,0,0.3); /* Ein leichter Schatten gibt Tiefe */
-    }
-</style>
-""", unsafe_allow_html=True)
-# --- MAẞSTAB / SKALIERUNG (Hier kannst du die Größe anpassen) ---
-# 1.0 = Original, 0.5 = Halbe Größe, 0.3 = Sehr kompakt
-scale_factor = 0.4 
+
+# --- STELLSCHRAUBE FÜR DIE HÖHE ---
+# Ändere diesen Wert, um beide Blöcke gleichzeitig zu vergrößern/verkleinern
+GLOBAL_HEIGHT = 200 
 
 col1, col2 = st.columns(2)
 
 # --- LINKS: SKIZZE BIS PRODUKT ---
 with col1:
     st.subheader("Von der Skizze bis zum fertigen Produkt")
-    # Die Reihenfolge hier bestimmt die Position (Index 0 = oben links)
     kerze_files = [
         "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
-        "images/kerze5.jpg", "images/kerze4.jpg", "images/kerze3.png", "images/kerze6.jpg"
+        "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
     ]
     
-    # Mehr Spalten = kleinere Bilder (4 Spalten pro Seite)
-    k_cols = st.columns(4) 
+    # Wir nutzen ein Raster, das die Bilder bündig hält
+    k_cols = st.columns(3) 
     for idx, img_path in enumerate(kerze_files):
-        img = load_processed_img(img_path, scale=scale_factor)
+        img = load_fixed_height_img(img_path, target_height=GLOBAL_HEIGHT)
         if img:
-            k_cols[idx % 4].image(img)
+            k_cols[idx % 3].image(img, use_container_width=False)
 
 # --- RECHTS: IDEE BIS SERIE ---
 with col2:
     st.subheader("Von der Idee bis zur Übergabe...")
-    # (Pfad, Drehung)
     project_configs = [
         ("images/project1.jpg", 0),
         ("images/project2.jpeg", 0),
         ("images/project3.jpeg", 90), 
-        ("images/project5.jpg", 0),
         ("images/project4.jpeg", 90),
-        ("images/project6.jpeg", -90)
+        ("images/project5.jpg", 0),
+        ("images/project6.jpeg", -90) # Falls das Bild noch falsch liegt, hier 90 oder 180 testen
     ]
     
-    p_cols = st.columns(3) # 3 Spalten für die Projektbilder
+    p_cols = st.columns(3)
     for idx, (img_path, angle) in enumerate(project_configs):
-        img = load_processed_img(img_path, angle, scale=scale_factor)
+        # Hier nutzen wir dieselbe GLOBAL_HEIGHT für den Ausgleich
+        img = load_fixed_height_img(img_path, angle, target_height=GLOBAL_HEIGHT)
         if img:
-            p_cols[idx % 3].image(img)
+            p_cols[idx % 3].image(img, use_container_width=False)
 
-st.divider()
-
-# --- QM & METHODIK (Kompakter) ---
-st.subheader("📉 Expertise & Methodik")
-info_col1, info_col2 = st.columns(2)
-with info_col1:
-    st.info("**Qualitätsmanagement & Audits**\n\nISO 9001/17025 | CAPA-Coaching")
-with info_col2:
-    st.info("**Lean Management & Datenanalyse**\n\nSix Sigma | Prozessoptimierung")
-
-st.success("🐍 **Programmierkenntnisse:** Diese Seite wurde mit Python und Leidenschaft gebaut.")
+# CSS für saubere Abstände und Schatten
+st.markdown("""
+<style>
+    [data-testid="stHorizontalBlock"] img {
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        margin-bottom: 10px;
+    }
+</style>
+""", unsafe_allow_html=True)
