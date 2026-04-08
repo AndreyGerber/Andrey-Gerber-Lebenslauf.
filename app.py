@@ -951,6 +951,7 @@ def st_certificate_wall(image_folder="images", images_per_row=8):
     cert_filenames = [
         "1_Python_for_Data_Science.jpg",
         "2_Exploratory_Statistics_with_Python.jpg",
+        "3_Data_Quality.jpg"
         "4_Data_Visualization_Matplotlib.jpg",
         "5_Data_Visualization_with_Seaborn.jpg",
         "6_Matplotlib_Complements.jpg",
@@ -959,7 +960,7 @@ def st_certificate_wall(image_folder="images", images_per_row=8):
         "9_Git_and_Github.jpg",
         "10_Unit_Testing.jpg",
         "11_Classification_with_scikit-learn.jpg",
-        "12_Regressionn_with_scikit-learn.jpg",
+        "12_Regression_with_scikit-learn.jpg",
         "13_Methodology_in_Data_Science.jpg",
         "14_Feature_Engineering_and_Optimisation.jpg",
         "15_Time_Series_Analysis_with_Python.jpg",
