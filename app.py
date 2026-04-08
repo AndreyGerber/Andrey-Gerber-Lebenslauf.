@@ -1016,17 +1016,17 @@ exp_col1, exp_col2 = st.columns(2)
 
 with exp_col1:
     st.markdown("""
-    <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 20px; border-radius: 16px; border-left: 4px solid #4a90e2; height: 100%;">
-        <h4 style="color: #01579b; margin-top: 0;">💻 Tools & Software</h4>
-        <ul style="margin-bottom: 0; line-height: 2.0;">
-            <li><strong>ob 3D Modelle mit CATIVA V5 oder AutoCAD erstellen,</li>
-            <li><strong>ob Sensorik anschließen, einstellen und Objekte vermessen mit Technik von B&K oder Head Acoustics,</li>
-            <li><strong>ob Daten mit Minitab oder selbst erstellten statistischen Methoden analysieren,</li>
-            <li><strong>sollte machbar sein. SAP kann jeder und niemand gleichzeitig. <li>
-            <li>Von MS Produkten spricht heutzutage doch niemand mehr.</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
+        <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 20px; border-radius: 16px; border-left: 4px solid #4a90e2; height: 100%;">
+            <h4 style="color: #01579b; margin-top: 0;">💻 Tools & Software</h4>
+            <ul style="margin-bottom: 0; line-height: 2.0;">
+                <li><strong>ob 3D Modelle mit CATIA V5 oder AutoCAD erstellen,</strong></li>
+                <li><strong>ob Sensorik anschließen, einstellen und Objekte vermessen mit Technik von B&K oder Head Acoustics,</strong></li>
+                <li><strong>ob Daten mit Minitab oder selbst erstellten statistischen Methoden analysieren,</strong></li>
+                <li><strong>sollte machbar sein. SAP kann jeder und niemand gleichzeitig.</strong></li>
+                <li><strong>Von MS Produkten spricht heutzutage doch niemand mehr.</strong></li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
 
 with exp_col2:
     st.markdown("""
