@@ -933,44 +933,51 @@ st.markdown("<br>" * 3, unsafe_allow_html=True)  # Drei Umbrüche
 
 
 
-
 import streamlit as st
 import os
 from PIL import Image
 
-def load_scaled_img(path, degrees=0, scale=0.4):
+# --- FUNKTION ZUM SKALIEREN ---
+def load_scaled_img(path, degrees=0, scale_percent=40):
     if os.path.exists(path):
         img = Image.open(path)
         if degrees != 0:
             img = img.rotate(degrees, expand=True)
-        new_size = (int(img.width * scale), int(img.height * scale))
+        # Berechnung basierend auf Prozentwert vom Slider
+        scale_factor = scale_percent / 100
+        new_size = (int(img.width * scale_factor), int(img.height * scale_factor))
         return img.resize(new_size, Image.Resampling.LANCZOS)
     return None
 
-# --- CONTAINER FÜR FERTIGKEITEN (UM DAS CSS ZU ISOLIEREN) ---
+# --- CONTAINER FÜR FERTIGKEITEN ---
 with st.container():
-    # Wir vergeben eine eindeutige CSS-Klasse nur für diesen Bereich
+    # CSS Isolation: Wirkt NUR auf Bilder in diesem Block
     st.markdown("""
         <style>
-            /* Nur Bilder innerhalb von Containern mit dieser Struktur erhalten den Schatten */
             .skill-section img {
-                border-radius: 12px !important;
-                box-shadow: 3px 3px 12px rgba(0,0,0,0.2) !important;
+                border-radius: 10px !important;
+                box-shadow: 2px 2px 8px rgba(0,0,0,0.2) !important;
                 margin-bottom: 10px !important;
+                max-width: 100%; /* Verhindert Überlaufen */
             }
         </style>
         <div class="skill-section">
     """, unsafe_allow_html=True)
 
     st.title("🛠️ Meine Fertigkeiten")
+    
+    # --- INTERAKTIVER SKALIERUNGS-REGLER ---
+    # Dieser Slider steuert die Größe aller Bilder in diesem Block
+    img_scale = st.slider("Bildgröße anpassen (%)", min_value=10, max_value=100, value=35)
+    
     st.divider()
 
-    header_col1, header_col2 = st.columns(2)
-    with header_col1:
-        st.subheader("Von der Skizze bis zum fertigen Produkt")
-    with header_col2:
-        st.subheader("Von der Idee bis zur Übergabe...")
+    # Überschriften bündig halten
+    h_col1, h_col2 = st.columns(2)
+    h_col1.subheader("Von der Skizze bis zum fertigen Produkt")
+    h_col2.subheader("Von der Idee bis zur Übergabe...")
 
+    # Bild-Inhalte
     content_col1, content_col2 = st.columns(2)
 
     with content_col1:
@@ -978,9 +985,10 @@ with st.container():
             "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
             "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
         ]
+        # Wir nutzen 3 Spalten für eine kompakte Ansicht
         k_cols = st.columns(3) 
         for idx, img_path in enumerate(kerze_files):
-            img = load_scaled_img(img_path, scale=0.35)
+            img = load_scaled_img(img_path, scale_percent=img_scale)
             if img:
                 k_cols[idx % 3].image(img)
 
@@ -990,17 +998,18 @@ with st.container():
             ("images/project3.jpeg", 90), ("images/project4.jpeg", 90),
             ("images/project5.jpg", 0), ("images/project6.jpeg", -90)
         ]
+        # 2 Spalten rechts, damit die Projektbilder (Hochkant) Platz haben
         p_cols = st.columns(2)
         for idx, (img_path, angle) in enumerate(project_configs):
-            img = load_scaled_img(img_path, angle, scale=0.42)
+            img = load_scaled_img(img_path, angle, scale_percent=img_scale)
             if img:
                 p_cols[idx % 2].image(img)
 
-    st.markdown("</div>", unsafe_allow_html=True) # Ende der skill-section
+    st.markdown("</div>", unsafe_allow_html=True)
 
 st.divider()
 
-# --- QM & METHODIK (Bleibt Standard-Streamlit ohne spezielles CSS) ---
+# --- QM & METHODIK (Bleibt unbeeinflusst vom Slider) ---
 st.subheader("📉 Expertise & Methodik")
 info_col1, info_col2 = st.columns(2)
 with info_col1:
@@ -1008,4 +1017,4 @@ with info_col1:
 with info_col2:
     st.info("**Lean Management & Datenanalyse**\n\nSix Sigma | Prozessoptimierung")
 
-st.success("🐍 **Programmierkenntnisse:** Diese Seite wurde mit Python und Leidenschaft gebaut.")
+st.success("🐍 **Programmierkenntnisse:** Diese Seite wurde mit Python gebaut.")
