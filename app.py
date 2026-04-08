@@ -932,40 +932,36 @@ else:
 import streamlit as st
 import streamlit.components.v1 as components
 import os
+import base64
+import json
 
-# --- KONFIGURATION ---
-# Pfad zu deinem Bilder-Ordner (relativ zum Skript)
-IMAGE_DIR = "images" 
+# --- FUNKTION: BILDER LOKAL LADEN & KONVERTIEREN ---
+def get_base64_img(file_path):
+    if os.path.exists(file_path):
+        with open(file_path, "rb") as f:
+            data = f.read()
+            return "data:image/jpeg;base64," + base64.b64encode(data).decode()
+    return None
 
-# Liste deiner 17 Zertifikate basierend auf dem Screenshot
-cert_filenames = [
-    "1_Python_for_Data_Science.jpg",
-    "2_Exploratory_Statistics_with_Python.jpg",
-    "4_Data_Visualization_Matplotlib.jpg",
-    "5_Data_Visualization_with_Seaborn.jpg",
-    "6_Matplotlib_Complements.jpg",
-    "7_DataViz_with_Plotly.jpg",
-    "8_MCQ_Linux_and_Bash.jpg",
-    "9_Git_and_Github.jpg",
-    "10_Unit_Testing.jpg",
-    "11_Classification_with_scikit-learn.jpg",
-    "12_Regressionn_with_scikit-learn.jpg",
-    "13_Methodology_in_Data_Science.jpg",
-    "14_Feature_Engineering_and_Optimisation.jpg",
-    "15_Time_Series_Analysis_with_Python.jpg",
-    "16_Advanced_Classification_with_scikit-learn.jpg",
-    "17_Text_Mining.jpg"
-]
+# --- BILDERLISTE VORBEREITEN ---
+IMAGE_DIR = "images"
+# Dynamisches Einlesen aller JPEGs aus deinem Ordner
+cert_files = [f for f in os.listdir(IMAGE_DIR) if f.endswith('.jpg')]
+cert_files.sort(key=lambda x: int(x.split('_')[0]) if x[0].isdigit() else 99)
 
-# WICHTIG: Streamlit muss Zugriff auf lokale Dateien haben. 
-# Wir erstellen URLs, die für den Browser lesbar sind.
-cert_urls = [f"{IMAGE_DIR}/{name}" for name in cert_filenames]
+cert_b64_data = []
+for filename in cert_files:
+    path = os.path.join(IMAGE_DIR, filename)
+    b64 = get_base64_img(path)
+    if b64:
+        cert_b64_data.append(b64)
 
-def st_3d_wall(urls):
-    canvas_height = 650
-    # JavaScript-Teil mit Three.js
+def st_3d_wall(b64_list):
+    canvas_height = 600
+    urls_json = json.dumps(b64_list)
+    
     three_js_code = f"""
-    <div id="container" style="width: 100%; height: {canvas_height}px; cursor: move;"></div>
+    <div id="container" style="width: 100%; height: {canvas_height}px; background: transparent;"></div>
     <script src="https://cloudflare.com"></script>
     <script src="https://jsdelivr.net"></script>
     
@@ -978,19 +974,18 @@ def st_3d_wall(urls):
         container.appendChild(renderer.domElement);
 
         const loader = new THREE.TextureLoader();
-        const urls = {urls};
-        const radius = 7; 
-        const totalAngle = Math.PI * 0.8; // Breite der Kurve
+        const images = {urls_json};
+        const radius = 7;
+        const totalAngle = Math.PI * 0.9;
 
-        urls.forEach((url, i) => {{
-            loader.load(url, (texture) => {{
+        images.forEach((b64, i) => {{
+            loader.load(b64, (texture) => {{
                 const geometry = new THREE.PlaneGeometry(2.2, 3);
                 const material = new THREE.MeshBasicMaterial({{ map: texture, side: THREE.DoubleSide }});
                 const mesh = new THREE.Mesh(geometry, material);
                 
-                // Verteilung auf der Kurve
-                const angle = (i / (urls.length - 1) - 0.5) * totalAngle;
-                mesh.position.set(Math.sin(angle) * radius, (i % 2 === 0 ? 0.4 : -0.4), Math.cos(angle) * radius - radius);
+                const angle = (i / (images.length - 1) - 0.5) * totalAngle;
+                mesh.position.set(Math.sin(angle) * radius, (i % 2 === 0 ? 0.5 : -0.5), Math.cos(angle) * radius - radius);
                 mesh.rotation.y = angle;
                 
                 scene.add(mesh);
@@ -999,9 +994,8 @@ def st_3d_wall(urls):
 
         camera.position.z = 4;
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
         controls.autoRotate = true;
-        controls.autoRotateSpeed = 0.6;
+        controls.autoRotateSpeed = 0.5;
 
         function animate() {{
             requestAnimationFrame(animate);
@@ -1019,13 +1013,13 @@ def st_3d_wall(urls):
     """
     components.html(three_js_code, height=canvas_height)
 
-# --- APP LAYOUT ---
-st.set_page_config(page_title="Data Science Portfolio", layout="wide")
-st.header("🎓 Meine Zertifizierungen")
+# --- MAIN APP ---
+st.set_page_config(page_title="Andrey Gerber Lebenslauf", layout="wide")
+st.header("🎓 Zertifikate & Qualifikationen")
 
-if cert_urls:
-    st_3d_wall(cert_urls)
+if cert_b64_data:
+    st_3d_wall(cert_b64_data)
 else:
-    st.error("Bilder konnten nicht geladen werden. Prüfe den 'images' Ordner.")
+    st.error("Keine Bilder im Ordner 'images' gefunden.")
 
-st.caption("Interaktive Ansicht: Du kannst die Wand mit der Maus drehen und zoomen.")
+st.info("💡 Interaktive 3D-Wand: Nutze die Maus zum Drehen und Zoomen.")
