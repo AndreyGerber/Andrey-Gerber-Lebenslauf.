@@ -399,7 +399,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 """, unsafe_allow_html=True)
 
         with col_foto:
-            img_haw = lade_formatiertes_bild("haw.png", max_width=500)  # SKALIERBAR!
+            img_haw = lade_formatiertes_bild("haw.png", max_width=int(1000 * MASSSTAB_STUDIUM))  # SKALIERBAR!
             if img_haw:
                 st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
                 st.image(img_haw, use_container_width=True)
