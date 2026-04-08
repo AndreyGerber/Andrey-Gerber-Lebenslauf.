@@ -605,3 +605,293 @@ with col_viewer:
 st.write("")
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<br>", unsafe_allow_html=True)
+
+
+# ==================== 3D ZERTIFIKATE-GALERIE ====================
+st.markdown("<h2 style='text-align: center; margin-top: 50px;'>📜 Meine Zertifikate & Nachweise</h2>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ 3D-Galerie – klicke auf ein Zertifikat zum Vergrößern ✧</p>", unsafe_allow_html=True)
+
+# Auswahl der Darstellungsart
+view_mode = st.radio(
+    "🎨 Darstellungsart wählen:",
+    ["🏛️ 3D-Galerie-Wand (Variante A)", "🌀 Fließende 3D-Wand (Variante D)"],
+    horizontal=True,
+    help="Variante A: Zertifikate wie an einer Wand. Variante D: Schweben im Raum."
+)
+
+# Deine 17 Zertifikatsnamen
+cert_names = [
+    "1_Python_for_Data_Science",
+    "2_Exploratory_Statistics_with_Python",
+    "3_Data_Quality",
+    "4_Data_Visualization_Matplotlib",
+    "5_Data_Visualization_with_Seaborn",
+    "6_Matplotlib_Complements",
+    "7_DataViz_with_Plotly",
+    "8_MCQ_Linux_and_Bash",
+    "9_Git_and_Github",
+    "10_Unit_Testing",
+    "11_Classification_with_scikit-learn",
+    "12_Regressionn_with_scikit_learn",
+    "13_Methodology_in_Data_Science",
+    "14_Feature_Engineering_and_Optimisation",
+    "15_Time_Series_Analysis_with_Python",
+    "16_Advanced_Classification_with_scikit-learn",
+    "17_Text_Mining"
+]
+
+num_certs = len(cert_names)
+
+# Ordner für Zertifikats-Bilder
+cert_folder = "certificates"
+
+# Prüfe, ob Bilder existieren, sonst verwende Platzhalter
+cert_files = []
+for name in cert_names:
+    # Mögliche Dateinamen: Python_for_Data_Science.png, Python_for_Data_Science.jpg, etc.
+    found = False
+    for ext in ['.png', '.jpg', '.jpeg', '.PNG', '.JPG']:
+        test_path = os.path.join(cert_folder, name + ext)
+        if os.path.exists(test_path):
+            cert_files.append(name + ext)
+            found = True
+            break
+    if not found:
+        # Platzhalter für fehlende Bilder
+        cert_files.append(None)
+        st.warning(f"⚠️ Bild für '{name}' nicht gefunden in '{cert_folder}/'")
+
+# Nur vorhandene Zertifikate anzeigen
+valid_certs = [(cert_files[i], cert_names[i]) for i in range(num_certs) if cert_files[i] is not None]
+num_valid = len(valid_certs)
+
+if num_valid > 0:
+    import plotly.graph_objects as go
+    from PIL import Image
+    import base64
+    from io import BytesIO
+    import numpy as np
+    
+    def get_image_base64(img_path, width=150):
+        """Lädt Bild und konvertiert zu Base64 für Plotly"""
+        try:
+            img = Image.open(img_path)
+            # Bild skaliert für bessere Performance
+            img.thumbnail((width, width), Image.Resampling.LANCZOS)
+            buffered = BytesIO()
+            img.save(buffered, format="PNG")
+            return "data:image/png;base64," + base64.b64encode(buffered.getvalue()).decode()
+        except Exception as e:
+            print(f"Fehler beim Laden von {img_path}: {e}")
+            return None
+    
+    # Positionen berechnen
+    if view_mode == "🏛️ 3D-Galerie-Wand (Variante A)":
+        # Variante A: Zertifikate an einer Wand (x, y, z)
+        cols_per_row = 5
+        rows = (num_valid + cols_per_row - 1) // cols_per_row
+        
+        x_positions = []
+        y_positions = []
+        z_positions = []
+        texts = []
+        images_base64 = []
+        
+        for i, (cert_file, cert_name) in enumerate(valid_certs):
+            row = i // cols_per_row
+            col = i % cols_per_row
+            
+            # X: von -3 bis 3 (zentriert)
+            x = (col - (cols_per_row - 1) / 2) * 1.3
+            # Y: Höhe (von oben nach unten)
+            y = (rows - row - 1) * 1.5 - (rows - 1) * 0.75
+            # Z: leichte Tiefe (Wand-Effekt)
+            z = 0
+            
+            x_positions.append(x)
+            y_positions.append(y)
+            z_positions.append(z)
+            
+            # Formatierter Name für Anzeige (Unterstriche durch Leerzeichen ersetzen)
+            display_name = cert_name.replace('_', ' ').replace('with', 'with ').replace('and', '&')
+            texts.append(display_name)
+            
+            img_b64 = get_image_base64(os.path.join(cert_folder, cert_file), width=130)
+            images_base64.append(img_b64)
+        
+        # 3D Scatter Plot mit Bildern als Marker
+        fig = go.Figure()
+        
+        # Für jedes Zertifikat einen eigenen Trace (für individuelle Bilder beim Klick)
+        for i in range(num_valid):
+            fig.add_trace(go.Scatter3d(
+                x=[x_positions[i]],
+                y=[y_positions[i]],
+                z=[z_positions[i]],
+                mode='markers+text',
+                name=texts[i],
+                text=[texts[i]],
+                textposition="bottom center",
+                textfont=dict(size=9, color="#475569"),
+                marker=dict(
+                    size=32,
+                    symbol='square',
+                    color='#e6f7ff',
+                    opacity=0.9,
+                    line=dict(color='#69c0ff', width=2)
+                ),
+                customdata=[images_base64[i]],
+                hovertemplate=f"<b>{texts[i]}</b><br>📸 Klicken zum Vergrößern<extra></extra>"
+            ))
+        
+        fig.update_layout(
+            title=dict(text="🏛️ 3D-Galerie-Wand – Meine Zertifikate", font=dict(size=20, color="#01579b")),
+            scene=dict(
+                xaxis=dict(title="", showticklabels=False, showgrid=True, gridcolor='#e2e8f0'),
+                yaxis=dict(title="", showticklabels=False, showgrid=True, gridcolor='#e2e8f0'),
+                zaxis=dict(title="", showticklabels=False, showgrid=True, gridcolor='#e2e8f0'),
+                camera=dict(
+                    eye=dict(x=1.5, y=1.5, z=1.2),
+                    up=dict(x=0, y=1, z=0)
+                ),
+                bgcolor="#f8fafc"
+            ),
+            height=700,
+            margin=dict(l=0, r=0, t=60, b=0),
+            showlegend=False
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+    
+    else:  # Variante D: Fließende 3D-Wand
+        x_positions = []
+        y_positions = []
+        z_positions = []
+        texts = []
+        images_base64 = []
+        
+        # Spiral-/Wellenförmige Anordnung (fließend)
+        for i, (cert_file, cert_name) in enumerate(valid_certs):
+            angle = i * 0.65  # langsame Drehung pro Zertifikat
+            radius = 4.5
+            x = np.cos(angle) * radius
+            z = np.sin(angle) * radius
+            y = (i - num_valid/2) * 0.4  # Höhe gestaffelt
+            
+            x_positions.append(x)
+            y_positions.append(y)
+            z_positions.append(z)
+            
+            display_name = cert_name.replace('_', ' ').replace('with', 'with ').replace('and', '&')
+            texts.append(display_name)
+            
+            img_b64 = get_image_base64(os.path.join(cert_folder, cert_file), width=130)
+            images_base64.append(img_b64)
+        
+        fig = go.Figure()
+        
+        for i in range(num_valid):
+            fig.add_trace(go.Scatter3d(
+                x=[x_positions[i]],
+                y=[y_positions[i]],
+                z=[z_positions[i]],
+                mode='markers+text',
+                name=texts[i],
+                text=[texts[i]],
+                textposition="top center",
+                textfont=dict(size=9, color="#475569"),
+                marker=dict(
+                    size=30,
+                    symbol='circle',
+                    color='#e6f7ff',
+                    opacity=0.9,
+                    line=dict(color='#69c0ff', width=2)
+                ),
+                customdata=[images_base64[i]],
+                hovertemplate=f"<b>{texts[i]}</b><br>📸 Klicken zum Vergrößern<extra></extra>"
+            ))
+        
+        fig.update_layout(
+            title=dict(text="🌀 Fließende 3D-Wand – Meine Zertifikate", font=dict(size=20, color="#01579b")),
+            scene=dict(
+                xaxis=dict(title="", showticklabels=False, showgrid=True, gridcolor='#e2e8f0'),
+                yaxis=dict(title="", showticklabels=False, showgrid=True, gridcolor='#e2e8f0'),
+                zaxis=dict(title="", showticklabels=False, showgrid=True, gridcolor='#e2e8f0'),
+                camera=dict(
+                    eye=dict(x=2.0, y=1.8, z=1.5),
+                    up=dict(x=0, y=1, z=0)
+                ),
+                bgcolor="#f8fafc"
+            ),
+            height=700,
+            margin=dict(l=0, r=0, t=60, b=0),
+            showlegend=False
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+
+    # MODAL FÜR BEIDE VARIANTEN (Zoom/Lupe)
+    st.markdown("""
+    <style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.9);
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-content {
+        max-width: 80%;
+        max-height: 80%;
+        border-radius: 10px;
+        box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    }
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        color: white;
+        font-size: 50px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .close:hover {
+        color: #69c0ff;
+    }
+    </style>
+    
+    <div id="certModal" class="modal" onclick="this.style.display='none'">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+    
+    <script>
+    function showCertModal(imgSrc) {
+        var modal = document.getElementById('certModal');
+        var modalImg = document.getElementById('modalImage');
+        modal.style.display = 'flex';
+        modalImg.src = imgSrc;
+    }
+    
+    // Plotly Klick-Event abfangen
+    document.addEventListener('DOMContentLoaded', function() {
+        var plotElement = document.querySelector('.plotly-graph-div');
+        if (plotElement) {
+            plotElement.on('plotly_click', function(data) {
+                var customdata = data.points[0].customdata;
+                if (customdata && customdata[0]) {
+                    showCertModal(customdata[0]);
+                }
+            });
+        }
+    });
+    </script>
+    """, unsafe_allow_html=True)
+
+else:
+    st.info(f"📂 Keine Zertifikats-Bilder gefunden. Lege PNG/JPG Dateien in den Ordner 'certificates/' mit folgenden Namen:\n\n" + "\n".join([f"• {name}.png" for name in cert_names]))
