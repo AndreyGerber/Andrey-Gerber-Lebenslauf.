@@ -919,7 +919,7 @@ else:
 
 
 
-
+st.markdown("<br>" * 3, unsafe_allow_html=True)  # Drei Umbrüche
 
 
 
@@ -1128,3 +1128,14 @@ st.set_page_config(page_title="Lebenslauf Zertifikate", layout="wide")
 st.header("🐍 ob ich programmieren kann... 👨‍💻")
 
 st_certificate_wall()
+
+st.markdown("<br>" * 3, unsafe_allow_html=True)  # Drei Umbrüche
+
+
+
+
+
+
+
+
+
