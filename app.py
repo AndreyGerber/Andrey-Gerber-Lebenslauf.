@@ -473,7 +473,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
                     <li>Wartung und Reparatur bestehender Anlagen für <b>akustische und Vibrationsmessungen</b></li>
                     <li>Betreuung vom Aufbau von mehreren <b> Prüfkammern für akustische und Vibrationsmessungen</b> an dem neuen Produktionsstandort</li>
                     <li><b>Entwicklung neuer Prüfmethoden</b></li>
-                    <li></b>Validierung und Inbetriebnahme </b> für die Serienfertigung</li>
+                    <li><b>Validierung und Inbetriebnahme</b> für die Serienfertigung</li>
                 </ul>
             """, unsafe_allow_html=True)
 
