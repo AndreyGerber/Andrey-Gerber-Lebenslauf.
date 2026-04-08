@@ -580,7 +580,7 @@ with col_gallery:
                 var iframe = parent.document.querySelector('#pdf-viewer');
                 iframe.src = 'data:application/pdf;base64,{pdf_data}';
             " style="
-                height: 10px;
+                height: 100px;
                 width: 100%;
                 border-radius: 16px;
                 background-color: {bg_color};
