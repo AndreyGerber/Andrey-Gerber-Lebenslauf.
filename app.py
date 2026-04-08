@@ -456,6 +456,41 @@ with st.container(height=BLOCK_HOEHE, border=True):
             else:
                 st.error("Datei 'images/tuev.png' nicht gefunden.")
 
+
+    elif jahr_aktiv == 2022:
+        MASSSTAB_TUV = 1.15  # 1.15 = 115% der Originalgröße, ändere diesen Wert zum Skalieren
+        OBEN_ABSTAND_TEXT = "10px" 
+
+        col_text, col_foto = st.columns([1, 1.8])
+
+        with col_text:
+            st.markdown(f"<div style='margin-top: {OBEN_ABSTAND_TEXT};'></div>", unsafe_allow_html=True)
+            st.subheader(f"⚙️ {jahr_aktiv} – 2025: Ferchau GmbH")
+            
+            st.markdown(f"""
+                <p style='font-size: 24px; color: #0055A5; margin-bottom: 5px;'><strong>Test & Measurement Engineer</strong></p>
+                <ul style='font-size: 20px; color: #333; line-height: 1.6;'>
+                    <li>Wartung und Reparatur bestehender Anlagen für <b>akustische und Vibrationsmessungen</b></li>
+                    <li>Betreuung vom Aufbau von mehreren <b> Prüfkammern für akustische und Vibrationsmessungen</b> an dem neuen Produktionsstandort</li>
+                    <li><b>Entwicklung neuer Prüfmethoden</b></li>
+                    <li></b>Validierung und Inbetriebnahme </b> für die Serienfertigung</li>
+                </ul>
+            """, unsafe_allow_html=True)
+
+
+
+        with col_foto:
+            img_tuv = lade_formatiertes_bild("tuev.png")
+            if img_tuv:
+                st.markdown("<div style='margin-top: 5px;'></div>", unsafe_allow_html=True)
+                
+                # MASSSTAB_TUV wird hier angewendet
+                original_breite = img_tuv.size[0]
+                neue_breite = int(original_breite * MASSSTAB_TUV)
+                st.image(img_tuv, width=neue_breite)
+            else:
+                st.error("Datei 'images/tuev.png' nicht gefunden.")
+
 st.markdown('<div style="margin-top: 150px;"></div>', unsafe_allow_html=True)
 
 st.write("")
