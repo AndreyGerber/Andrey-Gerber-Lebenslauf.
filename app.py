@@ -1144,49 +1144,60 @@ st.markdown("<br>" * 3, unsafe_allow_html=True)  # Drei Umbrüche
 
 import streamlit as st
 import os
+from PIL import Image
 
+# Hilfsfunktion zum Laden und Drehen von Bildern
+def load_and_rotate(path, degrees=0):
+    if os.path.exists(path):
+        img = Image.open(path)
+        if degrees != 0:
+            img = img.rotate(degrees, expand=True)
+        return img
+    return None
+
+st.title("🛠️ Meine Fertigkeiten")
 st.divider()
 
 col1, col2 = st.columns(2)
 
-# --- SPALTE 1: KERZEN ---
+# --- LINKS: SKIZZE BIS PRODUKT ---
 with col1:
-    st.subheader("🛠️ 3D-Konstruktion & Prototyping")
-    st.write("Vom CAD-Modell zum physischen Produkt.")
-    
+    st.subheader("Von der Skizze bis zum fertigen Produkt")
     kerze_files = [
         "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
         "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
     ]
     
-    # Bilder einzeln prüfen und anzeigen
-    k_cols = st.columns(4) # Erzeugt ein kleines Raster innerhalb der Spalte
+    k_cols = st.columns(3)
     for idx, img_path in enumerate(kerze_files):
-        if os.path.exists(img_path):
-            k_cols[idx % 4].image(img_path, caption=f"Teil {idx}", use_container_width=True)
-        else:
-            st.error(f"Fehlt: {img_path}") # Zeigt dir genau an, welche Datei das Problem ist
+        img = load_and_rotate(img_path)
+        if img:
+            k_cols[idx % 3].image(img, use_container_width=True)
 
-# --- SPALTE 2: PROJECT ---
+# --- RECHTS: IDEE BIS SERIE ---
 with col2:
-    st.subheader("🏗️ Project Management")
-    st.write("Aufbau einer Akustik-Prüfkammer.")
-    
-    project_files = [
-        "images/project1.jpg", "images/project2.jpeg", "images/project3.jpeg",
-        "images/project4.jpeg", "images/project5.jpg", "images/project6.jpeg"
+    st.subheader("Von der Idee bis zur Übergabe an die Serienfertigung")
+    # Mapping der Bilder mit ihren spezifischen Drehungen
+    # Phase 3 & 4: 90° links (entspricht 90)
+    # Phase 6: 90° rechts (entspricht -90 oder 270)
+    project_configs = [
+        ("images/project1.jpg", 0),
+        ("images/project2.jpeg", 0),
+        ("images/project3.jpeg", 90), 
+        ("images/project4.jpeg", 90),
+        ("images/project5.jpg", 0),
+        ("images/project6.jpeg", -90)
     ]
     
-    p_cols = st.columns(3)
-    for idx, img_path in enumerate(project_files):
-        if os.path.exists(img_path):
-            p_cols[idx % 3].image(img_path, caption=f"Phase {idx+1}", use_container_width=True)
-        else:
-            st.error(f"Fehlt: {img_path}")
+    p_cols = st.columns(2)
+    for idx, (img_path, angle) in enumerate(project_configs):
+        img = load_and_rotate(img_path, angle)
+        if img:
+            p_cols[idx % 2].image(img, use_container_width=True)
 
 st.divider()
 
-# --- QM & LEAN TEXTBLOCK ---
+# --- QM & LEAN BLOCK ---
 st.subheader("📉 Expertise & Methodik")
 info_col1, info_col2 = st.columns(2)
 
