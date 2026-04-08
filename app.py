@@ -919,57 +919,112 @@ else:
 
 
 
-#2D-Lösung
-import streamlit.components.v1 as components
 
-def st_3d_cert_wall(image_urls):
-    # JavaScript/Three.js Code für die gekrümmte Wand
+
+
+
+
+
+
+
+
+#2D-Lösung
+import streamlit as st
+import streamlit.components.v1 as components
+import json
+
+def st_3d_certificate_wall(image_urls):
+    # Konfiguration der Wand
+    canvas_height = 600
+    # Wir wandeln die Python-Liste in einen JSON-String für JavaScript um
+    js_image_urls = json.dumps(image_urls)
+
     three_js_code = f"""
-    <div id="container" style="width: 100%; height: 500px;"></div>
+    <div id="three-container" style="width: 100%; height: {canvas_height}px; background: transparent;"></div>
     <script src="https://cloudflare.com"></script>
+    <!-- OrbitControls für Maus-Interaktion -->
+    <script src="https://jsdelivr.net"></script>
+    
     <script>
-        const container = document.getElementById('container');
+        const container = document.getElementById('three-container');
+        const images = {js_image_urls};
+        
+        // 1. Szene & Kamera
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, container.offsetWidth / 500, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(50, container.offsetWidth / {canvas_height}, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({{ antialias: true, alpha: true }});
-        renderer.setSize(container.offsetWidth, 500);
+        renderer.setSize(container.offsetWidth, {canvas_height});
+        renderer.setPixelRatio(window.devicePixelRatio);
         container.appendChild(renderer.domElement);
 
-        const images = {image_urls};
-        const radius = 5;
-        const angleStep = Math.PI / (images.length + 1);
+        // 2. Beleuchtung
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
 
+        // 3. Wand-Parameter
+        const radius = 8;        // Krümmungsradius
+        const wallSpread = 4.0;  // Wie weit die Wand "aufgefächert" ist (in Radianten)
+        
+        const loader = new THREE.TextureLoader();
+
+        // 4. Zertifikate erstellen
         images.forEach((url, i) => {{
-            const texture = new THREE.TextureLoader().load(url);
-            const geometry = new THREE.PlaneGeometry(2, 1.5);
-            const material = new THREE.MeshBasicMaterial({{ map: texture, side: THREE.DoubleSide }});
-            const mesh = new THREE.Mesh(geometry, material);
-            
-            // Berechnung der Position auf der Kurve
-            const angle = (i - (images.length-1)/2) * 0.5; 
-            mesh.position.set(Math.sin(angle) * radius, 0, Math.cos(angle) * radius - radius);
-            mesh.rotation.y = angle;
-            scene.add(mesh);
+            loader.load(url, (texture) => {{
+                const geometry = new THREE.PlaneGeometry(2.5, 3.5); // Format eines Zertifikats
+                const material = new THREE.MeshBasicMaterial({{ 
+                    map: texture, 
+                    side: THREE.DoubleSide,
+                    transparent: true
+                }});
+                const mesh = new THREE.Mesh(geometry, material);
+
+                // Position auf der Kurve berechnen
+                const angle = (i / (images.length - 1) - 0.5) * wallSpread;
+                
+                mesh.position.x = Math.sin(angle) * radius;
+                mesh.position.z = Math.cos(angle) * radius - radius;
+                mesh.position.y = (i % 2 === 0 ? 0.5 : -0.5); // Leichtes Versetzen für Dynamik
+                
+                // Rotation zum Betrachter
+                mesh.rotation.y = angle;
+
+                scene.add(mesh);
+            }});
         }});
 
-        camera.position.z = 2;
+        camera.position.z = 5;
+        camera.position.y = 0;
+
+        // 5. Interaktion
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableZoom = true;
+        controls.autoRotate = true; // Die Wand dreht sich langsam
+        controls.autoRotateSpeed = 0.5;
 
         function animate() {{
             requestAnimationFrame(animate);
-            // Optional: Leichte Rotation oder Interaktion hier hinzufügen
+            controls.update();
             renderer.render(scene, camera);
         }}
         animate();
+
+        // Resize Handling
+        window.addEventListener('resize', () => {{
+            camera.aspect = container.offsetWidth / {canvas_height};
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.offsetWidth, {canvas_height});
+        }});
     </script>
     """
-    components.html(three_js_code, height=500)
+    components.html(three_js_code, height=canvas_height)
 
-# Beispielaufruf mit deinen Bild-URLs
-cert_images = [
-    "https://placeholder.com",
-    "https://placeholder.com",
-    "https://placeholder.com"
-]
+# --- Streamlit UI ---
+st.set_page_config(layout="wide")
+st.title("Diplome & Zertifikate (3D View)")
 
-st.title("Meine Zertifikate")
-st_3d_cert_wall(cert_images)
+# Erstelle Liste mit 17 Beispiel-URLs (Ersetze diese durch deine Pfade)
+my_certs = [f"https://picsum.photos{i}" for i in range(17)]
+
+st_3d_certificate_wall(my_certs)
+
+st.info("💡 Du kannst die Wand mit der Maus drehen und zoomen.")
