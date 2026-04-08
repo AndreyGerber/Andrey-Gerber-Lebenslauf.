@@ -936,77 +936,90 @@ import os
 import base64
 
 def get_base64_img(file_path):
+    """Konvertiert lokale Bilder in Base64, um Pfadprobleme in Streamlit zu vermeiden."""
     if os.path.exists(file_path):
         with open(file_path, "rb") as f:
             return base64.b64encode(f.read()).decode()
     return None
 
-st.set_page_config(layout="wide")
-st.title("🎓 Zertifikate & Qualifikationen")
+def st_certificate_wall(image_folder="images", images_per_row=8):
+    """Erzeugt eine gekrümmte 2D-Wand mit 3D-Effekt in Reihen."""
+    if not os.path.exists(image_folder):
+        st.error(f"Ordner '{image_folder}' nicht gefunden.")
+        return
 
-IMAGE_DIR = "images"
-if os.path.exists(IMAGE_DIR):
-    # Alle 17 Zertifikate laden
-    cert_files = sorted([f for f in os.listdir(IMAGE_DIR) if f.lower().endswith('.jpg')])
-    total = len(cert_files)
+    # Alle Zertifikate laden und sortieren
+    cert_files = sorted([f for f in os.listdir(image_folder) if f.lower().endswith('.jpg')])
     
-    gallery_html = """
+    if not cert_files:
+        st.warning("Keine .jpg Bilder im Ordner gefunden.")
+        return
+
+    # Aufteilung in Reihen (max. 8 pro Reihe)
+    rows = [cert_files[i:i + images_per_row] for i in range(0, len(cert_files), images_per_row)]
+    
+    html_content = """
     <style>
-        .wall-wrapper {
-            background: #0e1117;
-            padding: 80px 20px;
+        .main-wall {
+            background: #0e1117; /* Dunkler Hintergrund für Kontrast */
+            padding: 60px 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            gap: 100px; /* Großer Abstand für den 1.5x Zoom */
             align-items: center;
             overflow: visible;
-            perspective: 1200px; /* Tiefe des Raums */
         }
-        .cert-container {
+        .row-container {
             display: flex;
-            gap: -15px; /* Engeres Zusammenrücken für Wand-Effekt */
+            perspective: 1000px; /* Erzeugt die Tiefenwirkung */
+            justify-content: center;
+            width: 100%;
         }
         .cert-card {
-            width: 140px; /* Etwas schmaler, damit alle 17 passen */
+            width: 150px; /* Basisbreite */
             height: auto;
-            transition: all 0.4s ease-in-out;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: -5px 10px 20px rgba(0,0,0,0.5);
             cursor: pointer;
             z-index: 1;
+            margin: 0 -10px; /* Überlappung für Wand-Effekt */
+            border-radius: 4px;
         }
         
-        /* Hover-Effekt: Vergrößerung auf 1.5 und Begradigung */
+        /* Hover-Effekt: 1.5x Vergrößerung und Begradigung */
         .cert-card:hover {
-            transform: scale(1.5) rotateY(0deg) !important;
-            z-index: 999;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-            margin: 0 40px; /* Platz schaffen für den Zoom */
+            transform: scale(1.5) rotateY(0deg) translateZ(50px) !important;
+            z-index: 100;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.9);
+            margin: 0 50px; /* Schiebt Nachbarn beiseite */
         }
     </style>
-    <div class="wall-wrapper">
-        <div class="cert-container">
+    <div class="main-wall">
     """
 
-    for i, filename in enumerate(cert_files):
-        b64_data = get_base64_img(os.path.join(IMAGE_DIR, filename))
-        if b64_data:
-            # Berechnung der Krümmung basierend auf der Position (i)
-            # Links positive Rotation, rechts negative
-            mid = total / 2
-            rotation = (mid - i) * 5 # Erzeugt den Bogen-Effekt
-            
-            gallery_html += f'''
-                <img src="data:image/jpeg;base64,{b64_data}" 
-                     class="cert-card" 
-                     style="transform: rotateY({rotation}deg);" 
-                     title="{filename}">
-            '''
+    for row in rows:
+        html_content += '<div class="row-container">'
+        mid = (len(row) - 1) / 2
+        for i, filename in enumerate(row):
+            b64_data = get_base64_img(os.path.join(image_folder, filename))
+            if b64_data:
+                # Berechnung der Krümmung: links positiv, rechts negativ rotieren
+                rotation = (mid - i) * 10 
+                html_content += f'''
+                    <img src="data:image/jpeg;base64,{b64_data}" 
+                         class="cert-card" 
+                         style="transform: rotateY({rotation}deg);" 
+                         title="{filename}">
+                '''
+        html_content += '</div>'
 
-    gallery_html += "</div></div>"
+    html_content += "</div>"
     
-    # Höhe des iFrames vergrößern, damit der 1.5x Zoom nicht abgeschnitten wird
-    st.components.v1.html(gallery_html, height=650)
-else:
-    st.error("Ordner 'images' nicht gefunden.")
+    # Anzeige in Streamlit
+    st.components.v1.html(html_content, height=1100, scrolling=True)
 
-st.info("🔍 **Interaktion:** Bewege die Maus über ein Zertifikat für den **1.5x Zoom**.")
+# --- App Aufruf ---
+st.set_page_config(page_title="Lebenslauf Zertifikate", layout="wide")
+st.header("🎓 Zertifikate & Qualifikationen")
+
+st_certificate_wall()
