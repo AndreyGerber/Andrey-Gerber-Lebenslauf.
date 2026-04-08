@@ -546,7 +546,7 @@ st.markdown("""
     /* Icon und Text formatieren */
     .stButton > button p {
         margin: 0 !important;
-        font-size: 13px !important;
+        font-size: 20px !important;
         font-weight: 700 !important;
         color: #475569 !important;
         line-height: 1.3 !important;
@@ -556,7 +556,7 @@ st.markdown("""
     
     /* Die erste Zeile (Icon) */
     .stButton > button p::first-line {
-        font-size: 38px !important;
+        font-size: 25px !important;
         line-height: 1.5 !important;
     }
     
