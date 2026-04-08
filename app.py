@@ -536,7 +536,7 @@ with col_gallery:
         html_btn = f"""
         <a href="?doc={doc['file']}" style="text-decoration: none;">
             <div style="
-                height: 120px;
+                height: 100px;
                 width: 100%;
                 border-radius: 16px;
                 background-color: {bg_color};
@@ -553,8 +553,8 @@ with col_gallery:
             "
             onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#94a3b8';"
             onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='{border_color}';">
-                <span style="font-size: 48px; line-height: 1;">{doc['icon']}</span>
-                <span style="font-size: 16px; font-weight: 600; color: {text_color};">{doc['label']}</span>
+                <span style="font-size: 28px; line-height: 1;">{doc['icon']}</span>
+                <span style="font-size: 20px; font-weight: 600; color: {text_color};">{doc['label']}</span>
             </div>
         </a>
         """
