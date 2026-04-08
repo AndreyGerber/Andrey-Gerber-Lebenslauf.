@@ -1146,40 +1146,44 @@ import streamlit as st
 import os
 from PIL import Image
 
-# Hilfsfunktion zum Laden und Drehen von Bildern
-def load_and_rotate(path, degrees=0):
+def load_processed_img(path, degrees=0, scale=0.5):
     if os.path.exists(path):
         img = Image.open(path)
         if degrees != 0:
             img = img.rotate(degrees, expand=True)
-        return img
+        # Hier wird das Bild skaliert, um die Höhe zu kontrollieren
+        new_size = (int(img.width * scale), int(img.height * scale))
+        return img.resize(new_size)
     return None
 
 st.title("🛠️ Meine Fertigkeiten")
-st.divider()
+
+# --- MAẞSTAB / SKALIERUNG (Hier kannst du die Größe anpassen) ---
+# 1.0 = Original, 0.5 = Halbe Größe, 0.3 = Sehr kompakt
+scale_factor = 0.4 
 
 col1, col2 = st.columns(2)
 
 # --- LINKS: SKIZZE BIS PRODUKT ---
 with col1:
     st.subheader("Von der Skizze bis zum fertigen Produkt")
+    # Die Reihenfolge hier bestimmt die Position (Index 0 = oben links)
     kerze_files = [
         "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
         "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
     ]
     
-    k_cols = st.columns(3)
+    # Mehr Spalten = kleinere Bilder (4 Spalten pro Seite)
+    k_cols = st.columns(4) 
     for idx, img_path in enumerate(kerze_files):
-        img = load_and_rotate(img_path)
+        img = load_processed_img(img_path, scale=scale_factor)
         if img:
-            k_cols[idx % 3].image(img, use_container_width=True)
+            k_cols[idx % 4].image(img)
 
 # --- RECHTS: IDEE BIS SERIE ---
 with col2:
-    st.subheader("Von der Idee bis zur Übergabe an die Serienfertigung")
-    # Mapping der Bilder mit ihren spezifischen Drehungen
-    # Phase 3 & 4: 90° links (entspricht 90)
-    # Phase 6: 90° rechts (entspricht -90 oder 270)
+    st.subheader("Von der Idee bis zur Übergabe...")
+    # (Pfad, Drehung)
     project_configs = [
         ("images/project1.jpg", 0),
         ("images/project2.jpeg", 0),
@@ -1189,22 +1193,20 @@ with col2:
         ("images/project6.jpeg", -90)
     ]
     
-    p_cols = st.columns(2)
+    p_cols = st.columns(3) # 3 Spalten für die Projektbilder
     for idx, (img_path, angle) in enumerate(project_configs):
-        img = load_and_rotate(img_path, angle)
+        img = load_processed_img(img_path, angle, scale=scale_factor)
         if img:
-            p_cols[idx % 2].image(img, use_container_width=True)
+            p_cols[idx % 3].image(img)
 
 st.divider()
 
-# --- QM & LEAN BLOCK ---
+# --- QM & METHODIK (Kompakter) ---
 st.subheader("📉 Expertise & Methodik")
 info_col1, info_col2 = st.columns(2)
-
 with info_col1:
-    st.info("**Qualitätsmanagement & Audits**\n\n* Durchführung Audits (ISO 9001/17025)\n* CAPA-Coaching & Schulungen")
-
+    st.info("**Qualitätsmanagement & Audits**\n\nISO 9001/17025 | CAPA-Coaching")
 with info_col2:
-    st.info("**Lean Management & Datenanalyse**\n\n* Schnelle Projekt-Analyse\n* Statistische Methoden & Six Sigma")
+    st.info("**Lean Management & Datenanalyse**\n\nSix Sigma | Prozessoptimierung")
 
-st.success("🐍 **Programmierkenntnisse:** Diese Seite ist das Ergebnis aus Python, ein wenig Kaffee und dem Drang, Dinge digital zum Laufen zu bringen.")
+st.success("🐍 **Programmierkenntnisse:** Diese Seite wurde mit Python und Leidenschaft gebaut.")
