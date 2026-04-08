@@ -1225,7 +1225,7 @@ with col3:
                 <span class="img-label">Yoga</span>
             </div>
             <div class="hobby-img-wrapper">
-                <img src="data:image/jpeg;base64,{img_y2}" title="Ist einfach, mach es">
+                <img src="data:image/jpeg;base64,{img_y2}" title="Ist einfach, haben sie gesagt">
                 <span class="img-label">Balance</span>
             </div>
             <div class="hobby-img-wrapper">
@@ -1235,3 +1235,6 @@ with col3:
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+
+    st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
