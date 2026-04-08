@@ -1027,15 +1027,13 @@ st.markdown("""
         }
         .exp-box h4 { color: #01579b; margin-top: 0; margin-bottom: 15px; }
         
-        /* Liste bündig machen */
         .exp-box ul { 
             margin-bottom: 10px; 
             line-height: 1.8; 
             flex-grow: 1;
-            padding-left: 1.2rem; /* Einzug für die Aufzählungspunkte */
+            padding-left: 1.2rem;
         }
         
-        /* Der Text ohne Punkt erhält exakt denselben Einzug wie der Text neben den Bullets */
         .no-bullet { 
             list-style-type: none; 
             padding-left: 1.2rem; 
@@ -1055,12 +1053,12 @@ with exp_col1:
         <div class="exp-box">
             <h4>💻 Hardware & Software</h4>
             <ul>
-                <li><strong>ob 3D Modelle mit CATIA V5 oder AutoCAD erstellen,</strong></li>
+                <li><strong>ob 3D-Modelle mit CATIA V5 oder AutoCAD erstellen,</strong></li>
                 <li><strong>ob Sensorik anschließen, einstellen und Objekte vermessen mit Technik von B&K oder Head Acoustics,</strong></li>
                 <li><strong>ob Daten mit Minitab oder selbst erstellten statistischen Methoden analysieren,</strong></li>
             </ul>
-            <div class="no-bullet" style="margin-bottom: 18px;"><strong>sollte machbar sein. SAP kann jeder und niemand gleichzeitig.</strong></div>
-            <div class="no-bullet"><strong>Von MS Produkten spricht heutzutage doch niemand mehr.</strong></div>
+            <div class="no-bullet" style="margin-bottom: 18px;"><strong>sollte machbar sein. SAP kann jeder irgendwie und niemand gleichzeitig.</strong></div>
+            <div class="no-bullet"><strong>Von MS-Produkten spricht heutzutage doch niemand mehr.</strong></div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1072,24 +1070,24 @@ with exp_col2:
                 <li><strong>Qualitätsmanagement | Lean Management & Six Sigma | Audits | Risikomanagement</strong></li>
                 <li><strong>ISO 9001 oder IATF 16949, CAPA oder 8D, DMAIC oder PDCA</strong></li>
             </ul>
-            <div class="no-bullet", style="margin-bottom: 110px;">Hier müssen wir zunächst die Begriffe definieren, bevor aneinander gesprochen wird.</div>
+            <div class="no-bullet" style="margin-bottom: 110px;">Hier müssen wir zunächst die Begriffe definieren, bevor aneinander vorbei gesprochen wird.</div>
         </div>
         """, unsafe_allow_html=True)
 
-
+# Programmier-Abschnitt mit Korrekturen
 st.markdown(f"""
     <div style="
-        background-color: #d1e7dd; /* Ein dunkleres, satteres Grün als Standard */
+        background-color: #d1e7dd; 
         padding: 25px; 
         border-radius: 15px; 
         border-left: 6px solid #0f5132;
         color: #0f5132;
-        font-size: 1.1rem; /* Vergrößerte Schrift */
+        font-size: 1.1rem; 
         line-height: 1.6;
     ">
-        <span style="font-size: 1.5rem;">🐍</span> <strong>ob ich programmieren kann:</strong><br><br>
+        <span style="font-size: 1.5rem;">🐍</span> <strong>Ob ich programmieren kann:</strong><br><br>
         Das hier ist übrigens keine Agentur – diese Seite habe ich selbst programmiert.<br>
         Mit Python, Streamlit und der ein oder anderen Tasse Kaffee.<br><br>
-        <i>Übrigens, das half mir meinen Wortschatz der Schimpfwörter und ihrer Kombinationen in mehreren Sprachen zu aktualisieren.</i>
+        <i>Übrigens half mir das dabei, meinen Wortschatz an Schimpfwörtern und deren Kombinationen in mehreren Sprachen zu aktualisieren.</i>
     </div>
     """, unsafe_allow_html=True)
