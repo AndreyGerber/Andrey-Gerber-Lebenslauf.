@@ -488,7 +488,7 @@ with st.container():
         </div>
     """, unsafe_allow_html=True)
 
-# --- PDF GALERIE mit st.link_button (bleibt im selben Tab) ---
+# --- PDF GALERIE mit st.button (funktioniert garantiert) ---
 if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
 
@@ -515,11 +515,11 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# CSS für st.link_button
+# Globales CSS für ALLE Buttons (akzeptiere bitte)
 st.markdown("""
 <style>
-    /* Nur für st.link_button im PDF-Bereich */
-    .stLinkButton > button {
+    /* Alle Buttons in der App */
+    .stButton > button {
         height: 120px !important;
         width: 100% !important;
         border-radius: 16px !important;
@@ -530,12 +530,31 @@ st.markdown("""
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 8px !important;
+        white-space: pre-wrap !important;
+        word-break: break-word !important;
         padding: 10px !important;
-        white-space: normal !important;
+        gap: 8px !important;
     }
     
-    .stLinkButton > button:hover {
+    /* Der Text im Button */
+    .stButton > button p {
+        margin: 0 !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        color: #475569 !important;
+        line-height: 1.3 !important;
+        text-align: center !important;
+        width: 100% !important;
+    }
+    
+    /* Icon (erste Zeile) */
+    .stButton > button p::first-line {
+        font-size: 38px !important;
+        line-height: 1.5 !important;
+    }
+    
+    /* Hover Effekt */
+    .stButton > button:hover {
         transform: translateY(-5px) !important;
         border-color: #94a3b8 !important;
         background-color: #f1f5f9 !important;
@@ -549,68 +568,28 @@ with col_gallery:
     st.markdown("<div style='height: 30px;'></div>", unsafe_allow_html=True)
     
     # Top-Dokument zentriert
-    c1, c2, c3 = st.columns([1, 1, 1])
-    with c2:
+    t_c1, t_c2, t_c3 = st.columns(3)
+    with t_c2:
         doc = top_doc
         is_active = st.session_state.active_doc == doc['file']
         
-        # Link-Button mit Query Param
-        st.link_button(
-            f"{doc['icon']}\n\n{doc['label']}",
-            f"?doc={doc['file']}",
-            use_container_width=True,
-            type="secondary"
-        )
-        
-        if is_active:
-            st.markdown("""
-                <style>
-                    div:has(> a[href="?doc=Namensaenderung.pdf"]) button {
-                        background-color: #e6f7ff !important;
-                        border: 2px solid #69c0ff !important;
-                    }
-                    div:has(> a[href="?doc=Namensaenderung.pdf"]) button p {
-                        color: #0050b3 !important;
-                    }
-                </style>
-            """, unsafe_allow_html=True)
+        if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
+            st.session_state.active_doc = doc['file']
+            st.rerun()
     
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     
     # Andere Dokumente im 3er-Grid
-    cols = st.columns(3)
+    grid_cols = st.columns(3)
     for i, doc in enumerate(other_docs):
-        with cols[i % 3]:
-            is_active = st.session_state.active_doc == doc['file']
-            
-            st.link_button(
-                f"{doc['icon']}\n\n{doc['label']}",
-                f"?doc={doc['file']}",
-                use_container_width=True,
-                type="secondary"
-            )
-            
-            if is_active:
-                st.markdown(f"""
-                    <style>
-                        div:has(> a[href="?doc={doc['file']}"]) button {{
-                            background-color: #e6f7ff !important;
-                            border: 2px solid #69c0ff !important;
-                        }}
-                        div:has(> a[href="?doc={doc['file']}"]) button p {{
-                            color: #0050b3 !important;
-                        }}
-                    </style>
-                """, unsafe_allow_html=True)
+        with grid_cols[i % 3]:
+            if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
+                st.session_state.active_doc = doc['file']
+                st.rerun()
     
     st.markdown("<div style='height: 80px;'></div>", unsafe_allow_html=True)
 
 with col_viewer:
-    # Query Parameter auslesen
-    query_params = st.query_params
-    if "doc" in query_params:
-        st.session_state.active_doc = query_params["doc"]
-    
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     if pdf_b64:
         st.markdown(f'''
