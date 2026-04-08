@@ -920,9 +920,10 @@ else:
 
 
 #2D-Lösung
-# ==================== ZERTIFIKATE-GALERIE (2.5D mit Bildern) ====================
+
+# ==================== GEKRÜMMTE 3D-WAND MIT ZERTIFIKATEN ====================
 st.markdown("<h2 style='text-align: center; margin-top: 50px;'>📜 Meine Zertifikate & Nachweise</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Klicke auf ein Zertifikat zum Vergrößern ✧</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Gekrümmte 3D-Wand – Maus ziehen zum Drehen, Hover = Vergrößerung (1.5x), Klick = Vollbild ✧</p>", unsafe_allow_html=True)
 
 # Deine 17 Zertifikatsnamen mit Nummerierung
 cert_names = [
@@ -947,161 +948,11 @@ cert_names = [
 
 cert_folder = "images"
 
-# CSS für Karten-Layout mit 8 Spalten
-st.markdown("""
-<style>
-.cert-container {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.cert-card {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border-radius: 12px;
-    padding: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    border: 1px solid #e2e8f0;
-    text-align: center;
-}
-
-.cert-card:hover {
-    transform: scale(1.5);
-    box-shadow: 0 15px 25px -8px rgba(0,0,0,0.2);
-    border-color: #69c0ff;
-    background: white;
-    z-index: 10;
-    position: relative;
-}
-
-.cert-card img {
-    width: 100%;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-}
-
-.cert-card p {
-    font-size: 10px;
-    font-weight: 600;
-    color: #01579b;
-    margin: 0;
-    line-height: 1.3;
-    word-break: break-word;
-}
-
-/* Modal für vergrößerte Ansicht */
-.cert-modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.92);
-    justify-content: center;
-    align-items: center;
-    backdrop-filter: blur(5px);
-}
-
-.cert-modal-content {
-    max-width: 85%;
-    max-height: 85%;
-    border-radius: 16px;
-    box-shadow: 0 0 50px rgba(0,0,0,0.5);
-    border: 3px solid white;
-}
-
-.cert-modal-close {
-    position: absolute;
-    top: 25px;
-    right: 40px;
-    color: white;
-    font-size: 55px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-
-.cert-modal-close:hover {
-    color: #69c0ff;
-}
-
-.cert-modal-caption {
-    position: absolute;
-    bottom: 30px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    color: white;
-    font-size: 18px;
-    font-weight: 500;
-    background: rgba(0,0,0,0.6);
-    padding: 8px;
-    margin: 0 auto;
-    width: fit-content;
-    border-radius: 30px;
-    backdrop-filter: blur(4px);
-}
-
-/* Responsive: Bei schmalen Bildschirmen weniger Spalten */
-@media (max-width: 1200px) {
-    .cert-container {
-        grid-template-columns: repeat(6, 1fr);
-    }
-}
-@media (max-width: 900px) {
-    .cert-container {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-@media (max-width: 600px) {
-    .cert-container {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-</style>
-
-<div id="certModal" class="cert-modal" onclick="closeModal()">
-    <span class="cert-modal-close">&times;</span>
-    <img class="cert-modal-content" id="modalImage">
-    <div class="cert-modal-caption" id="modalCaption"></div>
-</div>
-
-<script>
-function openModal(imgSrc, caption) {
-    var modal = document.getElementById('certModal');
-    var modalImg = document.getElementById('modalImage');
-    var modalCaption = document.getElementById('modalCaption');
-    modal.style.display = 'flex';
-    modalImg.src = imgSrc;
-    modalCaption.textContent = caption;
-}
-
-function closeModal() {
-    var modal = document.getElementById('certModal');
-    modal.style.display = 'none';
-}
-
-// Escape-Taste schließt Modal
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closeModal();
-    }
-});
-</script>
-""", unsafe_allow_html=True)
-
 # Sammle existierende Bilder
 import base64
+import math
 
-valid_certs = []
+cert_data = []
 for cert_name in cert_names:
     for ext in ['.png', '.jpg', '.jpeg']:
         img_path = os.path.join(cert_folder, cert_name + ext)
@@ -1109,31 +960,356 @@ for cert_name in cert_names:
             with open(img_path, "rb") as f:
                 img_b64 = base64.b64encode(f.read()).decode()
             display_name = cert_name.split('_', 1)[1].replace('_', ' ')
-            valid_certs.append({
+            cert_data.append({
                 "name": display_name,
                 "b64": img_b64,
-                "ext": ext
+                "ext": ext[1:] if ext.startswith('.') else ext
             })
             break
 
-if len(valid_certs) > 0:
-    # Grid mit 8 Spalten
-    st.markdown('<div class="cert-container">', unsafe_allow_html=True)
-    
-    for cert in valid_certs:
-        # HTML-Karte für jedes Zertifikat
-        st.markdown(f'''
-            <div class="cert-card" onclick="openModal('data:image/{cert["ext"]};base64,{cert["b64"]}', '{cert["name"]}')">
-                <img src="data:image/{cert["ext"]};base64,{cert["b64"]}" alt="{cert["name"]}">
-                <p>{cert["name"]}</p>
-            </div>
-        ''', unsafe_allow_html=True)
-    
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Info wie viele Zertifikate geladen wurden
-    st.markdown(f"<p style='text-align: center; color: gray; margin-top: 30px;'>✨ {len(valid_certs)} Zertifikate geladen ✨</p>", unsafe_allow_html=True)
+num_certs = len(cert_data)
 
+if num_certs > 0:
+    # Positionen auf gekrümmter Wand berechnen
+    # Radius der Krümmung
+    radius = 6.0
+    # 8 Stück pro Reihe, 3 Reihen (17 Stück → 8 + 8 + 1)
+    cols_per_row = 8
+    rows = 3
+    
+    positions = []
+    for i, cert in enumerate(cert_data):
+        row = i // cols_per_row
+        col = i % cols_per_row
+        
+        # Winkel basierend auf Spalte (von -45° bis +45°)
+        angle_min = -0.8  # -45° in rad
+        angle_max = 0.8   # +45° in rad
+        angle = angle_min + (col / (cols_per_row - 1)) * (angle_max - angle_min) if cols_per_row > 1 else 0
+        
+        # Position auf Kreisbogen
+        x = math.sin(angle) * radius
+        z = math.cos(angle) * radius - radius * 0.3
+        y = (1 - row) * 1.8  # Reihen von oben nach unten
+        
+        positions.append({
+            "x": x,
+            "y": y,
+            "z": z,
+            "angle": angle
+        })
+    
+    # Three.js HTML mit gekrümmter Wand
+    threejs_html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }}
+            #info {{
+                position: absolute;
+                bottom: 20px;
+                left: 20px;
+                color: white;
+                background: rgba(0,0,0,0.6);
+                padding: 6px 12px;
+                border-radius: 8px;
+                pointer-events: none;
+                z-index: 10;
+                font-size: 12px;
+            }}
+            #modal {{
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.92);
+                justify-content: center;
+                align-items: center;
+                backdrop-filter: blur(5px);
+            }}
+            #modal img {{
+                max-width: 85%;
+                max-height: 85%;
+                border-radius: 12px;
+                box-shadow: 0 0 40px rgba(0,0,0,0.5);
+                border: 3px solid white;
+            }}
+            #modal .close {{
+                position: absolute;
+                top: 25px;
+                right: 40px;
+                color: white;
+                font-size: 50px;
+                font-weight: bold;
+                cursor: pointer;
+            }}
+            #modal .close:hover {{ color: #69c0ff; }}
+            #modal .caption {{
+                position: absolute;
+                bottom: 30px;
+                left: 0;
+                right: 0;
+                text-align: center;
+                color: white;
+                font-size: 18px;
+                background: rgba(0,0,0,0.6);
+                padding: 8px;
+                width: fit-content;
+                margin: 0 auto;
+                border-radius: 30px;
+            }}
+        </style>
+    </head>
+    <body>
+        <div id="info">
+            🖱️ Maus ziehen = drehen | Rechtsklick ziehen = schwenken | Scrollen = zoomen | Hover = 1.5x vergrößern | Klick = Vollbild
+        </div>
+        <div id="modal" onclick="document.getElementById('modal').style.display='none'">
+            <span class="close">&times;</span>
+            <img id="modalImage" src="">
+            <div class="caption" id="modalCaption"></div>
+        </div>
+        
+        <script type="importmap">
+            {{
+                "imports": {{
+                    "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                    "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+                }}
+            }}
+        </script>
+        
+        <script type="module">
+            import * as THREE from 'three';
+            import {{ OrbitControls }} from 'three/addons/controls/OrbitControls.js';
+            import {{ CSS2DRenderer, CSS2DObject }} from 'three/addons/renderers/CSS2DRenderer.js';
+            
+            // Zertifikatsdaten mit Positionen
+            const certsData = {[
+                {{
+                    name: cert_data[i]["name"],
+                    b64: cert_data[i]["b64"],
+                    ext: cert_data[i]["ext"],
+                    x: positions[i]["x"],
+                    y: positions[i]["y"],
+                    z: positions[i]["z"]
+                }} for i in range(num_certs)
+            ]};
+            
+            // Szene
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a2a);
+            scene.fog = new THREE.FogExp2(0x0a0a2a, 0.008);
+            
+            // Kamera
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 2, 10);
+            camera.lookAt(0, 0, 0);
+            
+            // Renderer
+            const renderer = new THREE.WebGLRenderer({{ antialias: true }});
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            document.body.appendChild(renderer.domElement);
+            
+            // CSS2DRenderer für Text
+            const labelRenderer = new CSS2DRenderer();
+            labelRenderer.setSize(window.innerWidth, window.innerHeight);
+            labelRenderer.domElement.style.position = 'absolute';
+            labelRenderer.domElement.style.top = '0px';
+            labelRenderer.domElement.style.left = '0px';
+            labelRenderer.domElement.style.pointerEvents = 'none';
+            document.body.appendChild(labelRenderer.domElement);
+            
+            // Controls
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.rotateSpeed = 0.8;
+            controls.zoomSpeed = 1.0;
+            controls.panSpeed = 0.5;
+            
+            // Licht
+            const ambientLight = new THREE.AmbientLight(0x404060, 0.6);
+            scene.add(ambientLight);
+            const mainLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            mainLight.position.set(5, 10, 5);
+            mainLight.castShadow = true;
+            scene.add(mainLight);
+            const fillLight = new THREE.PointLight(0x4466cc, 0.3);
+            fillLight.position.set(-2, 1, 3);
+            scene.add(fillLight);
+            const backLight = new THREE.PointLight(0xffaa66, 0.2);
+            backLight.position.set(0, 2, -4);
+            scene.add(backLight);
+            
+            // Gekrümmte Wand (transparente Referenz)
+            const wallCurve = new THREE.EllipseCurve(0, 0, 6.2, 6.2, -0.9, 0.9, false, 0);
+            const wallPoints = wallCurve.getPoints(30);
+            const wallGeometry = new THREE.BufferGeometry().setFromPoints(wallPoints.map(p => new THREE.Vector3(p.x, -1.5, p.y - 5.5)));
+            const wallMaterial = new THREE.LineBasicMaterial({{ color: 0x3366aa, opacity: 0.15, transparent: true }});
+            const wallLine = new THREE.Line(wallGeometry, wallMaterial);
+            scene.add(wallLine);
+            
+            // Bodenraster
+            const gridHelper = new THREE.GridHelper(14, 20, 0x4488aa, 0x335577);
+            gridHelper.position.y = -1.8;
+            gridHelper.material.transparent = true;
+            gridHelper.material.opacity = 0.3;
+            scene.add(gridHelper);
+            
+            // Sterne im Hintergrund (dekorativ)
+            const starGeometry = new THREE.BufferGeometry();
+            const starCount = 800;
+            const starPositions = new Float32Array(starCount * 3);
+            for (let i = 0; i < starCount; i++) {{
+                starPositions[i*3] = (Math.random() - 0.5) * 200;
+                starPositions[i*3+1] = (Math.random() - 0.5) * 100;
+                starPositions[i*3+2] = (Math.random() - 0.5) * 80 - 40;
+            }}
+            starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+            const starMaterial = new THREE.PointsMaterial({{ color: 0x88aaff, size: 0.15, transparent: true, opacity: 0.6 }});
+            const stars = new THREE.Points(starGeometry, starMaterial);
+            scene.add(stars);
+            
+            // Zertifikate erstellen
+            const certificates = [];
+            
+            certsData.forEach((cert, idx) => {{
+                const img = new Image();
+                img.src = `data:image/${{cert.ext}};base64,${{cert.b64}}`;
+                
+                img.onload = () => {{
+                    const texture = new THREE.CanvasTexture(img);
+                    const material = new THREE.MeshStandardMaterial({{
+                        map: texture,
+                        side: THREE.DoubleSide,
+                        roughness: 0.25,
+                        metalness: 0.1,
+                        emissive: 0x111111
+                    }});
+                    
+                    const aspect = img.width / img.height;
+                    const width = 1.4;
+                    const height = width / aspect;
+                    const geometry = new THREE.PlaneGeometry(width, height);
+                    const plane = new THREE.Mesh(geometry, material);
+                    plane.position.set(cert.x, cert.y, cert.z);
+                    plane.userData = {{
+                        imageSrc: `data:image/${{cert.ext}};base64,${{cert.b64}}`,
+                        name: cert.name,
+                        originalScale: 1,
+                        targetScale: 1
+                    }};
+                    plane.castShadow = true;
+                    scene.add(plane);
+                    
+                    // Rahmen
+                    const borderGeometry = new THREE.BoxGeometry(width + 0.07, height + 0.07, 0.04);
+                    const borderMaterial = new THREE.MeshStandardMaterial({{ color: 0xc9a03d, metalness: 0.4, roughness: 0.3 }});
+                    const border = new THREE.Mesh(borderGeometry, borderMaterial);
+                    border.position.set(cert.x, cert.y, cert.z - 0.02);
+                    scene.add(border);
+                    
+                    // Text unter dem Bild
+                    const div = document.createElement('div');
+                    div.textContent = cert.name;
+                    div.style.color = '#ccddff';
+                    div.style.fontSize = '11px';
+                    div.style.fontWeight = '600';
+                    div.style.textAlign = 'center';
+                    div.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                    div.style.padding = '4px 10px';
+                    div.style.borderRadius = '20px';
+                    div.style.border = '1px solid #69c0ff';
+                    div.style.backdropFilter = 'blur(4px)';
+                    
+                    const label = new CSS2DObject(div);
+                    label.position.set(cert.x, cert.y - height/2 - 0.15, cert.z);
+                    scene.add(label);
+                    
+                    certificates.push(plane);
+                }};
+            }});
+            
+            // Hover-Effekt mit Raycaster
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+            let hoveredObject = null;
+            
+            function onMouseMove(event) {{
+                mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+                mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+                
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObjects(certificates);
+                
+                if (intersects.length > 0) {{
+                    const selected = intersects[0].object;
+                    if (hoveredObject !== selected) {{
+                        if (hoveredObject) {{
+                            hoveredObject.scale.set(1, 1, 1);
+                        }}
+                        selected.scale.set(1.5, 1.5, 1);
+                        hoveredObject = selected;
+                    }}
+                }} else {{
+                    if (hoveredObject) {{
+                        hoveredObject.scale.set(1, 1, 1);
+                        hoveredObject = null;
+                    }}
+                }}
+            }}
+            
+            function onMouseClick(event) {{
+                mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+                mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+                
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObjects(certificates);
+                
+                if (intersects.length > 0) {{
+                    const selected = intersects[0].object;
+                    const modal = document.getElementById('modal');
+                    const modalImg = document.getElementById('modalImage');
+                    const modalCaption = document.getElementById('modalCaption');
+                    modal.style.display = 'flex';
+                    modalImg.src = selected.userData.imageSrc;
+                    modalCaption.textContent = selected.userData.name;
+                }}
+            }}
+            
+            window.addEventListener('mousemove', onMouseMove, false);
+            window.addEventListener('click', onMouseClick, false);
+            
+            // Animation
+            function animate() {{
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+                labelRenderer.render(scene, camera);
+            }}
+            animate();
+            
+            // Fenster anpassen
+            window.addEventListener('resize', onWindowResize, false);
+            function onWindowResize() {{
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                labelRenderer.setSize(window.innerWidth, window.innerHeight);
+            }}
+        </script>
+    </body>
+    </html>
+    """
+    
+    st.components.v1.html(threejs_html, height=700, width=None)
+    
 else:
     st.warning(f"⚠️ Keine Zertifikats-Bilder gefunden. Lege PNG/JPG Dateien in den Ordner 'images/' mit folgenden Namen:\n\n" + 
                "\n".join([f"• {name}.png" for name in cert_names]))
