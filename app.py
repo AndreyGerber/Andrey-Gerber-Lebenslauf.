@@ -1244,18 +1244,42 @@ with col3:
 
 # --- DAS BUCH-SYMBOL (Am Ende deiner App) ---
 
-st.write("") 
-st.write("") 
+st.write("")
+st.write("")
+st.write("")
 
-# Spalten für die Positionierung rechts
-spacer1, spacer2, book_col = st.columns([2, 1, 1])
+# Wir nutzen Spalten, um Text und Buch harmonisch nebeneinander zu setzen
+# col_text bekommt mehr Platz (2), col_book ist kompakter (1)
+col_text, col_book = st.columns([2, 1])
 
-with book_col:
+with col_text:
+    # Vertikaler Abstand, damit der Text mittig zum Buch steht
+    st.write("")
+    st.write("")
+    st.markdown("""
+        <div style="
+            background: rgba(241, 245, 249, 0.5); 
+            padding: 20px 25px; 
+            border-radius: 12px; 
+            border-left: 4px solid #64748b;
+            color: #475569;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        ">
+            <span style="font-size: 1.3rem;">📖</span> 
+            <strong style="color: #1e293b;">Mein Buch:</strong> 
+            Dieses Projekt befindet sich gerade in Arbeit &ndash; 
+            <i>die Geschichte schreibt sich von Tag zu Tag weiter.</i>
+        </div>
+    """, unsafe_allow_html=True)
+
+with col_book:
     st.markdown("""
         <style>
             @keyframes float {
                 0% { transform: translateY(0px) rotate(15deg); }
-                50% { transform: translateY(-10px) rotate(10deg); }
+                50% { transform: translateY(-12px) rotate(10deg); }
                 100% { transform: translateY(0px) rotate(15deg); }
             }
             .book-wrapper {
@@ -1265,48 +1289,48 @@ with book_col:
                 cursor: help;
                 animation: float 4s ease-in-out infinite;
                 position: relative;
-                width: 120px;
+                width: 150px;
+                margin-left: auto; /* Schiebt das Buch nach rechts innerhalb der Spalte */
             }
             .book-icon {
                 font-size: 100px;
-                filter: drop-shadow(5px 10px 15px rgba(0,0,0,0.2));
+                filter: drop-shadow(5px 15px 20px rgba(0,0,0,0.15));
                 transition: all 0.4s ease-in-out;
             }
             
             /* Text AUF dem Buch - Initial unsichtbar */
             .book-text {
                 position: absolute;
-                top: 48px;
+                top: 50px;
                 left: 55%;
                 transform: translate(-50%, -50%) scale(0.5);
                 color: #1a1a1a;
-                font-family: 'Brush Script MT', cursive;
-                font-size: 15px;
+                font-family: 'Brush Script MT', cursive, sans-serif;
+                font-size: 16px;
                 font-weight: bold;
                 line-height: 1.1;
                 text-align: center;
                 pointer-events: none;
-                width: 70px;
-                opacity: 0; /* Versteckt */
+                width: 80px;
+                opacity: 0;
                 transition: all 0.4s ease-in-out;
             }
 
             /* Hover-Effekte */
             .book-wrapper:hover .book-icon {
-                transform: scale(1.2) rotate(0deg);
-                filter: drop-shadow(2px 5px 5px rgba(0,0,0,0.1));
+                transform: scale(1.15) rotate(0deg);
+                filter: drop-shadow(2px 5px 10px rgba(0,0,0,0.1));
             }
             
-            /* Text erscheint beim Hover */
             .book-wrapper:hover .book-text {
-                opacity: 1; /* Sichtbar machen */
-                transform: translate(-50%, -50%) scale(1.1); /* Leicht mit-vergrößern */
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.1);
             }
 
             .book-tag {
-                background: #f1f5f9;
-                color: #64748b;
-                padding: 4px 12px;
+                background: #f8fafc;
+                color: #94a3b8;
+                padding: 4px 14px;
                 border-radius: 20px;
                 font-size: 0.75rem;
                 font-weight: bold;
@@ -1316,8 +1340,9 @@ with book_col:
             }
         </style>
         
-        <div class="book-wrapper" title="📖 Mein Buch: Dieses Projekt befindet sich in Arbeit.">
+        <div class="book-wrapper">
             <div class="book-icon">📖</div>
-            <div class="book-tag">in Arbeit</div>
+            <div class="book-text">mein&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;Buch</div>
+            <div class="book-tag">Unvollendet</div>
         </div>
     """, unsafe_allow_html=True)
