@@ -1194,15 +1194,15 @@ with col2:
         <div class="hobby-text">Nichts ist besser als ein Gefühl, zum Erfolg des anderen beigetragen zu haben.</div>
         <div class="hobby-img-area">
             <div class="hobby-img-wrapper">
-                <img src="data:image/jpeg;base64,{img_f2}" title="Fußball am Rasen">
+                <img src="data:image/jpeg;base64,{img_f2}" title="Einmal Gold">
                 <span class="img-label">Fußball</span>
             </div>
             <div class="hobby-img-wrapper">
-                <img src="data:image/png;base64,{img_h1}" title="Erstes Training">
+                <img src="data:image/png;base64,{img_h1}" title="Auch hier auf dem Podest ">
                 <span class="img-label">Eishockey</span>
             </div>
             <div class="hobby-img-wrapper">
-                <img src="data:image/png;base64,{img_h3}" title="Team-Sieg">
+                <img src="data:image/png;base64,{img_h3}" title="Blick hinter der Kulissen">
                 <span class="img-label">Turnier</span>
             </div>
         </div>
@@ -1221,15 +1221,15 @@ with col3:
         <div class="hobby-text">Schnell reagieren und trotzdem gelassen bleiben.</div>
         <div class="hobby-img-area">
             <div class="hobby-img-wrapper">
-                <img src="data:image/jpeg;base64,{img_y1}" title="Morgendliches Yoga">
+                <img src="data:image/jpeg;base64,{img_y1}" title="entspannt">
                 <span class="img-label">Fokus</span>
             </div>
             <div class="hobby-img-wrapper">
-                <img src="data:image/jpeg;base64,{img_y2}" title="Box-Training">
+                <img src="data:image/jpeg;base64,{img_y2}" title="locker">
                 <span class="img-label">Kraft</span>
             </div>
             <div class="hobby-img-wrapper">
-                <img src="data:image/png;base64,{img_y3}" title="Gleichgewicht">
+                <img src="data:image/png;base64,{img_y3}" title="für das Leben">
                 <span class="img-label">Balance</span>
             </div>
         </div>
