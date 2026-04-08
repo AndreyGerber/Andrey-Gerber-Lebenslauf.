@@ -941,8 +941,8 @@ def get_base64_img(file_path):
             return base64.b64encode(f.read()).decode()
     return None
 
-def st_certificate_wall(image_folder="images", images_per_row=9):
-    """Erzeugt eine gekrümmte 2D-Wand mit 3D-Effekt in Reihen."""
+def st_certificate_wall(image_folder="images"):
+    """Erzeugt eine gekrümmte 2D-Wand mit 3D-Effekt in Reihen (20% Überlappung)."""
     if not os.path.exists(image_folder):
         st.error(f"Ordner '{image_folder}' nicht gefunden.")
         return
@@ -984,7 +984,7 @@ def st_certificate_wall(image_folder="images", images_per_row=9):
     row2 = valid_certs[9:]
     rows_list = [row1, row2]
     
-    # CSS mit hellem Hintergrund
+    # CSS mit hellem Hintergrund und Überlappung
     html_content = """
     <style>
         .main-wall {
@@ -992,7 +992,7 @@ def st_certificate_wall(image_folder="images", images_per_row=9):
             padding: 60px 0;
             display: flex;
             flex-direction: column;
-            gap: 80px;
+            gap: 60px;
             align-items: center;
             overflow: visible;
             border-radius: 20px;
@@ -1010,19 +1010,34 @@ def st_certificate_wall(image_folder="images", images_per_row=9):
             box-shadow: -3px 8px 15px rgba(0,0,0,0.15);
             cursor: pointer;
             z-index: 1;
-            margin: 0 -8px;
             border-radius: 8px;
             background: white;
             border: 2px solid #e0e6ed;
         }
         
-        /* Hover-Effekt: 1.5x Vergrößerung */
+        /* Jedes Bild überlappt das nächste um 20% (30px bei 150px Breite) */
+        .row-container .cert-card {
+            margin-left: -30px;
+        }
+        
+        /* Erstes Bild in der Reihe hat keinen negativen Margin links */
+        .row-container .cert-card:first-child {
+            margin-left: 0;
+        }
+        
+        /* Hover-Effekt: 1.5x Vergrößerung + nach vorne */
         .cert-card:hover {
-            transform: scale(3.5) rotateY(0deg) translateZ(60px) !important;
+            transform: scale(3.5) rotateY(0deg) translateZ(80px) !important;
             z-index: 100;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-            margin: 0 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            margin: 0 20px !important;
             border-color: #4a90e2;
+        }
+        
+        /* Korrigiert die Margin beim Hover für alle Bilder */
+        .row-container .cert-card:hover {
+            margin-left: 20px !important;
+            margin-right: 20px !important;
         }
         
         .cert-caption {
@@ -1051,7 +1066,7 @@ def st_certificate_wall(image_folder="images", images_per_row=9):
                 # Anzeigename ohne Nummer und Endung
                 display_name = filename.split('_', 1)[1].replace('.jpg', '').replace('.png', '').replace('_', ' ')
                 
-                # Krümmung berechnen
+                # Krümmung berechnen (sanfter für besseren Effekt)
                 rotation = (mid - i) * 8
                 
                 html_content += f'''
@@ -1109,7 +1124,7 @@ def st_certificate_wall(image_folder="images", images_per_row=9):
 # --- App Aufruf ---
 st.set_page_config(page_title="Lebenslauf Zertifikate", layout="wide")
 
-# Neuer Titel mit Smiley
-st.header("💻 ob ich programmieren kann... 👨‍💻")
+# Titel mit Smiley
+st.header("🐍 ob ich programmieren kann... 👨‍💻")
 
 st_certificate_wall()
