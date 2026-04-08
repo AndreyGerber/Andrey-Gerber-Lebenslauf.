@@ -311,7 +311,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             st.error(f"Fehler: {e}")
 
     elif jahr_aktiv == 1996:
-        MASSSTAB = 1.0  # 0.7 = 70% der Originalgröße, ändere diesen Wert zum Skalieren
+        MASSSTAB = 1.0
         OBEN_ABSTAND = "200px"
 
         col_text, col_foto = st.columns([1, 2.5])
@@ -322,14 +322,10 @@ with st.container(height=BLOCK_HOEHE, border=True):
             st.markdown(f"<p style='font-size: {INFO_FONT_SIZE}; color: #4B0082;'>So schnell vergehen 10 Jahre.</p>", unsafe_allow_html=True)
 
         with col_foto:
-            img_schule = lade_formatiertes_bild("schule2.png")
+            img_schule = lade_formatiertes_bild("schule2.png", max_width=500)  # SKALIERBAR!
             if img_schule:
                 st.markdown(f"<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
-                
-                # MASSSTAB wird hier angewendet
-                original_breite = img_schule.size[0]
-                neue_breite = int(original_breite * MASSSTAB)
-                st.image(img_schule, width=neue_breite)
+                st.image(img_schule, use_container_width=True)
             else:
                 st.error("Bild 'schule2.png' nicht gefunden.")
 
