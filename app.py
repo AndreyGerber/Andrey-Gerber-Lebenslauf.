@@ -1112,7 +1112,7 @@ def get_base64_img(file_path):
     return None
 
 st.divider()
-st.markdown("<h2 style='text-align: center;'>🎯 Leidenschaften & Ausgleich</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>Leidenschaften & Ausgleich</h2>", unsafe_allow_html=True)
 
 # Erweitertes CSS für Zoom-Effekt und Bild-Titel
 st.markdown("""
