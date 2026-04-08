@@ -1147,6 +1147,16 @@ st.markdown("<h2 style='text-align: center; margin-top: 60px;'>🛠️ Projekte 
 st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Konkrete Beispiele meiner Arbeit – mit Bildern ✧</p>", unsafe_allow_html=True)
 
 import json
+import base64
+import os
+
+# Funktion zum Laden der Bilder als Base64
+def get_image_base64(img_path):
+    """Lädt Bild und konvertiert zu Base64"""
+    if os.path.exists(img_path):
+        with open(img_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    return None
 
 # Projekt-Daten
 projects = [
@@ -1194,14 +1204,6 @@ projects = [
 
 # Humorvoller Satz zum Programmieren
 st.info("💡 **Übrigens:** Das hier ist keine Agentur – diese Seite habe ich selbst programmiert. Mit Python, Streamlit und der ein oder anderen Tasse Kaffee. ☕")
-
-# Funktion zum Laden der Bilder als Base64
-def get_image_base64(img_path):
-    """Lädt Bild und konvertiert zu Base64"""
-    if os.path.exists(img_path):
-        with open(img_path, "rb") as f:
-            return base64.b64encode(f.read()).decode()
-    return None
 
 # CSS für Projekt-Kacheln
 st.markdown("""
@@ -1257,161 +1259,22 @@ st.markdown("""
 <div class="project-container">
 """, unsafe_allow_html=True)
 
-# Modal für Projektdetails
-st.markdown("""
-<div id="projectModal" class="project-modal" style="display: none;">
-    <div class="project-modal-content">
-        <span class="project-modal-close">&times;</span>
-        <div id="projectModalBody"></div>
-    </div>
-</div>
-
-<style>
-.project-modal {
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.85);
-    justify-content: center;
-    align-items: center;
-}
-.project-modal-content {
-    background: white;
-    max-width: 650px;
-    width: 90%;
-    border-radius: 20px;
-    padding: 30px;
-    max-height: 85%;
-    overflow-y: auto;
-    position: relative;
-}
-.project-modal-close {
-    position: absolute;
-    top: 15px;
-    right: 25px;
-    font-size: 35px;
-    font-weight: bold;
-    cursor: pointer;
-    color: #666;
-}
-.project-modal-close:hover {
-    color: #000;
-}
-.project-modal-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #01579b;
-    margin-bottom: 20px;
-}
-.project-modal-desc {
-    font-size: 15px;
-    color: #333;
-    line-height: 1.6;
-    margin-bottom: 20px;
-    white-space: pre-line;
-}
-.project-modal-skills {
-    margin-top: 15px;
-    margin-bottom: 20px;
-}
-.project-modal-skill {
-    display: inline-block;
-    background: #e6f7ff;
-    color: #0050b3;
-    font-size: 12px;
-    padding: 5px 12px;
-    border-radius: 20px;
-    margin: 5px;
-}
-.project-modal-images {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 20px;
-}
-.project-modal-images img {
-    max-width: 180px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-.project-modal-images img:hover {
-    transform: scale(1.05);
-}
-</style>
-
-<script>
-function openProjectModal(projectId) {
-    const projects = """ + json.dumps(projects) + """;
-    const project = projects[projectId];
-    const modal = document.getElementById('projectModal');
-    const modalBody = document.getElementById('projectModalBody');
-    
-    // Bilder als Base64 laden (müssen im Voraus geladen werden)
-    // Wir verwenden Platzhalter, die später durch echte Base64 ersetzt werden
-    let imagesHtml = '<div class="project-modal-images">';
-    if (project.images && project.images.length > 0) {
-        project.images.forEach(imgName => {
-            imagesHtml += `<div style="text-align: center;"><img src="" data-img="${imgName}" style="width: 150px; background: #f0f0f0; padding: 20px;">📸 ${imgName}</div>`;
-        });
-    } else {
-        imagesHtml += '<p style="color: #888; font-style: italic;">📸 Bilder folgen demnächst</p>';
-    }
-    imagesHtml += '</div>';
-    
-    let skillsHtml = '<div class="project-modal-skills">';
-    project.skills.forEach(skill => {
-        skillsHtml += `<span class="project-modal-skill">${skill}</span>`;
-    });
-    skillsHtml += '</div>';
-    
-    modalBody.innerHTML = `
-        <div class="project-modal-title">${project.title}</div>
-        <div class="project-modal-desc">${project.long_desc}</div>
-        ${skillsHtml}
-        ${imagesHtml}
-    `;
-    
-    modal.style.display = 'flex';
-    
-    // Bilder nachladen (Base64 von Python-Seite)
-    for (let i = 0; i < project.images.length; i++) {
-        const imgName = project.images[i];
-        fetch(`/get_image?img=${imgName}`)
-            .then(response => response.json())
-            .then(data => {
-                const imgElements = document.querySelectorAll(`.project-modal-images img[data-img="${imgName}"]`);
-                imgElements.forEach(img => {
-                    img.src = `data:image/png;base64,${data.b64}`;
-                    img.style.background = 'none';
-                    img.style.padding = '0';
-                });
-            });
-    }
-    
-    // Close event
-    document.querySelector('.project-modal-close').onclick = () => {
-        modal.style.display = 'none';
-    };
-    modal.onclick = (e) => {
-        if (e.target === modal) modal.style.display = 'none';
-    };
-}
-</script>
-""", unsafe_allow_html=True)
-
 # Kacheln generieren
 for i, project in enumerate(projects):
     # Skills als Tags (max 3 für die Kachel)
     skills_html = ''.join([f'<span class="skill-tag">{skill}</span>' for skill in project["skills"][:3]])
     
+    # Bilder als Base64 für die Vorschau (optional)
+    preview_img = ""
+    if project["images"]:
+        img_path = os.path.join("images", project["images"][0])
+        b64 = get_image_base64(img_path)
+        if b64:
+            preview_img = f'<img src="data:image/png;base64,{b64}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">'
+    
     st.markdown(f'''
         <div class="project-card" onclick="openProjectModal({i})">
+            {preview_img}
             <div class="project-icon">{project["title"].split()[0]}</div>
             <div class="project-title">{project["title"]}</div>
             <div class="project-short-desc">{project["short_desc"]}</div>
@@ -1421,13 +1284,152 @@ for i, project in enumerate(projects):
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Bild-Endpoint für Streamlit (damit Bilder im Modal geladen werden können)
-@st.experimental_dialog
-def get_image_endpoint():
-    query_params = st.query_params
-    if "img" in query_params:
-        img_name = query_params["img"]
+# JavaScript/HTML für Modal (mit eingebetteten Bildern)
+# Erstelle eine Liste aller Bilder als Base64 für JavaScript
+all_images_base64 = {}
+for project in projects:
+    for img_name in project["images"]:
         img_path = os.path.join("images", img_name)
         b64 = get_image_base64(img_path)
         if b64:
-            st.json({"b64": b64})
+            all_images_base64[img_name] = b64
+
+images_json = json.dumps(all_images_base64)
+
+# Modal HTML/JS
+st.markdown(f"""
+<div id="projectModal" class="project-modal" style="display: none;">
+    <div class="project-modal-content">
+        <span class="project-modal-close">&times;</span>
+        <div id="projectModalBody"></div>
+    </div>
+</div>
+
+<style>
+.project-modal {{
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.85);
+    justify-content: center;
+    align-items: center;
+}}
+.project-modal-content {{
+    background: white;
+    max-width: 650px;
+    width: 90%;
+    border-radius: 20px;
+    padding: 30px;
+    max-height: 85%;
+    overflow-y: auto;
+    position: relative;
+}}
+.project-modal-close {{
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #666;
+}}
+.project-modal-close:hover {{
+    color: #000;
+}}
+.project-modal-title {{
+    font-size: 24px;
+    font-weight: 700;
+    color: #01579b;
+    margin-bottom: 20px;
+}}
+.project-modal-desc {{
+    font-size: 15px;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    white-space: pre-line;
+}}
+.project-modal-skills {{
+    margin-top: 15px;
+    margin-bottom: 20px;
+}}
+.project-modal-skill {{
+    display: inline-block;
+    background: #e6f7ff;
+    color: #0050b3;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin: 5px;
+}}
+.project-modal-images {{
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}}
+.project-modal-images img {{
+    max-width: 180px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.2s;
+}}
+.project-modal-images img:hover {{
+    transform: scale(1.05);
+}}
+</style>
+
+<script>
+const allImages = {images_json};
+
+function openProjectModal(projectId) {{
+    const projects = {json.dumps(projects)};
+    const project = projects[projectId];
+    const modal = document.getElementById('projectModal');
+    const modalBody = document.getElementById('projectModalBody');
+    
+    let imagesHtml = '<div class="project-modal-images">';
+    if (project.images && project.images.length > 0) {{
+        project.images.forEach(imgName => {{
+            const imgData = allImages[imgName];
+            if (imgData) {{
+                imagesHtml += `<img src="data:image/png;base64,${{imgData}}" style="width: 150px;">`;
+            }} else {{
+                imagesHtml += `<div style="width: 150px; text-align: center;">📸 ${{imgName}}</div>`;
+            }}
+        }});
+    }} else {{
+        imagesHtml += '<p style="color: #888; font-style: italic;">📸 Bilder folgen demnächst</p>';
+    }}
+    imagesHtml += '</div>';
+    
+    let skillsHtml = '<div class="project-modal-skills">';
+    project.skills.forEach(skill => {{
+        skillsHtml += `<span class="project-modal-skill">${{skill}}</span>`;
+    }});
+    skillsHtml += '</div>';
+    
+    modalBody.innerHTML = `
+        <div class="project-modal-title">${{project.title}}</div>
+        <div class="project-modal-desc">${{project.long_desc}}</div>
+        ${{skillsHtml}}
+        ${{imagesHtml}}
+    `;
+    
+    modal.style.display = 'flex';
+    
+    // Close event
+    document.querySelector('.project-modal-close').onclick = () => {{
+        modal.style.display = 'none';
+    }};
+    modal.onclick = (e) => {{
+        if (e.target === modal) modal.style.display = 'none';
+    }};
+}}
+</script>
+""", unsafe_allow_html=True)
