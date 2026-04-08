@@ -1142,79 +1142,66 @@ st.markdown("<br>" * 3, unsafe_allow_html=True)  # Drei Umbrüche
 
 #Fertigkeiten
 
-import streamlit as st
+
 import os
 from PIL import Image
 
-# --- FUNKTION FÜR EINHEITLICHE HÖHE ---
-def load_fixed_height_img(path, degrees=0, target_height=250):
+def load_scaled_img(path, degrees=0, scale=0.4):
     if os.path.exists(path):
         img = Image.open(path)
-        # 1. Drehung anwenden
         if degrees != 0:
             img = img.rotate(degrees, expand=True)
-        
-        # 2. Proportionen berechnen für feste Höhe
-        aspect_ratio = img.width / img.height
-        target_width = int(target_height * aspect_ratio)
-        
-        # 3. Größe anpassen
-        return img.resize((target_width, target_height), Image.Resampling.LANCZOS)
+        new_size = (int(img.width * scale), int(img.height * scale))
+        return img.resize(new_size, Image.Resampling.LANCZOS)
     return None
 
 st.title("🛠️ Meine Fertigkeiten")
+st.divider()
 
-# --- STELLSCHRAUBE FÜR DIE HÖHE ---
-# Ändere diesen Wert, um beide Blöcke gleichzeitig zu vergrößern/verkleinern
-GLOBAL_HEIGHT = 200 
-
-col1, col2 = st.columns(2)
-
-# --- LINKS: SKIZZE BIS PRODUKT ---
-with col1:
+# --- 1. SCHRITT: DIE ÜBERSCHRIFTEN IN EINER ZEILE ---
+header_col1, header_col2 = st.columns(2)
+with header_col1:
     st.subheader("Von der Skizze bis zum fertigen Produkt")
+with header_col2:
+    st.subheader("Von der Idee bis zur Übergabe...")
+
+# --- 2. SCHRITT: DIE BILD-INHALTE ---
+content_col1, content_col2 = st.columns(2)
+
+with content_col1:
     kerze_files = [
         "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
         "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
     ]
-    
-    # Wir nutzen ein Raster, das die Bilder bündig hält
     k_cols = st.columns(3) 
     for idx, img_path in enumerate(kerze_files):
-        img = load_fixed_height_img(img_path, target_height=GLOBAL_HEIGHT)
+        img = load_scaled_img(img_path, scale=0.35)
         if img:
-            k_cols[idx % 3].image(img, use_container_width=False)
+            k_cols[idx % 3].image(img)
 
-# --- RECHTS: IDEE BIS SERIE ---
-with col2:
-    st.subheader("Von der Idee bis zur Übergabe...")
+with content_col2:
     project_configs = [
-        ("images/project1.jpg", 0),
-        ("images/project2.jpeg", 0),
-        ("images/project3.jpeg", 90), 
-        ("images/project4.jpeg", 90),
-        ("images/project5.jpg", 0),
-        ("images/project6.jpeg", -90) # Falls das Bild noch falsch liegt, hier 90 oder 180 testen
+        ("images/project1.jpg", 0), ("images/project2.jpeg", 0),
+        ("images/project3.jpeg", 90), ("images/project4.jpeg", 90),
+        ("images/project5.jpg", 0), ("images/project6.jpeg", -90)
     ]
-    
-    p_cols = st.columns(3)
+    p_cols = st.columns(2)
     for idx, (img_path, angle) in enumerate(project_configs):
-        # Hier nutzen wir dieselbe GLOBAL_HEIGHT für den Ausgleich
-        img = load_fixed_height_img(img_path, angle, target_height=GLOBAL_HEIGHT)
+        img = load_scaled_img(img_path, angle, scale=0.42)
         if img:
-            p_cols[idx % 3].image(img, use_container_width=False)
+            p_cols[idx % 2].image(img)
 
-# CSS für saubere Abstände und Schatten
+# CSS für einheitliche Optik
 st.markdown("""
 <style>
-    [data-testid="stHorizontalBlock"] img {
-        object-fit: contain;
-        border-radius: 8px;
-        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    img {
+        border-radius: 12px;
+        box-shadow: 3px 3px 12px rgba(0,0,0,0.2);
         margin-bottom: 10px;
     }
 </style>
 """, unsafe_allow_html=True)
+
 
 
 st.divider()
