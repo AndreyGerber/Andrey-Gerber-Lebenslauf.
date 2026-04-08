@@ -1053,7 +1053,7 @@ exp_col1, exp_col2 = st.columns(2)
 with exp_col1:
     st.markdown("""
         <div class="exp-box">
-            <h4>💻 Tools & Software</h4>
+            <h4>💻 Hardware & Software</h4>
             <ul>
                 <li><strong>ob 3D Modelle mit CATIA V5 oder AutoCAD erstellen,</strong></li>
                 <li><strong>ob Sensorik anschließen, einstellen und Objekte vermessen mit Technik von B&K oder Head Acoustics,</strong></li>
@@ -1067,12 +1067,12 @@ with exp_col1:
 with exp_col2:
     st.markdown("""
         <div class="exp-box">
-            <h4>📋 Methodiken & Fachliche Kompetenzen</h4>
+            <h4>📋 Hardskills & Softskills</h4>
             <ul>
                 <li><strong>Qualitätsmanagement | Lean Management & Six Sigma | Audits | Risikomanagement</strong></li>
                 <li><strong>ISO 9001 oder IATF 16949, CAPA oder 8D, DMAIC oder PDCA</strong></li>
             </ul>
-            <div class="no-bullet", style="margin-bottom: 75px;">Hier müssen wir zunächst die Begriffe definieren, bevor aneinander gesprochen wird.</div>
+            <div class="no-bullet", style="margin-bottom: 95px;">Hier müssen wir zunächst die Begriffe definieren, bevor aneinander gesprochen wird.</div>
         </div>
         """, unsafe_allow_html=True)
 
