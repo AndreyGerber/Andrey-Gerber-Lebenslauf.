@@ -1275,7 +1275,7 @@ with book_col:
             /* Der Text AUF dem Buch */
             .book-text {
                 position: absolute;
-                top: 35px;      /* Zentrierung auf den Buchseiten */
+                top: 65px;      /* Zentrierung auf den Buchseiten */
                 left: 55%;
                 transform: translate(-50%, -50%);
                 color: #e63946; /* Ein schönes Rot für den Kontrast */
