@@ -471,7 +471,6 @@ st.write("")
 #ab hier beginnt dre Abschnitt mit Zeugnissen
 
 
-
 with st.container():
     st.markdown("""
         <div style="background-color: #e1f5fe; padding: 20px; border-radius: 15px; border-left: 5px solid #01579b; margin-bottom: 20px;">
@@ -489,7 +488,7 @@ with st.container():
         </div>
     """, unsafe_allow_html=True)
 
-# --- PDF GALERIE mit funktionierenden st.button ---
+# --- PDF GALERIE ---
 if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
 
@@ -516,15 +515,15 @@ other_docs = [
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
 
-# WICHTIG: Das CSS muss stärker sein - mit !important und spezifischen Selektoren
+# Sanftes CSS ohne aggressive Farben
 st.markdown("""
 <style>
-    /* Zwingt die Buttons in eine Spalten-Layout */
     .stButton > button {
-        height: 100px !important;
+        height: 120px !important;
         width: 100% !important;
         border-radius: 16px !important;
-        background-color: white !important;
+        background-color: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
         transition: all 0.3s ease !important;
         display: flex !important;
         align-items: center !important;
@@ -534,7 +533,6 @@ st.markdown("""
         padding: 10px !important;
     }
     
-    /* Der Inhalt des Buttons */
     .stButton > button .stMarkdown {
         display: flex !important;
         flex-direction: column !important;
@@ -543,33 +541,25 @@ st.markdown("""
         width: 100% !important;
     }
     
-    /* Icon und Text formatieren */
     .stButton > button p {
         margin: 0 !important;
-        font-size: 20px !important;
-        font-weight: 700 !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
         color: #475569 !important;
         line-height: 1.3 !important;
         text-align: center !important;
         width: 100% !important;
     }
     
-    /* Die erste Zeile (Icon) */
     .stButton > button p::first-line {
-        font-size: 25px !important;
+        font-size: 38px !important;
         line-height: 1.5 !important;
     }
     
-    /* Hover Effekt */
     .stButton > button:hover {
         transform: translateY(-5px) !important;
-        border-color: #3b82f6 !important;
+        border-color: #94a3b8 !important;
         background-color: #f1f5f9 !important;
-    }
-    
-    /* Aktiver Button */
-    div:has(> div > div > div > div > div > button[kind="secondary"]) .stButton > button {
-        background-color: #1e293b !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -583,15 +573,24 @@ with col_gallery:
     t_c1, t_c2, t_c3 = st.columns(3)
     with t_c2:
         is_active = st.session_state.active_doc == top_doc['file']
-        if is_active:
-            st.markdown('<div style="background-color: #1e293b; border-radius: 16px;">', unsafe_allow_html=True)
         
         if st.button(f"{top_doc['icon']}\n{top_doc['label']}", key=f"btn_{top_doc['file']}", use_container_width=True):
             st.session_state.active_doc = top_doc['file']
             st.rerun()
         
+        # Sanfter Rahmen für aktiven Button
         if is_active:
-            st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown("""
+                <style>
+                    div:has(> button[key="btn_Namensaenderung.pdf"]) > button {
+                        background-color: #e6f7ff !important;
+                        border: 2px solid #69c0ff !important;
+                    }
+                    div:has(> button[key="btn_Namensaenderung.pdf"]) > button p {
+                        color: #0050b3 !important;
+                    }
+                </style>
+            """, unsafe_allow_html=True)
     
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     
@@ -600,15 +599,24 @@ with col_gallery:
     for i, doc in enumerate(other_docs):
         with grid_cols[i % 3]:
             is_active = st.session_state.active_doc == doc['file']
-            if is_active:
-                st.markdown('<div style="background-color: #1e293b; border-radius: 16px;">', unsafe_allow_html=True)
             
             if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
                 st.session_state.active_doc = doc['file']
                 st.rerun()
             
+            # Sanfter Rahmen für aktiven Button
             if is_active:
-                st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown(f"""
+                    <style>
+                        div:has(> button[key="btn_{doc['file']}"]) > button {{
+                            background-color: #e6f7ff !important;
+                            border: 2px solid #69c0ff !important;
+                        }}
+                        div:has(> button[key="btn_{doc['file']}"]) > button p {{
+                            color: #0050b3 !important;
+                        }}
+                    </style>
+                """, unsafe_allow_html=True)
     
     st.markdown("<div style='height: 80px;'></div>", unsafe_allow_html=True)
 
@@ -620,7 +628,7 @@ with col_viewer:
                 src="data:application/pdf;base64,{pdf_b64}#toolbar=0" 
                 width="100%" 
                 height="850px" 
-                style="border-radius:15px; border:2px solid #1e293b;">
+                style="border-radius:15px; border:1px solid #e2e8f0;">
             </iframe>
         ''', unsafe_allow_html=True)
 
