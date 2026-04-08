@@ -616,16 +616,9 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 
 
-# ==================== 3D ZERTIFIKATE-GALERIE MIT THREE.JS ====================
+# ==================== FLIEßENDE 3D-WAND MIT THREE.JS ====================
 st.markdown("<h2 style='text-align: center; margin-top: 50px;'>📜 Meine Zertifikate & Nachweise</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ 3D-Galerie – Maus ziehen zum Drehen, Klick auf Zertifikat zum Vergrößern ✧</p>", unsafe_allow_html=True)
-
-# Auswahl der Darstellungsart
-view_mode = st.radio(
-    "🎨 Darstellungsart wählen:",
-    ["🏛️ 3D-Galerie-Wand (Variante A)", "🌀 Fließende 3D-Wand (Variante D)"],
-    horizontal=True,
-)
+st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Fließende 3D-Wand – Maus ziehen zum Drehen, Klick auf Zertifikat zum Vergrößern ✧</p>", unsafe_allow_html=True)
 
 # Deine 17 Zertifikatsnamen mit Nummerierung
 cert_names = [
@@ -644,7 +637,7 @@ cert_names = [
     "13_Methodology_in_Data_Science",
     "14_Feature_Engineering_and_Optimisation",
     "15_Time_Series_Analysis_with_Python",
-    "16_Advanced_Classification_with_scikit-learn",
+    "16_Advanced_Classification_with-scikit-learn",
     "17_Text_Mining"
 ]
 
@@ -653,6 +646,7 @@ cert_folder = "images"
 # Sammle existierende Bilder mit Base64
 import base64
 import json
+import math
 
 cert_data = []
 for cert_name in cert_names:
@@ -672,31 +666,15 @@ for cert_name in cert_names:
 num_certs = len(cert_data)
 
 if num_certs > 0:
-    # Positionen berechnen (JSON für JavaScript)
+    # Positionen für fließende Spirale berechnen
     positions = []
-    
-    if view_mode == "🏛️ 3D-Galerie-Wand (Variante A)":
-        cols_per_row = 5
-        rows = (num_certs + cols_per_row - 1) // cols_per_row
-        
-        for i in range(num_certs):
-            row = i // cols_per_row
-            col = i % cols_per_row
-            # X: von -3 bis 3, Y: von oben nach unten, Z: 0
-            x = (col - (cols_per_row - 1) / 2) * 1.2
-            y = (rows - row - 1) * 1.2 - (rows - 1) * 0.6
-            z = 0
-            positions.append({"x": x, "y": y, "z": z})
-    else:
-        # Variante D: Fließende Spirale
-        import math
-        for i in range(num_certs):
-            angle = i * 0.65
-            radius = 3.5
-            x = math.cos(angle) * radius
-            z = math.sin(angle) * radius
-            y = (i - num_certs/2) * 0.35
-            positions.append({"x": x, "y": y, "z": z})
+    for i in range(num_certs):
+        angle = i * 0.65
+        radius = 3.5
+        x = math.cos(angle) * radius
+        z = math.sin(angle) * radius
+        y = (i - num_certs/2) * 0.35
+        positions.append({"x": x, "y": y, "z": z})
     
     # Konvertiere zu JSON
     certs_json = json.dumps([{
@@ -759,7 +737,7 @@ if num_certs > 0:
     </head>
     <body>
         <div id="info">
-            🖱️ Maus ziehen = drehen | Rechtsklick ziehen = schwenken | Scrollen = zoomen | Klick auf Zertifikat = vergrößern
+            🌀 Fließende 3D-Wand | 🖱️ Maus ziehen = drehen | Rechtsklick ziehen = schwenken | Scrollen = zoomen | Klick = vergrößern
         </div>
         <div id="modal" onclick="this.style.display='none'">
             <span class="close">&times;</span>
@@ -787,7 +765,7 @@ if num_certs > 0:
             scene.background = new THREE.Color(0xf8fafc);
             
             const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(5, 4, 8);
+            camera.position.set(5, 3, 8);
             camera.lookAt(0, 0, 0);
             
             const renderer = new THREE.WebGLRenderer({{ antialias: true }});
@@ -825,73 +803,67 @@ if num_certs > 0:
             backLight.position.set(-3, 2, -4);
             scene.add(backLight);
             
-            // Boden-Raster (optional)
-            const gridHelper = new THREE.GridHelper(15, 20, 0xcccccc, 0xe0e0e0);
-            gridHelper.position.y = -1.5;
+            // Hilfslinien (dezent)
+            const gridHelper = new THREE.GridHelper(12, 20, 0xcccccc, 0xe0e0e0);
+            gridHelper.position.y = -1.8;
             scene.add(gridHelper);
             
             // Zertifikate erstellen
             const certificates = [];
             
             certsData.forEach((cert, idx) => {{
-                // Canvas für Bildtextur
                 const img = new Image();
                 img.src = `data:image/${{cert.ext}};base64,${{cert.b64}}`;
                 
                 img.onload = () => {{
-                    // Textur erstellen
                     const texture = new THREE.CanvasTexture(img);
                     
-                    // Material mit Bild
                     const material = new THREE.MeshStandardMaterial({{
                         map: texture,
                         side: THREE.DoubleSide,
                         roughness: 0.3,
-                        metalness: 0.1,
-                        emissive: 0x000000
+                        metalness: 0.1
                     }});
                     
-                    // Plane Geometry (Breite/Höhe an Bild anpassen)
                     const aspect = img.width / img.height;
-                    const width = 1.6;
+                    const width = 1.4;
                     const height = width / aspect;
                     const geometry = new THREE.PlaneGeometry(width, height);
                     const plane = new THREE.Mesh(geometry, material);
                     plane.position.set(cert.x, cert.y, cert.z);
                     plane.userData = {{ imageSrc: `data:image/${{cert.ext}};base64,${{cert.b64}}`, name: cert.name }};
                     plane.castShadow = true;
-                    plane.receiveShadow = false;
                     scene.add(plane);
                     
-                    // Weißer Rahmen
-                    const borderGeometry = new THREE.BoxGeometry(width + 0.08, height + 0.08, 0.03);
-                    const borderMaterial = new THREE.MeshStandardMaterial({{ color: 0xffffff, metalness: 0.2, roughness: 0.4 }});
+                    // Rahmen
+                    const borderGeometry = new THREE.BoxGeometry(width + 0.06, height + 0.06, 0.03);
+                    const borderMaterial = new THREE.MeshStandardMaterial({{ color: 0xffffff, metalness: 0.1, roughness: 0.3 }});
                     const border = new THREE.Mesh(borderGeometry, borderMaterial);
                     border.position.set(cert.x, cert.y, cert.z - 0.02);
                     scene.add(border);
                     
-                    // CSS2D Text unter dem Bild
+                    // Text unter dem Bild
                     const div = document.createElement('div');
                     div.textContent = cert.name;
                     div.style.color = '#475569';
-                    div.style.fontSize = '12px';
+                    div.style.fontSize = '11px';
                     div.style.fontWeight = '600';
                     div.style.textAlign = 'center';
-                    div.style.backgroundColor = 'rgba(255,255,255,0.8)';
-                    div.style.padding = '4px 8px';
+                    div.style.backgroundColor = 'rgba(255,255,255,0.85)';
+                    div.style.padding = '3px 8px';
                     div.style.borderRadius = '20px';
                     div.style.border = '1px solid #e2e8f0';
                     div.style.pointerEvents = 'none';
                     
                     const label = new CSS2DObject(div);
-                    label.position.set(cert.x, cert.y - height/2 - 0.15, cert.z);
+                    label.position.set(cert.x, cert.y - height/2 - 0.12, cert.z);
                     scene.add(label);
                     
                     certificates.push(plane);
                 }};
             }});
             
-            // Raycaster für Klick-Interaktion
+            // Raycaster für Klick
             const raycaster = new THREE.Raycaster();
             const mouse = new THREE.Vector2();
             
