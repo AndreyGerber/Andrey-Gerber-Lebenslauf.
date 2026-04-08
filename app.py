@@ -971,7 +971,7 @@ with st.container():
     # Überschriften
     h_col1, h_col2 = st.columns(2)
     h_col1.subheader("Von der Skizze bis zum fertigen Produkt")
-    h_col2.subheader("Von der Idee bis zur Übergabe...")
+    h_col2.subheader("Von der Idee bis zur Übergabe an die Fertigung")
 
     # Bild-Inhalte
     content_col1, content_col2 = st.columns(2)
