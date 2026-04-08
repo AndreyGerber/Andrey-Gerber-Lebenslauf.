@@ -523,7 +523,7 @@ st.markdown("""
         width: 100% !important;
         border-radius: 16px !important;
         background-color: #f8fafc !important;
-        border: 2px solid #cbd5e1 !important;
+        border: 2px solid #94a3b8 !important;
         transition: all 0.3s ease !important;
         display: flex !important;
         align-items: center !important;
