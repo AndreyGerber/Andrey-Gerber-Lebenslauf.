@@ -1119,7 +1119,7 @@ def st_certificate_wall(image_folder="images"):
     """
     
     # Anzeige in Streamlit
-    st.components.v1.html(html_content, height=1200, scrolling=True)
+    st.components.v1.html(html_content, height=2200, scrolling=True)
 
 # --- App Aufruf ---
 st.set_page_config(page_title="Lebenslauf Zertifikate", layout="wide")
