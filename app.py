@@ -1243,51 +1243,66 @@ with col3:
 
 
 # --- DAS BUCH-SYMBOL (Am Ende deiner App) ---
-st.write("") 
-st.write("") # Zusätzlicher Platz nach den Hobbies
 
-# Wir nutzen Spalten, um das Buch ganz nach rechts zu schieben
-spacer1, spacer2, book_col = st.columns([2, 1, 1])
+import base64
 
-with book_col:
-    st.markdown("""
-        <style>
-            @keyframes float {
-                0% { transform: translateY(0px) rotate(15deg); }
-                50% { transform: translateY(-10px) rotate(10deg); }
-                100% { transform: translateY(0px) rotate(15deg); }
-            }
-            .book-wrapper {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                cursor: help;
-                animation: float 4s ease-in-out infinite; /* Es schwebt leicht */
-            }
-            .book-icon {
-                font-size: 80px; /* Schön groß */
-                filter: drop-shadow(5px 10px 15px rgba(0,0,0,0.2));
-                transition: all 0.3s ease;
-            }
-            .book-wrapper:hover .book-icon {
-                transform: scale(1.2) rotate(0deg);
-                filter: drop-shadow(2px 5px 5px rgba(0,0,0,0.1));
-            }
-            .book-tag {
-                background: #f1f5f9;
-                color: #64748b;
-                padding: 4px 12px;
-                border-radius: 20px;
-                font-size: 0.75rem;
-                font-weight: bold;
-                margin-top: -10px;
-                border: 1px solid #e2e8f0;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            }
-        </style>
-        
-        <div class="book-wrapper" title="📖 Work in Progress: Dieses Projekt befindet sich noch in der Entwurfsphase.">
-            <div class="book-icon">📖</div>
-            <div class="book-tag">Unvollendet</div>
-        </div>
-    """, unsafe_allow_html=True)
+# Hilfsfunktion, um das Bild sicher einzubetten
+def get_base64_img(file_path):
+    if os.path.exists(file_path):
+        with open(file_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    return None
+
+# --- DAS BUCH-ELEMENT ---
+# Stelle sicher, dass die Datei exakt so im Ordner 'images' liegt
+buch_b64 = get_base64_img("images/mein_buch.png") 
+
+if buch_b64:
+    # Wir nutzen Spalten, um es ganz nach rechts zu schieben
+    spacer1, spacer2, book_col = st.columns([2, 1, 1])
+
+    with book_col:
+        st.markdown(f"""
+            <style>
+                @keyframes floating {{
+                    0% {{ transform: translateY(0px); }}
+                    50% {{ transform: translateY(-15px); }}
+                    100% {{ transform: translateY(0px); }}
+                }}
+                .book-wrapper {{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    cursor: help;
+                    animation: floating 4s ease-in-out infinite;
+                    margin-top: 50px;
+                }}
+                .book-img {{
+                    width: 180px; /* Größe hier anpassen */
+                    filter: drop-shadow(0px 10px 20px rgba(0,0,0,0.1));
+                    transition: transform 0.3s ease;
+                }}
+                .book-wrapper:hover .book-img {{
+                    transform: scale(1.1);
+                }}
+                /* Der Button unter dem Buch */
+                .status-badge {{
+                    background-color: #f1f5f9;
+                    color: #64748b;
+                    padding: 6px 16px;
+                    border-radius: 20px;
+                    font-size: 0.8rem;
+                    font-weight: bold;
+                    border: 1px solid #e2e8f0;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                    margin-top: -10px;
+                }}
+            </style>
+            
+            <div class="book-wrapper" title="📖 Work in Progress: Dieses Buchprojekt ist noch in Arbeit.">
+                <img src="data:image/png;base64,{buch_b64}" class="book-img">
+                <div class="status-badge">Unvollendet</div>
+            </div>
+        """, unsafe_allow_html=True)
+else:
+    st.error("Bild 'images/mein_buch.png' nicht gefunden. Bitte Dateipfad prüfen!")
