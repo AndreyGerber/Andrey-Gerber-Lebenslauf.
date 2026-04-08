@@ -1060,7 +1060,7 @@ with exp_col1:
                 <li><strong>ob Daten mit Minitab oder selbst erstellten statistischen Methoden analysieren,</strong></li>
             </ul>
             <div class="no-bullet"><strong>sollte machbar sein. SAP kann jeder und niemand gleichzeitig.</strong></div>
-            <div></div>
+            <div>   </div>
             <div class="no-bullet"><strong>Von MS Produkten spricht heutzutage doch niemand mehr.</strong></div>
         </div>
         """, unsafe_allow_html=True)
