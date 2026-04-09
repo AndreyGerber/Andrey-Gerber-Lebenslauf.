@@ -1112,16 +1112,10 @@ st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 
 
 
-def get_base64_img(file_path):
-    if os.path.exists(file_path):
-        with open(file_path, "rb") as f:
-            return base64.b64encode(f.read()).decode()
-    return None
-
 st.divider()
 st.markdown("<h2 style='text-align: center;'>Leidenschaften & Ausgleich</h2>", unsafe_allow_html=True)
 
-# Erweitertes CSS für Zoom-Effekt und Bild-Titel
+# Optimiertes CSS: Entfernung des störenden Abstands und Fixierung des Layouts
 st.markdown("""
 <style>
     .hobby-card {
@@ -1129,44 +1123,40 @@ st.markdown("""
         border: 2px solid #e2e8f0;
         border-radius: 15px;
         padding: 20px;
-        height: 420px;
+        height: 420px; /* Einheitliche Höhe für alle Karten */
         display: flex;
         flex-direction: column;
-        transition: transform 0.3s ease;
+        position: relative;
     }
     .hobby-icon { font-size: 30px; margin-bottom: 10px; }
     .hobby-title { font-weight: bold; font-size: 1.2rem; color: #1e293b; margin-bottom: 10px; }
     .hobby-text { font-size: 0.95rem; color: #475569; line-height: 1.5; flex-grow: 1; }
     
-    /* Container für Bilder */
     .hobby-img-area { 
-        display: flex; gap: 8px; margin-top: 15px; height: 110px; 
-        overflow: visible; /* Wichtig für den Zoom */
+        display: flex; gap: 8px; margin-top: 15px; height: 130px; 
     }
     
-    /* Einzelnes Bild-Styling mit Zoom */
     .hobby-img-wrapper {
         width: 31%;
         position: relative;
     }
     
     .hobby-img-wrapper img { 
-        width: 100%; height: 110px; object-fit: cover; border-radius: 8px; 
-        border: 1px solid #eee; transition: all 0.3s ease;
+        width: 100%; height: 100px; object-fit: cover; border-radius: 8px; 
+        border: 1px solid #eee; transition: transform 0.3s ease;
         cursor: zoom-in;
     }
 
-    /* Zoom-Effekt auf Faktor 2 */
+    /* Zoom-Effekt bleibt, aber z-index korrigiert */
     .hobby-img-wrapper img:hover {
-        transform: scale(2);
-        z-index: 999;
+        transform: scale(1.8);
+        z-index: 100;
         box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     }
 
-    /* Bildunterschrift im Tooltip-Stil oder Text darunter */
     .img-label {
         font-size: 10px; color: #94a3b8; text-align: center; margin-top: 4px;
-        display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        display: block;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -1182,7 +1172,7 @@ with col1:
             Ein Mann hat seinen Kindern ein Schachspiel gekauft. Nach einem Jahr konnte er mit uns nicht mehr mithalten.
             Ich sehe nicht nur meine Züge voraus, sondern auch die Züge des Mitspielers. 
         </div>
-        <div style="height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.2; font-size: 14px; text-align: center;">
+        <div style="height: 130px; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.2; font-size: 14px; text-align: center;">
             Wo es bei mir mit Schach losging, gab's bei uns im Ort wahrscheinlich drei Personen mit Kameras. Von daher leider keine Bilder von damals.<br>
             <span style="font-size: 40px;">♔ ♕ ♖</span>
         </div>
@@ -1200,18 +1190,9 @@ with col2:
         <div class="hobby-title">Eishockey & Fußball</div>
         <div class="hobby-text">Nichts ist besser als das Gefühl, zum Erfolg des anderen beigetragen zu haben.</div>
         <div class="hobby-img-area">
-            <div class="hobby-img-wrapper">
-                <img src="data:image/jpeg;base64,{img_f2}" title="Einmal Gold">
-                <span class="img-label">Fußball</span>
-            </div>
-            <div class="hobby-img-wrapper">
-                <img src="data:image/png;base64,{img_h1}" title="Auch hier auf dem Podest">
-                <span class="img-label">Eishockey</span>
-            </div>
-            <div class="hobby-img-wrapper">
-                <img src="data:image/png;base64,{img_h3}" title="Blick hinter die Kulissen">
-                <span class="img-label">Schmiede</span>
-            </div>
+            <div class="hobby-img-wrapper"><img src="data:image/jpeg;base64,{img_f2}"><span class="img-label">Fußball</span></div>
+            <div class="hobby-img-wrapper"><img src="data:image/png;base64,{img_h1}"><span class="img-label">Eishockey</span></div>
+            <div class="hobby-img-wrapper"><img src="data:image/png;base64,{img_h3}"><span class="img-label">Schmiede</span></div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1227,18 +1208,9 @@ with col3:
         <div class="hobby-title">Yoga & Boxen</div>
         <div class="hobby-text">Schnell reagieren und trotzdem gelassen bleiben.</div>
         <div class="hobby-img-area">
-            <div class="hobby-img-wrapper">
-                <img src="data:image/jpeg;base64,{img_y1}" title="Es ist entspannt, haben sie gesagt">
-                <span class="img-label">Yoga</span>
-            </div>
-            <div class="hobby-img-wrapper">
-                <img src="data:image/jpeg;base64,{img_y2}" title="Ist einfach, haben sie gesagt">
-                <span class="img-label">Balance</span>
-            </div>
-            <div class="hobby-img-wrapper">
-                <img src="data:image/png;base64,{img_y3}" title="Wenn du der einzige bist, der es richtig macht">
-                <span class="img-label">Kraft</span>
-            </div>
+            <div class="hobby-img-wrapper"><img src="data:image/jpeg;base64,{img_y1}"><span class="img-label">Yoga</span></div>
+            <div class="hobby-img-wrapper"><img src="data:image/jpeg;base64,{img_y2}"><span class="img-label">Balance</span></div>
+            <div class="hobby-img-wrapper"><img src="data:image/png;base64,{img_y3}"><span class="img-label">Kraft</span></div>
         </div>
     </div>
     """, unsafe_allow_html=True)
