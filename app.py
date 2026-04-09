@@ -986,32 +986,35 @@ def load_scaled_img(path, degrees=0, scale_percent=40):
 BILD_SKALIERUNG = 38  # Hier kannst du die Größe anpassen (z.B. 35, 40, 45)
 
 with st.container():
-    # CSS Isolation
+    # CSS für die Trennung der Spalten
     st.markdown("""
         <style>
+            .project-card {
+                background-color: #fcfcfc; /* Sehr helles Grau */
+                border: 1px solid #e6e9ef;
+                border-radius: 15px;
+                padding: 20px;
+                height: 100%;
+                box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+            }
             .skill-section img {
-                border-radius: 10px !important;
-                box-shadow: 2px 2px 8px rgba(0,0,0,0.2) !important;
+                border-radius: 8px !important;
                 margin-bottom: 10px !important;
-                max-width: 100% !important;
-                height: auto !important;
             }
         </style>
-        <div class="skill-section">
     """, unsafe_allow_html=True)
 
     st.title("🛠️ Meine Fertigkeiten")
     st.divider()
 
-    # Überschriften
-    h_col1, h_col2 = st.columns(2)
-    h_col1.subheader("Von der Skizze bis zum fertigen Produkt")
-    h_col2.subheader("Von der Idee bis zur Übergabe an die Fertigung")
+    # Wir nutzen st.columns, um die zwei Hauptbereiche nebeneinander zu legen
+    col_links, col_rechts = st.columns(2)
 
-    # Bild-Inhalte
-    content_col1, content_col2 = st.columns(2)
-
-    with content_col1:
+    # LINKER BEREICH
+    with col_links:
+        st.markdown('<div class="project-card">', unsafe_allow_html=True)
+        st.subheader("Von der Skizze bis zum fertigen Produkt")
+        
         kerze_files = [
             "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
             "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
@@ -1021,15 +1024,19 @@ with st.container():
             img = load_scaled_img(img_path, scale_percent=BILD_SKALIERUNG)
             if img:
                 k_cols[idx % 3].image(img)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    with content_col2:
-        # Hier wurden das 4. (project4) und 5. Bild (project5) in der Liste vertauscht
+    # RECHTER BEREICH
+    with col_rechts:
+        st.markdown('<div class="project-card">', unsafe_allow_html=True)
+        st.subheader("Von der Idee bis zur Übergabe") # Titel gekürzt für bessere Optik
+        
         project_configs = [
             ("images/project1.jpg", 0), 
             ("images/project2.jpeg", 0),
             ("images/project3.jpeg", 90), 
-            ("images/project5.jpg", 0),   # Vorher an Stelle 5
-            ("images/project4.jpeg", 90),  # Vorher an Stelle 4
+            ("images/project5.jpg", 0),
+            ("images/project4.jpeg", 90),
             ("images/project6.jpeg", -90)
         ]
         
@@ -1038,8 +1045,7 @@ with st.container():
             img = load_scaled_img(img_path, angle, scale_percent=BILD_SKALIERUNG)
             if img:
                 p_cols[idx % 3].image(img)
-
-    st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 st.divider()
 
