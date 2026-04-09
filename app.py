@@ -1249,7 +1249,7 @@ st.markdown("""
     }
     .quote-card {
         background: #ffffff;
-        border-top: 5px solid #ff4b4b;
+        border-top: 5px solid #8e44ad;
         border-radius: 12px;
         padding: 25px;
         height: 100%;
@@ -1272,7 +1272,7 @@ st.markdown("""
     .quote-year {
         text-align: right;
         font-weight: bold;
-        color: #ff4b4b;
+        color: #8e44ad;
         font-size: 0.95rem;
     }
     /* Bindestrich vor dem Jahr wie bei Autorenzitaten */
