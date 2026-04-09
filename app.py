@@ -1240,41 +1240,59 @@ st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
 
 
 st.divider()
+st.markdown("<h2 style='text-align: center;'>⚠️ Meine 3 größten Fehlschätzungen</h2>", unsafe_allow_html=True)
 
-# CSS für die "Fehler-Karten"
 st.markdown("""
 <style>
-    .fail-container {
-        background: #fff5f5; /* Ganz leichtes Rot/Rosa */
-        border-left: 5px solid #ff4b4b;
-        padding: 25px;
-        border-radius: 12px;
-        margin-top: 20px;
+    .fail-card {
+        background: #ffffff;
+        border-top: 5px solid #ff4b4b;
+        border-radius: 10px;
+        padding: 20px;
+        height: 100%;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        transition: transform 0.2s ease;
     }
-    .fail-item { margin-bottom: 15px; }
-    .fail-year { font-weight: bold; color: #ff4b4b; font-size: 1.1rem; }
-    .fail-quote { font-style: italic; color: #1e293b; font-size: 1.05rem; }
-    .fail-reality { color: #475569; font-size: 0.95rem; display: block; margin-top: 3px; }
+    .fail-card:hover { transform: translateY(-5px); }
+    .fail-year-badge {
+        background: #ff4b4b;
+        color: white;
+        padding: 2px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+    .fail-quote-box { margin-top: 15px; font-style: italic; color: #1e293b; min-height: 60px; }
+    .fail-lesson { color: #64748b; font-size: 0.9rem; border-top: 1px solid #f1f5f9; padding-top: 10px; }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h2 style='text-align: center;'>⚠️ Meine 3 größten Fehlschätzungen</h2>", unsafe_allow_html=True)
+f_col1, f_col2, f_col3 = st.columns(3)
 
-with st.container():
-    st.markdown(f"""
-    <div class="fail-container">
-        <div class="fail-item">
-            <span class="fail-year">2002:</span> <span class="fail-quote">"Ich werde mein ganzes Leben an diesem Ort verbringen."</span>
-            <span class="fail-reality">→ Spoiler: Die Welt war dann doch größer als mein Dorf, und mein Koffer war anderer Meinung.</span>
-        </div>
-        <div class="fail-item">
-            <span class="fail-year">2013:</span> <span class="fail-quote">"Ich bin schon zu alt fürs Programmieren."</span>
-            <span class="fail-reality">→ Ein klassischer Fall von geistiger Frührente. Heute weiß ich: Code altert nicht, nur die Syntax ändert sich.</span>
-        </div>
-        <div class="fail-item">
-            <span class="fail-year">Heute:</span> <span class="fail-quote">"Diesen Lebenslauf bau ich mal fix in ein paar Stunden."</span>
-            <span class="fail-reality">→ Berühmte letzte Worte. Jetzt sitzen wir hier, feilen am CSS-Grid und philosophieren über Tooltips.</span>
-        </div>
+with f_col1:
+    st.markdown("""
+    <div class="fail-card">
+        <span class="fail-year-badge">2002</span>
+        <div class="fail-quote-box">"Ich werde mein ganzes Leben an diesem Ort verbringen."</div>
+        <div class="fail-lesson"><b>Lektion:</b> Die Welt war größer als mein Dorf, und mein Koffer war anderer Meinung.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with f_col2:
+    st.markdown("""
+    <div class="fail-card">
+        <span class="fail-year-badge">2013</span>
+        <div class="fail-quote-box">"Ich bin schon zu alt fürs Programmieren."</div>
+        <div class="fail-lesson"><b>Lektion:</b> Code altert nicht, nur die Syntax. Ein klassischer Fall von geistiger Frührente.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with f_col3:
+    st.markdown("""
+    <div class="fail-card">
+        <span class="fail-year-badge">Heute</span>
+        <div class="fail-quote-box">"Diesen Lebenslauf bau ich mal fix in ein paar Stunden."</div>
+        <div class="fail-lesson"><b>Lektion:</b> Berühmte letzte Worte. Jetzt philosophieren wir über CSS-Grids.</div>
     </div>
     """, unsafe_allow_html=True)
 
