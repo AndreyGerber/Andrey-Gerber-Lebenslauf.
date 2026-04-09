@@ -1235,7 +1235,64 @@ with col3:
 
 
 
+
+st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
+
+
+st.divider()
+
+# CSS für die "Fehler-Karten"
+st.markdown("""
+<style>
+    .fail-container {
+        background: #fff5f5; /* Ganz leichtes Rot/Rosa */
+        border-left: 5px solid #ff4b4b;
+        padding: 25px;
+        border-radius: 12px;
+        margin-top: 20px;
+    }
+    .fail-item { margin-bottom: 15px; }
+    .fail-year { font-weight: bold; color: #ff4b4b; font-size: 1.1rem; }
+    .fail-quote { font-style: italic; color: #1e293b; font-size: 1.05rem; }
+    .fail-reality { color: #475569; font-size: 0.95rem; display: block; margin-top: 3px; }
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("<h2 style='text-align: center;'>⚠️ Meine 3 größten Fehlschätzungen</h2>", unsafe_allow_html=True)
+
+with st.container():
+    st.markdown(f"""
+    <div class="fail-container">
+        <div class="fail-item">
+            <span class="fail-year">2002:</span> <span class="fail-quote">"Ich werde mein ganzes Leben an diesem Ort verbringen."</span>
+            <span class="fail-reality">→ Spoiler: Die Welt war dann doch größer als mein Dorf, und mein Koffer war anderer Meinung.</span>
+        </div>
+        <div class="fail-item">
+            <span class="fail-year">2013:</span> <span class="fail-quote">"Ich bin schon zu alt fürs Programmieren."</span>
+            <span class="fail-reality">→ Ein klassischer Fall von geistiger Frührente. Heute weiß ich: Code altert nicht, nur die Syntax ändert sich.</span>
+        </div>
+        <div class="fail-item">
+            <span class="fail-year">Heute:</span> <span class="fail-quote">"Diesen Lebenslauf bau ich mal fix in ein paar Stunden."</span>
+            <span class="fail-reality">→ Berühmte letzte Worte. Jetzt sitzen wir hier, feilen am CSS-Grid und philosophieren über Tooltips.</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+
+
+
+
+
+
+
 st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
+
+
+
+
+
+
 
 # --- DAS BUCH-SYMBOL (Am Ende deiner App) ---
 
