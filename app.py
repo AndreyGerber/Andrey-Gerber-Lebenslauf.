@@ -1318,37 +1318,43 @@ st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
 
 
 
-st.set_page_config(layout="wide")
-
+# Pfade definieren
 video_path = os.path.join("videos", "VID_20240910_195820976.mp4")
 image_path = os.path.join("images", "Frequenzen.png")
 
-# --- CSS für horizontale Zentrierung und Höhenbegrenzung ---
+# --- CSS für exakte Zentrierung und Größenabgleich ---
 st.markdown(
     """
     <style>
-    /* Sucht den Container der Spalten und zentriert den Inhalt horizontal */
+    /* Bereich 1 und 2: Inhalte horizontal zentrieren */
     [data-testid="stColumn"] > div {
         display: flex;
+        flex-direction: column;
+        align-items: center; /* Horizontale Zentrierung */
         justify-content: center;
-        align-items: center;
-        width: 100%;
     }
 
-    /* Begrenzt die Höhe von Video und Bild auf denselben Wert */
+    /* Video und Bild auf gleiche maximale Höhe zwingen */
     [data-testid="stHorizontalBlock"] video, 
     [data-testid="stHorizontalBlock"] img {
-        max-height: 500px !important; /* Hier anpassen, um die Größe zu steuern */
+        max-height: 500px !important; /* Passt die Höhe beider Elemente an */
         width: auto !important;
         object-fit: contain;
+    }
+    
+    /* Titel-Ausrichtung fixieren */
+    .stMarkdown h3 {
+        text-align: center;
+        width: 100%;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-st.write("## Analyse-Bereich")
+st.title("Analyse-Bereich")
 
+# Spalten erstellen
 col1, col2 = st.columns(2)
 
 with col1:
@@ -1356,15 +1362,14 @@ with col1:
     if os.path.exists(video_path):
         st.video(video_path)
     else:
-        st.error("Video nicht gefunden")
+        st.error("Video-Datei nicht im Ordner 'videos' gefunden.")
 
 with col2:
     st.write("### Bild-Bereich")
     if os.path.exists(image_path):
-        # Wir lassen use_container_width weg, damit das CSS die Breite steuert
         st.image(image_path, caption="Frequenzen")
     else:
-        st.error("Bild nicht gefunden")
+        st.error("Bild 'Frequenzen.png' nicht im Ordner 'images' gefunden.")
 
 
 
