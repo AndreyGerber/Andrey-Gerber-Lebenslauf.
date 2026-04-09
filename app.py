@@ -1318,22 +1318,28 @@ st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
 
 
 
-# Seite konfigurieren (optional, für ein breiteres Layout)
+# Seite auf 'wide' setzen, damit die Spalten Platz haben
 st.set_page_config(layout="wide")
 
-# Pfade zu deinen Dateien definieren
 video_path = os.path.join("videos", "VID_20240910_195820976.mp4")
 image_path = os.path.join("images", "Frequenzen.png")
 
-# --- CSS zur Begrenzung der Höhe ---
-# Wir sprechen das Video-Element (video) und das Bild-Element (img) direkt an.
-# 'object-fit: contain' sorgt dafür, dass nichts verzerrt wird.
+# --- Optimiertes CSS für Zentrierung und Größenbegrenzung ---
 st.markdown(
     """
     <style>
+    /* Zentriert Video und Bild innerhalb ihrer Spalten-Container */
+    [data-testid="stColumn"] {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    /* Begrenzt die Höhe und sorgt für saubere Skalierung */
     [data-testid="stHorizontalBlock"] video, 
     [data-testid="stHorizontalBlock"] img {
-        max-height: 400px !important;
+        max-height: 450px !important; /* Hier kannst du die Höhe feinjustieren */
         width: auto !important;
         object-fit: contain;
     }
@@ -1342,27 +1348,25 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --- Layout-Block ---
 st.write("### Analyse-Bereich")
 
 col1, col2 = st.columns(2)
 
-# Linke Seite: Das Video
 with col1:
     st.markdown("**Video-Bereich**")
     if os.path.exists(video_path):
-        # 'use_container_width' sorgt für die Ausfüllung der Spalte bis zur Max-Höhe
         st.video(video_path)
     else:
-        st.error(f"Video nicht gefunden: {video_path}")
+        st.error("Video nicht gefunden")
 
-# Rechte Seite: Das Bild
 with col2:
     st.markdown("**Bild-Bereich**")
     if os.path.exists(image_path):
-        st.image(image_path, caption="Frequenzen", use_container_width=True)
+        # use_container_width=False hilft hier, damit das Bild nicht 
+        # die ganze Spalte sprengt und das CSS greifen kann
+        st.image(image_path, caption="Frequenzen", use_container_width=False)
     else:
-        st.error(f"Bild nicht gefunden: {image_path}")
+        st.error("Bild nicht gefunden")
 
 
 
