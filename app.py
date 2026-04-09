@@ -458,7 +458,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
 
     elif jahr_aktiv == 2022:
-        MASSSTAB_TUV = 1.15  # 1.15 = 115% der Originalgröße, ändere diesen Wert zum Skalieren
+        MASSSTAB_FERCHAU = 1.15  # 1.15 = 115% der Originalgröße, ändere diesen Wert zum Skalieren
         OBEN_ABSTAND_TEXT = "10px" 
 
         col_text, col_foto = st.columns([1, 1.8])
@@ -480,14 +480,14 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
 
         with col_foto:
-            img_tuv = lade_formatiertes_bild("ferchau.png")
-            if img_tuv:
+            img_fer = lade_formatiertes_bild("ferchau.png")
+            if img_fer:
                 st.markdown("<div style='margin-top: 5px;'></div>", unsafe_allow_html=True)
                 
                 # MASSSTAB_TUV wird hier angewendet
-                original_breite = img_tuv.size[0]
-                neue_breite = int(original_breite * MASSSTAB_TUV)
-                st.image(img_tuv, width=neue_breite)
+                original_breite = img_fer.size[0]
+                neue_breite = int(original_breite * MASSSTAB_FERCHAU)
+                st.image(img_fer, width=neue_breite)
             else:
                 st.error("Datei 'images/ferchau.png' nicht gefunden.")
 
