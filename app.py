@@ -445,7 +445,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             """, unsafe_allow_html=True)
 
         with col_foto:
-            img_tuv = lade_formatiertes_bild("tuev.png")
+            img_tuv = lade_formatiertes_bild("ferchau.png")
             if img_tuv:
                 st.markdown("<div style='margin-top: 5px;'></div>", unsafe_allow_html=True)
                 
@@ -454,7 +454,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 neue_breite = int(original_breite * MASSSTAB_TUV)
                 st.image(img_tuv, width=neue_breite)
             else:
-                st.error("Datei 'images/tuev.png' nicht gefunden.")
+                st.error("Datei 'images/ferchau.png' nicht gefunden.")
 
 
     elif jahr_aktiv == 2022:
