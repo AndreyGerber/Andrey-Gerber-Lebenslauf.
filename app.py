@@ -1081,10 +1081,12 @@ with exp_col2:
                 <li><strong>Qualitätsmanagement | Lean Management & Six Sigma | Audits | Risikomanagement</strong></li>
                 <li><strong>ISO 9001 oder IATF 16949, CAPA oder 8D, DMAIC oder PDCA</strong></li>
             </ul>
-            <div class="no-bullet" style="margin-top: 20px;">Hier müssen wir zunächst die Begriffe definieren, bevor aneinander vorbei gesprochen wird.</div>
-            st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
+            <div class="no-bullet" style="margin-top: 20px;">
+                Hier müssen wir zunächst die Begriffe definieren, bevor aneinander vorbei gesprochen wird.
+            </div>
+            <!-- Das ersetzt deinen Python-Befehl und schiebt den Block nach unten -->
+            <div style="margin-top: 50px;"></div> 
         </div>
-                
         """, unsafe_allow_html=True)
     
 
