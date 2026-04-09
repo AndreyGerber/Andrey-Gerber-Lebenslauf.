@@ -1238,37 +1238,114 @@ with col3:
 
 st.markdown("<div style='margin-top: 200px;'></div>", unsafe_allow_html=True)
 
-# Seite auf Breitbild einstellen
-st.set_page_config(layout="wide")
+st.divider()
+st.markdown("<h2 style='text-align: left;'>⚠️ Die 3 größten Fehlschätzungen meines Lebens</h2>", unsafe_allow_html=True)
+
+st.markdown("""
+<style>
+    [data-testid="stHorizontalBlock"] {
+        display: flex;
+        align-items: stretch;
+    }
+    .quote-card {
+        background: #ffffff;
+        border-top: 5px solid #8e44ad;
+        border-radius: 12px;
+        padding: 25px;
+        height: 100%;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Schiebt Inhalt auseinander */
+        transition: transform 0.2s ease;
+    }
+    .quote-card:hover {
+        transform: translateY(-5px);
+    }
+    .quote-content {
+        font-style: italic;
+        color: #1e293b;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+    .quote-year {
+        text-align: right;
+        font-weight: bold;
+        color: #8e44ad;
+        font-size: 0.95rem;
+    }
+    /* Bindestrich vor dem Jahr wie bei Autorenzitaten */
+    .quote-year::before {
+        content: "— ";
+    }
+</style>
+""", unsafe_allow_html=True)
+
+q_col1, q_col2, q_col3 = st.columns(3)
+
+with q_col1:
+    st.markdown("""
+    <div class="quote-card">
+        <div class="quote-content">"Ich werde mein ganzes Leben an diesem Ort verbringen."</div>
+        <div class="quote-year">2002</div>
+        <div style="margin-top: 30px;"></div> 
+    </div>
+    """, unsafe_allow_html=True)
+
+with q_col2:
+    st.markdown("""
+    <div class="quote-card">
+        <div class="quote-content">"Ich bin schon zu alt fürs Programmieren."</div>
+        <div class="quote-year">2013</div>
+        <div style="margin-top: 30px;"></div> 
+    </div>
+    """, unsafe_allow_html=True)
+
+with q_col3:
+    st.markdown("""
+    <div class="quote-card">
+        <div class="quote-content">"Den digitalen Lebenslauf baue ich schnell. Dauert eh nur ein paar Stunden."</div>
+        <div class="quote-year">Heute</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+
+
+
+st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
+
+
 
 # Pfade definieren
 video_path = os.path.join("videos", "VID_20240910_195820976.mp4")
 image_path = os.path.join("images", "Frequenzen.png")
 
-# --- CSS für Layout-Optimierung ---
+# --- CSS für exakte Zentrierung und Größenabgleich ---
 st.markdown(
     """
     <style>
-    /* Zentriert Video und Bild innerhalb ihrer Spalten */
-    [data-testid="stColumn"] {
+    /* Bereich 1 und 2: Inhalte horizontal zentrieren */
+    [data-testid="stColumn"] > div {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
+        align-items: center; /* Horizontale Zentrierung */
+        justify-content: center;
     }
 
-    /* Sorgt dafür, dass beide Medien eine harmonische Höhe haben */
+    /* Video und Bild auf gleiche maximale Höhe zwingen */
     [data-testid="stHorizontalBlock"] video, 
     [data-testid="stHorizontalBlock"] img {
-        max-height: 550px !important;
+        max-height: 500px !important; /* Passt die Höhe beider Elemente an */
         width: auto !important;
         object-fit: contain;
     }
     
-    /* Titel mittig ausrichten */
-    h3 {
+    /* Titel-Ausrichtung fixieren */
+    .stMarkdown h3 {
         text-align: center;
-        margin-bottom: 20px;
+        width: 100%;
     }
     </style>
     """,
@@ -1277,28 +1354,22 @@ st.markdown(
 
 st.title("Analyse-Bereich")
 
-# Spalten im Verhältnis 1:2 erstellen (Video schmaler, Bild breiter)
-col1, col2 = st.columns([1, 2])
+# Spalten erstellen
+col1, col2 = st.columns(2)
 
 with col1:
     st.write("### Video-Bereich")
     if os.path.exists(video_path):
-        # Das Video füllt die schmalere Spalte optimal aus
         st.video(video_path)
     else:
-        st.error("Video nicht gefunden")
+        st.error("Video-Datei nicht im Ordner 'videos' gefunden.")
 
 with col2:
     st.write("### Bild-Bereich")
     if os.path.exists(image_path):
-        # use_container_width sorgt dafür, dass das Bild die 2/3 Breite nutzt
-        st.image(image_path, caption="Frequenzspektrum der Klangschale", use_container_width=True)
+        st.image(image_path, caption="Frequenzen")
     else:
-        st.error("Bild nicht gefunden")
-
-
-
-
+        st.error("Bild 'Frequenzen.png' nicht im Ordner 'images' gefunden.")
 
 
 
