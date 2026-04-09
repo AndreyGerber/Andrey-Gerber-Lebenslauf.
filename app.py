@@ -336,7 +336,8 @@ with st.container(height=BLOCK_HOEHE, border=True):
                 st.error("Bild 'schule2.png' nicht gefunden.")
 
     elif jahr_aktiv == 2006:
-        st.subheader("✈️ 2006: Der neue Lebensabschnitt beginnt")
+        st.markdown(f"<h3 style='text-align: left;'>✈️ {jahr_aktiv}: Der neue Lebensabschnitt beginnt</h3>", unsafe_allow_html=True)
+        #st.subheader("✈️ 2006: Der neue Lebensabschnitt beginnt")
         st.divider()
 
         fig_flight = go.Figure()
