@@ -395,7 +395,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
         with col_text:
             st.markdown(f"<h3 style='text-align: left;'>🎓 {jahr_aktiv}: Studium</h3>", unsafe_allow_html=True)
             st.markdown(f"<div style='margin-top: {OBEN_ABSTAND};'></div>", unsafe_allow_html=True)
-                        
+            st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)            
             st.markdown(f"""
                 <p style='font-size: {INFO_FONT_SIZE}; color: #0055A5; line-height: 1.4;'>
                 <strong>Bachelor of Engineering</strong><br>
