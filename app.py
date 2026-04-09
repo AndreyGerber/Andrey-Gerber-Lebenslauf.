@@ -1077,6 +1077,7 @@ with exp_col2:
     st.markdown("""
         <div class="exp-box">
             <h4>📋 Hardskills & Softskills</h4>
+            <div style="margin-top: 50px;"></div> 
             <ul>
                 <li><strong>Qualitätsmanagement | Lean Management & Six Sigma | Audits | Risikomanagement</strong></li>
                 <li><strong>ISO 9001 oder IATF 16949, CAPA oder 8D, DMAIC oder PDCA</strong></li>
@@ -1084,7 +1085,7 @@ with exp_col2:
             <div class="no-bullet" style="margin-top: 20px;">
                 Hier müssen wir zunächst die Begriffe definieren, bevor aneinander vorbeigesprochen wird.
             </div>
-            <div style="margin-top: 100px;"></div> 
+            <div style="margin-top: 50px;"></div> 
         </div>
         """, unsafe_allow_html=True)
     
