@@ -399,7 +399,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             st.markdown(f"""
                 <p style='font-size: {INFO_FONT_SIZE}; color: #0055A5; line-height: 1.4;'>
                 <strong>Bachelor of Engineering</strong><br>
-                & <strong>Master of Science</strong>.<br><br>
+                & <strong>Master of Science</strong>.<br><br><br><br>
                 <i>"Pass auf, Wissenschaft – ich komme!"</i>
                 </p>
                 """, unsafe_allow_html=True)
