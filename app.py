@@ -1025,7 +1025,7 @@ with col1:
 with col2:
     with st.container(border=True):
         st.markdown('<div class="equal-height-header"><h3>Von der Idee bis zur Übergabe an die Fertigung</h3></div>', unsafe_allow_html=True)
-        st.markdown("<div style='margin-top: 45px;'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
         project_configs = [
             ("images/project1.jpg", 0), ("images/project2.jpeg", 0),
             ("images/project3.jpeg", 90), ("images/project5.jpg", 0),   
@@ -1079,7 +1079,7 @@ with exp_col2:
             <h4>📋 Hardskills & Softskills</h4>
             <ul>
                 <li><strong>Qualitätsmanagement | Lean Management & Six Sigma | Audits | Risikomanagement</strong></li>
-                <li><strong>ISO 9001 oder IATF 16949, CAPA oder 8D, DMAIC oder PDCA</strong></li>
+                <li><strong>ISO 9001 oder IATF 16949 | CAPA oder 8D | DMAIC oder PDCA</strong></li>
             </ul>
             <div class="no-bullet" style="margin-top: 20px;">
                 Hier müssen wir zunächst die Begriffe definieren, bevor aneinander vorbeigesprochen wird.
