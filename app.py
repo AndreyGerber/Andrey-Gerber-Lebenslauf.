@@ -1109,13 +1109,17 @@ st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 
 # Hobbies 
 
-
-
+# --- HILFSFUNKTION FÜR BILDER (Muss vor dem Aufruf definiert sein) ---
+def get_base64_img(file_path):
+    if os.path.exists(file_path):
+        with open(file_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    return ""
 
 st.divider()
 st.markdown("<h2 style='text-align: center;'>Leidenschaften & Ausgleich</h2>", unsafe_allow_html=True)
 
-# Optimiertes CSS: Entfernung des störenden Abstands und Fixierung des Layouts
+# --- CSS FÜR KARTEN-LAYOUT UND ZOOM-EFFEKT ---
 st.markdown("""
 <style>
     .hobby-card {
@@ -1123,7 +1127,7 @@ st.markdown("""
         border: 2px solid #e2e8f0;
         border-radius: 15px;
         padding: 20px;
-        height: 420px; /* Einheitliche Höhe für alle Karten */
+        height: 450px; /* Einheitliche Höhe für alle drei Karten */
         display: flex;
         flex-direction: column;
         position: relative;
@@ -1133,7 +1137,7 @@ st.markdown("""
     .hobby-text { font-size: 0.95rem; color: #475569; line-height: 1.5; flex-grow: 1; }
     
     .hobby-img-area { 
-        display: flex; gap: 8px; margin-top: 15px; height: 130px; 
+        display: flex; gap: 8px; margin-top: 15px; height: 110px; 
     }
     
     .hobby-img-wrapper {
@@ -1147,10 +1151,10 @@ st.markdown("""
         cursor: zoom-in;
     }
 
-    /* Zoom-Effekt bleibt, aber z-index korrigiert */
+    /* Zoom-Effekt */
     .hobby-img-wrapper img:hover {
         transform: scale(1.8);
-        z-index: 100;
+        z-index: 999;
         box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     }
 
@@ -1172,7 +1176,7 @@ with col1:
             Ein Mann hat seinen Kindern ein Schachspiel gekauft. Nach einem Jahr konnte er mit uns nicht mehr mithalten.
             Ich sehe nicht nur meine Züge voraus, sondern auch die Züge des Mitspielers. 
         </div>
-        <div style="height: 130px; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.2; font-size: 14px; text-align: center;">
+        <div style="height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.2; font-size: 14px; text-align: center;">
             Wo es bei mir mit Schach losging, gab's bei uns im Ort wahrscheinlich drei Personen mit Kameras. Von daher leider keine Bilder von damals.<br>
             <span style="font-size: 40px;">♔ ♕ ♖</span>
         </div>
@@ -1180,6 +1184,7 @@ with col1:
     """, unsafe_allow_html=True)
 
 with col2:
+    # Bilder laden
     img_f2 = get_base64_img("images/Hobbies/fussball1.png")
     img_h1 = get_base64_img("images/Hobbies/hockey1.png")
     img_h3 = get_base64_img("images/Hobbies/hockey3.png")
@@ -1190,7 +1195,7 @@ with col2:
         <div class="hobby-title">Eishockey & Fußball</div>
         <div class="hobby-text">Nichts ist besser als das Gefühl, zum Erfolg des anderen beigetragen zu haben.</div>
         <div class="hobby-img-area">
-            <div class="hobby-img-wrapper"><img src="data:image/jpeg;base64,{img_f2}"><span class="img-label">Fußball</span></div>
+            <div class="hobby-img-wrapper"><img src="data:image/png;base64,{img_f2}"><span class="img-label">Fußball</span></div>
             <div class="hobby-img-wrapper"><img src="data:image/png;base64,{img_h1}"><span class="img-label">Eishockey</span></div>
             <div class="hobby-img-wrapper"><img src="data:image/png;base64,{img_h3}"><span class="img-label">Schmiede</span></div>
         </div>
@@ -1198,6 +1203,7 @@ with col2:
     """, unsafe_allow_html=True)
 
 with col3:
+    # Bilder laden
     img_y1 = get_base64_img("images/Hobbies/yoga.jpg")
     img_y2 = get_base64_img("images/Hobbies/yoga2.jpg")
     img_y3 = get_base64_img("images/Hobbies/yoga3.png")
