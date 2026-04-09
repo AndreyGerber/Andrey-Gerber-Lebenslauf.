@@ -1044,7 +1044,7 @@ with col2:
 
 st.divider()
 
-st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True) 
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True) 
 
 # --- Hard & Soft-Skills ---
 st.markdown("""
