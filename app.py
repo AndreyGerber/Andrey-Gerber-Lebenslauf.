@@ -983,7 +983,7 @@ def load_scaled_img(path, degrees=0, scale_percent=40):
     return None
 
 # --- EINSTELLUNGEN (MANUELL IM CODE ANPASSEN) ---
-BILD_SKALIERUNG = 38  # Hier kannst du die Größe anpassen (z.B. 35, 40, 45)
+BILD_SKALIERUNG = 30  # Hier kannst du die Größe anpassen (z.B. 35, 40, 45)
 
 with st.container():
     # CSS Isolation
