@@ -1082,9 +1082,11 @@ with exp_col2:
                 <li><strong>ISO 9001 oder IATF 16949, CAPA oder 8D, DMAIC oder PDCA</strong></li>
             </ul>
             <div class="no-bullet" style="margin-top: 20px;">Hier müssen wir zunächst die Begriffe definieren, bevor aneinander vorbei gesprochen wird.</div>
+            st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
         </div>
+                
         """, unsafe_allow_html=True)
-    st.markdown("<div style='margin-top: 55px;'></div>", unsafe_allow_html=True)
+    
 
 # Programmier-Abschnitt
 st.markdown(f"""
