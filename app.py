@@ -1084,6 +1084,7 @@ with exp_col2:
             <div class="no-bullet" style="margin-top: 20px;">Hier müssen wir zunächst die Begriffe definieren, bevor aneinander vorbei gesprochen wird.</div>
         </div>
         """, unsafe_allow_html=True)
+    st.markdown("<div style='margin-top: 55px;'></div>", unsafe_allow_html=True)
 
 # Programmier-Abschnitt
 st.markdown(f"""
