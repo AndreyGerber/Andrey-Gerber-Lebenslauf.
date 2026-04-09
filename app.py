@@ -1239,7 +1239,7 @@ with col3:
 st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
 
 st.divider()
-st.markdown("<h2 style='text-align: center;'>⚠️ Meine 3 größten Fehlschätzungen</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>⚠️ 3 größten Fehlschätzungen meines Lebens</h2>", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
@@ -1247,87 +1247,64 @@ st.markdown("""
         display: flex;
         align-items: stretch;
     }
-    .fail-card {
+    .quote-card {
         background: #ffffff;
         border-top: 5px solid #ff4b4b;
         border-radius: 12px;
         padding: 25px;
         height: 100%;
         box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        transition: all 0.3s ease;
-        position: relative;
         display: flex;
         flex-direction: column;
+        justify-content: space-between; /* Schiebt Inhalt auseinander */
+        transition: transform 0.2s ease;
     }
-    .fail-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 20px rgba(255, 75, 75, 0.15);
-        border-top-width: 8px;
+    .quote-card:hover {
+        transform: translateY(-5px);
     }
-    .fail-year-badge {
-        background: #ff4b4b;
-        color: white;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: bold;
-        width: fit-content;
-    }
-    .fail-quote-box {
-        margin: 20px 0;
+    .quote-content {
         font-style: italic;
         color: #1e293b;
-        font-size: 1.05rem;
-        flex-grow: 1;
-        position: relative;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
     }
-    /* Optional: Ein dezentes Anführungszeichen im Hintergrund */
-    .fail-quote-box::before {
-        content: '"';
-        position: absolute;
-        top: -15px;
-        left: -10px;
-        font-size: 3rem;
-        color: #f1f5f9;
-        z-index: -1;
-        font-family: serif;
-    }
-    .fail-lesson {
-        color: #64748b;
+    .quote-year {
+        text-align: right;
+        font-weight: bold;
+        color: #ff4b4b;
         font-size: 0.95rem;
-        border-top: 1px solid #f1f5f9;
-        padding-top: 15px;
-        line-height: 1.4;
+    }
+    /* Bindestrich vor dem Jahr wie bei Autorenzitaten */
+    .quote-year::before {
+        content: "— ";
     }
 </style>
 """, unsafe_allow_html=True)
 
-f_col1, f_col2, f_col3 = st.columns(3)
+q_col1, q_col2, q_col3 = st.columns(3)
 
-with f_col1:
+with q_col1:
     st.markdown("""
-    <div class="fail-card">
-        <span class="fail-year-badge">2002</span>
-        <div class="fail-quote-box">"Ich werde mein ganzes Leben an diesem Ort verbringen."</div>
-        <div class="fail-lesson"><b>Lektion:</b> Die Welt war dann doch größer als mein Dorf, und mein Koffer war anderer Meinung.</div>
+    <div class="quote-card">
+        <div class="quote-content">"Ich werde mein ganzes Leben an diesem Ort verbringen."</div>
+        <div class="quote-year">2002</div>
     </div>
     """, unsafe_allow_html=True)
 
-with f_col2:
+with q_col2:
     st.markdown("""
-    <div class="fail-card">
-        <span class="fail-year-badge">2013</span>
-        <div class="fail-quote-box">"Ich bin schon zu alt fürs Programmieren."</div>
-        <div class="fail-lesson"><b>Lektion:</b> Code altert nicht, nur die Syntax. Ein klassischer Fall von geistiger Frührente.</div>
+    <div class="quote-card">
+        <div class="quote-content">"Ich bin schon zu alt fürs Programmieren."</div>
+        <div class="quote-year">2013</div>
     </div>
     """, unsafe_allow_html=True)
 
-with f_col3:
+with q_col3:
     st.markdown("""
-    <div class="fail-card">
-        <span class="fail-year-badge">Heute</span>
-        <div class="fail-quote-box">"Diesen Lebenslauf bau ich mal fix in ein paar Stunden."</div>
-        <div class="fail-lesson"><b>Lektion:</b> Berühmte letzte Worte. Jetzt philosophieren wir gemeinsam über CSS-Grids.</div>
+    <div class="quote-card">
+        <div class="quote-content">"Diesen digitalen Lebenslauf baue ich schnell. Dauert eh nur ein paar Stunden."</div>
+        <div class="quote-year">Heute</div>
     </div>
     """, unsafe_allow_html=True)
 
