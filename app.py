@@ -967,7 +967,7 @@ st.markdown("<br>" * 3, unsafe_allow_html=True)  # Drei Umbrüche
 
 
 
-
+#Abschnitt mit Fertigkeiten
 
 import streamlit as st
 import os
@@ -1044,7 +1044,9 @@ with col2:
 
 st.divider()
 
-# --- EXPERTISE ABSCHNITT ---
+st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True) 
+
+# --- Hard & Soft-Skills ---
 st.markdown("""
     <style>
         .exp-box {
