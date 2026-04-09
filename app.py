@@ -976,116 +976,113 @@ def load_scaled_img(path, degrees=0, scale_percent=40):
         img = Image.open(path)
         if degrees != 0:
             img = img.rotate(degrees, expand=True)
-        # Manuelle Skalierung über den Prozentwert im Code
         scale_factor = scale_percent / 100
         new_size = (int(img.width * scale_factor), int(img.height * scale_factor))
         return img.resize(new_size, Image.Resampling.LANCZOS)
     return None
 
-# --- EINSTELLUNGEN (MANUELL IM CODE ANPASSEN) ---
-BILD_SKALIERUNG = 38  # Hier kannst du die Größe anpassen (z.B. 35, 40, 45)
+# --- EINSTELLUNGEN ---
+BILD_SKALIERUNG = 38 
 
-with st.container():
-    # CSS für die Trennung der Spalten
-    st.markdown("""
-        <style>
-            .project-card {
-                background-color: #fcfcfc; /* Sehr helles Grau */
-                border: 1px solid #e6e9ef;
-                border-radius: 15px;
-                padding: 20px;
-                height: 100%;
-                box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
-            }
-            .skill-section img {
-                border-radius: 8px !important;
-                margin-bottom: 10px !important;
-            }
-        </style>
-    """, unsafe_allow_html=True)
-
-    st.title("🛠️ Meine Fertigkeiten")
-    st.divider()
-
-    # Wir nutzen st.columns, um die zwei Hauptbereiche nebeneinander zu legen
-    col_links, col_rechts = st.columns(2)
-
-    # LINKER BEREICH
-    with col_links:
-        st.markdown('<div class="project-card">', unsafe_allow_html=True)
-        st.subheader("Von der Skizze bis zum fertigen Produkt")
+# --- CSS FÜR DIE VISUELLE TRENNUNG ---
+st.markdown("""
+    <style>
+        /* Container für die gesamte Sektion */
+        .main-project-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
         
-        kerze_files = [
-            "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
-            "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
-        ]
-        k_cols = st.columns(3) 
-        for idx, img_path in enumerate(kerze_files):
-            img = load_scaled_img(img_path, scale_percent=BILD_SKALIERUNG)
-            if img:
-                k_cols[idx % 3].image(img)
-        st.markdown('</div>', unsafe_allow_html=True)
+        /* Die einzelnen Karten/Blöcke */
+        .project-card {
+            background-color: #f8f9fa; /* Hellgrauer Hintergrund */
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 2px 2px 12px rgba(0,0,0,0.05);
+            flex: 1;
+        }
 
-    # RECHTER BEREICH
-    with col_rechts:
-        st.markdown('<div class="project-card">', unsafe_allow_html=True)
-        st.subheader("Von der Idee bis zur Übergabe") # Titel gekürzt für bessere Optik
-        
-        project_configs = [
-            ("images/project1.jpg", 0), 
-            ("images/project2.jpeg", 0),
-            ("images/project3.jpeg", 90), 
-            ("images/project5.jpg", 0),
-            ("images/project4.jpeg", 90),
-            ("images/project6.jpeg", -90)
-        ]
-        
-        p_cols = st.columns(3)
-        for idx, (img_path, angle) in enumerate(project_configs):
-            img = load_scaled_img(img_path, angle, scale_percent=BILD_SKALIERUNG)
-            if img:
-                p_cols[idx % 3].image(img)
-        st.markdown('</div>', unsafe_allow_html=True)
+        .project-card h3 {
+            color: #31333F;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            min-height: 3rem; /* Sorgt für gleiche Header-Höhe */
+        }
+
+        /* Styling für die Bilder innerhalb der Karten */
+        [data-testid="stImage"] img {
+            border-radius: 8px !important;
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.1) !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+st.title("🛠️ Meine Fertigkeiten")
+st.divider()
+
+# Wir nutzen die Spalten von Streamlit für das Layout
+col_links, col_rechts = st.columns(2)
+
+# --- LINKER BLOCK ---
+with col_links:
+    # Wir öffnen den HTML-Rahmen
+    st.markdown('<div class="project-card">', unsafe_allow_html=True)
+    st.subheader("Von der Skizze bis zum fertigen Produkt")
+    
+    kerze_files = [
+        "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
+        "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
+    ]
+    
+    # Bilder in 3 kleinen Unter-Spalten innerhalb des Blocks
+    k_cols = st.columns(3) 
+    for idx, img_path in enumerate(kerze_files):
+        img = load_scaled_img(img_path, scale_percent=BILD_SKALIERUNG)
+        if img:
+            k_cols[idx % 3].image(img, use_container_width=True)
+    
+    # Wir schließen den HTML-Rahmen
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# --- RECHTER BLOCK ---
+with col_rechts:
+    st.markdown('<div class="project-card">', unsafe_allow_html=True)
+    st.subheader("Von der Idee bis zur Übergabe")
+    
+    project_configs = [
+        ("images/project1.jpg", 0), 
+        ("images/project2.jpeg", 0),
+        ("images/project3.jpeg", 90), 
+        ("images/project5.jpg", 0),   
+        ("images/project4.jpeg", 90),  
+        ("images/project6.jpeg", -90)
+    ]
+    
+    p_cols = st.columns(3)
+    for idx, (img_path, angle) in enumerate(project_configs):
+        img = load_scaled_img(img_path, angle, scale_percent=BILD_SKALIERUNG)
+        if img:
+            p_cols[idx % 3].image(img, use_container_width=True)
+            
+    st.markdown('</div>', unsafe_allow_html=True)
 
 st.divider()
 
-# --- EXPERTISE ABSCHNITT ---
-# CSS für bündige Ausrichtung und gleichen Block-Höhen
+# --- EXPERTISE ABSCHNITT (DEIN BESTEHENDER CODE) ---
 st.markdown("""
     <style>
-        [data-testid="stHorizontalBlock"] {
-            display: flex;
-            align-items: stretch;
-        }
         .exp-box {
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             padding: 25px;
             border-radius: 16px;
             border-left: 4px solid #4a90e2;
             height: 100%;
-            display: flex;
-            flex-direction: column;
         }
-        .exp-box h4 { color: #01579b; margin-top: 0; margin-bottom: 15px; }
-        
-        .exp-box ul { 
-            margin-bottom: 10px; 
-            line-height: 1.8; 
-            flex-grow: 1;
-            padding-left: 1.2rem;
-        }
-        
-        .no-bullet { 
-            list-style-type: none; 
-            padding-left: 1.2rem; 
-            font-weight: bold;
-            margin-top: 5px;
-        }
+        .exp-box h4 { color: #01579b; margin-top: 0; }
     </style>
     """, unsafe_allow_html=True)
-
-#st.markdown("<h2 style='text-align: center; margin-top: 40px;'>🛠️ Tools & Methodiken</h2>", unsafe_allow_html=True)
-#st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Software & Fachliche Kompetenzen ✧</p>", unsafe_allow_html=True)
 
 exp_col1, exp_col2 = st.columns(2)
 
@@ -1094,12 +1091,11 @@ with exp_col1:
         <div class="exp-box">
             <h4>💻 Hardware & Software</h4>
             <ul>
-                <li><strong>ob 3D-Modelle mit CATIA V5 oder AutoCAD erstellen,</strong></li>
-                <li><strong>ob Sensorik anschließen, einstellen und Objekte vermessen mit Technik von B&K oder Head Acoustics,</strong></li>
-                <li><strong>ob Daten mit Minitab oder selbst erstellten statistischen Methoden analysieren,</strong></li>
+                <li><strong>CATIA V5 / AutoCAD</strong></li>
+                <li><strong>Messtechnik (B&K, Head Acoustics)</strong></li>
+                <li><strong>Datenanalyse (Minitab)</strong></li>
             </ul>
-            <div class="no-bullet" style="margin-bottom: 18px;"><strong>sollte machbar sein. SAP kann jeder irgendwie und niemand gleichzeitig.</strong></div>
-            <div class="no-bullet"><strong>Von MS-Produkten spricht heutzutage doch niemand mehr.</strong></div>
+            <p><strong>SAP & MS-Produkte sind Standard.</strong></p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1108,28 +1104,18 @@ with exp_col2:
         <div class="exp-box">
             <h4>📋 Hardskills & Softskills</h4>
             <ul>
-                <li><strong>Qualitätsmanagement | Lean Management & Six Sigma | Audits | Risikomanagement</strong></li>
-                <li><strong>ISO 9001 oder IATF 16949, CAPA oder 8D, DMAIC oder PDCA</strong></li>
+                <li><strong>QM | Lean | Six Sigma | Audits</strong></li>
+                <li><strong>ISO 9001, IATF 16949, DMAIC</strong></li>
             </ul>
-            <div class="no-bullet" style="margin-bottom: 110px;">Hier müssen wir zunächst die Begriffe definieren, bevor aneinander vorbei gesprochen wird.</div>
+            <p>Definitionen sind die Basis für gute Zusammenarbeit.</p>
         </div>
         """, unsafe_allow_html=True)
 
-# Programmier-Abschnitt mit Korrekturen
+# Programmier-Abschnitt
 st.markdown(f"""
-    <div style="
-        background-color: #d1e7dd; 
-        padding: 25px; 
-        border-radius: 15px; 
-        border-left: 6px solid #0f5132;
-        color: #0f5132;
-        font-size: 1.1rem; 
-        line-height: 1.6;
-    ">
-        <span style="font-size: 1.5rem;">🐍</span> <strong>Ob ich programmieren kann:</strong><br><br>
-        Das hier ist übrigens keine Agentur – diese Seite habe ich selbst programmiert.<br>
-        Mit Python, Streamlit und der ein oder anderen Tasse Kaffee.<br><br>
-        <i>Übrigens half mir das dabei, meinen Wortschatz an Schimpfwörtern und deren Kombinationen in mehreren Sprachen zu aktualisieren.</i>
+    <div style="background-color: #d1e7dd; padding: 25px; border-radius: 15px; border-left: 6px solid #0f5132; color: #0f5132; margin-top: 20px;">
+        <span style="font-size: 1.5rem;">🐍</span> <strong>Diese Seite ist handprogrammiert:</strong><br>
+        Erstellt mit Python und Streamlit – inklusive einer Erweiterung meines internationalen Schimpfwort-Repertoires während des Debuggens.
     </div>
     """, unsafe_allow_html=True)
 
