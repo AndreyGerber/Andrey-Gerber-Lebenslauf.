@@ -279,7 +279,8 @@ with st.container(height=BLOCK_HOEHE, border=True):
     jahr_aktiv = highlights[st.session_state.info_idx]
 
     if jahr_aktiv == 1988:
-        st.subheader(f"📍 {jahr_aktiv}: Hier begann meine Reise")
+        st.markdown(f"<h3 style='text-align: left;'>📍 {jahr_aktiv}: Hier begann meine Reise</h3>", unsafe_allow_html=True)
+
 
         MASSSTAB_MAP = 0.8
         
