@@ -1358,13 +1358,13 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.title("Analyse-Bereich")
+st.title("Bonus")
 
 # Spalten im Verhältnis 1:2 erstellen (Video schmaler, Bild breiter)
 col1, col2 = st.columns([1, 2])
 
 with col1:
-    st.write("### Video-Bereich")
+    st.write("### Video")
     if os.path.exists(video_path):
         # Das Video füllt die schmalere Spalte optimal aus
         st.video(video_path)
@@ -1372,7 +1372,7 @@ with col1:
         st.error("Video nicht gefunden")
 
 with col2:
-    st.write("### Bild-Bereich")
+    st.write("### Frequenzbereich")
     if os.path.exists(image_path):
         # use_container_width sorgt dafür, dass das Bild die 2/3 Breite nutzt
         st.image(image_path, caption="Frequenzspektrum der Klangschale", use_container_width=True)
