@@ -1236,10 +1236,10 @@ with col3:
 
 
 
-st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='margin-top: 200px;'></div>", unsafe_allow_html=True)
 
 st.divider()
-st.markdown("<h2 style='text-align: center;'>⚠️ Die 3 größten Fehlschätzungen meines Lebens</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: left;'>⚠️ Die 3 größten Fehlschätzungen meines Lebens</h2>", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
