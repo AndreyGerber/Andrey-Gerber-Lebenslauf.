@@ -984,27 +984,19 @@ def load_scaled_img(path, degrees=0, scale_percent=40):
 # --- EINSTELLUNGEN ---
 BILD_SKALIERUNG = 38 
 
-# --- CSS FÜR VISUELLE TRENNUNG (DIREKTE SPALTEN-STYLING) ---
+# CSS für Hintergrundfarbe in den Containern und Abstände
 st.markdown("""
     <style>
-        /* Stylt die zwei Hauptspalten als separate Blöcke */
-        [data-testid="column"]:nth-of-type(1) [data-testid="stVerticalBlockBorderWrapper"] {
-            background-color: #f8f9fa;
-            border: 1px solid #e0e0e0;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+        /* Erzwingt Hintergrundfarbe für die Border-Container */
+        [data-testid="stVerticalBlockBorderWrapper"] {
+            background-color: #f8f9fa !important;
+            padding: 10px !important;
         }
-        [data-testid="column"]:nth-of-type(2) [data-testid="stVerticalBlockBorderWrapper"] {
-            background-color: #f8f9fa;
-            border: 1px solid #e0e0e0;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
-        }
-        /* Verhindert, dass Bilder den Block sprengen */
-        [data-testid="stImage"] img {
-            border-radius: 8px !important;
+        /* Gleiche Höhe für die Überschriften erzwingen */
+        .equal-height-header {
+            min-height: 80px;
+            display: flex;
+            align-items: center;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -1012,36 +1004,38 @@ st.markdown("""
 st.title("🛠️ Meine Fertigkeiten")
 st.divider()
 
-# --- HAUPTBEREICH ---
+# Hauptspalten
 col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader("Von der Skizze bis zum fertigen Produkt")
-    kerze_files = [
-        "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
-        "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
-    ]
-    k_cols = st.columns(3) 
-    for idx, img_path in enumerate(kerze_files):
-        img = load_scaled_img(img_path, scale_percent=BILD_SKALIERUNG)
-        if img:
-            k_cols[idx % 3].image(img, use_container_width=True)
+    # Container mit Rahmen und Hintergrund (durch CSS oben gefärbt)
+    with st.container(border=True):
+        st.markdown('<div class="equal-height-header"><h3>Von der Skizze bis zum fertigen Produkt</h3></div>', unsafe_allow_html=True)
+        
+        kerze_files = [
+            "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
+            "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
+        ]
+        k_cols = st.columns(3) 
+        for idx, img_path in enumerate(kerze_files):
+            img = load_scaled_img(img_path, scale_percent=BILD_SKALIERUNG)
+            if img:
+                k_cols[idx % 3].image(img, use_container_width=True)
 
 with col2:
-    st.subheader("Von der Idee bis zur Übergabe an die Fertigung")
-    project_configs = [
-        ("images/project1.jpg", 0), 
-        ("images/project2.jpeg", 0),
-        ("images/project3.jpeg", 90), 
-        ("images/project5.jpg", 0),   
-        ("images/project4.jpeg", 90),  
-        ("images/project6.jpeg", -90)
-    ]
-    p_cols = st.columns(3)
-    for idx, (img_path, angle) in enumerate(project_configs):
-        img = load_scaled_img(img_path, angle, scale_percent=BILD_SKALIERUNG)
-        if img:
-            p_cols[idx % 3].image(img, use_container_width=True)
+    with st.container(border=True):
+        st.markdown('<div class="equal-height-header"><h3>Von der Idee bis zur Übergabe an die Fertigung</h3></div>', unsafe_allow_html=True)
+        
+        project_configs = [
+            ("images/project1.jpg", 0), ("images/project2.jpeg", 0),
+            ("images/project3.jpeg", 90), ("images/project5.jpg", 0),   
+            ("images/project4.jpeg", 90), ("images/project6.jpeg", -90)
+        ]
+        p_cols = st.columns(3)
+        for idx, (img_path, angle) in enumerate(project_configs):
+            img = load_scaled_img(img_path, angle, scale_percent=BILD_SKALIERUNG)
+            if img:
+                p_cols[idx % 3].image(img, use_container_width=True)
 
 st.divider()
 
