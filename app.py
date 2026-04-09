@@ -1036,6 +1036,8 @@ with col2:
             img = load_scaled_img(img_path, angle, scale_percent=BILD_SKALIERUNG)
             if img:
                 p_cols[idx % 3].image(img, use_container_width=True)
+        
+        st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 
 st.divider()
 
