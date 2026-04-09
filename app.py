@@ -987,34 +987,16 @@ BILD_SKALIERUNG = 38
 # CSS für Hintergrundfarbe in den Containern und Abstände
 st.markdown("""
     <style>
-        /* Gleiche Höhe für beide Hauptspalten erzwingen */
-        [data-testid="stHorizontalBlock"] {
-            display: flex;
-            align-items: stretch;
-        }
-        
+        /* Erzwingt Hintergrundfarbe für die Border-Container */
         [data-testid="stVerticalBlockBorderWrapper"] {
             background-color: #f8f9fa !important;
-            height: 100% !important;
-            display: flex;
-            flex-direction: column;
-            padding: 20px !important;
+            padding: 10px !important;
         }
-
-        /* Überschriften auf gleicher Höhe halten */
-        .header-box {
-            height: 70px; 
+        /* Gleiche Höhe für die Überschriften erzwingen */
+        .equal-height-header {
+            min-height: 80px;
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
-        }
-
-        /* Bilder einheitlich formatieren */
-        [data-testid="stImage"] img {
-            object-fit: cover;
-            height: 120px !important; /* Fixe Höhe für die Grid-Optik */
-            width: 100%;
-            border-radius: 5px;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -1022,11 +1004,13 @@ st.markdown("""
 st.title("🛠️ Meine Fertigkeiten")
 st.divider()
 
+# Hauptspalten
 col1, col2 = st.columns(2)
 
 with col1:
+    # Container mit Rahmen und Hintergrund (durch CSS oben gefärbt)
     with st.container(border=True):
-        st.markdown('<div class="header-box"><h3>Von der Skizze bis zum fertigen Produkt</h3></div>', unsafe_allow_html=True)
+        st.markdown('<div class="equal-height-header"><h3>Von der Skizze bis zum fertigen Produkt</h3></div>', unsafe_allow_html=True)
         
         kerze_files = [
             "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
@@ -1040,7 +1024,7 @@ with col1:
 
 with col2:
     with st.container(border=True):
-        st.markdown('<div class="header-box"><h3>Von der Idee bis zur Übergabe an die Fertigung</h3></div>', unsafe_allow_html=True)
+        st.markdown('<div class="equal-height-header"><h3>Von der Idee bis zur Übergabe an die Fertigung</h3></div>', unsafe_allow_html=True)
         
         project_configs = [
             ("images/project1.jpg", 0), ("images/project2.jpeg", 0),
