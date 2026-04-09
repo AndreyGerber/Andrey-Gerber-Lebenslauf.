@@ -1289,6 +1289,7 @@ with q_col1:
     <div class="quote-card">
         <div class="quote-content">"Ich werde mein ganzes Leben an diesem Ort verbringen."</div>
         <div class="quote-year">2002</div>
+        <div style="margin-top: 30px;"></div> 
     </div>
     """, unsafe_allow_html=True)
 
@@ -1297,6 +1298,7 @@ with q_col2:
     <div class="quote-card">
         <div class="quote-content">"Ich bin schon zu alt fürs Programmieren."</div>
         <div class="quote-year">2013</div>
+        <div style="margin-top: 30px;"></div> 
     </div>
     """, unsafe_allow_html=True)
 
