@@ -959,7 +959,7 @@ else:
 
 st.markdown("<br>" * 3, unsafe_allow_html=True)  # Drei Umbrüche
 
-st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True) 
+
 
 
 
