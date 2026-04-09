@@ -1119,16 +1119,13 @@ def get_base64_img(file_path):
 st.divider()
 st.markdown("<h2 style='text-align: center;'>Leidenschaften & Ausgleich</h2>", unsafe_allow_html=True)
 
-# --- CSS FÜR KARTEN-LAYOUT UND ZOOM-EFFEKT ---
+# --- CSS FÜR LAYOUT, ZOOM UND TOOLTIPS ---
 st.markdown("""
 <style>
-    /* Zwingt die Spalten in der Reihe auf die gleiche Höhe */
     [data-testid="stHorizontalBlock"] {
         display: flex;
         align-items: stretch;
     }
-    
-    /* Jede Karte füllt die volle verfügbare Höhe der Spalte aus */
     .hobby-card {
         background: #f8fafc;
         border: 2px solid #e2e8f0;
@@ -1136,41 +1133,30 @@ st.markdown("""
         padding: 20px;
         display: flex;
         flex-direction: column;
-        height: 100%; /* Wichtig für Flex-Stretch */
-        min-height: 450px; 
+        height: 100%;
+        min-height: 420px;
     }
-
-    .hobby-text { 
-        flex-grow: 1; /* Schiebt die Bild-Area nach ganz unten, falls Text kurz ist */
-        font-size: 0.95rem; 
-        color: #475569; 
-        line-height: 1.5; 
-        margin-bottom: 20px;
-    }
-
+    .hobby-icon { font-size: 30px; margin-bottom: 10px; }
+    .hobby-title { font-weight: bold; font-size: 1.2rem; color: #1e293b; margin-bottom: 10px; }
+    .hobby-text { font-size: 0.95rem; color: #475569; line-height: 1.5; flex-grow: 1; }
+    
     .hobby-img-area { 
-        display: flex; 
-        gap: 8px; 
-        height: 110px;
-        margin-top: auto; /* Klebt immer am unteren Rand der Karte */
+        display: flex; gap: 8px; margin-top: 15px; height: 110px; 
     }
-
+    .hobby-img-wrapper { width: 31%; position: relative; }
     .hobby-img-wrapper img { 
-        width: 100%; 
-        height: 80px; 
-        object-fit: cover; 
-        border-radius: 8px; 
-        transition: transform 0.3s ease;
+        width: 100%; height: 100px; object-fit: cover; border-radius: 8px; 
+        border: 1px solid #eee; transition: transform 0.3s ease;
+        cursor: zoom-in;
     }
-
     .hobby-img-wrapper img:hover {
         transform: scale(1.8);
         z-index: 999;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     }
+    .img-label { font-size: 10px; color: #94a3b8; text-align: center; margin-top: 4px; display: block; }
 </style>
 """, unsafe_allow_html=True)
-
-st.markdown("<h2 style='text-align: center;'>Leidenschaften & Ausgleich</h2>", unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns(3)
 
@@ -1183,9 +1169,9 @@ with col1:
             Ein Mann hat seinen Kindern ein Schachspiel gekauft. Nach einem Jahr konnte er mit uns nicht mehr mithalten.
             Ich sehe nicht nur meine Züge voraus, sondern auch die Züge des Mitspielers. 
         </div>
-        <div style="opacity: 0.2; text-align: center; margin-top: auto;">
-            <p style="font-size: 12px;">Keine Bilder von damals vorhanden.</p>
-            <span style="font-size: 30px;">♔ ♕ ♖</span>
+        <div style="height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.2; font-size: 14px; text-align: center; margin-top: auto;">
+            Wo es bei mir mit Schach losging, gab's bei uns im Ort wahrscheinlich drei Personen mit Kameras. Von daher leider keine Bilder von damals.<br>
+            <span style="font-size: 40px;">♔ ♕ ♖</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1194,15 +1180,25 @@ with col2:
     img_f2 = get_base64_img("images/Hobbies/fussball1.png")
     img_h1 = get_base64_img("images/Hobbies/hockey1.png")
     img_h3 = get_base64_img("images/Hobbies/hockey3.png")
+    
     st.markdown(f"""
     <div class="hobby-card">
         <div class="hobby-icon">🏒 & ⚽</div>
         <div class="hobby-title">Eishockey & Fußball</div>
         <div class="hobby-text">Nichts ist besser als das Gefühl, zum Erfolg des anderen beigetragen zu haben.</div>
         <div class="hobby-img-area">
-            <div class="hobby-img-wrapper"><img src="data:image/png;base64,{img_f2}"><span class="img-label">Fußball</span></div>
-            <div class="hobby-img-wrapper"><img src="data:image/png;base64,{img_h1}"><span class="img-label">Eishockey</span></div>
-            <div class="hobby-img-wrapper"><img src="data:image/png;base64,{img_h3}"><span class="img-label">Schmiede</span></div>
+            <div class="hobby-img-wrapper">
+                <img src="data:image/png;base64,{img_f2}" title="Einmal Gold">
+                <span class="img-label">Fußball</span>
+            </div>
+            <div class="hobby-img-wrapper">
+                <img src="data:image/png;base64,{img_h1}" title="Auch hier auf dem Podest">
+                <span class="img-label">Eishockey</span>
+            </div>
+            <div class="hobby-img-wrapper">
+                <img src="data:image/png;base64,{img_h3}" title="Blick hinter die Kulissen">
+                <span class="img-label">Schmiede</span>
+            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1211,24 +1207,35 @@ with col3:
     img_y1 = get_base64_img("images/Hobbies/yoga.jpg")
     img_y2 = get_base64_img("images/Hobbies/yoga2.jpg")
     img_y3 = get_base64_img("images/Hobbies/yoga3.png")
+
     st.markdown(f"""
     <div class="hobby-card">
         <div class="hobby-icon">🧘 & 🥊</div>
         <div class="hobby-title">Yoga & Boxen</div>
         <div class="hobby-text">Schnell reagieren und trotzdem gelassen bleiben.</div>
         <div class="hobby-img-area">
-            <div class="hobby-img-wrapper"><img src="data:image/jpeg;base64,{img_y1}"><span class="img-label">Yoga</span></div>
-            <div class="hobby-img-wrapper"><img src="data:image/jpeg;base64,{img_y2}"><span class="img-label">Balance</span></div>
-            <div class="hobby-img-wrapper"><img src="data:image/png;base64,{img_y3}"><span class="img-label">Kraft</span></div>
+            <div class="hobby-img-wrapper">
+                <img src="data:image/jpeg;base64,{img_y1}" title="Es ist entspannt, haben sie gesagt">
+                <span class="img-label">Yoga</span>
+            </div>
+            <div class="hobby-img-wrapper">
+                <img src="data:image/jpeg;base64,{img_y2}" title="Ist einfach, haben sie gesagt">
+                <span class="img-label">Balance</span>
+            </div>
+            <div class="hobby-img-wrapper">
+                <img src="data:image/png;base64,{img_y3}" title="Wenn du der einzige bist, der es richtig macht">
+                <span class="img-label">Kraft</span>
+            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 
-    st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
 
 
 
+
+st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
 
 # --- DAS BUCH-SYMBOL (Am Ende deiner App) ---
 
