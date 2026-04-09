@@ -1238,32 +1238,67 @@ with col3:
 
 st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
 
-
 st.divider()
 st.markdown("<h2 style='text-align: center;'>⚠️ Meine 3 größten Fehlschätzungen</h2>", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
+    [data-testid="stHorizontalBlock"] {
+        display: flex;
+        align-items: stretch;
+    }
     .fail-card {
         background: #ffffff;
         border-top: 5px solid #ff4b4b;
-        border-radius: 10px;
-        padding: 20px;
+        border-radius: 12px;
+        padding: 25px;
         height: 100%;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        transition: transform 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        position: relative;
+        display: flex;
+        flex-direction: column;
     }
-    .fail-card:hover { transform: translateY(-5px); }
+    .fail-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 20px rgba(255, 75, 75, 0.15);
+        border-top-width: 8px;
+    }
     .fail-year-badge {
         background: #ff4b4b;
         color: white;
-        padding: 2px 10px;
+        padding: 4px 12px;
         border-radius: 20px;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         font-weight: bold;
+        width: fit-content;
     }
-    .fail-quote-box { margin-top: 15px; font-style: italic; color: #1e293b; min-height: 60px; }
-    .fail-lesson { color: #64748b; font-size: 0.9rem; border-top: 1px solid #f1f5f9; padding-top: 10px; }
+    .fail-quote-box {
+        margin: 20px 0;
+        font-style: italic;
+        color: #1e293b;
+        font-size: 1.05rem;
+        flex-grow: 1;
+        position: relative;
+    }
+    /* Optional: Ein dezentes Anführungszeichen im Hintergrund */
+    .fail-quote-box::before {
+        content: '"';
+        position: absolute;
+        top: -15px;
+        left: -10px;
+        font-size: 3rem;
+        color: #f1f5f9;
+        z-index: -1;
+        font-family: serif;
+    }
+    .fail-lesson {
+        color: #64748b;
+        font-size: 0.95rem;
+        border-top: 1px solid #f1f5f9;
+        padding-top: 15px;
+        line-height: 1.4;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -1274,7 +1309,7 @@ with f_col1:
     <div class="fail-card">
         <span class="fail-year-badge">2002</span>
         <div class="fail-quote-box">"Ich werde mein ganzes Leben an diesem Ort verbringen."</div>
-        <div class="fail-lesson"><b>Lektion:</b> Die Welt war größer als mein Dorf, und mein Koffer war anderer Meinung.</div>
+        <div class="fail-lesson"><b>Lektion:</b> Die Welt war dann doch größer als mein Dorf, und mein Koffer war anderer Meinung.</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1292,10 +1327,9 @@ with f_col3:
     <div class="fail-card">
         <span class="fail-year-badge">Heute</span>
         <div class="fail-quote-box">"Diesen Lebenslauf bau ich mal fix in ein paar Stunden."</div>
-        <div class="fail-lesson"><b>Lektion:</b> Berühmte letzte Worte. Jetzt philosophieren wir über CSS-Grids.</div>
+        <div class="fail-lesson"><b>Lektion:</b> Berühmte letzte Worte. Jetzt philosophieren wir gemeinsam über CSS-Grids.</div>
     </div>
     """, unsafe_allow_html=True)
-
 
 
 
