@@ -313,7 +313,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     elif jahr_aktiv == 1996:
         MASSSTAB = 1  # 0.7 = 70% der Originalgröße, ändere diesen Wert zum Skalieren
-        OBEN_ABSTAND = "200px"
+        #OBEN_ABSTAND = "200px"
 
         col_text, col_foto = st.columns([1, 2.5])
         st.markdown(f"<h3 style='text-align: left;'>🎒 {jahr_aktiv}: Schulzeit</h3>", unsafe_allow_html=True)
