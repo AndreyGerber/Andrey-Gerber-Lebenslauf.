@@ -1117,7 +1117,7 @@ def get_base64_img(file_path):
     return ""
 
 st.divider()
-st.markdown("<h2 style='text-align: center;'>Leidenschaften & Ausgleich</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: left;'>Leidenschaften & Ausgleich</h2>", unsafe_allow_html=True)
 
 # --- CSS FÜR LAYOUT, ZOOM UND TOOLTIPS ---
 st.markdown("""
