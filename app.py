@@ -1228,7 +1228,7 @@ with col3:
                 <span class="img-label">Balance</span>
             </div>
             <div class="hobby-img-wrapper">
-                <img src="data:image/png;base64,{img_y3}" title="Wenn du der einzige bist, der es richtig macht">
+                <img src="data:image/png;base64,{img_y3}" title="Du wirst es im Leben brauchen, haben sie gesagt">
                 <span class="img-label">Kraft</span>
             </div>
         </div>
