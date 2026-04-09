@@ -1305,7 +1305,7 @@ with q_col2:
 with q_col3:
     st.markdown("""
     <div class="quote-card">
-        <div class="quote-content">"Diesen digitalen Lebenslauf baue ich schnell. Dauert eh nur ein paar Stunden."</div>
+        <div class="quote-content">"Den digitalen Lebenslauf baue ich schnell. Dauert eh nur ein paar Stunden."</div>
         <div class="quote-year">Heute</div>
     </div>
     """, unsafe_allow_html=True)
