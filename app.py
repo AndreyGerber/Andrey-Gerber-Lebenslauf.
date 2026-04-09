@@ -1040,11 +1040,11 @@ with col2:
             if img:
                 p_cols[idx % 3].image(img, use_container_width=True)
         
-        st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top: 90px;'></div>", unsafe_allow_html=True)
 
 st.divider()
 
-st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True) 
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True) 
 
 # --- Hard & Soft-Skills ---
 st.markdown("""
