@@ -1314,6 +1314,38 @@ with q_col3:
 
 
 
+st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
+
+
+
+# Pfade zu deinen Dateien definieren
+# Wir nutzen os.path.join für eine saubere Pfadführung
+video_path = os.path.join("videos", "VID_20240910_195820976.mp4")
+image_path = os.path.join("images", "Frequenzen.png")
+
+# Erstellung von zwei Spalten (50/50 Aufteilung)
+col1, col2 = st.columns(2)
+
+# Linke Seite: Das Video
+with col1:
+    st.subheader("Video-Bereich")
+    if os.path.exists(video_path):
+        st.video(video_path)
+    else:
+        st.error(f"Video nicht gefunden: {video_path}")
+
+# Rechte Seite: Das Bild
+with col2:
+    st.subheader("Bild-Bereich")
+    if os.path.exists(image_path):
+        st.image(image_path, caption="Frequenzen")
+    else:
+        st.error(f"Bild nicht gefunden: {image_path}")
+
+
+
+
+
 
 
 
