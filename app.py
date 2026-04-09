@@ -337,7 +337,6 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     elif jahr_aktiv == 2006:
         st.markdown(f"<h3 style='text-align: left;'>✈️ {jahr_aktiv}: Der neue Lebensabschnitt beginnt</h3>", unsafe_allow_html=True)
-        #st.subheader("✈️ 2006: Der neue Lebensabschnitt beginnt")
         st.divider()
 
         fig_flight = go.Figure()
@@ -389,14 +388,14 @@ with st.container(height=BLOCK_HOEHE, border=True):
 
     elif jahr_aktiv == 2010:
         MASSSTAB_STUDIUM = 1.0  # 0.8 = 80% der Originalgröße, ändere diesen Wert zum Skalieren
-        OBEN_ABSTAND = "50px"
+        OBEN_ABSTAND = "10px"
 
         col_text, col_foto = st.columns([1, 2.5])
 
         with col_text:
+            st.markdown(f"<h3 style='text-align: left;'>🎓 {jahr_aktiv}: Studium</h3>", unsafe_allow_html=True)
             st.markdown(f"<div style='margin-top: {OBEN_ABSTAND};'></div>", unsafe_allow_html=True)
-            st.subheader(f"🎓 {jahr_aktiv}: Studium")
-            
+                        
             st.markdown(f"""
                 <p style='font-size: {INFO_FONT_SIZE}; color: #0055A5; line-height: 1.4;'>
                 <strong>Bachelor of Engineering</strong><br>
