@@ -1318,27 +1318,49 @@ st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
 
 
 
+# Seite konfigurieren (optional, für ein breiteres Layout)
+st.set_page_config(layout="wide")
+
 # Pfade zu deinen Dateien definieren
-# Wir nutzen os.path.join für eine saubere Pfadführung
 video_path = os.path.join("videos", "VID_20240910_195820976.mp4")
 image_path = os.path.join("images", "Frequenzen.png")
 
-# Erstellung von zwei Spalten (50/50 Aufteilung)
+# --- CSS zur Begrenzung der Höhe ---
+# Wir sprechen das Video-Element (video) und das Bild-Element (img) direkt an.
+# 'object-fit: contain' sorgt dafür, dass nichts verzerrt wird.
+st.markdown(
+    """
+    <style>
+    [data-testid="stHorizontalBlock"] video, 
+    [data-testid="stHorizontalBlock"] img {
+        max-height: 400px !important;
+        width: auto !important;
+        object-fit: contain;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# --- Layout-Block ---
+st.write("### Analyse-Bereich")
+
 col1, col2 = st.columns(2)
 
 # Linke Seite: Das Video
 with col1:
-    st.subheader("Video-Bereich")
+    st.markdown("**Video-Bereich**")
     if os.path.exists(video_path):
+        # 'use_container_width' sorgt für die Ausfüllung der Spalte bis zur Max-Höhe
         st.video(video_path)
     else:
         st.error(f"Video nicht gefunden: {video_path}")
 
 # Rechte Seite: Das Bild
 with col2:
-    st.subheader("Bild-Bereich")
+    st.markdown("**Bild-Bereich**")
     if os.path.exists(image_path):
-        st.image(image_path, caption="Frequenzen")
+        st.image(image_path, caption="Frequenzen", use_container_width=True)
     else:
         st.error(f"Bild nicht gefunden: {image_path}")
 
