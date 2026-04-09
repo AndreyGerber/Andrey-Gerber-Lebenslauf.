@@ -1082,7 +1082,7 @@ with exp_col2:
                 <li><strong>ISO 9001 oder IATF 16949, CAPA oder 8D, DMAIC oder PDCA</strong></li>
             </ul>
             <div class="no-bullet" style="margin-top: 20px;">
-                Hier müssen wir zunächst die Begriffe definieren, bevor aneinander vorbei gesprochen wird.
+                Hier müssen wir zunächst die Begriffe definieren, bevor aneinander vorbeigesprochen wird.
             </div>
             <div style="margin-top: 100px;"></div> 
         </div>
