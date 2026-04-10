@@ -657,11 +657,26 @@ with col_gallery:
 with col_viewer:
     pdf_b64 = get_pdf_base64(st.session_state.active_doc)
     if pdf_b64:
+        # 1. Download-Button als Sicherheitsnetz (WICHTIG für Edge/Organisation)
+        path = os.path.join("documents", st.session_state.active_doc)
+        with open(path, "rb") as f:
+            st.download_button(
+                label=f"📥 {st.session_state.active_doc} öffnen / herunterladen",
+                data=f,
+                file_name=st.session_state.active_doc,
+                mime="application/pdf",
+                use_container_width=True
+            )
+        
+        # 2. Die Vorschau (wird in restriktiven Umgebungen blockiert)
         st.markdown(f'''
+            <div style="text-align: center; color: #64748b; font-size: 0.8em; margin-bottom: 5px;">
+                Vorschau (Falls nicht sichtbar, bitte den Button oben nutzen)
+            </div>
             <iframe 
                 src="data:application/pdf;base64,{pdf_b64}#toolbar=0" 
                 width="100%" 
-                height="850px" 
+                height="800px" 
                 style="border-radius:15px; border:1px solid #e2e8f0;">
             </iframe>
         ''', unsafe_allow_html=True)
