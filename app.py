@@ -232,9 +232,9 @@ for i, jahr in enumerate(jahre_alle):
         x=jahr, y=y_offset, 
         text=texte.get(jahr, ""),
         showarrow=False, 
-        textangle=-60,
+        textangle=-30,
         font=dict(size=GROESSE_TEXTE, color="#4B0082"),
-        xanchor="right", 
+        xanchor="center", 
         yanchor="top"
     )
 
