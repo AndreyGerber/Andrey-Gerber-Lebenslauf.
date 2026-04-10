@@ -575,7 +575,7 @@ other_docs = [
     {"file": "Master.pdf", "icon": "🎓", "label": "Master Zeugnis"},
     {"file": "b_k_pulse.pdf", "icon": "📟", "label": "B&K Pulse"},
     {"file": "M_BBM.pdf", "icon": "🔊", "label": "M-BBM"},
-    {"file": "InternerQualitätsauditor.pdf", "icon": "🕵️", "label": "Auditor 9000 ff."},
+    {"file": "Interner_Auditor.pdf", "icon": "🕵️", "label": "Auditor 9000 ff."},
     {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "QMB ISO 9001"},
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
 ]
@@ -674,7 +674,7 @@ with col_viewer:
         "Master.pdf": "Master.jpg",
         "b_k_pulse.pdf": "B_K_pulse.jpg",
         "M_BBM.pdf": "M_BBM.jpg",
-        "InternerQualitätsauditor.pdf": "Auditor9001.jpg",
+        "Interner_Auditor.pdf": "Auditor9001.jpg",
         "Qualitätsbeauftragter.pdf": "QMB9001.jpg",
         "QMB_ISO_17025.pdf": "QMB17025.jpg"
     }
