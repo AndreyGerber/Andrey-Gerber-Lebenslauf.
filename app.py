@@ -140,40 +140,42 @@ with col_daten:
 
 st.divider()
 
+
+
+
+
+
 # --- MEIN WERDEGANG (ORIGINAL, unverändert) ---
-# Alle Jahre für die Beschriftung
+import streamlit as st
+import plotly.graph_objects as go
+
+# --- 1. DATEN & EINSTELLUNGEN ---
 jahre_alle = [1988, 1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
-# Jahre, die eine Raute auf der Linie erhalten (alle außer 1988)
 jahre_mit_raute = [1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 
-GROESSE_JAHRE = 19       # Schriftgröße der Jahreszahlen (fett)
-GROESSE_TEXTE = 17       # Schriftgröße der Beschreibungen
+GROESSE_JAHRE = 19       
+GROESSE_TEXTE = 17       
+LINIEN_DICKE = 3
+STARTSTRICH_LAENGE = 0.18
 
-# Hier kannst du deine Texte für die Blöcke definieren
 texte = {
     1988: "Born in UdSSR ☭",
     1991: "Moved to Russian Federation<br>without moving 🇷🇺",
     1996: "School (not cool)",
     2006: "Emigration to GE 🇩🇪",
     2010: "Studying aircraft design<br>(B.Eng. & Ms.Sc.)",
-    2017: "TÜV Rheinland<br>(Expert in the lab  &                    ",
-    2019: "                  Quality Expert)",
+    2017: "TÜV Rheinland<br>(Expert in the lab &",
+    2019: "Quality Expert)",
     2022: "Ferchau (at Siemens)<br>(Quality Systems Engineering)",
     2026: "Liora<br>(Data Science & ML)"
 }
 
-# Design-Einstellungen
-LINIEN_DICKE = 3
-STARTSTRICH_LAENGE = 0.18
-JAHR_SCHRIFTGROESSE = 16
-
-# Titel linksbündig
 st.markdown("<h2 style='text-align: left;'>Mein Werdegang</h2>", unsafe_allow_html=True)
 
 # --- 2. GRAFIK ERSTELLEN ---
 fig = go.Figure()
 
-# Lebenslinie: Durchgehend von 1988 bis kurz vor die Pfeilspitze (2034)
+# Lebenslinie
 fig.add_trace(go.Scatter(
     x=[1988, 2029], 
     y=[0, 0],
@@ -183,7 +185,7 @@ fig.add_trace(go.Scatter(
     hoverinfo='none'
 ))
 
-# Senkrechter Startstrich bei 1988
+# Startstrich
 fig.add_shape(
     type="line", 
     x0=1988, y0=-STARTSTRICH_LAENGE, 
@@ -191,7 +193,7 @@ fig.add_shape(
     line=dict(color="black", width=LINIEN_DICKE + 1)
 )
 
-# Weiße Rauten (NUR ab 1996), mittig auf der Linie
+# Rauten
 fig.add_trace(go.Scatter(
     x=jahre_mit_raute, 
     y=[0] * len(jahre_mit_raute),
@@ -206,8 +208,9 @@ fig.add_trace(go.Scatter(
     hoverinfo='none'
 ))
 
-# Jahreszahlen und Textblöcke (45° gedreht)
+# Texte & Jahreszahlen
 for i, jahr in enumerate(jahre_alle):
+    # Versetztes Layout für bessere Lesbarkeit
     if jahr in [1991, 2017, 2019, 2022]:
         y_offset = -0.05
     else:
@@ -233,13 +236,7 @@ for i, jahr in enumerate(jahre_alle):
         yanchor="top"
     )
 
-fig.update_layout(
-    height=500,
-    margin=dict(l=50, r=50, t=20, b=250), 
-    yaxis=dict(range=[-1.8, 0.5]) 
-)
-
-# Pfeilspitze am rechten Ende
+# Pfeilspitze
 fig.add_annotation(
     x=2030, y=0,
     ax=2028, ay=0,
@@ -252,9 +249,11 @@ fig.add_annotation(
     arrowcolor="black"
 )
 
+# --- 3. LAYOUT MIT FESTER BREITE (WICHTIG FÜR MOBILE SCROLLING) ---
 fig.update_layout(
-    height=450, 
-    margin=dict(l=0, r=0, t=10, b=150),
+    width=1000,           # Erzwingt eine Breite von 1000px
+    height=500, 
+    margin=dict(l=50, r=50, t=10, b=150),
     xaxis=dict(
         showgrid=False, 
         zeroline=False, 
@@ -271,9 +270,16 @@ fig.update_layout(
     paper_bgcolor="rgba(0,0,0,0)"
 )
 
-st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
+# Anzeige in Streamlit ohne automatische Breitenanpassung
+st.plotly_chart(fig, use_container_width=False, config={'staticPlot': True, 'displayModeBar': False})
 
-# --- BLOCK MIT DEN DETAILS (Karte repariert) ---
+
+
+
+
+
+
+# --- BLOCK MIT DEN DETAILS zum Werdegang ---
 BLOCK_HOEHE = 750
 BILD_BREITE = 350
 INFO_FONT_SIZE = "24px"
