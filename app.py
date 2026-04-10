@@ -1272,7 +1272,7 @@ st.markdown(
     
     /* Titel mittig ausrichten */
     h3 {
-        text-align: center;
+        text-align: left;
         margin-bottom: 20px;
     }
     </style>
