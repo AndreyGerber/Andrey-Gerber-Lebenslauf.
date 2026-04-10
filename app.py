@@ -790,7 +790,7 @@ if num_certs > 0:
     """
 
     # Aufteilung in 3 Spalten (20% : 60% : 20%)
-    col1, col2, col3 = st.columns([1, 3, 1])
+    col1, col2, col3 = st.columns([0.7, 3, 0.7])
     with col2:
         components.html(threejs_html, height=700, scrolling=False)
     
