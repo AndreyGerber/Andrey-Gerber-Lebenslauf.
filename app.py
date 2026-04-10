@@ -1209,7 +1209,7 @@ with col2:
     """, unsafe_allow_html=True)
 
 with col3:
-    img_y1 = get_base64_img("images/Hobbies/yoga.jpg")
+    img_y1 = get_base64_img("images/Hobbies/box.png")
     img_y2 = get_base64_img("images/Hobbies/yoga2.jpg")
     img_y3 = get_base64_img("images/Hobbies/yoga3.png")
 
@@ -1221,15 +1221,15 @@ with col3:
         <div class="hobby-img-area">
             <div class="hobby-img-wrapper">
                 <img src="data:image/jpeg;base64,{img_y1}" title="Es ist entspannt, haben sie gesagt">
-                <span class="img-label">Yoga</span>
+                <span class="img-label">agil</span>
             </div>
             <div class="hobby-img-wrapper">
                 <img src="data:image/jpeg;base64,{img_y2}" title="Ist einfach, haben sie gesagt">
-                <span class="img-label">Balance</span>
+                <span class="img-label">ausbalanciert</span>
             </div>
             <div class="hobby-img-wrapper">
                 <img src="data:image/png;base64,{img_y3}" title="Du wirst es im Leben brauchen, haben sie gesagt">
-                <span class="img-label">Kraft</span>
+                <span class="img-label">stark</span>
             </div>
         </div>
     </div>
