@@ -655,32 +655,56 @@ with col_gallery:
     st.markdown("<div style='height: 80px;'></div>", unsafe_allow_html=True)
 
 with col_viewer:
-    pdf_b64 = get_pdf_base64(st.session_state.active_doc)
-    if pdf_b64:
-        # 1. Download-Button als Sicherheitsnetz (WICHTIG für Edge/Organisation)
-        path = os.path.join("documents", st.session_state.active_doc)
-        with open(path, "rb") as f:
+    active_pdf = st.session_state.active_doc
+    
+    # Pfad zum PDF (für den Download)
+    pdf_path = os.path.join("documents", active_pdf)
+    
+    # Pfad zum JPG (für die sichere Anzeige in Edge)
+    # Wir erstellen ein Dictionary für Ausnahmen, falls Dateinamen nicht exakt matchen
+    mapping_exceptions = {
+        "Namensaenderung.pdf": "NamensaenderungAG.jpg",
+        "allgemeineHochschulreife.pdf": "Abitur.jpg",
+        "InternerQualitätsauditor.pdf": "Auditor9001.jpg",
+        "Qualitätsbeauftragter.pdf": "QMB9001.jpg",
+        "QMB_ISO_17025.pdf": "QMB17025.jpg",
+        "Schweisskurs.pdf": "schweißkurs.jpg"
+    }
+    
+    # Bildpfad ermitteln: Entweder aus Ausnahme-Liste oder einfach Endung tauschen
+    if active_pdf in mapping_exceptions:
+        img_file = mapping_exceptions[active_pdf]
+    else:
+        img_file = active_pdf.replace(".pdf", ".jpg")
+        
+    image_path = os.path.join("images", "Zertifikate", img_file)
+
+    # 1. DOWNLOAD BUTTON (Native Streamlit Funktion - sehr sicher)
+    if os.path.exists(pdf_path):
+        with open(pdf_path, "rb") as f:
             st.download_button(
-                label=f"📥 {st.session_state.active_doc} öffnen / herunterladen",
+                label=f"📥 PDF öffnen: {active_pdf}",
                 data=f,
-                file_name=st.session_state.active_doc,
+                file_name=active_pdf,
                 mime="application/pdf",
                 use_container_width=True
             )
-        
-        # 2. Die Vorschau (wird in restriktiven Umgebungen blockiert)
-        st.markdown(f'''
-            <div style="text-align: center; color: #64748b; font-size: 0.8em; margin-bottom: 5px;">
-                Vorschau (Falls nicht sichtbar, bitte den Button oben nutzen)
-            </div>
-            <iframe 
-                src="data:application/pdf;base64,{pdf_b64}#toolbar=0" 
-                width="100%" 
-                height="800px" 
-                style="border-radius:15px; border:1px solid #e2e8f0;">
-            </iframe>
-        ''', unsafe_allow_html=True)
+    
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
 
+    # 2. BILD ANZEIGE (Wird nicht von Edge blockiert)
+    if os.path.exists(image_path):
+        st.image(image_path, use_container_width=True, caption=f"Vorschau: {active_pdf}")
+    else:
+        # Falls das Bild nicht gefunden wurde, versuchen wir den alten IFrame als Fallback
+        pdf_b64 = get_pdf_base64(active_pdf)
+        if pdf_b64:
+            st.warning("Bild-Vorschau nicht gefunden, lade PDF-Betrachter...")
+            st.markdown(f'''
+                <iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" 
+                        width="100%" height="800px" style="border-radius:15px; border:1px solid #e2e8f0;">
+                </iframe>
+            ''', unsafe_allow_html=True)
 
 st.write("")
 st.markdown("<br>", unsafe_allow_html=True)
