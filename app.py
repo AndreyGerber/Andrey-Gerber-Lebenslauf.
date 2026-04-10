@@ -740,7 +740,7 @@ import os
 st.set_page_config(layout="wide")
 
 st.markdown("<h2 style='text-align: left; margin-top: 50px;'>💻 Data Science & Machine Learning</h2>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align: left; margin-top: 20px;'>3D-Wand, man kann zoomen und drehen</h4>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align: left; margin-top: 10px;'>3D-Wand, man kann zoomen und drehen</h4>", unsafe_allow_html=True)
 
 # Deine 17 Zertifikatsnamen mit Nummerierung
 cert_names = [
