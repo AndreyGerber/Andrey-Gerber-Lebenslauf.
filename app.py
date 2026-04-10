@@ -662,12 +662,12 @@ import json
 import math
 import os
 
-# Seite auf Wide-Mode stellen für bessere Platznutzung
+# Seite auf Wide-Mode stellen
 st.set_page_config(layout="wide")
 
-st.markdown("<h2 style='text-align: center; margin-top: 50px;'>💻 Data Science & Machine Learning</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center; margin-top: 30px;'>💻 Data Science & Machine Learning</h2>", unsafe_allow_html=True)
 
-# Deine Zertifikatsnamen
+# Deine 17 Zertifikatsnamen
 cert_names = [
     "1_Python_for_Data_Science", "2_Exploratory_Statistics_with_Python", "3_Data_Quality",
     "4_Data_Visualization_Matplotlib", "5_Data_Visualization_with_Seaborn", "6_Matplotlib_Complements",
@@ -681,62 +681,76 @@ cert_folder = "images"
 cert_data = []
 
 # Bilder laden und in Base64 konvertieren
-for cert_name in cert_names:
-    for ext in ['.png', '.jpg', '.jpeg']:
-        img_path = os.path.join(cert_folder, cert_name + ext)
-        if os.path.exists(img_path):
-            with open(img_path, "rb") as f:
-                img_b64 = base64.b64encode(f.read()).decode()
-            display_name = cert_name.split('_', 1)[1].replace('_', ' ')
-            cert_data.append({
-                "name": display_name, "b64": img_b64, "ext": ext[1:]
-            })
-            break
+if os.path.exists(cert_folder):
+    for cert_name in cert_names:
+        for ext in ['.png', '.jpg', '.jpeg']:
+            img_path = os.path.join(cert_folder, cert_name + ext)
+            if os.path.exists(img_path):
+                with open(img_path, "rb") as f:
+                    img_b64 = base64.b64encode(f.read()).decode()
+                
+                # Namen für das Label aufbereiten (Nummer entfernen, Unterstriche zu Leerzeichen)
+                display_name = cert_name.split('_', 1)[1].replace('_', ' ') if '_' in cert_name else cert_name
+                
+                cert_data.append({
+                    "name": display_name,
+                    "b64": img_b64,
+                    "ext": ext[1:]
+                })
+                break
 
 num_certs = len(cert_data)
 
 if num_certs > 0:
-    # 3D-Positionen berechnen (Spirale)
+    # 3D-Positionen berechnen
     positions = []
     for i in range(num_certs):
-        angle = i * 0.65
-        radius = 3.5
+        angle = i * 0.7
+        radius = 3.8
         x = math.cos(angle) * radius
         z = math.sin(angle) * radius
-        y = (i - num_certs/2) * 0.35
+        y = (i - num_certs/2) * 0.45
         positions.append({"x": x, "y": y, "z": z})
     
     certs_json = json.dumps([{
-        "name": cert_data[i]["name"], "b64": cert_data[i]["b64"], "ext": cert_data[i]["ext"],
-        "x": positions[i]["x"], "y": positions[i]["y"], "z": positions[i]["z"]
+        "name": cert_data[i]["name"],
+        "b64": cert_data[i]["b64"],
+        "ext": cert_data[i]["ext"],
+        "x": positions[i]["x"],
+        "y": positions[i]["y"],
+        "z": positions[i]["z"]
     } for i in range(num_certs)])
     
-    # HTML / CSS / Three.js
+    # Three.js HTML/JS
     threejs_html = f"""
     <!DOCTYPE html>
     <html>
     <head>
         <style>
-            body {{ margin: 0; overflow: hidden; background-color: #f8fafc; font-family: sans-serif; }}
-            #info {{
-                position: absolute; top: 10px; left: 10px; color: #333;
-                background: rgba(255,255,255,0.7); padding: 5px 10px; border-radius: 5px;
-                font-size: 12px; pointer-events: none; z-index: 10;
-            }}
+            body {{ margin: 0; overflow: hidden; background-color: #ffffff; font-family: sans-serif; }}
             #modal {{
                 display: none; position: fixed; z-index: 1000; left: 0; top: 0;
-                width: 100%; height: 100%; background: rgba(0,0,0,0.85);
+                width: 100%; height: 100%; background: rgba(0,0,0,0.9);
                 justify-content: center; align-items: center; cursor: pointer;
             }}
-            #modal img {{ max-width: 90%; max-height: 90%; border-radius: 5px; }}
+            #modal img {{ max-width: 85%; max-height: 85%; border: 3px solid white; border-radius: 5px; }}
+            #hint {{
+                position: absolute; bottom: 10px; width: 100%; text-align: center;
+                color: #888; font-size: 12px; pointer-events: none;
+            }}
         </style>
     </head>
     <body>
-        <div id="info">🌀 Scrollen = Zoom | Ziehen = Drehen | Klick = Zoom Bild</div>
+        <div id="hint">🖱️ Ziehen zum Drehen | Scrollen zum Zoomen | Klick zum Vergrößern</div>
         <div id="modal" onclick="this.style.display='none'"><img id="modalImage" src=""></div>
         
         <script type="importmap">
-            {{ "imports": {{ "three": "https://unpkg.com", "three/addons/": "https://unpkg.com" }} }}
+            {{
+                "imports": {{
+                    "three": "https://unpkg.com",
+                    "three/addons/": "https://unpkg.com"
+                }}
+            }}
         </script>
         
         <script type="module">
@@ -745,10 +759,10 @@ if num_certs > 0:
             
             const certsData = {certs_json};
             const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xf8fafc);
+            scene.background = new THREE.Color(0xffffff);
             
             const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(7, 4, 10);
+            camera.position.set(10, 2, 12);
             
             const renderer = new THREE.WebGLRenderer({{ antialias: true }});
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -756,31 +770,27 @@ if num_certs > 0:
             
             const controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.5;
 
-            scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-            const light = new THREE.DirectionalLight(0xffffff, 0.5);
-            light.position.set(5, 10, 7);
-            scene.add(light);
+            scene.add(new THREE.AmbientLight(0xffffff, 1.0));
 
-            const grid = new THREE.GridHelper(15, 20, 0xdddddd, 0xeeeeee);
-            grid.position.y = -2;
-            scene.add(grid);
-
-            const raycaster = new THREE.Raycaster();
-            const mouse = new THREE.Vector2();
             const planes = [];
+            const loader = new THREE.TextureLoader();
 
             certsData.forEach(cert => {{
-                const loader = new THREE.TextureLoader();
-                const texture = loader.load(`data:image/${{cert.ext}};base64,${{cert.b64}}`);
-                const material = new THREE.MeshStandardMaterial({{ map: texture, side: THREE.DoubleSide }});
-                const geometry = new THREE.PlaneGeometry(1.6, 1.1);
+                const texture = loader.load('data:image/' + cert.ext + ';base64,' + cert.b64);
+                const material = new THREE.MeshBasicMaterial({{ map: texture, side: THREE.DoubleSide }});
+                const geometry = new THREE.PlaneGeometry(2.0, 1.4);
                 const plane = new THREE.Mesh(geometry, material);
                 plane.position.set(cert.x, cert.y, cert.z);
-                plane.userData = {{ src: `data:image/${{cert.ext}};base64,${{cert.b64}}` }};
+                plane.userData = {{ src: 'data:image/' + cert.ext + ';base64,' + cert.b64 }};
                 scene.add(plane);
                 planes.push(plane);
             }});
+
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
 
             window.addEventListener('click', (e) => {{
                 mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -788,14 +798,14 @@ if num_certs > 0:
                 raycaster.setFromCamera(mouse, camera);
                 const intersects = raycaster.intersectObjects(planes);
                 if (intersects.length > 0) {{
-                    document.getElementById('modalImage').src = intersects[0].object.userData.src;
+                    document.getElementById('modalImage').src = intersects.object.userData.src;
                     document.getElementById('modal').style.display = 'flex';
                 }}
             }});
 
             function animate() {{
                 requestAnimationFrame(animate);
-                planes.forEach(p => p.lookAt(camera.position)); // Karten folgen der Kamera
+                planes.forEach(p => p.lookAt(camera.position));
                 controls.update();
                 renderer.render(scene, camera);
             }}
@@ -811,12 +821,14 @@ if num_certs > 0:
     </html>
     """
 
-    # Layout-Aufteilung 20:60:20
+    # Erstellung der 3 Spalten (20% : 60% : 20%)
     col1, col2, col3 = st.columns([1, 3, 1])
+    
     with col2:
-        components.html(threejs_html, height=700, scrolling=False)
+        components.html(threejs_html, height=800, scrolling=False)
+
 else:
-    st.warning("Keine Bilder im Ordner 'images' gefunden. Bitte Pfad prüfen.")
+    st.error("Ordner 'images' nicht gefunden oder keine passenden Zertifikate darin.")
 
     
 
