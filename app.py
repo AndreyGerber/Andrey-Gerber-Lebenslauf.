@@ -128,7 +128,7 @@ with col_daten:
     # Darstellung in zwei kleinen Unterspalten für kompakte Optik
     lang_1, lang_2 = st.columns(2)
     
-    st.markdown("🇩🇪 <span style='color: gray; font-size: 18px;'>(C2)</span>", unsafe_allow_html=True)
+    st.markdown("🇩🇪 <span style='color: gray; font-size: 18px;'>(C2)</span>, 🇷🇺 <span style='color: gray; font-size: 18px;'>(C2)</span>", unsafe_allow_html=True)
     st.markdown("🇷🇺 <span style='color: gray; font-size: 18px;'>(C2)</span>", unsafe_allow_html=True)
     st.markdown("🇺🇸 <span style='color: gray; font-size: 18px;'>(B2)</span>", unsafe_allow_html=True)
 
