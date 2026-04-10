@@ -121,6 +121,21 @@ with col_daten:
         </div>
     """, unsafe_allow_html=True)
 
+    # --- NEU: ABSCHNITT SPRACHKENNTNISSE ---
+    st.markdown("<hr style='margin: 30px 0; border: none; border-top: 1px solid #eee;'>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 28px; font-weight: bold; margin-bottom: 15px;'>Sprachkenntnisse</p>", unsafe_allow_html=True)
+    
+    # Darstellung in zwei kleinen Unterspalten für kompakte Optik
+    lang_1, lang_2 = st.columns(2)
+    
+    with lang_1:
+        st.markdown("<p style='font-size: 22px;'>🇩🇪 <b>Deutsch</b><br><span style='color: gray; font-size: 18px;'>Niveau C2</span></p>", unsafe_allow_html=True)
+        st.markdown("<p style='font-size: 22px;'>🇷🇺 <b>Russisch</b><br><span style='color: gray; font-size: 18px;'>Muttersprache</span></p>", unsafe_allow_html=True)
+        
+    with lang_2:
+        st.markdown("<p style='font-size: 22px;'>🇺🇸 <b>Englisch</b><br><span style='color: gray; font-size: 18px;'>Niveau B2/C1</span></p>", unsafe_allow_html=True)
+
+
 st.divider()
 
 # --- MEIN WERDEGANG (ORIGINAL, unverändert) ---
