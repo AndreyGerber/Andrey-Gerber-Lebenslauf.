@@ -667,7 +667,7 @@ st.set_page_config(layout="wide")
 
 st.markdown("<h2 style='text-align: left; margin-top: 50px;'>💻 Data Science & Machine Learning</h2>", unsafe_allow_html=True)
 
-# Deine 17 Zertifikatsnamen mit Nummerierung
+# Deine 17 Zertifikatsnamen
 cert_names = [
     "1_Python_for_Data_Science", "2_Exploratory_Statistics_with_Python", "3_Data_Quality",
     "4_Data_Visualization_Matplotlib", "5_Data_Visualization_with_Seaborn", "6_Matplotlib_Complements",
@@ -680,7 +680,7 @@ cert_names = [
 cert_folder = "images"
 cert_data = []
 
-# Sammle Bilder mit Base64
+# Bilder laden und in Base64 konvertieren
 if os.path.exists(cert_folder):
     for cert_name in cert_names:
         for ext in ['.png', '.jpg', '.jpeg']:
@@ -688,8 +688,10 @@ if os.path.exists(cert_folder):
             if os.path.exists(img_path):
                 with open(img_path, "rb") as f:
                     img_b64 = base64.b64encode(f.read()).decode()
-                # Korrektur des Splittings für den Anzeigenamen
+                
+                # Fix: Erst splitten, dann den String-Teil bearbeiten
                 display_name = cert_name.split('_', 1)[1].replace('_', ' ') if '_' in cert_name else cert_name
+                
                 cert_data.append({
                     "name": display_name,
                     "b64": img_b64,
@@ -723,9 +725,9 @@ if num_certs > 0:
     <html>
     <head>
         <style>
-            body {{ margin: 0; overflow: hidden; font-family: 'Segoe UI', sans-serif; background-color: #f8fafc; }}
+            body {{ margin: 0; overflow: hidden; font-family: sans-serif; background-color: #f8fafc; }}
             #modal {{ display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; cursor: pointer; }}
-            #modal img {{ max-width: 90%; max-height: 90%; border-radius: 10px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }}
+            #modal img {{ max-width: 90%; max-height: 90%; border-radius: 10px; }}
         </style>
     </head>
     <body>
@@ -740,7 +742,6 @@ if num_certs > 0:
             const certsData = {certs_json};
             const scene = new THREE.Scene();
             scene.background = new THREE.Color(0xf8fafc);
-            
             const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(5, 3, 8);
             
@@ -751,14 +752,10 @@ if num_certs > 0:
             const controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
 
-            // Lichtquellen
-            scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-            const light = new THREE.DirectionalLight(0xffffff, 0.6);
-            light.position.set(5, 10, 7);
-            scene.add(light);
+            scene.add(new THREE.AmbientLight(0xffffff, 1.0));
 
-            // DAS GITTER (GridHelper) - Hier hinzugefügt und sichtbar gemacht
-            const gridHelper = new THREE.GridHelper(12, 20, 0xaaaaaa, 0xdddddd);
+            // Gitter hinzufügen
+            const gridHelper = new THREE.GridHelper(12, 20, 0x888888, 0xcccccc);
             gridHelper.position.y = -2.2;
             scene.add(gridHelper);
 
@@ -767,7 +764,7 @@ if num_certs > 0:
 
             certsData.forEach(cert => {{
                 const texture = loader.load('data:image/' + cert.ext + ';base64,' + cert.b64);
-                const material = new THREE.MeshStandardMaterial({{ map: texture, side: THREE.DoubleSide, roughness: 0.3 }});
+                const material = new THREE.MeshBasicMaterial({{ map: texture, side: THREE.DoubleSide }});
                 const plane = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.1), material);
                 plane.position.set(cert.x, cert.y, cert.z);
                 plane.userData = {{ src: 'data:image/' + cert.ext + ';base64,' + cert.b64 }};
@@ -793,23 +790,16 @@ if num_certs > 0:
                 renderer.render(scene, camera);
             }}
             animate();
-            
-            window.addEventListener('resize', () => {{
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            }});
         </script>
     </body>
     </html>
     """
 
-    # Erstellung der 3 Spalten (Verhältnis 20:60:20)
-    col1, col2, col3 = st.columns()
+    # Fix: st.columns benötigt ein Argument (3 für drei gleich große Spalten)
+    # Oder [0.2, 0.6, 0.2] für die exakte 20:60:20 Aufteilung
+    col1, col2, col3 = st.columns([0.2, 0.6, 0.2])
     with col2:
-        components.html(threejs_html, height=750, scrolling=False)
-else:
-    st.error("Bilder konnten nicht geladen werden. Bitte den 'images'-Ordner prüfen.")
+        components.html(threejs_html, height=800, scrolling=False)
 
     
   
