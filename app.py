@@ -663,12 +663,20 @@ with col_viewer:
     # Pfad zum JPG (für die sichere Anzeige in Edge)
     # Wir erstellen ein Dictionary für Ausnahmen, falls Dateinamen nicht exakt matchen
     mapping_exceptions = {
+        # PDFs aus deiner Liste -> JPGs aus deinem Screenshot
         "Namensaenderung.pdf": "NamensaenderungAG.jpg",
+        "Berufsschule.pdf": "Berufsschule.jpg",
         "allgemeineHochschulreife.pdf": "Abitur.jpg",
+        "Praktikum_V&F.pdf": "Praktikum_V_F.jpg",
+        "Bachelor.pdf": "Bachelor.jpg",
+        "Schweisskurs.pdf": "schweißkurs.jpg",
+        "Wertanalytiker.pdf": "Wertanalytiker.jpg",
+        "Master.pdf": "Master.jpg",
+        "b_k_pulse.pdf": "B_K_pulse.jpg",
+        "M_BBM.pdf": "M_BBM.jpg",
         "InternerQualitätsauditor.pdf": "Auditor9001.jpg",
         "Qualitätsbeauftragter.pdf": "QMB9001.jpg",
-        "QMB_ISO_17025.pdf": "QMB17025.jpg",
-        "Schweisskurs.pdf": "schweißkurs.jpg"
+        "QMB_ISO_17025.pdf": "QMB17025.jpg"
     }
     
     # Bildpfad ermitteln: Entweder aus Ausnahme-Liste oder einfach Endung tauschen
