@@ -655,31 +655,37 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 
 # ==================== FLIEßENDE 3D-WAND MIT THREE.JS ====================
-import streamlit as st
-import streamlit.components.v1 as components
-import base64
-import json
-import math
-import os
-
-# Seite auf Wide-Mode stellen
-st.set_page_config(layout="wide")
-
 st.markdown("<h2 style='text-align: left; margin-top: 50px;'>💻 Data Science & Machine Learning</h2>", unsafe_allow_html=True)
+#st.markdown("<p style='text-align: center; color: gray; margin-bottom: 30px;'>✧ Fließende 3D-Wand – Maus ziehen zum Drehen, Klick auf Zertifikat zum Vergrößern ✧</p>", unsafe_allow_html=True)
 
-# Deine 17 Zertifikatsnamen mit Nummerierung (DEIN ORIGINAL)
+# Deine 17 Zertifikatsnamen mit Nummerierung
 cert_names = [
-    "1_Python_for_Data_Science", "2_Exploratory_Statistics_with_Python", "3_Data_Quality",
-    "4_Data_Visualization_Matplotlib", "5_Data_Visualization_with_Seaborn", "6_Matplotlib_Complements",
-    "7_DataViz_with_Plotly", "8_MCQ_Linux_and_Bash", "9_Git_and_Github", "10_Unit_Testing",
-    "11_Classification_with_scikit-learn", "12_Regressionn_with_scikit_learn", "13_Methodology_in_Data_Science",
-    "14_Feature_Engineering_and_Optimisation", "15_Time_Series_Analysis_with_Python",
-    "16_Advanced_Classification_with-scikit-learn", "17_Text_Mining"
+    "1_Python_for_Data_Science",
+    "2_Exploratory_Statistics_with_Python",
+    "3_Data_Quality",
+    "4_Data_Visualization_Matplotlib",
+    "5_Data_Visualization_with_Seaborn",
+    "6_Matplotlib_Complements",
+    "7_DataViz_with_Plotly",
+    "8_MCQ_Linux_and_Bash",
+    "9_Git_and_Github",
+    "10_Unit_Testing",
+    "11_Classification_with_scikit-learn",
+    "12_Regressionn_with_scikit_learn",
+    "13_Methodology_in_Data_Science",
+    "14_Feature_Engineering_and_Optimisation",
+    "15_Time_Series_Analysis_with_Python",
+    "16_Advanced_Classification_with-scikit-learn",
+    "17_Text_Mining"
 ]
 
 cert_folder = "images"
 
-# Sammle existierende Bilder mit Base64 (DEIN ORIGINAL + Fix für Pfadzugriff)
+# Sammle existierende Bilder mit Base64
+import base64
+import json
+import math
+
 cert_data = []
 for cert_name in cert_names:
     for ext in ['.png', '.jpg', '.jpeg']:
@@ -687,10 +693,7 @@ for cert_name in cert_names:
         if os.path.exists(img_path):
             with open(img_path, "rb") as f:
                 img_b64 = base64.b64encode(f.read()).decode()
-            
-            # Fix für den Namen: split liefert Liste, wir brauchen den String
             display_name = cert_name.split('_', 1)[1].replace('_', ' ')
-            
             cert_data.append({
                 "name": display_name,
                 "b64": img_b64,
@@ -701,7 +704,7 @@ for cert_name in cert_names:
 num_certs = len(cert_data)
 
 if num_certs > 0:
-    # Positionen für fließende Spirale berechnen (DEIN ORIGINAL)
+    # Positionen für fließende Spirale berechnen
     positions = []
     for i in range(num_certs):
         angle = i * 0.65
@@ -721,86 +724,233 @@ if num_certs > 0:
         "z": positions[i]["z"]
     } for i in range(num_certs)])
     
-    # Three.js HTML/CSS/JS (DEIN ORIGINAL + Fix für Textur-Laden)
+    # Three.js HTML/CSS/JS
     threejs_html = f"""
     <!DOCTYPE html>
     <html>
     <head>
         <style>
-            body {{ margin: 0; overflow: hidden; background-color: #f8fafc; }}
-            #modal {{ display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; cursor: pointer; }}
-            #modal img {{ max-width: 90%; max-height: 90%; border-radius: 10px; }}
+            body {{ margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }}
+            #info {{
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                color: white;
+                background: rgba(0,0,0,0.6);
+                padding: 8px 15px;
+                border-radius: 8px;
+                pointer-events: none;
+                z-index: 10;
+                font-size: 14px;
+            }}
+            #modal {{
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.9);
+                justify-content: center;
+                align-items: center;
+            }}
+            #modal img {{
+                max-width: 90%;
+                max-height: 90%;
+                border-radius: 10px;
+                box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            }}
+            #modal .close {{
+                position: absolute;
+                top: 20px;
+                right: 40px;
+                color: white;
+                font-size: 50px;
+                font-weight: bold;
+                cursor: pointer;
+            }}
+            #modal .close:hover {{ color: #69c0ff; }}
         </style>
     </head>
     <body>
-        <div id="modal" onclick="this.style.display='none'"><img id="modalImage" src=""></div>
+        <div id="info">
+            🌀 Fließende 3D-Wand | 🖱️ Maus ziehen = drehen | Rechtsklick ziehen = schwenken | Scrollen = zoomen | Klick = vergrößern
+        </div>
+        <div id="modal" onclick="this.style.display='none'">
+            <span class="close">&times;</span>
+            <img id="modalImage" src="">
+        </div>
         
         <script type="importmap">
-            {{ "imports": {{ "three": "https://unpkg.com", "three/addons/": "https://unpkg.com" }} }}
+            {{
+                "imports": {{
+                    "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                    "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+                }}
+            }}
         </script>
         
         <script type="module">
             import * as THREE from 'three';
             import {{ OrbitControls }} from 'three/addons/controls/OrbitControls.js';
+            import {{ CSS2DRenderer, CSS2DObject }} from 'three/addons/renderers/CSS2DRenderer.js';
             
             const certsData = {certs_json};
+            
+            // Szene, Kamera, Renderer
             const scene = new THREE.Scene();
             scene.background = new THREE.Color(0xf8fafc);
             
             const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(5, 3, 8);
+            camera.lookAt(0, 0, 0);
             
             const renderer = new THREE.WebGLRenderer({{ antialias: true }});
             renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
             document.body.appendChild(renderer.domElement);
             
+            // CSS2DRenderer für Text
+            const labelRenderer = new CSS2DRenderer();
+            labelRenderer.setSize(window.innerWidth, window.innerHeight);
+            labelRenderer.domElement.style.position = 'absolute';
+            labelRenderer.domElement.style.top = '0px';
+            labelRenderer.domElement.style.left = '0px';
+            labelRenderer.domElement.style.pointerEvents = 'none';
+            document.body.appendChild(labelRenderer.domElement);
+            
+            // Orbit Controls
             const controls = new OrbitControls(camera, renderer.domElement);
-            scene.add(new THREE.AmbientLight(0xffffff, 1.0));
-
-            const planes = [];
-            const loader = new THREE.TextureLoader();
-
-            certsData.forEach(cert => {{
-                // Fix: Wir laden die Textur aus dem Base64-String, da JS nicht auf lokale Dateien zugreifen kann
-                const texture = loader.load('data:image/' + cert.ext + ';base64,' + cert.b64);
-                const material = new THREE.MeshBasicMaterial({{ map: texture, side: THREE.DoubleSide }});
-                const plane = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.1), material);
-                plane.position.set(cert.x, cert.y, cert.z);
-                plane.userData = {{ src: 'data:image/' + cert.ext + ';base64,' + cert.b64 }};
-                scene.add(plane);
-                planes.push(plane);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.rotateSpeed = 1.0;
+            controls.zoomSpeed = 1.2;
+            controls.panSpeed = 0.8;
+            controls.enableZoom = true;
+            controls.enablePan = true;
+            
+            // Licht
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 10, 7);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+            const backLight = new THREE.DirectionalLight(0xffffff, 0.3);
+            backLight.position.set(-3, 2, -4);
+            scene.add(backLight);
+            
+            // Hilfslinien (dezent)
+            const gridHelper = new THREE.GridHelper(12, 20, 0xcccccc, 0xe0e0e0);
+            gridHelper.position.y = -1.8;
+            scene.add(gridHelper);
+            
+            // Zertifikate erstellen
+            const certificates = [];
+            
+            certsData.forEach((cert, idx) => {{
+                const img = new Image();
+                img.src = `data:image/${{cert.ext}};base64,${{cert.b64}}`;
+                
+                img.onload = () => {{
+                    const texture = new THREE.CanvasTexture(img);
+                    
+                    const material = new THREE.MeshStandardMaterial({{
+                        map: texture,
+                        side: THREE.DoubleSide,
+                        roughness: 0.3,
+                        metalness: 0.1
+                    }});
+                    
+                    const aspect = img.width / img.height;
+                    const width = 1.4;
+                    const height = width / aspect;
+                    const geometry = new THREE.PlaneGeometry(width, height);
+                    const plane = new THREE.Mesh(geometry, material);
+                    plane.position.set(cert.x, cert.y, cert.z);
+                    plane.userData = {{ imageSrc: `data:image/${{cert.ext}};base64,${{cert.b64}}`, name: cert.name }};
+                    plane.castShadow = true;
+                    scene.add(plane);
+                    
+                    // Rahmen
+                    const borderGeometry = new THREE.BoxGeometry(width + 0.06, height + 0.06, 0.03);
+                    const borderMaterial = new THREE.MeshStandardMaterial({{ color: 0xffffff, metalness: 0.1, roughness: 0.3 }});
+                    const border = new THREE.Mesh(borderGeometry, borderMaterial);
+                    border.position.set(cert.x, cert.y, cert.z - 0.02);
+                    scene.add(border);
+                    
+                    // Text unter dem Bild
+                    const div = document.createElement('div');
+                    div.textContent = cert.name;
+                    div.style.color = '#475569';
+                    div.style.fontSize = '11px';
+                    div.style.fontWeight = '600';
+                    div.style.textAlign = 'center';
+                    div.style.backgroundColor = 'rgba(255,255,255,0.85)';
+                    div.style.padding = '3px 8px';
+                    div.style.borderRadius = '20px';
+                    div.style.border = '1px solid #e2e8f0';
+                    div.style.pointerEvents = 'none';
+                    
+                    const label = new CSS2DObject(div);
+                    label.position.set(cert.x, cert.y - height/2 - 0.12, cert.z);
+                    scene.add(label);
+                    
+                    certificates.push(plane);
+                }};
             }});
-
-            // Raycaster für Klick-Funktion
-            window.addEventListener('click', (e) => {{
-                const mouse = new THREE.Vector2((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
-                const raycaster = new THREE.Raycaster();
+            
+            // Raycaster für Klick
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+            
+            function onMouseClick(event) {{
+                mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+                mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+                
                 raycaster.setFromCamera(mouse, camera);
-                const intersects = raycaster.intersectObjects(planes);
+                const intersects = raycaster.intersectObjects(certificates);
+                
                 if (intersects.length > 0) {{
-                    document.getElementById('modalImage').src = intersects.object.userData.src;
-                    document.getElementById('modal').style.display = 'flex';
+                    const selected = intersects[0].object;
+                    const modal = document.getElementById('modal');
+                    const modalImg = document.getElementById('modalImage');
+                    modal.style.display = 'flex';
+                    modalImg.src = selected.userData.imageSrc;
                 }}
-            }});
-
+            }}
+            
+            window.addEventListener('click', onMouseClick, false);
+            
+            // Animation
             function animate() {{
                 requestAnimationFrame(animate);
-                planes.forEach(p => p.lookAt(camera.position)); // Optional: Bilder schauen zur Kamera
                 controls.update();
                 renderer.render(scene, camera);
+                labelRenderer.render(scene, camera);
             }}
             animate();
+            
+            // Fenster-Größe anpassen
+            window.addEventListener('resize', onWindowResize, false);
+            function onWindowResize() {{
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                labelRenderer.setSize(window.innerWidth, window.innerHeight);
+            }}
         </script>
     </body>
     </html>
     """
-
-    # --- DIE 20:60:20 AUFTEILUNG ---
-    col1, col2, col3 = st.columns([0.2, 0.6, 0.2])
-    with col2:
-        components.html(threejs_html, height=800, scrolling=False)
-
-
+    
+    # HTML in Streamlit einbetten
+    st.components.v1.html(threejs_html, height=700, width=None)
+    
+else:
+    st.warning(f"⚠️ Keine Zertifikats-Bilder gefunden. Lege PNG/JPG Dateien in den Ordner 'images/' mit folgenden Namen:\n\n" + 
+               "\n".join([f"• {name}.png" for name in cert_names]))
     
 
 
