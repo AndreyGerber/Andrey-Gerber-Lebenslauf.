@@ -312,7 +312,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             st.error(f"Fehler: {e}")
 
     elif jahr_aktiv == 1996:
-        MASSSTAB = 1  # 0.7 = 70% der Originalgröße, ändere diesen Wert zum Skalieren
+        MASSSTAB = 1.2  # 0.7 = 70% der Originalgröße, ändere diesen Wert zum Skalieren
         OBEN_ABSTAND = "10px"
 
         col_text, col_foto = st.columns([1, 2.5])
@@ -326,7 +326,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
         with col_foto:
             img_schule = lade_formatiertes_bild("schule2.png")
             if img_schule:
-                st.markdown(f"<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
+                st.markdown(f"<div style='margin-top: 5px;'></div>", unsafe_allow_html=True)
                 
                 # MASSSTAB wird hier angewendet
                 original_breite = img_schule.size[0]
