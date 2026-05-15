@@ -579,6 +579,7 @@ other_docs = [
     {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "QMB ISO 9001"},
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"},
     {"file": "Data_Science.pdf", "icon": "🐍", "label": "Data_Science"}
+    
 ]
 
 # Globales CSS für ALLE Buttons (akzeptiere bitte)
