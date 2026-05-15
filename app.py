@@ -577,7 +577,8 @@ other_docs = [
     {"file": "M_BBM.pdf", "icon": "🔊", "label": "M-BBM"},
     {"file": "Interner_Auditor.pdf", "icon": "🕵️", "label": "Auditor 9000 ff."},
     {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "QMB ISO 9001"},
-    {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"}
+    {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"},
+    {"file": "Data_Science.pdf", "icon": "🐍", "label": "Data_Science"}
 ]
 
 # Globales CSS für ALLE Buttons (akzeptiere bitte)
