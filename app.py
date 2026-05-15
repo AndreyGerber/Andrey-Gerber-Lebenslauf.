@@ -749,7 +749,9 @@ cert_names = [
     "7_DataViz_with_Plotly", "8_MCQ_Linux_and_Bash", "9_Git_and_Github", "10_Unit_Testing",
     "11_Classification_with_scikit-learn", "12_Regressionn_with_scikit_learn", "13_Methodology_in_Data_Science",
     "14_Feature_Engineering_and_Optimisation", "15_Time_Series_Analysis_with_Python",
-    "16_Advanced_Classification_with-scikit-learn", "17_Text_Mining"
+    "16_Advanced_Classification_with-scikit-learn", "17_Text_Mining", "18_Computer_Vision_with_OpenCV",
+    "19_Dense_Neural_Networks_with_Keras", "20_Convolutional_Neural_Networks_with_Keras", "21_PyTorch",
+    "22_Streamlit", "23_DATA_API_Fundamentals", "24_Docker_DS"
 ]
 
 cert_folder = "images"
