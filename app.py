@@ -676,7 +676,8 @@ with col_viewer:
         "M_BBM.pdf": "M_BBM.jpg",
         "Interner_Auditor.pdf": "Auditor9001.jpg",
         "Qualitätsbeauftragter.pdf": "QMB9001.jpg",
-        "QMB_ISO_17025.pdf": "QMB17025.jpg"
+        "QMB_ISO_17025.pdf": "QMB17025.jpg",
+        "Data_Science.pdf": "Data_Science.jpg"
     }
     
     # Bildpfad ermitteln: Entweder aus Ausnahme-Liste oder einfach Endung tauschen
