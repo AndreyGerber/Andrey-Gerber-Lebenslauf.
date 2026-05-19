@@ -1026,7 +1026,7 @@ with exp_col2:
             <div class="no-bullet" style="margin-top: 20px;">
                 Hier müssen wir zunächst die Begriffe definieren, bevor aneinander vorbeigesprochen wird.
             </div>
-            <div style="margin-top: 70px;"></div> 
+            <div style="margin-top: 60px;"></div> 
         </div>
         """, unsafe_allow_html=True)
     
@@ -1037,7 +1037,7 @@ st.markdown(f"""
         <span style="font-size: 1.75rem;">🐍</span> <strong>Ob ich programmieren kann:</strong><br><br>
         Das hier ist übrigens keine Agentur – diese Seite habe ich selbst programmiert.<br>
         Mit Python, Streamlit und der ein oder anderen Tasse Kaffee.<br><br>
-        <i>Übrigens half mir das dabei, meinen Wortschatz an Schimpfwörtern und deren Kombinationen in mehreren Sprachen zu aktualisieren.</i>
+        <i>Übrigens half mir dieses Projekt dabei, meinen Wortschatz an Schimpfwörtern und deren Kombinationen in mehreren Sprachen zu aktualisieren.</i>
     </div>
     """, unsafe_allow_html=True)
 
