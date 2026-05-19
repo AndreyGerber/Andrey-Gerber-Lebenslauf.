@@ -1,10 +1,10 @@
 from data.texts import de, en, ru
 
-LANG_MAP = {
+TEXTS = {
     "de": de.TEXTS,
     "en": en.TEXTS,
     "ru": ru.TEXTS
 }
 
-def get_text(key, lang="de"):
-    return LANG_MAP.get(lang, {}).get(key, key)
+def get_text(lang="de"):
+    return TEXTS.get(lang, TEXTS["de"])
