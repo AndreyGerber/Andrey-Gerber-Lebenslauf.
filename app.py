@@ -1190,6 +1190,7 @@ with col3:
 
 #Bonus-Abschnitt mit Video
 
+
 st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
 
 st.divider()
@@ -1197,6 +1198,14 @@ st.markdown("<h2 style='text-align: left;'>⚠️ Die 3 größten Fehlschätzung
 
 st.markdown("""
 <style>
+    :root, [data-testid="stHorizontalBlock"] {
+        /* ========================================================= */
+        /* PARAMETER FÜR DIE SCHRIFTGRÖSSEN (Hier einfach anpassen!) */
+        /* ========================================================= */
+        --size-quote: 21px;  /* Vorher: 1.1rem (~18px). Um ca. 3px erhöht */
+        --size-year: 18px;   /* Vorher: 0.95rem (~15px). Um ca. 3px erhöht */
+    }
+
     [data-testid="stHorizontalBlock"] {
         display: flex;
         align-items: stretch;
@@ -1216,10 +1225,12 @@ st.markdown("""
     .quote-card:hover {
         transform: translateY(-5px);
     }
+    
+    /* Hier werden die Variablen über var() zugewiesen */
     .quote-content {
         font-style: italic;
         color: #1e293b;
-        font-size: 1.1rem;
+        font-size: var(--size-quote);
         line-height: 1.6;
         margin-bottom: 20px;
     }
@@ -1227,8 +1238,9 @@ st.markdown("""
         text-align: right;
         font-weight: bold;
         color: #8e44ad;
-        font-size: 0.95rem;
+        font-size: var(--size-year);
     }
+    
     /* Bindestrich vor dem Jahr wie bei Autorenzitaten */
     .quote-year::before {
         content: "— ";
