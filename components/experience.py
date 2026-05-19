@@ -19,13 +19,13 @@ def show_experience():
 
             # Firma + Zeitraum
             st.markdown(
-                f"<div style='font-size:18px; margin-top:5px;'><strong>{job['company']} | {job['period']}</strong></div>",
+                f"<div style='font-size:24px; margin-top:5px;'><strong>{job['company']} | {job['period']}</strong></div>",
                 unsafe_allow_html=True
             )
 
             # Beschreibung
             st.markdown(
-                f"<div style='font-size:18px; line-height:1.6; margin-top:10px;'>{job['description']}</div>",
+                f"<div style='font-size:24px; line-height:1.6; margin-top:10px;'>{job['description']}</div>",
                 unsafe_allow_html=True
             )
 
