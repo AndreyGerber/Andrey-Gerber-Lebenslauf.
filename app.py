@@ -1006,12 +1006,12 @@ with exp_col1:
         <div class="exp-box">
             <h4>💻 Hardware & Software</h4>
             <ul>
-                <li><strong>ob 3D-Modelle mit CATIA V5 oder AutoCAD erstellen,</strong></li>
-                <li><strong>ob Sensorik anschließen, einstellen und Objekte vermessen mit Technik von B&K oder Head Acoustics,</strong></li>
-                <li><strong>ob Daten mit Minitab oder selbst erstellten statistischen Methoden analysieren,</strong></li>
+                <li><strong>📐 ob 3D-Modelle mit CATIA V5 oder AutoCAD erstellen,</strong></li>
+                <li><strong>🎙️🎧 ob Sensorik anschließen, einstellen und Objekte vermessen mit Technik von B&K oder Head Acoustics,</strong></li>
+                <li><strong>🔢 ob Daten mit Minitab oder selbst erstellten statistischen Methoden analysieren,</strong></li>
             </ul>
-            <div class="no-bullet" style="margin-bottom: 18px;">sollte machbar sein. SAP kann jeder irgendwie und niemand gleichzeitig.</div>
-            <div class="no-bullet">Von MS-Produkten spricht heutzutage doch niemand mehr. Oder?</div>
+            <div class="no-bullet" style="margin-bottom: 18px;">sollte machbar sein. 🗄️ SAP kann jeder irgendwie und niemand gleichzeitig.</div>
+            <div class="no-bullet">📑 Von MS-Produkten spricht heutzutage doch niemand mehr. Oder?</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1020,13 +1020,13 @@ with exp_col2:
         <div class="exp-box">
             <h4>📋 Hardskills & Softskills</h4>
             <ul>
-                <li><strong>Qualitätsmanagement | Lean Management & Six Sigma | Audits | Risikomanagement</strong></li>
-                <li><strong>ISO 9001 oder IATF 16949 | CAPA oder 8D | DMAIC oder PDCA</strong></li>
+                <li><strong>🧩 Qualitätsmanagement | Lean Management & Six Sigma | Audits | Risikomanagement</strong></li>
+                <li><strong>🔍 ISO 9001 oder IATF 16949 | CAPA oder 8D | DMAIC oder PDCA</strong></li>
             </ul>
             <div class="no-bullet" style="margin-top: 20px;">
                 Hier müssen wir zunächst die Begriffe definieren, bevor aneinander vorbeigesprochen wird.
             </div>
-            <div style="margin-top: 53px;"></div> 
+            <div style="margin-top: 52px;"></div> 
         </div>
         """, unsafe_allow_html=True)
     
