@@ -8,4 +8,4 @@ t = show_header()
 
 # About Section
 show_about(t)
-show_experience(t)
+show_experience()
