@@ -1,47 +1,12 @@
 import streamlit as st
-from utils.text_loader import get_text
+from components.header import show_header
 
-# -------------------------------
-# 1. Session State (Sprache merken)
-# -------------------------------
-if "lang" not in st.session_state:
-    st.session_state.lang = "de"
+st.set_page_config(page_title="Lebenslauf Andrey Gerber", layout="wide")
 
-# -------------------------------
-# 2. Sprach-Buttons (einheitlich)
-# -------------------------------
-def lang_button(label, code):
-    if st.button(label, key=f"lang_{code}"):
-        st.session_state.lang = code
-        st.rerun()
+# Header laden
+t = show_header()
 
-col1, col2, col3 = st.columns(3)
+# Beispiel Nutzung
+st.write("Hier geht der Rest deiner App weiter...")
 
-with col1:
-    lang_button("🇩🇪 Deutsch", "de")
 
-with col2:
-    lang_button("🇬🇧 English", "en")
-
-with col3:
-    lang_button("🇷🇺 Русский", "ru")
-
-# -------------------------------
-# 3. Texte laden
-# -------------------------------
-t = get_text(st.session_state.lang)
-
-# -------------------------------
-# 4. Header anzeigen
-# -------------------------------
-st.markdown(
-    f"<h2 style='text-align: center;'>{t['welcome']}</h2>",
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    f"<h1 style='text-align: center; color: #4B0082;'>{t['title']}</h1>",
-    unsafe_allow_html=True
-)
-
-st.divider()
