@@ -930,7 +930,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("🛠️ Meine Fertigkeiten")
-#st.divider()
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
 
 # Hauptspalten
 col1, col2 = st.columns(2)
@@ -967,9 +967,8 @@ with col2:
         
         st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
-st.divider()
 
-st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True) 
+st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True) 
 
 # --- Hard & Soft-Skills ---
 st.markdown("""
