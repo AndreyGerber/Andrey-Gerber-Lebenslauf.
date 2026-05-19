@@ -30,6 +30,6 @@ def show_header():
     st.markdown(f"<h2 style='text-align: center;'>{t['welcome']}</h2>", unsafe_allow_html=True)
     st.markdown(f"<h1 style='text-align: center; color: #4B0082;'>{t['title']}</h1>", unsafe_allow_html=True)
 
-    st.divider()
+    #st.divider()
 
     return t  # 🔥 DAS IST ENTSCHEIDEND

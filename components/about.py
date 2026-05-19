@@ -7,7 +7,7 @@ def show_about(t):
     st.markdown(
         f"""
         <p style="
-            font-size:18px;
+            font-size:24px;
             line-height:1.6;
             text-align:justify;
         ">
