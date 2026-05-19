@@ -3,6 +3,8 @@ from components.header import show_header
 from components.about import show_about
 from components.experience import show_experience
 
+st.set_page_config(layout="wide")
+
 # Header + Sprache
 t = show_header()
 
