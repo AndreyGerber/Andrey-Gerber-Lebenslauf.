@@ -31,6 +31,19 @@ TEXTS = {
             "period": "02/2017 – 09/2019",
             "description": "Durchführung normgerechter akustischer Messungen sowie Entwicklung kundenspezifischer Prüfverfahren. Aufbau neuer Prüfanlagen und Mitwirkung in Normungsgremien im Bereich Akustik."
         }
+    ],
+
+    # Kontaktdaten
+    "contact_phone": "0176 43 733 099",
+    "contact_email": "andrey.gerber.88@gmail.com",
+    "contact_address": "Brauchst du nicht, ruf an oder @",
+
+    # Sprachkenntnisse
+    "languages_title": "Sprachkenntnisse",
+    "languages": [
+        {"lang": "🇩🇪 Deutsch", "level": "C2"},
+        {"lang": "🇷🇺 Russisch", "level": "C2"},
+        {"lang": "🇺🇸 Englisch", "level": "B2"}
     ]
 
 }
