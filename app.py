@@ -32,9 +32,8 @@ st.markdown(f"<h1 style='text-align: center; color: #4B0082;'>{t['title']}</h1>"
 
 def lang_button(label, code):
     is_active = st.session_state.lang == code
-    style = "background-color: #4B0082; color: white;" if is_active else ""
 
-    if st.button(label):
+    if st.button(label, key=f"lang_{code}"):
         st.session_state.lang = code
         st.rerun()
 
