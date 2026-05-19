@@ -989,6 +989,18 @@ st.markdown("""
 
 exp_col1, exp_col2 = st.columns(2)
 
+# Zentrales Styling für die Boxen (erhöht die Schriftgröße um ca. 4pt)
+st.html("""
+    <style>
+        .exp-box {
+            font-size: 1.2rem !important; /* Erhöht den Fließtext & Listen */
+        }
+        .exp-box h4 {
+            font-size: 1.45rem !important; /* Erhöht die h4-Überschriften proportional */
+        }
+    </style>
+""")
+
 with exp_col1:
     st.markdown("""
         <div class="exp-box">
@@ -999,7 +1011,7 @@ with exp_col1:
                 <li><strong>ob Daten mit Minitab oder selbst erstellten statistischen Methoden analysieren,</strong></li>
             </ul>
             <div class="no-bullet" style="margin-bottom: 18px;">sollte machbar sein. SAP kann jeder irgendwie und niemand gleichzeitig.</div>
-            <div class="no-bullet">Von MS-Produkten spricht heutzutage doch niemand mehr.</div>
+            <div class="no-bullet">Von MS-Produkten spricht heutzutage doch niemand mehr. Oder?</div>
         </div>
         """, unsafe_allow_html=True)
 
