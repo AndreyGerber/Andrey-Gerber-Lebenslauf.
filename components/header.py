@@ -1,9 +1,14 @@
 # components/header.py
 
 import streamlit as st
+import sys
+import os
+
+# Füge das Projekt-Root zum Pfad hinzu
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from utils.text_loader import get_text
 from utils.image_loader import load_formatted_image
-import os
 
 def show_header():
     # Sprache initialisieren
