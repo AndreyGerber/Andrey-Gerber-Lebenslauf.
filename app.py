@@ -1026,20 +1026,21 @@ with exp_col2:
             <div class="no-bullet" style="margin-top: 20px;">
                 Hier müssen wir zunächst die Begriffe definieren, bevor aneinander vorbeigesprochen wird.
             </div>
-            <div style="margin-top: 100px;"></div> 
+            <div style="margin-top: 70px;"></div> 
         </div>
         """, unsafe_allow_html=True)
     
 
-# Programmier-Abschnitt
+# Programmier-Abschnitt mit erhöhter Schriftart
 st.markdown(f"""
-    <div style="background-color: #d1e7dd; padding: 25px; border-radius: 15px; border-left: 6px solid #0f5132; color: #0f5132; font-size: 1.1rem; line-height: 1.6; margin-top: 20px;">
-        <span style="font-size: 1.5rem;">🐍</span> <strong>Ob ich programmieren kann:</strong><br><br>
+    <div style="background-color: #d1e7dd; padding: 25px; border-radius: 15px; border-left: 6px solid #0f5132; color: #0f5132; font-size: 1.35rem; line-height: 1.6; margin-top: 20px;">
+        <span style="font-size: 1.75rem;">🐍</span> <strong>Ob ich programmieren kann:</strong><br><br>
         Das hier ist übrigens keine Agentur – diese Seite habe ich selbst programmiert.<br>
         Mit Python, Streamlit und der ein oder anderen Tasse Kaffee.<br><br>
         <i>Übrigens half mir das dabei, meinen Wortschatz an Schimpfwörtern und deren Kombinationen in mehreren Sprachen zu aktualisieren.</i>
     </div>
     """, unsafe_allow_html=True)
+
 
 
 
