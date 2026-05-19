@@ -1190,7 +1190,7 @@ with col3:
 
 #Bonus-Abschnitt mit Video
 
-st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
 
 st.divider()
 st.markdown("<h2 style='text-align: left;'>⚠️ Die 3 größten Fehlschätzungen meines Lebens</h2>", unsafe_allow_html=True)
@@ -1278,7 +1278,7 @@ with q_col3:
 
 
 
-st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='margin-top: 200px;'></div>", unsafe_allow_html=True)
 
 
 
