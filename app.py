@@ -535,6 +535,7 @@ st.write("")
 
 #ab hier beginnt dre Abschnitt mit Zeugnissen
 st.markdown("<h2 style='text-align: left;'>Meine Zeugnisse und Zertifikate</h2>", unsafe_allow_html=True)
+st.markdown('<div style="margin-top: 30px;"></div>', unsafe_allow_html=True)
 
 
 with st.container():
