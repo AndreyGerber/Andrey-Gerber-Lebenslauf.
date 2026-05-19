@@ -8,27 +8,28 @@ def show_experience():
     st.markdown(f"## {t['experience_title']}")
 
     for job in t["experience"]:
-        html = f"""
-        <div style="
-            border:1px solid #ddd;
-            border-radius:10px;
-            padding:25px;
-            margin:25px auto;
-            max-width:900px;
-            background-color:#f9f9f9;
-        ">
-            <h3 style="font-size:24px; margin-bottom:10px;">
-                {job['title']}
-            </h3>
+        st.markdown(
+            f"""
+            <div style="
+                border:1px solid #ddd;
+                border-radius:10px;
+                padding:25px;
+                margin:25px auto;
+                max-width:900px;
+                background-color:#f9f9f9;
+            ">
+                <div style="font-size:24px; font-weight:600; margin-bottom:10px;">
+                    {job['title']}
+                </div>
 
-            <p style="font-size:18px; margin:5px 0;">
-                <strong>{job['company']}</strong> | {job['period']}
-            </p>
+                <div style="font-size:18px; margin:5px 0;">
+                    <strong>{job['company']}</strong> | {job['period']}
+                </div>
 
-            <p style="font-size:18px; line-height:1.6; margin-top:10px;">
-                {job['description']}
-            </p>
-        </div>
-        """
-
-        st.markdown(html, unsafe_allow_html=True)
+                <div style="font-size:18px; line-height:1.6; margin-top:10px;">
+                    {job['description']}
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
