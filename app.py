@@ -540,7 +540,7 @@ st.markdown("<h2 style='text-align: left;'>🗃️ Meine Zeugnisse und Zertifika
 with st.container():
     st.markdown("""
         <div style="background-color: #e1f5fe; padding: 20px; border-radius: 15px; border-left: 5px solid #01579b; margin-bottom: 20px;">
-            #<h3 style="color: #01579b; margin-top: 0;">🗃️ Credentials & Zertifikate</h3>
+            <!--<h3 style="color: #01579b; margin-top: 0;">🗃️ Credentials & Zertifikate</h3>--> 
             <p style="color: #333; font-size: 1.1em;">
                 Hier finden Sie eine Übersicht meiner akademischen und beruflichen Nachweise. 
             </p>
