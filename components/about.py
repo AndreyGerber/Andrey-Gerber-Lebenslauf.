@@ -1,8 +1,6 @@
 import streamlit as st
 
 def show_about(t):
-    with st.expander("🔴 TEST - Bin ich sichtbar?", expanded=False):
-        st.write("Wenn du das siehst, funktioniert der Expander")    
     
     with st.expander(t["about_title"], expanded=False):
 
