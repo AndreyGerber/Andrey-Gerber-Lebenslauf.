@@ -968,7 +968,7 @@ with col2:
         st.markdown("<div style='margin-top: 58px;'></div>", unsafe_allow_html=True)
 
 
-st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True) 
+st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True) 
 
 # --- Hard & Soft-Skills ---
 st.markdown("""
