@@ -10,7 +10,6 @@ def show_experience():
         f"<h2 style='margin-top:50px; font-size:32px;'>{t['experience_title']}</h2>",
         unsafe_allow_html=True
     )
-
 for job in t["experience"]:
     st.markdown(
         f"""
