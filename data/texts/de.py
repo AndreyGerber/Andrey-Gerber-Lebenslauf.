@@ -1,3 +1,5 @@
+# data/texts/de.py
+
 TEXTS = {
     "welcome": "Willkommen auf der Seite",
     "title": "Lebenslauf von Andrey Gerber",
@@ -33,20 +35,17 @@ TEXTS = {
         }
     ],
 
-    # Kontaktdaten
+    # ========== KONTAKTDATEN ==========
+    "contact_name": "Andrey Gerber",
     "contact_phone": "0176 43 733 099",
     "contact_email": "andrey.gerber.88@gmail.com",
     "contact_address": "Brauchst du nicht, ruf an oder @",
 
-    # Sprachkenntnisse
+    # ========== SPRACHKENNTNISSE ==========
     "languages_title": "Sprachkenntnisse",
     "languages": [
-        {"lang": "🇩🇪 Deutsch", "level": "C2"},
-        {"lang": "🇷🇺 Russisch", "level": "C2"},
-        {"lang": "🇺🇸 Englisch", "level": "B2"}
+        {"flag": "🇩🇪", "name": "Deutsch", "level": "C2"},
+        {"flag": "🇷🇺", "name": "Russisch", "level": "C2"},
+        {"flag": "🇺🇸", "name": "Englisch", "level": "B2"}
     ]
-
 }
-
-
-
