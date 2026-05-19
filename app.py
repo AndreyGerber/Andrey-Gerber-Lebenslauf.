@@ -1019,6 +1019,7 @@ with exp_col2:
         <div class="exp-box">
             <h4>📋 Hardskills & Softskills</h4>
             <ul>
+                <li>🛠️ <strong>Projektmanagement (Planung, Steuerung der Umsetzung, Validierung & Inbetriebnahme)</strong></li>
                 <li><strong>🧩 Qualitätsmanagement | Lean Management & Six Sigma | Audits | Risikomanagement</strong></li>
                 <li><strong>🔍 ISO 9001 oder IATF 16949 | CAPA oder 8D | DMAIC oder PDCA</strong></li>
             </ul>
