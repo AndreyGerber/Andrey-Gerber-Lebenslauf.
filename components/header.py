@@ -13,7 +13,7 @@ def show_header():
             st.session_state.lang = code
             st.rerun()
 
-    spacer1, col1, col2, col3, spacer2 = st.columns([1, 1, 1, 1, 1])
+    spacer1, col1, col2, col3, spacer2 = st.columns([4, 1, 1, 1, 4])
     with col1:
         lang_button("🇩🇪 Deutsch", "de")
 
