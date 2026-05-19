@@ -11,20 +11,29 @@ def show_experience():
         unsafe_allow_html=True
     )
 
-    for job in t["experience"]:
-        st.markdown(f"""
+for job in t["experience"]:
+    st.markdown(
+        f"""
         <div style="
             border:1px solid #ddd;
-            border-radius:12px;
+            border-radius:10px;
             padding:25px;
-            margin:20px 0;
+            margin:25px auto;
+            max-width:900px;
             background-color:#f9f9f9;
         ">
-            <h3 style="font-size:24px; margin-bottom:5px;">
+
+            <h3 style="
+                font-size:24px;
+                margin-bottom:10px;
+            ">
                 {job['title']}
             </h3>
 
-            <p style="font-size:18px; margin:5px 0;">
+            <p style="
+                font-size:18px;
+                margin:5px 0;
+            ">
                 <strong>{job['company']}</strong> | {job['period']}
             </p>
 
@@ -35,5 +44,8 @@ def show_experience():
             ">
                 {job['description']}
             </p>
+
         </div>
-        """, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True
+    )
