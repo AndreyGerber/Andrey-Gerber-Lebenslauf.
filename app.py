@@ -1050,8 +1050,6 @@ st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 
 
 
-# Hobbies 
-
 # --- HILFSFUNKTION FÜR BILDER (Muss vor dem Aufruf definiert sein) ---
 def get_base64_img(file_path):
     if os.path.exists(file_path):
@@ -1062,9 +1060,20 @@ def get_base64_img(file_path):
 st.divider()
 st.markdown("<h2 style='text-align: left;'>Leidenschaften & Ausgleich</h2>", unsafe_allow_html=True)
 
-# --- CSS FÜR LAYOUT, ZOOM UND TOOLTIPS ---
+# --- CSS FÜR LAYOUT, ZOOM UND PARAMETRIERBARE SCHRIFTGRÖSSEN ---
 st.markdown("""
 <style>
+    :root, [data-testid="stHorizontalBlock"] {
+        /* ========================================================= */
+        /* PARAMETER FÜR DIE SCHRIFTGRÖSSEN (Hier einfach anpassen!) */
+        /* ========================================================= */
+        --size-icon: 34px;        /* Vorher: 30px */
+        --size-title: 24px;       /* Vorher: 1.2rem (~19px) */
+        --size-text: 19px;        /* Vorher: 0.95rem (~15px) */
+        --size-placeholder: 18px; /* Vorher: 14px */
+        --size-label: 14px;       /* Vorher: 10px */
+    }
+
     [data-testid="stHorizontalBlock"] {
         display: flex;
         align-items: stretch;
@@ -1077,11 +1086,14 @@ st.markdown("""
         display: flex;
         flex-direction: column;
         height: 100%;
-        min-height: 420px;
+        min-height: 460px; /* Leicht erhöht, da der Text nun mehr Platz braucht */
     }
-    .hobby-icon { font-size: 30px; margin-bottom: 10px; }
-    .hobby-title { font-weight: bold; font-size: 1.2rem; color: #1e293b; margin-bottom: 10px; }
-    .hobby-text { font-size: 0.95rem; color: #475569; line-height: 1.5; flex-grow: 1; }
+    
+    /* Zuweisung der Parameter über var() */
+    .hobby-icon { font-size: var(--size-icon); margin-bottom: 10px; }
+    .hobby-title { font-weight: bold; font-size: var(--size-title); color: #1e293b; margin-bottom: 10px; }
+    .hobby-text { font-size: var(--size-text); color: #475569; line-height: 1.6; flex-grow: 1; }
+    .img-label { font-size: var(--size-label); color: #94a3b8; text-align: center; margin-top: 4px; display: block; }
     
     .hobby-img-area { 
         display: flex; gap: 8px; margin-top: 15px; height: 110px; 
@@ -1097,7 +1109,6 @@ st.markdown("""
         z-index: 999;
         box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     }
-    .img-label { font-size: 10px; color: #94a3b8; text-align: center; margin-top: 4px; display: block; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -1112,9 +1123,10 @@ with col1:
             Ein Mann hat seinen Kindern ein Schachspiel gekauft. Nach einem Jahr konnte er mit uns nicht mehr mithalten.
             Ich sehe nicht nur meine Züge voraus, sondern auch die Züge des Mitspielers. 
         </div>
-        <div style="height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.2; font-size: 14px; text-align: center; margin-top: auto;">
+        <!-- Platzhalter-Text greift hier dynamisch auf die CSS-Variable zu -->
+        <div style="height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.2; font-size: var(--size-placeholder); text-align: center; margin-top: auto;">
             Wo es bei mir mit Schach losging, gab's bei uns im Ort wahrscheinlich drei Personen mit Kameras. Von daher leider keine Bilder von damals.<br>
-            <span style="font-size: 40px;">♔ ♕ ♖</span>
+            <span style="font-size: 44px;">♔ ♕ ♖</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1172,7 +1184,6 @@ with col3:
         </div>
     </div>
     """, unsafe_allow_html=True)
-
 
 
 
