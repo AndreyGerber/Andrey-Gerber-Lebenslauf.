@@ -965,7 +965,7 @@ with col2:
             if img:
                 p_cols[idx % 3].image(img, use_container_width=True)
         
-        st.markdown("<div style='margin-top: 55px;'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top: 58px;'></div>", unsafe_allow_html=True)
 
 
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True) 
