@@ -3,15 +3,11 @@ from utils.text_loader import get_text
 
 
 def show_header():
-    # -------------------------------
     # Sprache initialisieren
-    # -------------------------------
     if "lang" not in st.session_state:
         st.session_state.lang = "de"
 
-    # -------------------------------
-    # Sprach-Buttons
-    # -------------------------------
+    # Buttons
     def lang_button(label, code):
         if st.button(label, key=f"lang_{code}"):
             st.session_state.lang = code
@@ -28,24 +24,13 @@ def show_header():
     with col3:
         lang_button("🇷🇺 Русский", "ru")
 
-    # -------------------------------
     # Texte laden
-    # -------------------------------
     t = get_text(st.session_state.lang)
 
-    # -------------------------------
     # Header anzeigen
-    # -------------------------------
-    st.markdown(
-        f"<h2 style='text-align: center;'>{t['welcome']}</h2>",
-        unsafe_allow_html=True
-    )
-
-    st.markdown(
-        f"<h1 style='text-align: center; color: #4B0082;'>{t['title']}</h1>",
-        unsafe_allow_html=True
-    )
+    st.markdown(f"<h2 style='text-align: center;'>{t['welcome']}</h2>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='text-align: center; color: #4B0082;'>{t['title']}</h1>", unsafe_allow_html=True)
 
     st.divider()
 
-    return t  # 🔥 wichtig!
+    return t  # 🔥 DAS IST ENTSCHEIDEND
