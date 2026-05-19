@@ -930,7 +930,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("🛠️ Meine Fertigkeiten")
-st.divider()
+#st.divider()
 
 # Hauptspalten
 col1, col2 = st.columns(2)
