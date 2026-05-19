@@ -1058,6 +1058,7 @@ def get_base64_img(file_path):
     return ""
 
 st.divider()
+st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: left;'>Leidenschaften & Ausgleich</h2>", unsafe_allow_html=True)
 
 # --- CSS FÜR LAYOUT, ZOOM UND PARAMETRIERBARE SCHRIFTGRÖSSEN ---
@@ -1194,7 +1195,7 @@ st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
 
 st.divider()
 
-st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='margin-top: 150px;'></div>", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: left;'>⚠️ Die 3 größten Fehlschätzungen meines Lebens</h2>", unsafe_allow_html=True)
 
 st.markdown("""
