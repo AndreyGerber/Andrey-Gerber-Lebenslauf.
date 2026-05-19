@@ -8,15 +8,25 @@ def show_experience():
     # Titel
     st.markdown(f"## {t['experience_title']}")
 
-    # Jobs durchlaufen
     for job in t["experience"]:
         with st.container():
-            st.markdown(f"### {job['title']}")
-            
+
+            # Jobtitel größer
             st.markdown(
-                f"**{job['company']} | {job['period']}**"
+                f"<div style='font-size:26px; font-weight:600;'>{job['title']}</div>",
+                unsafe_allow_html=True
             )
-            
-            st.write(job['description'])
+
+            # Firma + Zeitraum
+            st.markdown(
+                f"<div style='font-size:18px; margin-top:5px;'><strong>{job['company']} | {job['period']}</strong></div>",
+                unsafe_allow_html=True
+            )
+
+            # Beschreibung
+            st.markdown(
+                f"<div style='font-size:18px; line-height:1.6; margin-top:10px;'>{job['description']}</div>",
+                unsafe_allow_html=True
+            )
 
             st.markdown("---")
