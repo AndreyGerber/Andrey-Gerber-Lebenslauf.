@@ -121,7 +121,7 @@ with col_daten:
         </div>
     """, unsafe_allow_html=True)
 
-    # --- NEU: ABSCHNITT SPRACHKENNTNISSE ---
+    # --- ABSCHNITT SPRACHKENNTNISSE ---
     st.markdown("<hr style='margin: 30px 0; border: none; border-top: 1px solid #eee;'>", unsafe_allow_html=True)
     #st.markdown("<p style='font-size: 28px; font-weight: bold; margin-bottom: 15px;'>Sprachkenntnisse</p>", unsafe_allow_html=True)
     
@@ -534,12 +534,13 @@ st.write("")
 
 
 #ab hier beginnt dre Abschnitt mit Zeugnissen
+st.markdown("<h2 style='text-align: left;'>🗃️ Meine Zeugnisse und Zertifikate</h2>", unsafe_allow_html=True)
 
 
 with st.container():
     st.markdown("""
         <div style="background-color: #e1f5fe; padding: 20px; border-radius: 15px; border-left: 5px solid #01579b; margin-bottom: 20px;">
-            <h3 style="color: #01579b; margin-top: 0;">🗃️ Credentials & Zertifikate</h3>
+            #<h3 style="color: #01579b; margin-top: 0;">🗃️ Credentials & Zertifikate</h3>
             <p style="color: #333; font-size: 1.1em;">
                 Hier finden Sie eine Übersicht meiner akademischen und beruflichen Nachweise. 
             </p>
