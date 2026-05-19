@@ -1026,7 +1026,7 @@ with exp_col2:
             <div class="no-bullet" style="margin-top: 20px;">
                 Hier müssen wir zunächst die Begriffe definieren, bevor aneinander vorbeigesprochen wird.
             </div>
-            <div style="margin-top: 15px;"></div> 
+            <div style="margin-top: 13px;"></div> 
         </div>
         """, unsafe_allow_html=True)
     
