@@ -1190,7 +1190,6 @@ with col3:
 
 #Bonus-Abschnitt mit Video
 
-
 st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
 
 st.divider()
@@ -1199,11 +1198,9 @@ st.markdown("<h2 style='text-align: left;'>⚠️ Die 3 größten Fehlschätzung
 st.markdown("""
 <style>
     :root, [data-testid="stHorizontalBlock"] {
-        /* ========================================================= */
-        /* PARAMETER FÜR DIE SCHRIFTGRÖSSEN (Hier einfach anpassen!) */
-        /* ========================================================= */
-        --size-quote: 21px;  /* Vorher: 1.1rem (~18px). Um ca. 3px erhöht */
-        --size-year: 18px;   /* Vorher: 0.95rem (~15px). Um ca. 3px erhöht */
+        /* PARAMETER FÜR DIE SCHRIFTGRÖSSEN */
+        --size-quote: 21px;  
+        --size-year: 18px;   
     }
 
     [data-testid="stHorizontalBlock"] {
@@ -1215,18 +1212,21 @@ st.markdown("""
         border-top: 5px solid #8e44ad;
         border-radius: 12px;
         padding: 25px;
+        
+        /* DIESE ZWEI ZEILEN ERZWINGEN DIE GLEICHE HÖHE */
         height: 100%;
+        min-height: 180px; /* Garantiert eine einheitliche Höhe auf Desktop-Monitoren */
+        
         box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         display: flex;
         flex-direction: column;
-        justify-content: space-between; /* Schiebt Inhalt auseinander */
+        justify-content: space-between; /* Drückt die Jahreszahl automatisch ganz nach unten */
         transition: transform 0.2s ease;
     }
     .quote-card:hover {
         transform: translateY(-5px);
     }
     
-    /* Hier werden die Variablen über var() zugewiesen */
     .quote-content {
         font-style: italic;
         color: #1e293b;
@@ -1241,7 +1241,6 @@ st.markdown("""
         font-size: var(--size-year);
     }
     
-    /* Bindestrich vor dem Jahr wie bei Autorenzitaten */
     .quote-year::before {
         content: "— ";
     }
@@ -1255,7 +1254,6 @@ with q_col1:
     <div class="quote-card">
         <div class="quote-content">"Ich werde mein ganzes Leben an diesem Ort verbringen."</div>
         <div class="quote-year">2002</div>
-        <div style="margin-top: 30px;"></div> 
     </div>
     """, unsafe_allow_html=True)
 
@@ -1264,7 +1262,6 @@ with q_col2:
     <div class="quote-card">
         <div class="quote-content">"Ich bin schon zu alt fürs Programmieren."</div>
         <div class="quote-year">2013</div>
-        <div style="margin-top: 30px;"></div> 
     </div>
     """, unsafe_allow_html=True)
 
@@ -1275,6 +1272,7 @@ with q_col3:
         <div class="quote-year">Heute</div>
     </div>
     """, unsafe_allow_html=True)
+
 
 
 
