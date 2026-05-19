@@ -1,12 +1,9 @@
 import streamlit as st
 from components.header import show_header
+from components.about import show_about
 
-st.set_page_config(page_title="Lebenslauf Andrey Gerber", layout="wide")
-
-# Header laden
+# Header + Sprache
 t = show_header()
 
-# Beispiel Nutzung
-st.write("Hier geht der Rest deiner App weiter...")
-
-
+# About Section
+show_about(t)
