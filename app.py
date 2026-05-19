@@ -534,7 +534,7 @@ st.write("")
 
 
 #ab hier beginnt dre Abschnitt mit Zeugnissen
-st.markdown("<h2 style='text-align: left;'>🗃️ Meine Zeugnisse und Zertifikate</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: left;'>Meine Zeugnisse und Zertifikate</h2>", unsafe_allow_html=True)
 
 
 with st.container():
@@ -542,7 +542,7 @@ with st.container():
         <div style="background-color: #e1f5fe; padding: 20px; border-radius: 15px; border-left: 5px solid #01579b; margin-bottom: 20px;">
             <!--<h3 style="color: #01579b; margin-top: 0;">🗃️ Credentials & Zertifikate</h3>--> 
             <p style="color: #333; font-size: 1.1em;">
-                Hier finden Sie eine Übersicht meiner akademischen und beruflichen Nachweise. 
+                🗃️ Hier finden Sie eine Übersicht meiner akademischen und beruflichen Nachweise. 
             </p>
             <div style="background-color: #fff9c4; padding: 10px; border-radius: 8px; border: 1px solid #fbc02d;">
                 <strong>⚠️ Wichtiger Hinweis zur Namensänderung:</strong><br>
