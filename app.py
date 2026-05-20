@@ -119,30 +119,28 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- SPRACHAUSWAHL ---
-# --- SPRACHAUSWAHL ---
 if 'language' not in st.session_state:
     st.session_state.language = 'de'
 
-# Die linke Spalte extrem vergrößern (15), damit die rechten Spalten (je 1) ganz schmal werden
-col_space, col_de, col_en, col_ru = st.columns([15, 1, 1, 1])
+# Erstellt eine breite leere Spalte links und drei kleine, exakt passende Spalten rechts
+cols = st.columns([7.5, 1.5, 1.5, 1.5])
 
-with col_de:
-    if st.button("🇩🇪 DE", key="lang_de"):
+with cols[1]:
+    if st.button("🇩🇪 DE", key="lang_de", use_container_width=True):
         st.session_state.language = 'de'
         st.rerun()
 
-with col_en:
-    if st.button("🇬🇧 EN", key="lang_en"):
+with cols[2]:
+    if st.button("🇬🇧 EN", key="lang_en", use_container_width=True):
         st.session_state.language = 'en'
         st.rerun()
 
-with col_ru:
-    if st.button("🇷🇺 RU", key="lang_ru"):
+with cols[3]:
+    if st.button("🇷🇺 RU", key="lang_ru", use_container_width=True):
         st.session_state.language = 'ru'
         st.rerun()
 
-st.markdown("<div style='margin-top: -15px;'></div><hr style='margin-top: 5px; margin-bottom: 20px;'>", unsafe_allow_html=True)
-
+st.markdown("<div style='margin-top: -10px;'></div><hr style='margin-top: 5px; margin-bottom: 10px;'>", unsafe_allow_html=True)
 
 
 # --- LADE DIE AUSGEWÄHLTE SPRACHDATEI (OHNE main() AUFRUF) ---
