@@ -1,0 +1,1325 @@
+import streamlit as st
+import plotly.express as px
+import plotly.graph_objects as go
+import pandas as pd
+import pydeck as pdk
+import base64
+import os
+from PIL import Image, ImageOps
+
+# Am Anfang der Datei (nach den imports)
+# Globale Variablen für gecachte Funktionen (werden von app.py gesetzt)
+load_image_cached = None
+load_pil_image_cached = None
+load_pdf_cached = None
+get_certificate_list = None
+
+def main(load_image_cached_func=None, load_pil_image_cached_func=None, 
+         load_pdf_cached_func=None, get_certificate_list_func=None):
+    """Hauptfunktion, die von app.py aufgerufen wird"""
+    global load_image_cached, load_pil_image_cached, load_pdf_cached, get_certificate_list
+    
+    if load_image_cached_func:
+        load_image_cached = load_image_cached_func
+    if load_pil_image_cached_func:
+        load_pil_image_cached = load_pil_image_cached_func
+    if load_pdf_cached_func:
+        load_pdf_cached = load_pdf_cached_func
+    if get_certificate_list_func:
+        get_certificate_list = get_certificate_list_func
+    
+    # Hier kommt dein gesamter existierender Code rein
+    # (alles was bisher in der Datei war)
+    
+# Wenn die Datei direkt ausgeführt wird (nicht von app.py importiert)
+if __name__ == "__main__":
+    # Fallback: Verwende die normalen Funktionen ohne Caching
+    main()
+
+
+
+# Настройки страницы
+st.set_page_config(page_title="Резюме Андрея Гербера", layout="wide")
+
+# 1. Заголовок (по центру, две строки)
+st.markdown("<h2 style='text-align: center;'>Добро пожаловать на страницу</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #4B0082;'>Резюме Андрея Гербера</h1>", unsafe_allow_html=True)
+st.divider()
+
+# --- 1. ФУНКЦИЯ ДЛЯ СТАБИЛЬНОГО РАЗМЕРА ИЗОБРАЖЕНИЙ (масштабируемая) ---
+def load_formatted_image(name, target_size=(900, 600), max_width=None):
+    path = os.path.join("images", name)
+    
+    if not os.path.exists(path):
+        return None
+        
+    if path.lower().endswith(".pdf"):
+        return None
+
+    try:
+        img = Image.open(path)
+        if img.mode != "RGB":
+            img = img.convert("RGB")
+            
+        if max_width:
+            ratio = max_width / img.size[0]
+            new_size = (max_width, int(img.size[1] * ratio))
+            img.thumbnail(new_size, Image.Resampling.LANCZOS)
+            return img
+        else:
+            img.thumbnail(target_size, Image.Resampling.LANCZOS)
+            new_img = Image.new("RGBA", target_size, (255, 255, 255, 0))
+            new_img.paste(img, ((target_size[0] - img.size[0]) // 2, 
+                                (target_size[1] - img.size[1]) // 2))
+            return new_img
+        
+    except Exception as e:
+        print(f"Ошибка с файлом {name}: {e}")
+        return None
+
+# --- 2. ДАННЫЕ И ЛОГИКА ---
+if 'bild_index' not in st.session_state:
+    st.session_state.bild_index = 0
+
+slideshow_images = ["ich1.JPG", "ich_pass.png", "aufenthaltstitel.png"]
+drawing_name = "itsme2.png"
+
+# --- 3. ГЛОБАЛЬНЫЙ СТИЛЬ ДЛЯ ЦЕНТРИРОВАНИЯ ---
+st.markdown("""
+    <style>
+    [data-testid="stHorizontalBlock"] {
+        align-items: center;
+    }
+    .contact-link {
+        text-decoration: none;
+        color: #007BFF;
+        font-weight: bold;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# --- 4. МАКЕТ: 3 КОЛОНКИ ---
+col_image, col_center, col_data = st.columns([1.5, 1.0, 1.5])
+
+with col_image:
+    current_photo = load_formatted_image(slideshow_images[st.session_state.bild_index])
+    if current_photo:
+        st.image(current_photo, use_container_width=True)
+    else:
+        st.error(f"Файл отсутствует: {slideshow_images[st.session_state.bild_index]}")
+
+    # Навигация под изображением
+    p_left, p_center, p_right = st.columns([1, 4, 1]) 
+    with p_left:
+        if st.button("⬅️"):
+            st.session_state.bild_index = (st.session_state.bild_index - 1) % len(slideshow_images)
+            st.rerun()
+    with p_right:
+        if st.button("➡️"):
+            st.session_state.bild_index = (st.session_state.bild_index + 1) % len(slideshow_images)
+            st.rerun()
+
+with col_center:
+    drawing = load_formatted_image(drawing_name, target_size=(300, 300))
+    if drawing:
+        st.image(drawing, use_container_width=True)
+    else:
+        st.info("Здесь появится твой рисунок...")
+
+with col_data:
+    st.markdown("<p style='font-size: 30px; color: gray; margin-bottom: -10px;'>Мои контактные данные</p>", unsafe_allow_html=True)
+    
+    st.markdown("<h1 style='font-size: 42px; font-weight: bold; margin-top: 0px;'>Андрей Гербер</h1>", unsafe_allow_html=True)
+    
+    st.markdown(f"""
+        <div style='line-height: 1.8;'>
+            <p style='font-size: 24px;'>
+                <span style='margin-right: 15px;'>📞</span> 
+                <strong>0176 43 733 099</strong>
+            </p>
+            <p style='font-size: 24px;'>
+                <span style='margin-right: 15px;'>📧</span> 
+                <a href='mailto:andrey.gerber.88@gmail.com' class='contact-link'>
+                    andrey.gerber.88@gmail.com
+                </a>
+            </p>
+            <p style='font-size: 24px; color: #666; margin-top: 20px;'>
+                📍 <i>Адрес: Просто позвони или напиши</i>
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # --- РАЗДЕЛ ЗНАНИЕ ЯЗЫКОВ ---
+    st.markdown("<hr style='margin: 30px 0; border: none; border-top: 1px solid #eee;'>", unsafe_allow_html=True)
+    
+    st.markdown("""
+        <p style='font-size: 22px;'>
+            🇩🇪 <span style='color: gray; font-size: 18px;'>(C2)</span> 
+            <span style='margin-right: 40px;'></span> 
+            🇷🇺 <span style='color: gray; font-size: 18px;'>(C2)</span> 
+            <span style='margin-right: 40px;'></span> 
+            🇺🇸 <span style='color: gray; font-size: 18px;'>(B2)</span>
+        </p>
+        """, unsafe_allow_html=True)
+
+st.divider()
+
+# --- МОЙ ПУТЬ ---
+# Все годы для подписей
+all_years = [1988, 1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
+# Годы, которые получают ромб на линии (все кроме 1988)
+years_with_diamond = [1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
+
+SIZE_YEARS = 19       # Размер шрифта для годов (жирный)
+SIZE_TEXTS = 17       # Размер шрифта для описаний
+
+# Тексты для блоков (русская версия)
+texts = {
+    1988: "Родился в СССР ☭",
+    1991: "Переехал в РФ<br>не сходя с места 🇷🇺",
+    1996: "Школа (не круто)",
+    2006: "Эмиграция в Германию 🇩🇪",
+    2010: "Изучение авиастроения<br>(B.Eng. & Ms.Sc.)",
+    2017: "TÜV Rheinland<br>(Эксперт в лаборатории &                    ",
+    2019: "                  Эксперт по качеству)",
+    2022: "Ferchau (at Siemens)<br>(Системный инжиниринг качества)",
+    2026: "Liora<br>(Data Science & ML)"
+}
+
+# Настройки дизайна
+LINE_THICKNESS = 3
+START_DASH_LENGTH = 0.18
+YEAR_FONT_SIZE = 16
+
+# Заголовок слева
+st.markdown("<h2 style='text-align: left;'>Мой путь</h2>", unsafe_allow_html=True)
+
+# --- 2. СОЗДАНИЕ ГРАФИКА ---
+fig = go.Figure()
+
+# Линия жизни: непрерывная от 1988 до наконечника стрелки (2034)
+fig.add_trace(go.Scatter(
+    x=[1988, 2029], 
+    y=[0, 0],
+    mode='lines',
+    line=dict(color='black', width=LINE_THICKNESS),
+    showlegend=False, 
+    hoverinfo='none'
+))
+
+# Вертикальная начальная черта в 1988
+fig.add_shape(
+    type="line", 
+    x0=1988, y0=-START_DASH_LENGTH, 
+    x1=1988, y1=START_DASH_LENGTH,
+    line=dict(color="black", width=LINE_THICKNESS + 1)
+)
+
+# Белые ромбы (начиная с 1996), по центру линии
+fig.add_trace(go.Scatter(
+    x=years_with_diamond, 
+    y=[0] * len(years_with_diamond),
+    mode='markers',
+    marker=dict(
+        symbol='diamond', 
+        size=16, 
+        color='white', 
+        line=dict(color='black', width=2)
+    ),
+    showlegend=False, 
+    hoverinfo='none'
+))
+
+# Годы и текстовые блоки (повернуты на 45°)
+for i, year in enumerate(all_years):
+    if year in [1991, 2017, 2019, 2022]:
+        y_offset = -0.05
+    else:
+        y_offset = -0.20
+    
+    fig.add_annotation(
+        x=year, y=-0.1, 
+        text=f"<b>{year}</b>",
+        showarrow=False, 
+        textangle=-30,
+        font=dict(size=SIZE_YEARS, color="black"),
+        xanchor="center", 
+        yanchor="top"
+    )
+    
+    fig.add_annotation(
+        x=year, y=y_offset, 
+        text=texts.get(year, ""),
+        showarrow=False, 
+        textangle=-30,
+        font=dict(size=SIZE_TEXTS, color="#4B0082"),
+        xanchor="center", 
+        yanchor="top"
+    )
+
+fig.update_layout(
+    height=500,
+    margin=dict(l=50, r=50, t=20, b=250), 
+    yaxis=dict(range=[-1.8, 0.5]) 
+)
+
+# Наконечник стрелки на правом конце
+fig.add_annotation(
+    x=2030, y=0,
+    ax=2028, ay=0,
+    xref="x", yref="y", 
+    axref="x", ayref="y",
+    showarrow=True, 
+    arrowhead=2, 
+    arrowsize=1.5, 
+    arrowwidth=LINE_THICKNESS, 
+    arrowcolor="black"
+)
+
+fig.update_layout(
+    height=450, 
+    margin=dict(l=0, r=0, t=10, b=150),
+    xaxis=dict(
+        showgrid=False, 
+        zeroline=False, 
+        showticklabels=False, 
+        range=[1985, 2035]
+    ),
+    yaxis=dict(
+        showgrid=False, 
+        zeroline=False, 
+        showticklabels=False, 
+        range=[-1.8, 0.6]
+    ),
+    plot_bgcolor="rgba(0,0,0,0)", 
+    paper_bgcolor="rgba(0,0,0,0)"
+)
+
+st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
+
+# --- БЛОК С ДЕТАЛЯМИ ПУТИ ---
+BLOCK_HEIGHT = 750
+IMAGE_WIDTH = 350
+INFO_FONT_SIZE = "24px"
+
+highlights = [1988, 1996, 2006, 2010, 2017, 2022]
+if 'info_idx' not in st.session_state:
+    st.session_state.info_idx = 0
+
+c_nav1, c_nav2, c_nav3 = st.columns([1, 4, 1])
+with c_nav1:
+    if st.button("⬅️ Назад", key="nav_prev", disabled=(st.session_state.info_idx == 0)):
+        st.session_state.info_idx -= 1
+        st.rerun()
+with c_nav3:
+    if st.button("Вперёд ➡️", key="nav_next", disabled=(st.session_state.info_idx == len(highlights) - 1)):
+        st.session_state.info_idx += 1
+        st.rerun()
+
+with st.container(height=BLOCK_HEIGHT, border=True):
+    active_year = highlights[st.session_state.info_idx]
+
+    if active_year == 1988:
+        st.markdown(f"<h3 style='text-align: left;'>📍 {active_year}: Здесь началось моё путешествие</h3>", unsafe_allow_html=True)
+
+        MAP_SCALE = 0.8
+        
+        def get_base64(path):
+            with open(path, "rb") as f:
+                return base64.b64encode(f.read()).decode()
+
+        try:
+            img_b64 = get_base64("images/tscherlak_map.png")
+            
+            st.markdown(f"""
+                <div style="width: {int(MAP_SCALE * 100)}%; margin: auto;">
+                    <div style="position: relative; display: inline-block; width: 100%;">
+                        <img src="data:image/png;base64,{img_b64}" style="width: 100%; display: block; border-radius: 10px;">
+                        <div style="
+                            position: absolute;
+                            top: 45.3%;
+                            left: 89.8%;
+                            transform: translate(-50%, -100%);
+                            font-size: 40px;
+                            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
+                            z-index: 999;
+                        ">📍</div>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+            
+        except Exception as e:
+            st.error(f"Ошибка: {e}")
+
+    elif active_year == 1996:
+        SCALE = 1.2
+        TOP_MARGIN = "10px"
+
+        col_text, col_photo = st.columns([1, 2.5])
+
+        with col_text:
+            st.markdown(f"<div style='margin-top: {TOP_MARGIN};'></div>", unsafe_allow_html=True)
+            st.markdown(f"<h3 style='text-align: left;'>🎒 {active_year}: Школьные годы</h3>", unsafe_allow_html=True)
+            st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
+            st.markdown(f"<p style='font-size: {INFO_FONT_SIZE}; color: #0055A5;'>Как быстро летят 10 лет.</p>", unsafe_allow_html=True)
+
+        with col_photo:
+            img_school = load_formatted_image("schule2.png")
+            if img_school:
+                st.markdown(f"<div style='margin-top: 5px;'></div>", unsafe_allow_html=True)
+                original_width = img_school.size[0]
+                new_width = int(original_width * SCALE)
+                st.image(img_school, width=new_width)
+            else:
+                st.error("Изображение 'schule2.png' не найдено.")
+
+    elif active_year == 2006:
+        st.markdown(f"<h3 style='text-align: left;'>✈️ {active_year}: Начинается новый этап жизни</h3>", unsafe_allow_html=True)
+        st.divider()
+
+        fig_flight = go.Figure()
+
+        fig_flight.add_trace(go.Scattergeo(
+            lon = [73.32, 13.40],
+            lat = [54.98, 52.52],
+            mode = 'markers+text',
+            text = ["Омск", "Берлин"],
+            textposition = "bottom center",
+            textfont = dict(size=16, color="black", family="Arial Black"),
+            marker = dict(size=14, color='#FF4B4B', line=dict(width=2, color='white')),
+            hoverinfo = 'none'
+        ))
+
+        fig_flight.add_trace(go.Scattergeo(
+            lon = [73.32, 13.40],
+            lat = [54.98, 52.52],
+            mode = 'lines',
+            line = dict(width=3, color='#FF4B4B'),
+            hoverinfo = 'none'
+        ))
+
+        fig_flight.add_annotation(
+            x=14.8, y=52.7, 
+            text="✈️",
+            showarrow=False,
+            font=dict(size=50),
+            textangle=-140,
+            xref="x", yref="y"
+        )
+
+        fig_flight.update_layout(
+            height=550,
+            margin=dict(l=0, r=0, t=10, b=0),
+            geo = dict(
+                projection_type = 'equirectangular',
+                showland = True, landcolor = "#F0F2F6",
+                showocean = True, oceancolor = "#E8F4F9",
+                showcountries = True, countrycolor = "white",
+                lataxis = dict(range=[45, 65], showgrid=False),
+                lonaxis = dict(range=[5, 85], showgrid=False),
+                resolution = 50
+            ),
+            showlegend = False
+        )
+
+        st.plotly_chart(fig_flight, use_container_width=True, key="flight_landing_final_fix")
+
+    elif active_year == 2010:
+        STUDY_SCALE = 1.0
+        TOP_MARGIN = "10px"
+
+        col_text, col_photo = st.columns([1, 2.5])
+
+        with col_text:
+            st.markdown(f"<h3 style='text-align: left;'>🎓 {active_year}: Учёба</h3>", unsafe_allow_html=True)
+            st.markdown(f"<div style='margin-top: {TOP_MARGIN};'></div>", unsafe_allow_html=True)
+            st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)            
+            st.markdown(f"""
+                <p style='font-size: {INFO_FONT_SIZE}; color: #0055A5; line-height: 1.4;'>
+                <strong>Бакалавр техники</strong><br>
+                & <strong>Магистр наук</strong>.<br><br><br><br>
+                <i>"Берегись, наука – я иду!"</i>
+                </p>
+                """, unsafe_allow_html=True)
+
+        with col_photo:
+            img_haw = load_formatted_image("haw.png")
+            if img_haw:
+                st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
+                original_width = img_haw.size[0]
+                new_width = int(original_width * STUDY_SCALE)
+                st.image(img_haw, width=new_width)
+            else:
+                st.error("Изображение 'haw.png' не загружено.")
+
+    elif active_year == 2017:
+        TUV_SCALE = 1.15
+        TOP_MARGIN_TEXT = "10px" 
+
+        col_text, col_photo = st.columns([1, 1.8])
+
+        with col_text:
+            st.markdown(f"<h3 style='text-align: left;'>🛠️ {active_year}– 2022: TÜV Rheinland</h3>", unsafe_allow_html=True)
+            st.markdown(f"<div style='margin-top: {TOP_MARGIN_TEXT};'></div>", unsafe_allow_html=True)
+            
+            st.markdown(f"""
+                <p style='font-size: 24px; color: #0055A5; margin-bottom: 5px;'><strong>Инженер по испытаниям и измерениям</strong></p>
+                <ul style='font-size: 20px; color: #333; line-height: 1.6;'>
+                    <li>Стандартизированные <b>акустические измерения</b> (бытовая техника, инструменты, игрушки)</li>
+                    <li>Планирование и создание <b>новой испытательной камеры</b> для умных колонок</li>
+                    <li><b>Измерения вибрации и специальные заказные измерения</b></li>
+                    <li>Член <b>комитета по стандартам DIN</b> по звукоизоляции</li>
+                </ul>
+            """, unsafe_allow_html=True)
+
+            st.markdown(f"""
+                <p style='font-size: 24px; color: #0055A5; margin-top: 20px; margin-bottom: 5px;'><strong>с 2019 <br>Менеджер по качеству / Эксперт по качеству</strong></p>
+                <ul style='font-size: 20px; color: #333; line-height: 1.6;'>
+                    <li>Проведение <b>внутренних аудитов</b> (ISO 9001 & ISO 17025)</li>
+                    <li>Ответственность за <b>процессы CAPA</b> и <b>управление рекламациями</b></li>
+                    <li><b>Внешние аудиты</b> и <b>анализ со стороны руководства</b></li>
+                </ul>
+            """, unsafe_allow_html=True)
+
+        with col_photo:
+            img_tuv = load_formatted_image("tuev.png")
+            if img_tuv:
+                st.markdown("<div style='margin-top: 5px;'></div>", unsafe_allow_html=True)
+                original_width = img_tuv.size[0]
+                new_width = int(original_width * TUV_SCALE)
+                st.image(img_tuv, width=new_width)
+            else:
+                st.error("Файл 'images/tuev.png' не найден.")
+
+    elif active_year == 2022:
+        FERCHAU_SCALE = 1.15
+        TOP_MARGIN_TEXT = "10px" 
+
+        col_text, col_photo = st.columns([1, 1.8])
+
+        with col_text:
+            st.markdown(f"<h3 style='text-align: left;'>⚙️ {active_year} – 2025: Ferchau GmbH</h3>", unsafe_allow_html=True)
+            st.markdown(f"<div style='margin-top: {TOP_MARGIN_TEXT};'></div>", unsafe_allow_html=True)
+            st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)   
+
+            st.markdown(f"""
+                <p style='font-size: 24px; color: #0055A5; margin-bottom: 5px;'><strong>Технолог процессов в Siemens Healthineers</strong></p><br>
+                <ul style='font-size: 20px; color: #333; line-height: 1.6;'>
+                    <li>Техническое обслуживание и ремонт существующего оборудования для <b>акустических и вибрационных измерений</b></li>
+                    <li>Поддержка создания нескольких <b>испытательных камер для акустических и вибрационных измерений</b> на новом производственном участке</li>
+                    <li><b>Разработка новых методов испытаний</b></li>
+                    <li><b>Валидация и ввод в эксплуатацию</b> для серийного производства</li>
+                </ul>
+            """, unsafe_allow_html=True)
+
+        with col_photo:
+            img_fer = load_formatted_image("ferchau.png")
+            if img_fer:
+                st.markdown("<div style='margin-top: 5px;'></div>", unsafe_allow_html=True)
+                original_width = img_fer.size[0]
+                new_width = int(original_width * FERCHAU_SCALE)
+                st.image(img_fer, width=new_width)
+            else:
+                st.error("Файл 'images/ferchau.png' не найден.")
+
+st.markdown('<div style="margin-top: 150px;"></div>', unsafe_allow_html=True)
+
+st.write("")
+
+# --- РАЗДЕЛ С СЕРТИФИКАТАМИ ---
+st.markdown("<h2 style='text-align: left;'>Мои сертификаты и документы</h2>", unsafe_allow_html=True)
+st.markdown('<div style="margin-top: 30px;"></div>', unsafe_allow_html=True)
+
+with st.container():
+    st.markdown("""
+        <div style="background-color: #e1f5fe; padding: 20px; border-radius: 15px; border-left: 5px solid #01579b; margin-bottom: 20px;">
+            <p style="color: #333; font-size: 1.1em;">
+                🗃️ Здесь вы найдете обзор моих академических и профессиональных документов.
+            </p>
+            <div style="background-color: #fff9c4; padding: 10px; border-radius: 8px; border: 1px solid #fbc02d;">
+                <strong>⚠️ Важное примечание о смене имени:</strong><br>
+                Пожалуйста, учтите, что я менял свое имя в течение жизни. Некоторые из перечисленных ниже документов 
+                (например, аттестат о среднем образовании, диплом бакалавра) поэтому выданы на мое прежнее имя. 
+                <br>Соответствующее подтверждение смены имени представлено как первый документ в галерее.
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+# --- PDF ГАЛЕРЕЯ с st.button ---
+if "active_doc" not in st.session_state:
+    st.session_state.active_doc = "Namensaenderung.pdf"
+
+def get_pdf_base64(file_name):
+    path = os.path.join("documents", file_name)
+    if os.path.exists(path):
+        with open(path, "rb") as f:
+            return base64.b64encode(f.read()).decode('utf-8')
+    return None
+
+top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Смена имени"}
+other_docs = [
+    {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Профессиональное училище"},
+    {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Аттестат зрелости"},
+    {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Стажировка V&F"},
+    {"file": "Bachelor.pdf", "icon": "✈️", "label": "Диплом бакалавра"},
+    {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Курс сварки"},
+    {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Аналитик стоимости"},
+    {"file": "Master.pdf", "icon": "🎓", "label": "Диплом магистра"},
+    {"file": "b_k_pulse.pdf", "icon": "📟", "label": "B&K Pulse"},
+    {"file": "M_BBM.pdf", "icon": "🔊", "label": "M-BBM"},
+    {"file": "Interner_Auditor.pdf", "icon": "🕵️", "label": "Аудитор 9001 и др."},
+    {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "Уполномоченный по качеству ISO 9001"},
+    {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "Уполномоченный по качеству ISO 17025"},
+    {"file": "Data_Science.pdf", "icon": "🐍", "label": "Data Science"}
+]
+
+# Глобальный CSS для всех кнопок
+st.markdown("""
+<style>
+    .stButton > button {
+        height: 70px !important;
+        width: 100% !important;
+        border-radius: 16px !important;
+        background-color: #f1f5f9 !important;
+        border: 2px solid #94a3b8 !important;
+        transition: all 0.3s ease !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        white-space: pre-wrap !important;
+        word-break: break-word !important;
+        padding: 10px !important;
+        gap: 8px !important;
+    }
+    
+    .stButton > button p {
+        margin: 0 !important;
+        font-size: 20px !important;
+        font-weight: 600 !important;
+        color: #475569 !important;
+        line-height: 1.3 !important;
+        text-align: center !important;
+        width: 100% !important;
+    }
+    
+    .stButton > button p::first-line {
+        font-size: 25px !important;
+        line-height: 1.5 !important;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-5px) !important;
+        border-color: #94a3b8 !important;
+        background-color: #f1f5f9 !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+col_gallery, col_viewer = st.columns([1, 1.4])
+
+with col_gallery:
+    st.markdown("<div style='height: 30px;'></div>", unsafe_allow_html=True)
+    
+    # Центрирование верхнего документа
+    t_c1, t_c2, t_c3 = st.columns(3)
+    with t_c2:
+        doc = top_doc
+        is_active = st.session_state.active_doc == doc['file']
+        
+        if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
+            st.session_state.active_doc = doc['file']
+            st.rerun()
+    
+    st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+    
+    # Другие документы в сетке из 3 колонок
+    grid_cols = st.columns(3)
+    for i, doc in enumerate(other_docs):
+        with grid_cols[i % 3]:
+            if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
+                st.session_state.active_doc = doc['file']
+                st.rerun()
+    
+    st.markdown("<div style='height: 80px;'></div>", unsafe_allow_html=True)
+
+with col_viewer:
+    active_pdf = st.session_state.active_doc
+    
+    pdf_path = os.path.join("documents", active_pdf)
+    
+    # Исключения для сопоставления изображений
+    mapping_exceptions = {
+        "Namensaenderung.pdf": "NamensaenderungAG.jpg",
+        "Berufsschule.pdf": "Berufsschule.jpg",
+        "allgemeineHochschulreife.pdf": "Abitur.jpg",
+        "Praktikum_V&F.pdf": "Praktikum_V_F.jpg",
+        "Bachelor.pdf": "Bachelor.jpg",
+        "Schweisskurs.pdf": "schweißkurs.jpg",
+        "Wertanalytiker.pdf": "Wertanalytiker.jpg",
+        "Master.pdf": "Master.jpg",
+        "b_k_pulse.pdf": "B_K_pulse.jpg",
+        "M_BBM.pdf": "M_BBM.jpg",
+        "Interner_Auditor.pdf": "Auditor9001.jpg",
+        "Qualitätsbeauftragter.pdf": "QMB9001.jpg",
+        "QMB_ISO_17025.pdf": "QMB17025.jpg",
+        "Data_Science.pdf": "Data_Science.jpg"
+    }
+    
+    if active_pdf in mapping_exceptions:
+        img_file = mapping_exceptions[active_pdf]
+    else:
+        img_file = active_pdf.replace(".pdf", ".jpg")
+        
+    image_path = os.path.join("images", "Zertifikate", img_file)
+
+    # 1. КНОПКА ЗАГРУЗКИ
+    if os.path.exists(pdf_path):
+        with open(pdf_path, "rb") as f:
+            st.download_button(
+                label=f"📥 Открыть PDF: {active_pdf}",
+                data=f,
+                file_name=active_pdf,
+                mime="application/pdf",
+                use_container_width=True
+            )
+    
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+
+    # 2. ПРЕДПРОСМОТР ИЗОБРАЖЕНИЯ
+    if os.path.exists(image_path):
+        st.image(image_path, use_container_width=True, caption=f"Предпросмотр: {active_pdf}")
+    else:
+        pdf_b64 = get_pdf_base64(active_pdf)
+        if pdf_b64:
+            st.warning("Предпросмотр изображения не найден, загружается просмотрщик PDF...")
+            st.markdown(f'''
+                <iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" 
+                        width="100%" height="800px" style="border-radius:15px; border:1px solid #e2e8f0;">
+                </iframe>
+            ''", unsafe_allow_html=True)
+
+st.write("")
+st.markdown("<br>", unsafe_allow_html=True)
+st.markdown("<br>", unsafe_allow_html=True)
+
+# ==================== ПЛАВАЮЩАЯ 3D-СТЕНА С THREE.JS ====================
+import streamlit.components.v1 as components
+import json
+import math
+
+st.markdown("<h2 style='text-align: left; margin-top: 50px;'>💻 Data Science & Machine Learning</h2>", unsafe_allow_html=True)
+st.markdown("<h5 style='text-align: left; margin-top: 10px;'>3D-стена, которую можно масштабировать и вращать.</h5>", unsafe_allow_html=True)
+
+# Ваши 24 названия сертификатов с нумерацией
+cert_names = [
+    "1_Python_for_Data_Science", "2_Exploratory_Statistics_with_Python", "3_Data_Quality",
+    "4_Data_Visualization_Matplotlib", "5_Data_Visualization_with_Seaborn", "6_Matplotlib_Complements",
+    "7_DataViz_with_Plotly", "8_MCQ_Linux_and_Bash", "9_Git_and_Github", "10_Unit_Testing",
+    "11_Classification_with_scikit-learn", "12_Regressionn_with_scikit_learn", "13_Methodology_in_Data_Science",
+    "14_Feature_Engineering_and_Optimisation", "15_Time_Series_Analysis_with_Python",
+    "16_Advanced_Classification_with-scikit-learn", "17_Text_Mining", "18_Computer_Vision_with_OpenCV",
+    "19_Dense_Neural_Networks_with_Keras", "20_Convolutional_Neural_Networks_with_Keras", "21_PyTorch",
+    "22_Streamlit", "23_DATA_API_Fundamentals", "24_Docker_DS"
+]
+
+cert_folder = "images"
+cert_data = []
+
+# Сбор существующих изображений в Base64
+if os.path.exists(cert_folder):
+    for cert_name in cert_names:
+        for ext in ['.png', '.jpg', '.jpeg']:
+            img_path = os.path.join(cert_folder, cert_name + ext)
+            if os.path.exists(img_path):
+                with open(img_path, "rb") as f:
+                    img_b64 = base64.b64encode(f.read()).decode()
+                display_name = cert_name.split('_', 1)[1].replace('_', ' ')
+                cert_data.append({
+                    "name": display_name,
+                    "b64": img_b64,
+                    "ext": ext[1:]
+                })
+                break
+
+num_certs = len(cert_data)
+
+if num_certs > 0:
+    positions = []
+    for i in range(num_certs):
+        angle = i * 0.65
+        radius = 3.5
+        x = math.cos(angle) * radius
+        z = math.sin(angle) * radius
+        y = (i - num_certs/2) * 0.35
+        positions.append({"x": x, "y": y, "z": z})
+    
+    certs_json = json.dumps([{
+        "name": cert_data[i]["name"],
+        "b64": cert_data[i]["b64"],
+        "ext": cert_data[i]["ext"],
+        "x": positions[i]["x"],
+        "y": positions[i]["y"],
+        "z": positions[i]["z"]
+    } for i in range(num_certs)])
+    
+    threejs_html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ margin: 0; overflow: hidden; font-family: 'Segoe UI', sans-serif; background-color: #f8fafc; }}
+            #modal {{ display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; cursor: pointer; }}
+            #modal img {{ max-width: 90%; max-height: 90%; border-radius: 10px; }}
+        </style>
+    </head>
+    <body>
+        <div id="modal" onclick="this.style.display='none'"><img id="modalImage" src=""></div>
+        <script type="importmap">
+            {{ "imports": {{ "three": "https://unpkg.com/three@0.128.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/" }} }}
+        </script>
+        <script type="module">
+            import * as THREE from 'three';
+            import {{ OrbitControls }} from 'three/addons/controls/OrbitControls.js';
+            
+            const certsData = {certs_json};
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf8fafc);
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(5, 3, 8);
+            
+            const renderer = new THREE.WebGLRenderer({{ antialias: true }});
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+            
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            
+            scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+            const sun = new THREE.DirectionalLight(0xffffff, 0.8);
+            sun.position.set(5, 10, 7);
+            scene.add(sun);
+
+            const planes = [];
+            certsData.forEach(cert => {{
+                const loader = new THREE.TextureLoader();
+                const texture = loader.load('data:image/' + cert.ext + ';base64,' + cert.b64);
+                const material = new THREE.MeshStandardMaterial({{ map: texture, side: THREE.DoubleSide }});
+                const plane = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.1), material);
+                plane.position.set(cert.x, cert.y, cert.z);
+                plane.userData = {{ src: 'data:image/' + cert.ext + ';base64,' + cert.b64 }};
+                scene.add(plane);
+                planes.push(plane);
+            }});
+
+            window.addEventListener('click', (e) => {{
+                const mouse = new THREE.Vector2((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
+                const raycaster = new THREE.Raycaster();
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObjects(planes);
+                if (intersects.length > 0) {{
+                    document.getElementById('modalImage').src = intersects.object.userData.src;
+                    document.getElementById('modal').style.display = 'flex';
+                }}
+            }});
+
+            function animate() {{
+                requestAnimationFrame(animate);
+                planes.forEach(p => p.lookAt(camera.position));
+                controls.update();
+                renderer.render(scene, camera);
+            }}
+            animate();
+        </script>
+    </body>
+    </html>
+    """
+
+    # Макет: 3 колонки (20% : 60% : 20%)
+    col1, col2, col3 = st.columns([0.7, 3, 0.7])
+    with col2:
+        components.html(threejs_html, height=700, scrolling=False)
+    
+st.markdown("<br>" * 3, unsafe_allow_html=True)
+
+# --- РАЗДЕЛ С НАВЫКАМИ ---
+# Функция для масштабирования изображений
+def load_scaled_img(path, degrees=0, scale_percent=40):
+    if os.path.exists(path):
+        img = Image.open(path)
+        if degrees != 0:
+            img = img.rotate(degrees, expand=True)
+        scale_factor = scale_percent / 100
+        new_size = (int(img.width * scale_factor), int(img.height * scale_factor))
+        return img.resize(new_size, Image.Resampling.LANCZOS)
+    return None
+
+# Настройки
+IMAGE_SCALING = 38 
+
+# CSS для фона и отступов
+st.markdown("""
+    <style>
+        [data-testid="stVerticalBlockBorderWrapper"] {
+            background-color: #f8f9fa !important;
+            padding: 10px !important;
+        }
+        .equal-height-header {
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+st.title("🛠️ Мои навыки")
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+
+# Основные колонки
+col1, col2 = st.columns(2)
+
+with col1:
+    with st.container(border=True):
+        st.markdown('<div class="equal-height-header"><h3>От эскиза до готового продукта</h3></div>', unsafe_allow_html=True)
+        
+        candle_files = [
+            "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
+            "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
+        ]
+        k_cols = st.columns(3) 
+        for idx, img_path in enumerate(candle_files):
+            img = load_scaled_img(img_path, scale_percent=IMAGE_SCALING)
+            if img:
+                k_cols[idx % 3].image(img, use_container_width=True)
+
+with col2:
+    with st.container(border=True):
+        st.markdown('<div class="equal-height-header"><h3>От идеи до передачи в производство</h3></div>', unsafe_allow_html=True)
+        st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
+        project_configs = [
+            ("images/project1.jpg", 0), ("images/project2.jpeg", 0),
+            ("images/project3.jpeg", 90), ("images/project5.jpg", 0),   
+            ("images/project4.jpeg", 90), ("images/project6.jpeg", -90)
+        ]
+        p_cols = st.columns(3)
+        for idx, (img_path, angle) in enumerate(project_configs):
+            img = load_scaled_img(img_path, angle, scale_percent=IMAGE_SCALING)
+            if img:
+                p_cols[idx % 3].image(img, use_container_width=True)
+        
+        st.markdown("<div style='margin-top: 58px;'></div>", unsafe_allow_html=True)
+
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True) 
+
+# --- Жесткие и мягкие навыки ---
+st.markdown("""
+    <style>
+        .exp-box {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 25px;
+            border-radius: 16px;
+            border-left: 4px solid #4a90e2;
+            height: 100%;
+        }
+        .exp-box h4 { color: #01579b; margin-top: 0; margin-bottom: 15px; }
+        .exp-box ul { line-height: 1.8; padding-left: 1.2rem; }
+        .no-bullet { list-style-type: none; padding-left: 1.2rem; font-weight: bold; }
+    </style>
+    """, unsafe_allow_html=True)
+
+exp_col1, exp_col2 = st.columns(2)
+
+# Центральный стиль для рамок (увеличенный шрифт)
+st.html("""
+    <style>
+        .exp-box {
+            font-size: 1.2rem !important;
+        }
+        .exp-box h4 {
+            font-size: 1.45rem !important;
+        }
+    </style>
+""")
+
+with exp_col1:
+    st.markdown("""
+        <div class="exp-box">
+            <h4>💻 Оборудование и ПО</h4>
+            <ul>
+                <li><strong>📐 Создание 3D-моделей в CATIA V5 или AutoCAD.</strong></li>
+                <li><strong>🎙️🎧 Подключение и настройка датчиков, измерение объектов с помощью оборудования B&K или Head Acoustics.</strong></li>
+                <li><strong>🔢 Анализ данных с помощью Minitab или самостоятельно разработанных статистических методов.</strong></li>
+                <li><strong>🗄️ SAP знают все как-то по-своему и никто не знает его одинаково.</strong></li>
+                <li><strong>📑 Сейчас ведь никто уже не говорит о продуктах Microsoft. Или я не прав?</strong></li>
+        </div>
+        """, unsafe_allow_html=True)
+
+with exp_col2:
+    st.markdown("""
+        <div class="exp-box">
+            <h4>📋 Профессиональные и личные навыки</h4>
+            <ul>
+                <li>🛠️ <strong>Управление проектами (планирование, контроль выполнения, валидация и ввод в эксплуатацию)</strong></li>
+                <li><strong>🧩 Управление качеством | Бережливое производство и Six Sigma | Аудиты | Управление рисками</strong></li>
+                <li><strong>🔍 ISO 9001 или IATF 16949 | CAPA или 8D | DMAIC или PDCA</strong></li>
+            </ul>
+            <div class="no-bullet" style="margin-top: 20px;">
+                Сначала нужно определить термины, прежде чем говорить мимо друг друга.
+            </div>
+            <div style="margin-top: 13px;"></div> 
+        </div>
+        """, unsafe_allow_html=True)
+    
+st.markdown("<div style='margin-top: 20px;"></div>", unsafe_allow_html=True) 
+
+# Раздел программирования
+st.markdown(f"""
+    <div style="background-color: #d1e7dd; padding: 25px; border-radius: 15px; border-left: 6px solid #0f5132; color: #0f5132; font-size: 1.35rem; line-height: 1.6; margin-top: 20px;">
+        <span style="font-size: 1.75rem;">🐍</span> <strong>Умею ли я программировать?</strong><br><br>
+        Это, кстати, не агентство – я сам запрограммировал эту страницу.<br>
+        На Python, Streamlit и с парой чашек кофе.<br><br>
+        <i>Кстати, этот проект помог мне обновить мой словарный запас ругательств и их комбинаций на нескольких языках.</i>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
+
+# --- РАЗДЕЛ С ХОББИ ---
+def get_base64_img(file_path):
+    if os.path.exists(file_path):
+        with open(file_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    return ""
+
+st.divider()
+st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: left;'>Увлечения и баланс</h2>", unsafe_allow_html=True)
+
+# CSS для макета, зума и масштабируемых шрифтов
+st.markdown("""
+<style>
+    :root, [data-testid="stHorizontalBlock"] {
+        --size-icon: 34px;
+        --size-title: 24px;
+        --size-text: 19px;
+        --size-placeholder: 18px;
+        --size-label: 14px;
+    }
+
+    [data-testid="stHorizontalBlock"] {
+        display: flex;
+        align-items: stretch;
+    }
+    .hobby-card {
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 460px;
+    }
+    
+    .hobby-icon { font-size: var(--size-icon); margin-bottom: 10px; }
+    .hobby-title { font-weight: bold; font-size: var(--size-title); color: #1e293b; margin-bottom: 10px; }
+    .hobby-text { font-size: var(--size-text); color: #475569; line-height: 1.6; flex-grow: 1; }
+    .img-label { font-size: var(--size-label); color: #94a3b8; text-align: center; margin-top: 4px; display: block; }
+    
+    .hobby-img-area { 
+        display: flex; gap: 8px; margin-top: 15px; height: 110px; 
+    }
+    .hobby-img-wrapper { width: 31%; position: relative; }
+    .hobby-img-wrapper img { 
+        width: 100%; height: 100px; object-fit: cover; border-radius: 8px; 
+        border: 1px solid #eee; transition: transform 0.3s ease;
+        cursor: zoom-in;
+    }
+    .hobby-img-wrapper img:hover {
+        transform: scale(1.8);
+        z-index: 999;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+</style>
+""", unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.markdown("""
+    <div class="hobby-card">
+        <div class="hobby-icon">♟️</div>
+        <div class="hobby-title">Шахматы</div>
+        <div class="hobby-text">
+            Один мужчина купил шахматы своим детям. Через год он уже не мог с нами тягаться.
+            Я вижу вперед не только свои ходы, но и ходы соперника.
+        </div>
+        <div style="height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.2; font-size: var(--size-placeholder); text-align: center; margin-top: auto;">
+            Когда я начинал играть в шахматы, в нашем городе, наверное, было всего три человека с фотоаппаратами. Так что, к сожалению, нет фотографий тех времен.<br>
+            <span style="font-size: 44px;">♔ ♕ ♖</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    img_f2 = get_base64_img("images/Hobbies/fussball1.png")
+    img_h1 = get_base64_img("images/Hobbies/hockey1.png")
+    img_h3 = get_base64_img("images/Hobbies/hockey3.png")
+    
+    st.markdown(f"""
+    <div class="hobby-card">
+        <div class="hobby-icon">🏒 & ⚽</div>
+        <div class="hobby-title">Хоккей и Футбол</div>
+        <div class="hobby-text">Нет ничего лучше чувства, когда ты внес вклад в успех другого.</div>
+        <div class="hobby-img-area">
+            <div class="hobby-img-wrapper">
+                <img src="data:image/png;base64,{img_f2}" title="Золотая медаль">
+                <span class="img-label">Футбол</span>
+            </div>
+            <div class="hobby-img-wrapper">
+                <img src="data:image/png;base64,{img_h1}" title="Снова на подиуме">
+                <span class="img-label">Хоккей</span>
+            </div>
+            <div class="hobby-img-wrapper">
+                <img src="data:image/png;base64,{img_h3}" title="За кулисами">
+                <span class="img-label">Тренировка</span>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    img_y1 = get_base64_img("images/Hobbies/box.png")
+    img_y2 = get_base64_img("images/Hobbies/yoga2.jpg")
+    img_y3 = get_base64_img("images/Hobbies/yoga3.png")
+
+    st.markdown(f"""
+    <div class="hobby-card">
+        <div class="hobby-icon">🧘 & 🥊</div>
+        <div class="hobby-title">Йога и Бокс</div>
+        <div class="hobby-text">Быстро реагировать и при этом оставаться спокойным.</div>
+        <div class="hobby-img-area">
+            <div class="hobby-img-wrapper">
+                <img src="data:image/jpeg;base64,{img_y1}" title="Это расслабляет, говорили они">
+                <span class="img-label">ловкий</span>
+            </div>
+            <div class="hobby-img-wrapper">
+                <img src="data:image/jpeg;base64,{img_y2}" title="Это просто, говорили они">
+                <span class="img-label">уравновешенный</span>
+            </div>
+            <div class="hobby-img-wrapper">
+                <img src="data:image/png;base64,{img_y3}" title="Тебе это пригодится в жизни, говорили они">
+                <span class="img-label">сильный</span>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+# --- БОНУС: 3 ПРОСЧЕТА ---
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+st.divider()
+st.markdown("<div style='margin-top: 150px;'></div>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: left;'>⚠️ 3 самых больших просчета в моей жизни</h2>", unsafe_allow_html=True)
+
+st.markdown("""
+<style>
+    :root, [data-testid="stHorizontalBlock"] {
+        --size-quote: 21px;  
+        --size-year: 18px;   
+    }
+
+    [data-testid="stHorizontalBlock"] {
+        display: flex;
+        align-items: stretch;
+    }
+    .quote-card {
+        background: #ffffff;
+        border-top: 5px solid #8e44ad;
+        border-radius: 12px;
+        padding: 25px;
+        height: 100%;
+        min-height: 180px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.2s ease;
+    }
+    .quote-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .quote-content {
+        font-style: italic;
+        color: #1e293b;
+        font-size: var(--size-quote);
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+    .quote-year {
+        text-align: right;
+        font-weight: bold;
+        color: #8e44ad;
+        font-size: var(--size-year);
+    }
+    
+    .quote-year::before {
+        content: "— ";
+    }
+</style>
+""", unsafe_allow_html=True)
+
+q_col1, q_col2, q_col3 = st.columns(3)
+
+with q_col1:
+    st.markdown("""
+    <div class="quote-card">
+        <div class="quote-content">"Я проведу всю свою жизнь в этом месте."</div>
+        <div class="quote-year">2002</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with q_col2:
+    st.markdown("""
+    <div class="quote-card">
+        <div class="quote-content">"Я уже слишком стар для программирования."</div>
+        <div class="quote-year">2013</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with q_col3:
+    st.markdown("""
+    <div class="quote-card">
+        <div class="quote-content">"Я быстро сделаю цифровое резюме. Это займет всего пару часов."</div>
+        <div class="quote-year">Сегодня</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("<div style='margin-top: 200px;'></div>", unsafe_allow_html=True)
+
+# --- БОНУС: ВИДЕО И ИЗОБРАЖЕНИЕ ЧАСТОТ ---
+video_path = os.path.join("videos", "VID_20240910_195820976.mp4")
+image_path = os.path.join("images", "Frequenzen.png")
+
+# CSS для оптимизации макета
+st.markdown(
+    """
+    <style>
+    [data-testid="stColumn"] {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    [data-testid="stHorizontalBlock"] video, 
+    [data-testid="stHorizontalBlock"] img {
+        max-height: 550px !important;
+        width: auto !important;
+        object-fit: contain;
+    }
+    
+    h3 {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+st.title("Бонус")
+
+# Колонки в соотношении 1:2 (видео уже, изображение шире)
+col1, col2 = st.columns([1, 2])
+
+with col1:
+    st.write("### Видео")
+    if os.path.exists(video_path):
+        st.video(video_path)
+    else:
+        st.error("Видео не найдено")
+
+with col2:
+    st.write("### Частотный диапазон")
+    if os.path.exists(image_path):
+        st.image(image_path, caption="Частотный спектр поющей чаши", use_container_width=True)
+    else:
+        st.error("Изображение не найдено")
+
+st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
+
+# --- СИМВОЛ КНИГИ (В конце приложения) ---
+st.write("") 
+st.write("") 
+
+spacer1, spacer2, book_col = st.columns([2, 1, 1])
+
+with book_col:
+    st.markdown("""
+        <style>
+            @keyframes float {
+                0% { transform: translateY(0px) rotate(15deg); }
+                50% { transform: translateY(-10px) rotate(10deg); }
+                100% { transform: translateY(0px) rotate(15deg); }
+            }
+            .book-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                cursor: help;
+                animation: float 4s ease-in-out infinite;
+                position: relative;
+                width: 120px;
+            }
+            .book-icon {
+                font-size: 50px;
+                filter: drop-shadow(5px 10px 15px rgba(0,0,0,0.2));
+                transition: all 0.4s ease-in-out;
+            }
+            
+            .book-text {
+                position: absolute;
+                top: 48px;
+                left: 55%;
+                transform: translate(-50%, -50%) scale(0.5);
+                color: #1a1a1a;
+                font-family: 'Brush Script MT', cursive;
+                font-size: 15px;
+                font-weight: bold;
+                line-height: 1.1;
+                text-align: center;
+                pointer-events: none;
+                width: 70px;
+                opacity: 0;
+                transition: all 0.4s ease-in-out;
+            }
+
+            .book-wrapper:hover .book-icon {
+                transform: scale(1.2) rotate(0deg);
+                filter: drop-shadow(2px 5px 5px rgba(0,0,0,0.1));
+            }
+            
+            .book-wrapper:hover .book-text {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+
+            .book-tag {
+                background: #f1f5f9;
+                color: #64748b;
+                padding: 4px 12px;
+                border-radius: 20px;
+                font-size: 0.75rem;
+                font-weight: bold;
+                margin-top: -5px;
+                border: 1px solid #e2e8f0;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            }
+        </style>
+        
+        <div class="book-wrapper" title="📖 Моя книга: Этот проект находится в стадии разработки – история пишется день за днём.">
+            <div class="book-icon">📖</div>
+            <div class="book-tag">в разработке</div>
+        </div>
+    """, unsafe_allow_html=True)
