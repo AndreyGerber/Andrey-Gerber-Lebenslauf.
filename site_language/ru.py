@@ -163,8 +163,8 @@ texte = {
     1996: "Школа (так себе удовольствие)",
     2006: "Эмиграция в Германию 🇩🇪",
     2010: "Учёба на авиаконструктора<br>(B.Eng. & M.Sc.)",
-    2017: "TÜV Rheinland<br>(лабораторное тестирование & ",
-    2019: " Эксперт по качеству)",
+    2017: "TÜV Rheinland<br>(лабораторное тестирование &              ",
+    2019: "                 Эксперт по качеству)",
     2022: "Ferchau (в Siemens)<br>(Quality Systems Engineering)",
     2026: "Liora<br>(Data Science & ML)"
 }
@@ -215,7 +215,7 @@ fig.add_trace(go.Scatter(
 
 # Jahreszahlen und Textblöcke (45° gedreht)
 for i, jahr in enumerate(jahre_alle):
-    if jahr in [1991, 1996, 2017, 2019, 2022]:
+    if jahr in [1991, 1996, 2006, 2010, 2017, 2019, 2022]:
         y_offset = -0.05
     else:
         y_offset = -0.2
