@@ -60,7 +60,7 @@ TEXTS = {
         2019: "Quality Expert",
         2022: "Ferchau (Siemens)",
         2026: "Data Science & Machine Learning"
-    }
+    },
 
     "career_details": {
         1988: {
