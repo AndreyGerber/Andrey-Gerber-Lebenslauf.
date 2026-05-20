@@ -163,8 +163,8 @@ texte = {
     1996: "Школа (так себе удовольствие)",
     2006: "Эмиграция в Германию 🇩🇪",
     2010: "Учёба на авиаконструктора<br>(B.Eng. & M.Sc.)",
-    2017: "TÜV Rheinland",
-    2019: "(лабораторное тестирование & Эксперт по качеству)",
+    2017: "TÜV Rheinland<br>(Expert in the lab  &                    ",
+    2019: "                  Quality Expert)",
     2022: "Ferchau (в Siemens)<br>(Quality Systems Engineering)",
     2026: "Liora<br>(Data Science & ML)"
 }
