@@ -89,14 +89,16 @@ def get_certificate_list():
 st.markdown("""
 <style>
 /* Überschreibt die Höhe und Abstände der Buttons in den Spalten */
-div[data-testid="stColumn"] button {
+/* Zielgerichtet NUR die allererste Spalten-Reihe (die Sprachauswahl) verändern */
+div[data-testid="stHorizontalBlock"]:first-of-type div[data-testid="stColumn"] button {
     padding: 2px 10px !important;
     min-height: 28px !important;
     height: 28px !important;
     line-height: 1.2 !important;
-    font-size: 8px !important;
+    font-size: 12px !important;
     border-radius: 6px !important;
 }
+
 
 /* Verringert den vertikalen Standardabstand, den Streamlit um Spalten herum erzeugt */
 div[data-testid="stHorizontalBlock"] {
