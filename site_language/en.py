@@ -496,7 +496,7 @@ with st.container():
             <div style="background-color: #fff9c4; padding: 10px; border-radius: 8px; border: 1px solid #fbc02d;">
                 <strong>⚠️ Important note regarding name change:</strong><br>
                 Please note that I have changed my name during my life. Some of the documents listed below 
-                (e.g., high school, Bachelor's degree) are therefore issued under my previous name. 
+                (e.g., high school diploma, Bachelor's degree) are therefore issued under my previous name. 
                 <br>Corresponding proof of the name change is provided as the first document in the gallery.
             </div>
         </div>
@@ -515,7 +515,7 @@ def get_pdf_base64(file_name):
 top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Name Change"}
 other_docs = [
     {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Vocational School"},
-    {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "High School Diploma"},
+    {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "High School"},
     {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Internship V&F"},
     {"file": "Bachelor.pdf", "icon": "✈️", "label": "Bachelor's Degree"},
     {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Welding Course"},
