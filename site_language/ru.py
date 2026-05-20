@@ -215,7 +215,7 @@ fig.add_trace(go.Scatter(
 
 # Jahreszahlen und Textblöcke (45° gedreht)
 for i, jahr in enumerate(jahre_alle):
-    if jahr in [1991, 1996, 2019, 2022]:
+    if jahr in [1991, 1996, 2017, 2019, 2022]:
         y_offset = -0.05
     else:
         y_offset = -0.2
