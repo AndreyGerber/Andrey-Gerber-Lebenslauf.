@@ -88,32 +88,20 @@ def get_certificate_list():
 # --- CUSTOM CSS FÜR SPRACHBUTTONS ---
 st.markdown("""
 <style>
-.language-bar {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
-    padding: 12px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 60px;
+/* Überschreibt die Höhe und Abstände der Buttons in den Spalten */
+div[data-testid="stColumn"] button {
+    padding: 2px 10px !important;
+    min-height: 28px !important;
+    height: 28px !important;
+    line-height: 1.2 !important;
+    font-size: 14px !important;
+    border-radius: 6px !important;
 }
-.language-bar button {
-    background: rgba(255,255,255,0.2) !important;
-    border: none !important;
-    color: white !important;
-    padding: 8px 30px !important;
-    border-radius: 40px !important;
-    font-size: 18px !important;
-    font-weight: bold !important;
-    transition: all 0.3s ease !important;
-}
-.language-bar button:hover {
-    background: rgba(255,255,255,0.4) !important;
-    transform: translateY(-2px) !important;
-}
-.active-lang {
-    background: white !important;
-    color: #667eea !important;
+
+/* Verringert den vertikalen Standardabstand, den Streamlit um Spalten herum erzeugt */
+div[data-testid="stHorizontalBlock"] {
+    gap: 10px !important;
+    margin-bottom: -10px !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -140,7 +128,8 @@ with cols[3]:
         st.session_state.language = 'ru'
         st.rerun()
 
-st.markdown("<div style='margin-top: -10px;'></div><hr style='margin-top: 5px; margin-bottom: 10px;'>", unsafe_allow_html=True)
+st.markdown("<div style='margin-top: -5px;'></div><hr style='margin-top: 0px; margin-bottom: 10px;'>", unsafe_allow_html=True)
+
 
 
 # --- LADE DIE AUSGEWÄHLTE SPRACHDATEI (OHNE main() AUFRUF) ---
