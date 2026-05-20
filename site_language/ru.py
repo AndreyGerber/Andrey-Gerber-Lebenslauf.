@@ -667,7 +667,7 @@ with col_viewer:
                 <iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" 
                         width="100%" height="800px" style="border-radius:15px; border:1px solid #e2e8f0;">
                 </iframe>
-            ''", unsafe_allow_html=True)
+            ''', unsafe_allow_html=True)
 
 st.write("")
 st.markdown("<br>", unsafe_allow_html=True)
