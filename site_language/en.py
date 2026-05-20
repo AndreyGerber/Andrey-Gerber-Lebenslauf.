@@ -7,29 +7,32 @@ import base64
 import os
 from PIL import Image, ImageOps
 
-# Page settings
-st.set_page_config(page_title="Andrey Gerber Resume", layout="wide")
 
-# 1. Title (centered, two lines)
-st.markdown("<h2 style='text-align: center;'>Welcome to the page of</h1>", unsafe_allow_html=True)
-st.markdown("<h1 style='text-align: center; color: #4B0082;'>Andrey Gerber's Resume</h1>", unsafe_allow_html=True)
+
+# Seiteneinstellungen
+st.set_page_config(page_title="Lebenslauf Andrey Gerber", layout="wide")
+
+# 1. Titel (zentriert und zwei Zeilen)
+st.markdown("<h2 style='text-align: center;'>Welcome to the page</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #4B0082;'>Resume of Andrey Gerber</h1>", unsafe_allow_html=True)
 st.divider()
 
-# --- 1. FUNCTION FOR STABLE IMAGE SIZE (scalable) ---
-def load_formatted_image(name, target_size=(900, 600), max_width=None):
-    path = os.path.join("images", name)
+# --- 1. FUNKTION FÜR STABILE BILDGRÖSSE (angepasst: skalierbar) ---
+def lade_formatiertes_bild(name, target_size=(900, 600), max_width=None):
+    pfad = os.path.join("images", name)
     
-    if not os.path.exists(path):
+    if not os.path.exists(pfad):
         return None
         
-    if path.lower().endswith(".pdf"):
+    if pfad.lower().endswith(".pdf"):
         return None
 
     try:
-        img = Image.open(path)
+        img = Image.open(pfad)
         if img.mode != "RGB":
             img = img.convert("RGB")
             
+        # Wenn max_width angegeben ist, skaliere dahin
         if max_width:
             ratio = max_width / img.size[0]
             new_size = (max_width, int(img.size[1] * ratio))
@@ -43,22 +46,24 @@ def load_formatted_image(name, target_size=(900, 600), max_width=None):
             return new_img
         
     except Exception as e:
-        print(f"Error with file {name}: {e}")
+        print(f"Fehler bei Datei {name}: {e}")
         return None
 
-# --- 2. DATA & LOGIC ---
+# --- 2. DATEN & LOGIK ---
 if 'bild_index' not in st.session_state:
     st.session_state.bild_index = 0
 
-slideshow_images = ["ich1.JPG", "ich_pass.png", "aufenthaltstitel.png"]
-drawing_name = "itsme2.png"
+slideshow_bilder = ["ich1.JPG", "ich_pass.png", "aufenthaltstitel.png"]
+zeichnung_name = "itsme2.png"
 
-# --- 3. GLOBAL STYLE FOR CENTERING ---
+# --- 3. GLOBALER STYLE FÜR ZENTRIERUNG ---
 st.markdown("""
     <style>
+    /* Zentriert den Inhalt aller Spalten vertikal */
     [data-testid="stHorizontalBlock"] {
         align-items: center;
     }
+    /* Link-Styling */
     .contact-link {
         text-decoration: none;
         color: #007BFF;
@@ -67,35 +72,35 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- 4. LAYOUT: 3 COLUMNS ---
-col_image, col_center, col_data = st.columns([1.5, 1.0, 1.5])
+# --- 4. LAYOUT: 3 SPALTEN ---
+col_bild, col_mitte, col_daten = st.columns([1.5, 1.0, 1.5])
 
-with col_image:
-    current_photo = load_formatted_image(slideshow_images[st.session_state.bild_index])
-    if current_photo:
-        st.image(current_photo, use_container_width=True)
+with col_bild:
+    aktuelles_foto = lade_formatiertes_bild(slideshow_bilder[st.session_state.bild_index])
+    if aktuelles_foto:
+        st.image(aktuelles_foto, use_container_width=True)
     else:
-        st.error(f"File missing: {slideshow_images[st.session_state.bild_index]}")
+        st.error(f"Datei fehlt: {slideshow_bilder[st.session_state.bild_index]}")
 
-    # Navigation below the image
-    p_left, p_center, p_right = st.columns([1, 4, 1]) 
-    with p_left:
+    # Navigation unter dem Bild
+    p_links, p_mitte, p_rechts = st.columns([1, 4, 1]) 
+    with p_links:
         if st.button("⬅️"):
-            st.session_state.bild_index = (st.session_state.bild_index - 1) % len(slideshow_images)
+            st.session_state.bild_index = (st.session_state.bild_index - 1) % len(slideshow_bilder)
             st.rerun()
-    with p_right:
+    with p_rechts:
         if st.button("➡️"):
-            st.session_state.bild_index = (st.session_state.bild_index + 1) % len(slideshow_images)
+            st.session_state.bild_index = (st.session_state.bild_index + 1) % len(slideshow_bilder)
             st.rerun()
 
-with col_center:
-    drawing = load_formatted_image(drawing_name, target_size=(300, 300))
-    if drawing:
-        st.image(drawing, use_container_width=True)
+with col_mitte:
+    zeichnung = lade_formatiertes_bild(zeichnung_name, target_size=(300, 300))
+    if zeichnung:
+        st.image(zeichnung, use_container_width=True)
     else:
-        st.info("Your drawing will appear here...")
+        st.info("Hier erscheint deine Zeichnung...")
 
-with col_data:
+with col_daten:
     st.markdown("<p style='font-size: 30px; color: gray; margin-bottom: -10px;'>My Contact Details</p>", unsafe_allow_html=True)
     
     st.markdown("<h1 style='font-size: 42px; font-weight: bold; margin-top: 0px;'>Andrey Gerber</h1>", unsafe_allow_html=True)
@@ -113,13 +118,17 @@ with col_data:
                 </a>
             </p>
             <p style='font-size: 24px; color: #666; margin-top: 20px;'>
-                📍 <i>Address: Just call or email me</i>
+                📍 <i>Address: Not required — just call or email</i>
             </p>
         </div>
     """, unsafe_allow_html=True)
 
-    # --- LANGUAGE SKILLS SECTION ---
+    # --- ABSCHNITT SPRACHKENNTNISSE ---
     st.markdown("<hr style='margin: 30px 0; border: none; border-top: 1px solid #eee;'>", unsafe_allow_html=True)
+    #st.markdown("<p style='font-size: 28px; font-weight: bold; margin-bottom: 15px;'>Sprachkenntnisse</p>", unsafe_allow_html=True)
+    
+    # Darstellung in zwei kleinen Unterspalten für kompakte Optik
+    lang_1, lang_2 = st.columns(2)
     
     st.markdown("""
         <p style='font-size: 22px;'>
@@ -133,51 +142,66 @@ with col_data:
 
 st.divider()
 
-# --- MY CAREER PATH ---
-all_years = [1988, 1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
-years_with_diamond = [1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 
-SIZE_YEARS = 19
-SIZE_TEXTS = 17
 
-texts = {
-    1988: "Born in USSR ☭",
+
+
+
+# --- MEIN WERDEGANG (ORIGINAL, unverändert) ---
+# Alle Jahre für die Beschriftung
+jahre_alle = [1988, 1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
+# Jahre, die eine Raute auf der Linie erhalten (alle außer 1988)
+jahre_mit_raute = [1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
+
+GROESSE_JAHRE = 19       # Schriftgröße der Jahreszahlen (fett)
+GROESSE_TEXTE = 17       # Schriftgröße der Beschreibungen
+
+# Hier kannst du deine Texte für die Blöcke definieren
+texte = {
+    1988: "Born in the USSR ☭",
     1991: "Moved to Russian Federation<br>without moving 🇷🇺",
     1996: "School (not cool)",
     2006: "Emigration to Germany 🇩🇪",
-    2010: "Studying aircraft design<br>(B.Eng. & Ms.Sc.)",
-    2017: "TÜV Rheinland<br>(Expert in the lab  &                    ",
-    2019: "                  Quality Expert)",
+    2010: "Studied aircraft design<br>(B.Eng. & M.Sc.)",
+    2017: "TÜV Rheinland<br>(Expert in the lab &",
+    2019: "Quality Expert)",
     2022: "Ferchau (at Siemens)<br>(Quality Systems Engineering)",
     2026: "Liora<br>(Data Science & ML)"
 }
 
-LINE_THICKNESS = 3
-START_DASH_LENGTH = 0.18
+# Design-Einstellungen
+LINIEN_DICKE = 3
+STARTSTRICH_LAENGE = 0.18
+JAHR_SCHRIFTGROESSE = 16
 
+# Titel linksbündig
 st.markdown("<h2 style='text-align: left;'>My Career Path</h2>", unsafe_allow_html=True)
 
+# --- 2. GRAFIK ERSTELLEN ---
 fig = go.Figure()
 
+# Lebenslinie: Durchgehend von 1988 bis kurz vor die Pfeilspitze (2034)
 fig.add_trace(go.Scatter(
     x=[1988, 2029], 
     y=[0, 0],
     mode='lines',
-    line=dict(color='black', width=LINE_THICKNESS),
+    line=dict(color='black', width=LINIEN_DICKE),
     showlegend=False, 
     hoverinfo='none'
 ))
 
+# Senkrechter Startstrich bei 1988
 fig.add_shape(
     type="line", 
-    x0=1988, y0=-START_DASH_LENGTH, 
-    x1=1988, y1=START_DASH_LENGTH,
-    line=dict(color="black", width=LINE_THICKNESS + 1)
+    x0=1988, y0=-STARTSTRICH_LAENGE, 
+    x1=1988, y1=STARTSTRICH_LAENGE,
+    line=dict(color="black", width=LINIEN_DICKE + 1)
 )
 
+# Weiße Rauten (NUR ab 1996), mittig auf der Linie
 fig.add_trace(go.Scatter(
-    x=years_with_diamond, 
-    y=[0] * len(years_with_diamond),
+    x=jahre_mit_raute, 
+    y=[0] * len(jahre_mit_raute),
     mode='markers',
     marker=dict(
         symbol='diamond', 
@@ -189,28 +213,29 @@ fig.add_trace(go.Scatter(
     hoverinfo='none'
 ))
 
-for i, year in enumerate(all_years):
-    if year in [1991, 2017, 2019, 2022]:
+# Jahreszahlen und Textblöcke (45° gedreht)
+for i, jahr in enumerate(jahre_alle):
+    if jahr in [1991, 2017, 2019, 2022]:
         y_offset = -0.05
     else:
         y_offset = -0.20
     
     fig.add_annotation(
-        x=year, y=-0.1, 
-        text=f"<b>{year}</b>",
+        x=jahr, y=-0.1, 
+        text=f"<b>{jahr}</b>",
         showarrow=False, 
         textangle=-30,
-        font=dict(size=SIZE_YEARS, color="black"),
+        font=dict(size=GROESSE_JAHRE, color="black"),
         xanchor="center", 
         yanchor="top"
     )
     
     fig.add_annotation(
-        x=year, y=y_offset, 
-        text=texts.get(year, ""),
+        x=jahr, y=y_offset, 
+        text=texte.get(jahr, ""),
         showarrow=False, 
         textangle=-30,
-        font=dict(size=SIZE_TEXTS, color="#4B0082"),
+        font=dict(size=GROESSE_TEXTE, color="#4B0082"),
         xanchor="center", 
         yanchor="top"
     )
@@ -221,6 +246,7 @@ fig.update_layout(
     yaxis=dict(range=[-1.8, 0.5]) 
 )
 
+# Pfeilspitze am rechten Ende
 fig.add_annotation(
     x=2030, y=0,
     ax=2028, ay=0,
@@ -229,7 +255,7 @@ fig.add_annotation(
     showarrow=True, 
     arrowhead=2, 
     arrowsize=1.5, 
-    arrowwidth=LINE_THICKNESS, 
+    arrowwidth=LINIEN_DICKE, 
     arrowcolor="black"
 )
 
@@ -254,9 +280,14 @@ fig.update_layout(
 
 st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
 
-# --- DETAILS BLOCK ---
-BLOCK_HEIGHT = 750
-IMAGE_WIDTH = 350
+
+
+
+
+
+# --- BLOCK MIT DEN DETAILS zum Werdegang ---
+BLOCK_HOEHE = 750
+BILD_BREITE = 350
 INFO_FONT_SIZE = "24px"
 
 highlights = [1988, 1996, 2006, 2010, 2017, 2022]
@@ -273,13 +304,14 @@ with c_nav3:
         st.session_state.info_idx += 1
         st.rerun()
 
-with st.container(height=BLOCK_HEIGHT, border=True):
-    active_year = highlights[st.session_state.info_idx]
+with st.container(height=BLOCK_HOEHE, border=True):
+    jahr_aktiv = highlights[st.session_state.info_idx]
 
-    if active_year == 1988:
-        st.markdown(f"<h3 style='text-align: left;'>📍 {active_year}: Here my journey began</h3>", unsafe_allow_html=True)
+    if jahr_aktiv == 1988:
+        st.markdown(f"<h3 style='text-align: left;'>📍 {jahr_aktiv}: Where my journey began</h3>", unsafe_allow_html=True)
 
-        MAP_SCALE = 0.8
+
+        MASSSTAB_MAP = 0.8
         
         def get_base64(path):
             with open(path, "rb") as f:
@@ -289,7 +321,7 @@ with st.container(height=BLOCK_HEIGHT, border=True):
             img_b64 = get_base64("images/tscherlak_map.png")
             
             st.markdown(f"""
-                <div style="width: {int(MAP_SCALE * 100)}%; margin: auto;">
+                <div style="width: {int(MASSSTAB_MAP * 100)}%; margin: auto;">
                     <div style="position: relative; display: inline-block; width: 100%;">
                         <img src="data:image/png;base64,{img_b64}" style="width: 100%; display: block; border-radius: 10px;">
                         <div style="
@@ -306,32 +338,34 @@ with st.container(height=BLOCK_HEIGHT, border=True):
             """, unsafe_allow_html=True)
             
         except Exception as e:
-            st.error(f"Error: {e}")
+            st.error(f"Fehler: {e}")
 
-    elif active_year == 1996:
-        SCALE = 1.2
-        TOP_MARGIN = "10px"
+    elif jahr_aktiv == 1996:
+        MASSSTAB = 1.2  # 0.7 = 70% der Originalgröße, ändere diesen Wert zum Skalieren
+        OBEN_ABSTAND = "10px"
 
-        col_text, col_photo = st.columns([1, 2.5])
+        col_text, col_foto = st.columns([1, 2.5])
 
         with col_text:
-            st.markdown(f"<div style='margin-top: {TOP_MARGIN};'></div>", unsafe_allow_html=True)
-            st.markdown(f"<h3 style='text-align: left;'>🎒 {active_year}: School Years</h3>", unsafe_allow_html=True)
+            st.markdown(f"<div style='margin-top: {OBEN_ABSTAND};'></div>", unsafe_allow_html=True)
+            st.markdown(f"<h3 style='text-align: left;'>🎒 {jahr_aktiv}: School Years</h3>", unsafe_allow_html=True)
             st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
-            st.markdown(f"<p style='font-size: {INFO_FONT_SIZE}; color: #0055A5;'>How quickly 10 years pass.</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='font-size: {INFO_FONT_SIZE}; color: #0055A5;'>Ten years pass faster than you think.</p>", unsafe_allow_html=True)
 
-        with col_photo:
-            img_school = load_formatted_image("schule2.png")
-            if img_school:
+        with col_foto:
+            img_schule = lade_formatiertes_bild("schule2.png")
+            if img_schule:
                 st.markdown(f"<div style='margin-top: 5px;'></div>", unsafe_allow_html=True)
-                original_width = img_school.size[0]
-                new_width = int(original_width * SCALE)
-                st.image(img_school, width=new_width)
+                
+                # MASSSTAB wird hier angewendet
+                original_breite = img_schule.size[0]
+                neue_breite = int(original_breite * MASSSTAB)
+                st.image(img_schule, width=neue_breite)
             else:
-                st.error("Image 'schule2.png' not found.")
+                st.error("Bild 'schule2.png' nicht gefunden.")
 
-    elif active_year == 2006:
-        st.markdown(f"<h3 style='text-align: left;'>✈️ {active_year}: A new chapter begins</h3>", unsafe_allow_html=True)
+    elif jahr_aktiv == 2006:
+        st.markdown(f"<h3 style='text-align: left;'>✈️ {jahr_aktiv}: A new chapter begins</h3>", unsafe_allow_html=True)
         st.divider()
 
         fig_flight = go.Figure()
@@ -381,127 +415,150 @@ with st.container(height=BLOCK_HEIGHT, border=True):
 
         st.plotly_chart(fig_flight, use_container_width=True, key="flight_landing_final_fix")
 
-    elif active_year == 2010:
-        STUDY_SCALE = 1.0
-        TOP_MARGIN = "10px"
+    elif jahr_aktiv == 2010:
+        MASSSTAB_STUDIUM = 1.0  # 0.8 = 80% der Originalgröße, ändere diesen Wert zum Skalieren
+        OBEN_ABSTAND = "10px"
 
-        col_text, col_photo = st.columns([1, 2.5])
+        col_text, col_foto = st.columns([1, 2.5])
 
         with col_text:
-            st.markdown(f"<h3 style='text-align: left;'>🎓 {active_year}: Studies</h3>", unsafe_allow_html=True)
-            st.markdown(f"<div style='margin-top: {TOP_MARGIN};'></div>", unsafe_allow_html=True)
+            st.markdown(f"<h3 style='text-align: left;'>🎓 {jahr_aktiv}: Studies</h3>", unsafe_allow_html=True)
+            st.markdown(f"<div style='margin-top: {OBEN_ABSTAND};'></div>", unsafe_allow_html=True)
             st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)            
             st.markdown(f"""
                 <p style='font-size: {INFO_FONT_SIZE}; color: #0055A5; line-height: 1.4;'>
                 <strong>Bachelor of Engineering</strong><br>
                 & <strong>Master of Science</strong>.<br><br><br><br>
-                <i>"Watch out, science – I'm coming!"</i>
+                <i>"Watch out, science — here I come!"</i>
                 </p>
                 """, unsafe_allow_html=True)
 
-        with col_photo:
-            img_haw = load_formatted_image("haw.png")
+        with col_foto:
+            img_haw = lade_formatiertes_bild("haw.png")
             if img_haw:
                 st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
-                original_width = img_haw.size[0]
-                new_width = int(original_width * STUDY_SCALE)
-                st.image(img_haw, width=new_width)
+                
+                # MASSSTAB_STUDIUM wird hier angewendet
+                original_breite = img_haw.size[0]
+                neue_breite = int(original_breite * MASSSTAB_STUDIUM)
+                st.image(img_haw, width=neue_breite)
             else:
-                st.error("Image 'haw.png' could not be loaded.")
+                st.error("Bild 'haw.png' konnte nicht geladen werden.")
 
-    elif active_year == 2017:
-        TUV_SCALE = 1.15
-        TOP_MARGIN_TEXT = "10px" 
+    elif jahr_aktiv == 2017:
+        MASSSTAB_TUV = 1.15  # 1.15 = 115% der Originalgröße, ändere diesen Wert zum Skalieren
+        OBEN_ABSTAND_TEXT = "10px" 
 
-        col_text, col_photo = st.columns([1, 1.8])
+        col_text, col_foto = st.columns([1, 1.8])
 
         with col_text:
-            st.markdown(f"<h3 style='text-align: left;'>🛠️ {active_year}– 2022: TÜV Rheinland</h3>", unsafe_allow_html=True)
-            st.markdown(f"<div style='margin-top: {TOP_MARGIN_TEXT};'></div>", unsafe_allow_html=True)
+            st.markdown(f"<h3 style='text-align: left;'>🛠️ {jahr_aktiv}– 2022: TÜV Rheinland</h3>", unsafe_allow_html=True)
+            st.markdown(f"<div style='margin-top: {OBEN_ABSTAND_TEXT};'></div>", unsafe_allow_html=True)
             
             st.markdown(f"""
                 <p style='font-size: 24px; color: #0055A5; margin-bottom: 5px;'><strong>Test & Measurement Engineer</strong></p>
                 <ul style='font-size: 20px; color: #333; line-height: 1.6;'>
-                    <li>Standard-compliant <b>acoustic measurements</b> (household appliances, tools, toys)</li>
-                    <li>Planning & setup of a <b>new test chamber</b> for smart speakers</li>
-                    <li><b>Vibration measurements & custom special measurements</b></li>
-                    <li>Member of the <b>DIN standards committee</b> for sound insulation</li>
+                    <li>Standardised <b>acoustic measurements</b> (household appliances, tools, toys)</li>
+                    <li>Planning & building a new <b>test chamber</b> for Smart Speaker</li>
+                    <li><b>Vibration measurements & customised special measurements</b></li>
+                    <li>Member of <b>DIN standardization committee</b> for sound insulation</li>
                 </ul>
             """, unsafe_allow_html=True)
 
             st.markdown(f"""
-                <p style='font-size: 24px; color: #0055A5; margin-top: 20px; margin-bottom: 5px;'><strong>from 2019 <br>Quality Manager / Quality Expert</strong></p>
+                <p style='font-size: 24px; color: #0055A5; margin-top: 20px; margin-bottom: 5px;'><strong>ab 2019 <br>Quality manager / Quality Expert</strong></p>
                 <ul style='font-size: 20px; color: #333; line-height: 1.6;'>
-                    <li>Conducting <b>internal audits</b> (ISO 9001 & ISO 17025)</li>
-                    <li>Responsibility for <b>CAPA processes</b> and <b>complaint management</b></li>
-                    <li><b>External audits</b> and <b>management reviews</b></li>
+                    <li><b>internal audits</b>  (ISO 9001 & ISO 17025)</li>
+                    <li>responsibility for <b>CAPA processes</b> and <b>complaint management</li>
+                    <li><b>external audits</b>  and <b>management reviews</b></li>
+                    
                 </ul>
             """, unsafe_allow_html=True)
 
-        with col_photo:
-            img_tuv = load_formatted_image("tuev.png")
+        with col_foto:
+            img_tuv = lade_formatiertes_bild("tuev.png")
             if img_tuv:
                 st.markdown("<div style='margin-top: 5px;'></div>", unsafe_allow_html=True)
-                original_width = img_tuv.size[0]
-                new_width = int(original_width * TUV_SCALE)
-                st.image(img_tuv, width=new_width)
+                
+                # MASSSTAB_TUV wird hier angewendet
+                original_breite = img_tuv.size[0]
+                neue_breite = int(original_breite * MASSSTAB_TUV)
+                st.image(img_tuv, width=neue_breite)
             else:
-                st.error("File 'images/tuev.png' not found.")
+                st.error("Datei 'images/tuev.png' nicht gefunden.")
 
-    elif active_year == 2022:
-        FERCHAU_SCALE = 1.15
-        TOP_MARGIN_TEXT = "10px" 
 
-        col_text, col_photo = st.columns([1, 1.8])
+    elif jahr_aktiv == 2022:
+        MASSSTAB_FERCHAU = 1.15  # 1.15 = 115% der Originalgröße, ändere diesen Wert zum Skalieren
+        OBEN_ABSTAND_TEXT = "10px" 
+
+        col_text, col_foto = st.columns([1, 1.8])
 
         with col_text:
-            st.markdown(f"<h3 style='text-align: left;'>⚙️ {active_year} – 2025: Ferchau GmbH</h3>", unsafe_allow_html=True)
-            st.markdown(f"<div style='margin-top: {TOP_MARGIN_TEXT};'></div>", unsafe_allow_html=True)
+            st.markdown(f"<h3 style='text-align: left;'>⚙️ {jahr_aktiv} – 2025: Ferchau GmbH</h3>", unsafe_allow_html=True)
+            st.markdown(f"<div style='margin-top: {OBEN_ABSTAND_TEXT};'></div>", unsafe_allow_html=True)
             st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)   
 
             st.markdown(f"""
                 <p style='font-size: 24px; color: #0055A5; margin-bottom: 5px;'><strong>Process Technologist at Siemens Healthineers</strong></p><br>
                 <ul style='font-size: 20px; color: #333; line-height: 1.6;'>
-                    <li>Maintenance and repair of existing equipment for <b>acoustic and vibration measurements</b></li>
-                    <li>Supporting the setup of several <b>test chambers for acoustic and vibration measurements</b> at the new production site</li>
-                    <li><b>Development of new test methods</b></li>
-                    <li><b>Validation and commissioning</b> for series production</li>
+                    <li>Maintain and repair existing chambers for <b>acoustic and vibration measurements</b></li>
+                    <li>Supervise the setup of multiple <b>testing chambers for acoustic and vibration measurements</b> at the new production site</li>
+                    <li><b>Develop new testing methods</b></li>
+                    <li><b>Validate and commission</b> measurement systems for series production</li>
                 </ul>
             """, unsafe_allow_html=True)
 
-        with col_photo:
-            img_fer = load_formatted_image("ferchau.png")
+
+
+        with col_foto:
+            img_fer = lade_formatiertes_bild("ferchau.png")
             if img_fer:
                 st.markdown("<div style='margin-top: 5px;'></div>", unsafe_allow_html=True)
-                original_width = img_fer.size[0]
-                new_width = int(original_width * FERCHAU_SCALE)
-                st.image(img_fer, width=new_width)
+                
+                # MASSSTAB_TUV wird hier angewendet
+                original_breite = img_fer.size[0]
+                neue_breite = int(original_breite * MASSSTAB_FERCHAU)
+                st.image(img_fer, width=neue_breite)
             else:
-                st.error("File 'images/ferchau.png' not found.")
+                st.error("Datei 'images/ferchau.png' nicht gefunden.")
 
 st.markdown('<div style="margin-top: 150px;"></div>', unsafe_allow_html=True)
 
 st.write("")
 
-# --- CERTIFICATES SECTION ---
-st.markdown("<h2 style='text-align: left;'>My Certificates & Credentials</h2>", unsafe_allow_html=True)
+
+
+
+
+
+
+
+
+#ab hier beginnt dre Abschnitt mit Zeugnissen
+st.markdown("<h2 style='text-align: left;'>My Certificates and Credentials</h2>", unsafe_allow_html=True)
 st.markdown('<div style="margin-top: 30px;"></div>', unsafe_allow_html=True)
+
 
 with st.container():
     st.markdown("""
         <div style="background-color: #e1f5fe; padding: 20px; border-radius: 15px; border-left: 5px solid #01579b; margin-bottom: 20px;">
+            <!--<h3 style="color: #01579b; margin-top: 0;">🗃️ Credentials & Certificates</h3>--> 
             <p style="color: #333; font-size: 1.1em;">
-                🗃️ Here you will find an overview of my academic and professional credentials.
+                🗃️ Here you will find an overview of my academic and professional credentials. 
             </p>
             <div style="background-color: #fff9c4; padding: 10px; border-radius: 8px; border: 1px solid #fbc02d;">
                 <strong>⚠️ Important note regarding name change:</strong><br>
-                Please note that I have changed my name during my life. Some of the documents listed below 
-                (e.g., high school diploma, Bachelor's degree) are therefore issued under my previous name. 
-                <br>Corresponding proof of the name change is provided as the first document in the gallery.
+                Please note that I have changed my name. 
+                Consequently, some of the documents listed below (e.g., High School Diploma/Abitur, Bachelor's Degree) 
+                are issued under my former name. <br>The corresponding official proof of name change is provided 
+                as the first document in the gallery.
             </div>
         </div>
     """, unsafe_allow_html=True)
 
+
+# --- PDF GALERIE mit st.button (funktioniert garantiert) ---
 if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
 
@@ -512,25 +569,28 @@ def get_pdf_base64(file_name):
             return base64.b64encode(f.read()).decode('utf-8')
     return None
 
-top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Name Change"}
+top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namensänderung"}
 other_docs = [
-    {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Vocational School"},
-    {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "High School"},
-    {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Internship V&F"},
-    {"file": "Bachelor.pdf", "icon": "✈️", "label": "Bachelor's Degree"},
-    {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Welding Course"},
-    {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Value Analyst"},
-    {"file": "Master.pdf", "icon": "🎓", "label": "Master's Degree"},
+    {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Berufsschule"},
+    {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Abitur"},
+    {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Praktikum V&F"},
+    {"file": "Bachelor.pdf", "icon": "✈️", "label": "Bachelor Zeugnis"},
+    {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Schweißkurs"},
+    {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalytiker"},
+    {"file": "Master.pdf", "icon": "🎓", "label": "Master Zeugnis"},
     {"file": "b_k_pulse.pdf", "icon": "📟", "label": "B&K Pulse"},
     {"file": "M_BBM.pdf", "icon": "🔊", "label": "M-BBM"},
-    {"file": "Interner_Auditor.pdf", "icon": "🕵️", "label": "Auditor 9001 ff."},
+    {"file": "Interner_Auditor.pdf", "icon": "🕵️", "label": "Auditor 9000 ff."},
     {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "QMB ISO 9001"},
     {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"},
-    {"file": "Data_Science.pdf", "icon": "🐍", "label": "Data Science"}
+    {"file": "Data_Science.pdf", "icon": "🐍", "label": "Data_Science"}
+    
 ]
 
+# Globales CSS für ALLE Buttons (akzeptiere bitte)
 st.markdown("""
 <style>
+    /* Alle Buttons in der App */
     .stButton > button {
         height: 70px !important;
         width: 100% !important;
@@ -548,6 +608,7 @@ st.markdown("""
         gap: 8px !important;
     }
     
+    /* Der Text im Button */
     .stButton > button p {
         margin: 0 !important;
         font-size: 20px !important;
@@ -558,11 +619,13 @@ st.markdown("""
         width: 100% !important;
     }
     
+    /* Icon (erste Zeile) */
     .stButton > button p::first-line {
         font-size: 25px !important;
         line-height: 1.5 !important;
     }
     
+    /* Hover Effekt */
     .stButton > button:hover {
         transform: translateY(-5px) !important;
         border-color: #94a3b8 !important;
@@ -576,9 +639,11 @@ col_gallery, col_viewer = st.columns([1, 1.4])
 with col_gallery:
     st.markdown("<div style='height: 30px;'></div>", unsafe_allow_html=True)
     
+    # Top-Dokument zentriert
     t_c1, t_c2, t_c3 = st.columns(3)
     with t_c2:
         doc = top_doc
+        is_active = st.session_state.active_doc == doc['file']
         
         if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
             st.session_state.active_doc = doc['file']
@@ -586,6 +651,7 @@ with col_gallery:
     
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     
+    # Andere Dokumente im 3er-Grid
     grid_cols = st.columns(3)
     for i, doc in enumerate(other_docs):
         with grid_cols[i % 3]:
@@ -597,9 +663,14 @@ with col_gallery:
 
 with col_viewer:
     active_pdf = st.session_state.active_doc
+    
+    # Pfad zum PDF (für den Download)
     pdf_path = os.path.join("documents", active_pdf)
     
+    # Pfad zum JPG (für die sichere Anzeige in Edge)
+    # Wir erstellen ein Dictionary für Ausnahmen, falls Dateinamen nicht exakt matchen
     mapping_exceptions = {
+        # PDFs aus deiner Liste -> JPGs aus deinem Screenshot
         "Namensaenderung.pdf": "NamensaenderungAG.jpg",
         "Berufsschule.pdf": "Berufsschule.jpg",
         "allgemeineHochschulreife.pdf": "Abitur.jpg",
@@ -616,6 +687,7 @@ with col_viewer:
         "Data_Science.pdf": "Data_Science.jpg"
     }
     
+    # Bildpfad ermitteln: Entweder aus Ausnahme-Liste oder einfach Endung tauschen
     if active_pdf in mapping_exceptions:
         img_file = mapping_exceptions[active_pdf]
     else:
@@ -623,10 +695,11 @@ with col_viewer:
         
     image_path = os.path.join("images", "Zertifikate", img_file)
 
+    # 1. DOWNLOAD BUTTON (Native Streamlit Funktion - sehr sicher)
     if os.path.exists(pdf_path):
         with open(pdf_path, "rb") as f:
             st.download_button(
-                label=f"📥 Open PDF: {active_pdf}",
+                label=f"📥 PDF öffnen: {active_pdf}",
                 data=f,
                 file_name=active_pdf,
                 mime="application/pdf",
@@ -635,12 +708,14 @@ with col_viewer:
     
     st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
 
+    # 2. BILD ANZEIGE (Wird nicht von Edge blockiert)
     if os.path.exists(image_path):
-        st.image(image_path, use_container_width=True, caption=f"Preview: {active_pdf}")
+        st.image(image_path, use_container_width=True, caption=f"Vorschau: {active_pdf}")
     else:
+        # Falls das Bild nicht gefunden wurde, versuchen wir den alten IFrame als Fallback
         pdf_b64 = get_pdf_base64(active_pdf)
         if pdf_b64:
-            st.warning("Image preview not found, loading PDF viewer...")
+            st.warning("Bild-Vorschau nicht gefunden, lade PDF-Betrachter...")
             st.markdown(f'''
                 <iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" 
                         width="100%" height="800px" style="border-radius:15px; border:1px solid #e2e8f0;">
@@ -651,14 +726,31 @@ st.write("")
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ==================== 3D WALL WITH THREE.JS ====================
+
+
+
+
+
+
+
+
+
+
+# ==================== FLIEßENDE 3D-WAND MIT THREE.JS ====================
+import streamlit as st
 import streamlit.components.v1 as components
+import base64
 import json
 import math
+import os
+
+# Seite auf Wide-Mode stellen
+#st.set_page_config(layout="wide")
 
 st.markdown("<h2 style='text-align: left; margin-top: 50px;'>💻 Data Science & Machine Learning</h2>", unsafe_allow_html=True)
-st.markdown("<h5 style='text-align: left; margin-top: 10px;'>a 3D wall that you can zoom and rotate.</h5>", unsafe_allow_html=True)
+st.markdown("<h5 style='text-align: left; margin-top: 10px;'>a 3D wall you can zoom and rotate.</h5>", unsafe_allow_html=True)
 
+# Deine 17 Zertifikatsnamen mit Nummerierung
 cert_names = [
     "1_Python_for_Data_Science", "2_Exploratory_Statistics_with_Python", "3_Data_Quality",
     "4_Data_Visualization_Matplotlib", "5_Data_Visualization_with_Seaborn", "6_Matplotlib_Complements",
@@ -673,6 +765,7 @@ cert_names = [
 cert_folder = "images"
 cert_data = []
 
+# Sammle existierende Bilder mit Base64
 if os.path.exists(cert_folder):
     for cert_name in cert_names:
         for ext in ['.png', '.jpg', '.jpeg']:
@@ -781,13 +874,34 @@ if num_certs > 0:
     </html>
     """
 
+    # Aufteilung in 3 Spalten (20% : 60% : 20%)
     col1, col2, col3 = st.columns([0.7, 3, 0.7])
     with col2:
         components.html(threejs_html, height=700, scrolling=False)
+    
+  
 
-st.markdown("<br>" * 3, unsafe_allow_html=True)
 
-# --- SKILLS SECTION ---
+
+
+
+st.markdown("<br>" * 3, unsafe_allow_html=True)  # Drei Umbrüche
+
+
+
+
+
+
+
+
+
+#Abschnitt mit Fertigkeiten
+
+import streamlit as st
+import os
+from PIL import Image
+
+# --- FUNKTION ZUM SKALIEREN ---
 def load_scaled_img(path, degrees=0, scale_percent=40):
     if os.path.exists(path):
         img = Image.open(path)
@@ -798,14 +912,18 @@ def load_scaled_img(path, degrees=0, scale_percent=40):
         return img.resize(new_size, Image.Resampling.LANCZOS)
     return None
 
-IMAGE_SCALING = 38
+# --- EINSTELLUNGEN ---
+BILD_SKALIERUNG = 38 
 
+# CSS für Hintergrundfarbe in den Containern und Abstände
 st.markdown("""
     <style>
+        /* Erzwingt Hintergrundfarbe für die Border-Container */
         [data-testid="stVerticalBlockBorderWrapper"] {
             background-color: #f8f9fa !important;
             padding: 10px !important;
         }
+        /* Gleiche Höhe für die Überschriften erzwingen */
         .equal-height-header {
             min-height: 80px;
             display: flex;
@@ -817,25 +935,27 @@ st.markdown("""
 st.title("🛠️ My Skills")
 st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
 
+# Hauptspalten
 col1, col2 = st.columns(2)
 
 with col1:
+    # Container mit Rahmen und Hintergrund (durch CSS oben gefärbt)
     with st.container(border=True):
-        st.markdown('<div class="equal-height-header"><h3>From sketch to finished product</h3></div>', unsafe_allow_html=True)
+        st.markdown('<div class="equal-height-header"><h3>From Sketch to Finished Product</h3></div>', unsafe_allow_html=True)
         
-        candle_files = [
+        kerze_files = [
             "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
             "images/kerze3.png", "images/kerze4.jpg", "images/kerze5.jpg", "images/kerze6.jpg"
         ]
         k_cols = st.columns(3) 
-        for idx, img_path in enumerate(candle_files):
-            img = load_scaled_img(img_path, scale_percent=IMAGE_SCALING)
+        for idx, img_path in enumerate(kerze_files):
+            img = load_scaled_img(img_path, scale_percent=BILD_SKALIERUNG)
             if img:
                 k_cols[idx % 3].image(img, use_container_width=True)
 
 with col2:
     with st.container(border=True):
-        st.markdown('<div class="equal-height-header"><h3>From idea to handover to production</h3></div>', unsafe_allow_html=True)
+        st.markdown('<div class="equal-height-header"><h3>From Idea to Production Handover</h3></div>', unsafe_allow_html=True)
         st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
         project_configs = [
             ("images/project1.jpg", 0), ("images/project2.jpeg", 0),
@@ -844,14 +964,16 @@ with col2:
         ]
         p_cols = st.columns(3)
         for idx, (img_path, angle) in enumerate(project_configs):
-            img = load_scaled_img(img_path, angle, scale_percent=IMAGE_SCALING)
+            img = load_scaled_img(img_path, angle, scale_percent=BILD_SKALIERUNG)
             if img:
                 p_cols[idx % 3].image(img, use_container_width=True)
         
         st.markdown("<div style='margin-top: 58px;'></div>", unsafe_allow_html=True)
 
-st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
 
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True) 
+
+# --- Hard & Soft-Skills ---
 st.markdown("""
     <style>
         .exp-box {
@@ -865,17 +987,18 @@ st.markdown("""
         .exp-box ul { line-height: 1.8; padding-left: 1.2rem; }
         .no-bullet { list-style-type: none; padding-left: 1.2rem; font-weight: bold; }
     </style>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 exp_col1, exp_col2 = st.columns(2)
 
+# Zentrales Styling für die Boxen (erhöht die Schriftgröße um ca. 4pt)
 st.html("""
     <style>
         .exp-box {
-            font-size: 1.2rem !important;
+            font-size: 1.2rem !important; /* Erhöht den Fließtext & Listen */
         }
         .exp-box h4 {
-            font-size: 1.45rem !important;
+            font-size: 1.45rem !important; /* Erhöht die h4-Überschriften proportional */
         }
     </style>
 """)
@@ -885,11 +1008,11 @@ with exp_col1:
         <div class="exp-box">
             <h4>💻 Hardware & Software</h4>
             <ul>
-                <li><strong>📐 Create 3D models with CATIA V5 or AutoCAD.</strong></li>
-                <li><strong>🎙️🎧 Connect and configure sensors, measure objects with technology from B&K or Head Acoustics.</strong></li>
-                <li><strong>🔢 Analyze data with Minitab or self-created statistical methods.</strong></li>
-                <li><strong>🗄️ Everyone knows SAP somehow, but no one knows it the same way.</strong></li>
-                <li><strong>📑 Nobody talks about MS products nowadays. Right?</strong></li>
+                <li><strong>📐 Create 3D models using CATIA V5 or AutoCAD.</strong></li>
+                <li><strong>🎙️🎧 Connect and configure sensors, and measure objects using B&K or Head Acoustics equipment.</strong></li>
+                <li><strong>🔢 Analyze data with Minitab or custom-developed statistical methods.</strong></li>
+                <li><strong>🗄️ Everyone somehow knows how to use SAP, yet nobody truly does.</strong></li>
+                <li><strong>📑 Nobody really talks about MS Office products anymore these days. Right?</strong></li>
         </div>
         """, unsafe_allow_html=True)
 
@@ -898,31 +1021,39 @@ with exp_col2:
         <div class="exp-box">
             <h4>📋 Hard Skills & Soft Skills</h4>
             <ul>
-                <li>🛠️ <strong>Project management (planning, execution control, validation & commissioning)</strong></li>
-                <li><strong>🧩 Quality management | Lean Management & Six Sigma | Audits | Risk management</strong></li>
+                <li>🛠️ <strong>Project Management (Planning, Execution Control, Validation & Commissioning)</strong></li>
+                <li><strong>🧩 Quality Management | Lean Management & Six Sigma | Audits | Risk Management</strong></li>
                 <li><strong>🔍 ISO 9001 or IATF 16949 | CAPA or 8D | DMAIC or PDCA</strong></li>
             </ul>
             <div class="no-bullet" style="margin-top: 20px;">
-                First we need to define the terms before we talk past each other.
+                We need to define these terms first before we end up talking past each other.
             </div>
             <div style="margin-top: 13px;"></div> 
         </div>
         """, unsafe_allow_html=True)
     
-st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True) 
 
+# Programming section with larger font
 st.markdown(f"""
     <div style="background-color: #d1e7dd; padding: 25px; border-radius: 15px; border-left: 6px solid #0f5132; color: #0f5132; font-size: 1.35rem; line-height: 1.6; margin-top: 20px;">
-        <span style="font-size: 1.75rem;">🐍</span> <strong>Can I code?</strong><br><br>
-        By the way, this isn't an agency – I programmed this page myself.<br>
-        With Python, Streamlit, and one or two cups of coffee.<br><br>
-        <i>This project also helped me update my vocabulary of swear words and their combinations in several languages.</i>
+        <span style="font-size: 1.75rem;">🐍</span> <strong>Whether I can code:</strong><br><br>
+        By the way, this wasn't done by an agency – I programmed this page myself.<br>
+        Using Python, Streamlit, and a cup of coffee or two.<br><br>
+        <i>As a side benefit, this project helped me thoroughly update my vocabulary of swear words and their combinations in multiple languages.</i>
     </div>
     """, unsafe_allow_html=True)
 
+
+
+
 st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 
-# --- HOBBIES SECTION ---
+
+
+
+
+# --- HILFSFUNKTION FÜR BILDER (Muss vor dem Aufruf definiert sein) ---
 def get_base64_img(file_path):
     if os.path.exists(file_path):
         with open(file_path, "rb") as f:
@@ -933,14 +1064,18 @@ st.divider()
 st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: left;'>Passions & Balance</h2>", unsafe_allow_html=True)
 
+# --- CSS FÜR LAYOUT, ZOOM UND PARAMETRIERBARE SCHRIFTGRÖSSEN ---
 st.markdown("""
 <style>
     :root, [data-testid="stHorizontalBlock"] {
-        --size-icon: 34px;
-        --size-title: 24px;
-        --size-text: 19px;
-        --size-placeholder: 18px;
-        --size-label: 14px;
+        /* ========================================================= */
+        /* PARAMETER FÜR DIE SCHRIFTGRÖSSEN (Hier einfach anpassen!) */
+        /* ========================================================= */
+        --size-icon: 34px;        /* Vorher: 30px */
+        --size-title: 24px;       /* Vorher: 1.2rem (~19px) */
+        --size-text: 19px;        /* Vorher: 0.95rem (~15px) */
+        --size-placeholder: 18px; /* Vorher: 14px */
+        --size-label: 14px;       /* Vorher: 10px */
     }
 
     [data-testid="stHorizontalBlock"] {
@@ -955,9 +1090,10 @@ st.markdown("""
         display: flex;
         flex-direction: column;
         height: 100%;
-        min-height: 460px;
+        min-height: 460px; /* Leicht erhöht, da der Text nun mehr Platz braucht */
     }
     
+    /* Zuweisung der Parameter über var() */
     .hobby-icon { font-size: var(--size-icon); margin-bottom: 10px; }
     .hobby-title { font-weight: bold; font-size: var(--size-title); color: #1e293b; margin-bottom: 10px; }
     .hobby-text { font-size: var(--size-text); color: #475569; line-height: 1.6; flex-grow: 1; }
@@ -988,11 +1124,12 @@ with col1:
         <div class="hobby-icon">♟️</div>
         <div class="hobby-title">Chess</div>
         <div class="hobby-text">
-            A man bought a chess set for his children. After a year, he couldn't keep up with us anymore.
-            I don't just see my moves ahead, but also my opponent's moves.
+            A man once bought a chess set for his children. After a year, he could no longer keep up with us.
+            I don't just anticipate my own moves, but also the moves of my opponent. 
         </div>
+        <!-- Platzhalter-Text greift hier dynamisch auf die CSS-Variable zu -->
         <div style="height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.2; font-size: var(--size-placeholder); text-align: center; margin-top: auto;">
-            When I started playing chess, there were probably only three people in our town with cameras. So unfortunately no pictures from back then.<br>
+            Back when I started playing chess, there were probably only about three people in our town who owned a camera. So unfortunately, no pictures from those days.<br>
             <span style="font-size: 44px;">♔ ♕ ♖</span>
         </div>
     </div>
@@ -1006,20 +1143,20 @@ with col2:
     st.markdown(f"""
     <div class="hobby-card">
         <div class="hobby-icon">🏒 & ⚽</div>
-        <div class="hobby-title">Ice Hockey & Soccer</div>
-        <div class="hobby-text">Nothing beats the feeling of contributing to someone else's success.</div>
+        <div class="hobby-title">Ice Hockey & Football</div>
+        <div class="hobby-text">Nothing beats the feeling of having contributed to someone else's success.</div>
         <div class="hobby-img-area">
             <div class="hobby-img-wrapper">
-                <img src="data:image/png;base64,{img_f2}" title="Gold medal">
-                <span class="img-label">Soccer</span>
+                <img src="data:image/png;base64,{img_f2}" title="Going for gold">
+                <span class="img-label">Football</span>
             </div>
             <div class="hobby-img-wrapper">
-                <img src="data:image/png;base64,{img_h1}" title="On the podium again">
+                <img src="data:image/png;base64,{img_h1}" title="On the podium here as well">
                 <span class="img-label">Ice Hockey</span>
             </div>
             <div class="hobby-img-wrapper">
-                <img src="data:image/png;base64,{img_h3}" title="Behind the scenes">
-                <span class="img-label">Training</span>
+                <img src="data:image/png;base64,{img_h3}" title="A look behind the scenes">
+                <span class="img-label">Forge</span>
             </div>
         </div>
     </div>
@@ -1034,7 +1171,7 @@ with col3:
     <div class="hobby-card">
         <div class="hobby-icon">🧘 & 🥊</div>
         <div class="hobby-title">Yoga & Boxing</div>
-        <div class="hobby-text">React quickly and still stay calm.</div>
+        <div class="hobby-text">Reacting quickly while remaining perfectly calm.</div>
         <div class="hobby-img-area">
             <div class="hobby-img-wrapper">
                 <img src="data:image/jpeg;base64,{img_y1}" title="It's relaxing, they said">
@@ -1052,15 +1189,21 @@ with col3:
     </div>
     """, unsafe_allow_html=True)
 
-# --- BONUS SECTION ---
-st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
-st.divider()
-st.markdown("<div style='margin-top: 150px;'></div>", unsafe_allow_html=True)
-st.markdown("<h2 style='text-align: left;'>⚠️ The 3 biggest misjudgments of my life</h2>", unsafe_allow_html=True)
 
+
+
+#Bonus-Abschnitt mit Video
+
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+
+st.divider()
+
+st.markdown("<div style='margin-top: 150px;'></div>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: left;'>⚠️ The 3 Biggest Miscalculations of My Life</h2>", unsafe_allow_html=True)
 st.markdown("""
 <style>
     :root, [data-testid="stHorizontalBlock"] {
+        /* PARAMETER FÜR DIE SCHRIFTGRÖSSEN */
         --size-quote: 21px;  
         --size-year: 18px;   
     }
@@ -1074,12 +1217,15 @@ st.markdown("""
         border-top: 5px solid #8e44ad;
         border-radius: 12px;
         padding: 25px;
+        
+        /* DIESE ZWEI ZEILEN ERZWINGEN DIE GLEICHE HÖHE */
         height: 100%;
-        min-height: 180px;
+        min-height: 180px; /* Garantiert eine einheitliche Höhe auf Desktop-Monitoren */
+        
         box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: space-between; /* Drückt die Jahreszahl automatisch ganz nach unten */
         transition: transform 0.2s ease;
     }
     .quote-card:hover {
@@ -1119,7 +1265,7 @@ with q_col1:
 with q_col2:
     st.markdown("""
     <div class="quote-card">
-        <div class="quote-content">"I'm already too old for programming."</div>
+        <div class="quote-content">"I'm already too old to learn how to code."</div>
         <div class="quote-year">2013</div>
     </div>
     """, unsafe_allow_html=True)
@@ -1127,20 +1273,34 @@ with q_col2:
 with q_col3:
     st.markdown("""
     <div class="quote-card">
-        <div class="quote-content">"I'll build the digital resume quickly. It'll only take a few hours."</div>
+        <div class="quote-content">"Building this digital CV will be quick. It'll only take a few hours anyway."</div>
         <div class="quote-year">Today</div>
     </div>
     """, unsafe_allow_html=True)
 
+
+
+
+
+
+
 st.markdown("<div style='margin-top: 200px;'></div>", unsafe_allow_html=True)
 
-# --- VIDEO & FREQUENCY SECTION ---
+
+
+
+# Seite auf Breitbild einstellen
+st.set_page_config(layout="wide")
+
+# Pfade definieren
 video_path = os.path.join("videos", "VID_20240910_195820976.mp4")
 image_path = os.path.join("images", "Frequenzen.png")
 
+# --- CSS für Layout-Optimierung ---
 st.markdown(
     """
     <style>
+    /* Zentriert Video und Bild innerhalb ihrer Spalten */
     [data-testid="stColumn"] {
         display: flex;
         flex-direction: column;
@@ -1148,6 +1308,7 @@ st.markdown(
         justify-content: flex-start;
     }
 
+    /* Sorgt dafür, dass beide Medien eine harmonische Höhe haben */
     [data-testid="stHorizontalBlock"] video, 
     [data-testid="stHorizontalBlock"] img {
         max-height: 550px !important;
@@ -1155,6 +1316,7 @@ st.markdown(
         object-fit: contain;
     }
     
+    /* Titel mittig ausrichten */
     h3 {
         text-align: left;
         margin-bottom: 20px;
@@ -1166,25 +1328,40 @@ st.markdown(
 
 st.title("Bonus")
 
+# Spalten im Verhältnis 1:2 erstellen (Video schmaler, Bild breiter)
 col1, col2 = st.columns([1, 2])
 
 with col1:
     st.write("### Video")
     if os.path.exists(video_path):
+        # Das Video füllt die schmalere Spalte optimal aus
         st.video(video_path)
     else:
-        st.error("Video not found")
+        st.error("Video nicht gefunden")
 
 with col2:
-    st.write("### Frequency Range")
+    st.write("### Frequenzbereich")
     if os.path.exists(image_path):
-        st.image(image_path, caption="Frequency spectrum of the singing bowl", use_container_width=True)
+        # use_container_width sorgt dafür, dass das Bild die 2/3 Breite nutzt
+        st.image(image_path, caption="Frequenzspektrum der Klangschale", use_container_width=True)
     else:
-        st.error("Image not found")
+        st.error("Bild nicht gefunden")
+
+
+
+
+
+
+
 
 st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
 
-# --- BOOK SYMBOL ---
+
+
+
+
+
+
 # --- DAS BUCH-SYMBOL (Am Ende deiner App) ---
 
 st.write("") 
@@ -1215,6 +1392,8 @@ with book_col:
                 filter: drop-shadow(5px 10px 15px rgba(0,0,0,0.2));
                 transition: all 0.4s ease-in-out;
             }
+            
+            /* Text AUF dem Buch - Initial unsichtbar */
             .book-text {
                 position: absolute;
                 top: 48px;
@@ -1228,17 +1407,22 @@ with book_col:
                 text-align: center;
                 pointer-events: none;
                 width: 70px;
-                opacity: 0;
+                opacity: 0; /* Versteckt */
                 transition: all 0.4s ease-in-out;
             }
+
+            /* Hover-Effekte */
             .book-wrapper:hover .book-icon {
                 transform: scale(1.2) rotate(0deg);
                 filter: drop-shadow(2px 5px 5px rgba(0,0,0,0.1));
             }
+            
+            /* Text erscheint beim Hover */
             .book-wrapper:hover .book-text {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1; /* Sichtbar machen */
+                transform: translate(-50%, -50%) scale(1.1); /* Leicht mit-vergrößern */
             }
+
             .book-tag {
                 background: #f1f5f9;
                 color: #64748b;
@@ -1252,8 +1436,9 @@ with book_col:
             }
         </style>
         
-        <div class="book-wrapper" title="📖 My book: This project is currently a work in progress">
+        <div class="book-wrapper" title="📖 My Book: This project is currently in progress &ndash; the story continues to be written day by day.">
             <div class="book-icon">📖</div>
-            <div class="book-tag">still in progress</div>
+            <div class="book-tag">in progress</div>
+
         </div>
     """, unsafe_allow_html=True)
