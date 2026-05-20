@@ -118,7 +118,7 @@ with col_daten:
                 </a>
             </p>
             <p style='font-size: 24px; color: #666; margin-top: 20px;'>
-                📍 <i>Адрес проживания: Не нужен, просто позвоните или напишите на @</i>
+                📍 <i>Адрес проживания: просто позвоните или напишите на @</i>
             </p>
         </div>
     """, unsafe_allow_html=True)
@@ -349,7 +349,7 @@ with st.container(height=BLOCK_HOEHE, border=True):
             st.markdown(f"<div style='margin-top: {OBEN_ABSTAND};'></div>", unsafe_allow_html=True)
             st.markdown(f"<h3 style='text-align: left;'>🎒 {jahr_aktiv}: Школьные годы</h3>", unsafe_allow_html=True)
             st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
-            st.markdown(f"<p style='font-size: {INFO_FONT_SIZE}; color: #0055A5;'>SКак быстро пролетают 10 лет...</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='font-size: {INFO_FONT_SIZE}; color: #0055A5;'>Как быстро пролетают 10 лет...</p>", unsafe_allow_html=True)
 
         with col_foto:
             img_schule = lade_formatiertes_bild("schule2.png")
