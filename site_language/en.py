@@ -1185,6 +1185,8 @@ with col2:
 st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
 
 # --- BOOK SYMBOL ---
+# --- DAS BUCH-SYMBOL (Am Ende deiner App) ---
+
 st.write("") 
 st.write("") 
 
