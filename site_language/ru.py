@@ -571,22 +571,24 @@ def get_pdf_base64(file_name):
     return None
 
 top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namensänderung"}
+top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Свидетельство о смене имени"}
+
 other_docs = [
-    {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Berufsschule"},
-    {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Abitur"},
-    {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Praktikum V&F"},
-    {"file": "Bachelor.pdf", "icon": "✈️", "label": "Bachelor Zeugnis"},
-    {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Schweißkurs"},
-    {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalytiker"},
-    {"file": "Master.pdf", "icon": "🎓", "label": "Master Zeugnis"},
+    {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Профтехучилище"},
+    {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Школьный аттестат"},
+    {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Практика в V&F"},
+    {"file": "Bachelor.pdf", "icon": "✈️", "label": "Диплом бакалавра"},
+    {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Сертификат сварщика"},
+    {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "стоимостный анализ"},
+    {"file": "Master.pdf", "icon": "🎓", "label": "Диплом магистра"},
     {"file": "b_k_pulse.pdf", "icon": "📟", "label": "B&K Pulse"},
     {"file": "M_BBM.pdf", "icon": "🔊", "label": "M-BBM"},
-    {"file": "Interner_Auditor.pdf", "icon": "🕵️", "label": "Auditor 9000 ff."},
-    {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "QMB ISO 9001"},
-    {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"},
-    {"file": "Data_Science.pdf", "icon": "🐍", "label": "Data_Science"}
-    
+    {"file": "Interner_Auditor.pdf", "icon": "🕵️", "label": "ISO 9000 ff."},
+    {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "Аудитор ISO 9001"},
+    {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "Аудитор ISO 17025"},
+    {"file": "Data_Science.pdf", "icon": "🐍", "label": "Data Science"}
 ]
+
 
 # Globales CSS für ALLE Buttons (akzeptiere bitte)
 st.markdown("""
@@ -942,7 +944,7 @@ col1, col2 = st.columns(2)
 with col1:
     # Container mit Rahmen und Hintergrund (durch CSS oben gefärbt)
     with st.container(border=True):
-        st.markdown('<div class="equal-height-header"><h3>Von der Skizze bis zum fertigen Produkt</h3></div>', unsafe_allow_html=True)
+        st.markdown('<div class="equal-height-header"><h3>От эскиза до готового продукта</h3></div>', unsafe_allow_html=True)
         
         kerze_files = [
             "images/kerze0.png", "images/kerze1.png", "images/kerze2.png", 
@@ -956,7 +958,7 @@ with col1:
 
 with col2:
     with st.container(border=True):
-        st.markdown('<div class="equal-height-header"><h3>Von der Idee bis zur Übergabe an die Fertigung</h3></div>', unsafe_allow_html=True)
+        st.markdown('<div class="equal-height-header"><h3>От идеи до передачи в производство</h3></div>', unsafe_allow_html=True)
         st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
         project_configs = [
             ("images/project1.jpg", 0), ("images/project2.jpeg", 0),
