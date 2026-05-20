@@ -49,7 +49,9 @@ TEXTS = {
         {"flag": "🇺🇸", "name": "Englisch", "level": "B2"}
     ],
 
+    # ========== CAREER ==========
     "career_title": "Mein Werdegang",
+
     "career_timeline": {
         1988: "Geboren in der UdSSR ☭",
         1991: "Umzug in die Russische Föderation<br>ohne umzuziehen 🇷🇺",
@@ -60,7 +62,7 @@ TEXTS = {
         2019: "Quality Expert",
         2022: "Ferchau (Siemens)",
         2026: "Data Science & Machine Learning"
-    },
+    },  # ✅ DAS KOMMA HAT GEFEHLT
 
     "career_details": {
         1988: {
