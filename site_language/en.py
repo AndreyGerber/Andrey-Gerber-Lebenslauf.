@@ -1190,70 +1190,12 @@ st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
 st.write("") 
 st.write("") 
 
-# Spalten für die Positionierung rechts
 spacer1, spacer2, book_col = st.columns([2, 1, 1])
 
 with book_col:
     st.markdown("""
-        <style>
-            @keyframes float {
-                0% { transform: translateY(0px) rotate(15deg); }
-                50% { transform: translateY(-10px) rotate(10deg); }
-                100% { transform: translateY(0px) rotate(15deg); }
-            }
-            .book-wrapper {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                cursor: help;
-                animation: float 4s ease-in-out infinite;
-                position: relative;
-                width: 120px;
-            }
-            .book-icon {
-                font-size: 50px;
-                filter: drop-shadow(5px 10px 15px rgba(0,0,0,0.2));
-                transition: all 0.4s ease-in-out;
-            }
-            .book-text {
-                position: absolute;
-                top: 48px;
-                left: 55%;
-                transform: translate(-50%, -50%) scale(0.5);
-                color: #1a1a1a;
-                font-family: 'Brush Script MT', cursive;
-                font-size: 15px;
-                font-weight: bold;
-                line-height: 1.1;
-                text-align: center;
-                pointer-events: none;
-                width: 70px;
-                opacity: 0;
-                transition: all 0.4s ease-in-out;
-            }
-            .book-wrapper:hover .book-icon {
-                transform: scale(1.2) rotate(0deg);
-                filter: drop-shadow(2px 5px 5px rgba(0,0,0,0.1));
-            }
-            .book-wrapper:hover .book-text {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.1);
-            }
-            .book-tag {
-                background: #f1f5f9;
-                color: #64748b;
-                padding: 4px 12px;
-                border-radius: 20px;
-                font-size: 0.75rem;
-                font-weight: bold;
-                margin-top: -5px;
-                border: 1px solid #e2e8f0;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            }
-        </style>
-        
-        <div class="book-wrapper" title="📖 My book: This project is currently a work in progress">
-            <div class="book-icon">📖</div>
-            <div class="book-tag">still in progress</div>
+        <div style="text-align: center; cursor: help;">
+            <div style="font-size: 50px;">📖</div>
+            <div style="background: #f1f5f9; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; display: inline-block;">in progress</div>
         </div>
     """, unsafe_allow_html=True)
