@@ -570,8 +570,7 @@ def get_pdf_base64(file_name):
             return base64.b64encode(f.read()).decode('utf-8')
     return None
 
-top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namensänderung"}
-top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Свидетельство о смене имени"}
+top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Перемена имени"}
 
 other_docs = [
     {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Профтехучилище"},
