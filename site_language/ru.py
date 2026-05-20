@@ -163,7 +163,7 @@ texte = {
     1996: "Школа (так себе удовольствие)",
     2006: "Эмиграция в Германию 🇩🇪",
     2010: "Учёба на авиаконструктора<br>(B.Eng. & M.Sc.)",
-    2017: "TÜV Rheinland<br>(Эксперт в лаборатории &                                    ",
+    2017: "TÜV Rheinland<br>(Эксперт в лаборатории &                                          ",
     2019: "                  Эксперт по качеству)",
     2022: "Ferchau (в Siemens)<br>(Quality Systems Engineering)",
     2026: "Liora<br>(Data Science & ML)"
@@ -218,7 +218,7 @@ for i, jahr in enumerate(jahre_alle):
     if jahr in [1991, 1996, 2019, 2022]:
         y_offset = -0.05
     else:
-        y_offset = -0.10
+        y_offset = -0.2
     
     fig.add_annotation(
         x=jahr, y=-0.1, 
