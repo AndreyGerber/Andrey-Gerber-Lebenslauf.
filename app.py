@@ -111,7 +111,7 @@ if 'language' not in st.session_state:
     st.session_state.language = 'de'
 
 # Erstellt eine breite leere Spalte links und drei kleine, exakt passende Spalten rechts
-cols = st.columns([7.5, 1.5, 1.5, 1.5])
+cols = st.columns([8.5, 1.0, 1.0, 1.0])
 
 with cols[1]:
     if st.button("🇩🇪 DE", key="lang_de", use_container_width=True):
