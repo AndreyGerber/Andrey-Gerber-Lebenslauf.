@@ -1197,9 +1197,9 @@ with book_col:
     st.markdown("""
         <style>
             @keyframes float {
-                0%% { transform: translateY(0px) rotate(15deg); }
-                50%% { transform: translateY(-10px) rotate(10deg); }
-                100%% { transform: translateY(0px) rotate(15deg); }
+                0% { transform: translateY(0px) rotate(15deg); }
+                50% { transform: translateY(-10px) rotate(10deg); }
+                100% { transform: translateY(0px) rotate(15deg); }
             }
             .book-wrapper {
                 display: flex;
