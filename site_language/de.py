@@ -8,35 +8,6 @@ import os
 from PIL import Image, ImageOps
 
 
-# Am Anfang der Datei (nach den imports)
-# Globale Variablen für gecachte Funktionen (werden von app.py gesetzt)
-load_image_cached = None
-load_pil_image_cached = None
-load_pdf_cached = None
-get_certificate_list = None
-
-def main(load_image_cached_func=None, load_pil_image_cached_func=None, 
-         load_pdf_cached_func=None, get_certificate_list_func=None):
-    """Hauptfunktion, die von app.py aufgerufen wird"""
-    global load_image_cached, load_pil_image_cached, load_pdf_cached, get_certificate_list
-    
-    if load_image_cached_func:
-        load_image_cached = load_image_cached_func
-    if load_pil_image_cached_func:
-        load_pil_image_cached = load_pil_image_cached_func
-    if load_pdf_cached_func:
-        load_pdf_cached = load_pdf_cached_func
-    if get_certificate_list_func:
-        get_certificate_list = get_certificate_list_func
-    
-    # Hier kommt dein gesamter existierender Code rein
-    # (alles was bisher in der Datei war)
-    
-# Wenn die Datei direkt ausgeführt wird (nicht von app.py importiert)
-if __name__ == "__main__":
-    # Fallback: Verwende die normalen Funktionen ohne Caching
-    main()
-
 
 # Seiteneinstellungen
 st.set_page_config(page_title="Lebenslauf Andrey Gerber", layout="wide")
