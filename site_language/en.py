@@ -1185,9 +1185,12 @@ with col2:
 st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
 
 # --- BOOK SYMBOL ---
+# --- DAS BUCH-SYMBOL (Am Ende deiner App) ---
+
 st.write("") 
 st.write("") 
 
+# Spalten für die Positionierung rechts
 spacer1, spacer2, book_col = st.columns([2, 1, 1])
 
 with book_col:
@@ -1213,6 +1216,7 @@ with book_col:
                 transition: all 0.4s ease-in-out;
             }
             
+            /* Text AUF dem Buch - Initial unsichtbar */
             .book-text {
                 position: absolute;
                 top: 48px;
@@ -1226,18 +1230,20 @@ with book_col:
                 text-align: center;
                 pointer-events: none;
                 width: 70px;
-                opacity: 0;
+                opacity: 0; /* Versteckt */
                 transition: all 0.4s ease-in-out;
             }
 
+            /* Hover-Effekte */
             .book-wrapper:hover .book-icon {
                 transform: scale(1.2) rotate(0deg);
                 filter: drop-shadow(2px 5px 5px rgba(0,0,0,0.1));
             }
             
+            /* Text erscheint beim Hover */
             .book-wrapper:hover .book-text {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1; /* Sichtbar machen */
+                transform: translate(-50%, -50%) scale(1.1); /* Leicht mit-vergrößern */
             }
 
             .book-tag {
@@ -1253,8 +1259,8 @@ with book_col:
             }
         </style>
         
-        <div class="book-wrapper" title="📖 My book: This project is currently a work in progress – the story writes itself day by day.">
+        <div class="book-wrapper" title="📖 Mein Buch: Dieses Projekt befindet sich gerade in Arbeit &ndash; die Geschichte schreibt sich von Tag zu Tag weiter.">
             <div class="book-icon">📖</div>
-            <div class="book-tag">still in progress</div>
+            <div class="book-tag">noch in Arbeit</div>
         </div>
     """, unsafe_allow_html=True)
