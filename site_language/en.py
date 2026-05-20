@@ -7,10 +7,8 @@ import base64
 import os
 from PIL import Image, ImageOps
 
-
-
 # Page settings
-st.set_page_config(page_title="Andrey Gerber - Resume", layout="wide")
+st.set_page_config(page_title="Andrey Gerber Resume", layout="wide")
 
 # 1. Title (centered, two lines)
 st.markdown("<h2 style='text-align: center;'>Welcome to the page of</h1>", unsafe_allow_html=True)
@@ -136,20 +134,17 @@ with col_data:
 st.divider()
 
 # --- MY CAREER PATH ---
-# All years for labeling
 all_years = [1988, 1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
-# Years that get a diamond on the line (all except 1988)
 years_with_diamond = [1991, 1996, 2006, 2010, 2017, 2019, 2022, 2026]
 
-SIZE_YEARS = 19       # Font size for years (bold)
-SIZE_TEXTS = 17       # Font size for descriptions
+SIZE_YEARS = 19
+SIZE_TEXTS = 17
 
-# Texts for the blocks (English version)
 texts = {
     1988: "Born in USSR ☭",
     1991: "Moved to Russian Federation<br>without moving 🇷🇺",
     1996: "School (not cool)",
-    2006: "Emigration to GE 🇩🇪",
+    2006: "Emigration to Germany 🇩🇪",
     2010: "Studying aircraft design<br>(B.Eng. & Ms.Sc.)",
     2017: "TÜV Rheinland<br>(Expert in the lab  &                    ",
     2019: "                  Quality Expert)",
@@ -157,18 +152,13 @@ texts = {
     2026: "Liora<br>(Data Science & ML)"
 }
 
-# Design settings
 LINE_THICKNESS = 3
 START_DASH_LENGTH = 0.18
-YEAR_FONT_SIZE = 16
 
-# Title left-aligned
 st.markdown("<h2 style='text-align: left;'>My Career Path</h2>", unsafe_allow_html=True)
 
-# --- 2. CREATE GRAPH ---
 fig = go.Figure()
 
-# Life line: Continuous from 1988 to just before the arrowhead (2034)
 fig.add_trace(go.Scatter(
     x=[1988, 2029], 
     y=[0, 0],
@@ -178,7 +168,6 @@ fig.add_trace(go.Scatter(
     hoverinfo='none'
 ))
 
-# Vertical start dash at 1988
 fig.add_shape(
     type="line", 
     x0=1988, y0=-START_DASH_LENGTH, 
@@ -186,7 +175,6 @@ fig.add_shape(
     line=dict(color="black", width=LINE_THICKNESS + 1)
 )
 
-# White diamonds (starting 1996), centered on the line
 fig.add_trace(go.Scatter(
     x=years_with_diamond, 
     y=[0] * len(years_with_diamond),
@@ -201,7 +189,6 @@ fig.add_trace(go.Scatter(
     hoverinfo='none'
 ))
 
-# Year numbers and text blocks (rotated 45°)
 for i, year in enumerate(all_years):
     if year in [1991, 2017, 2019, 2022]:
         y_offset = -0.05
@@ -234,7 +221,6 @@ fig.update_layout(
     yaxis=dict(range=[-1.8, 0.5]) 
 )
 
-# Arrowhead at the right end
 fig.add_annotation(
     x=2030, y=0,
     ax=2028, ay=0,
@@ -268,7 +254,7 @@ fig.update_layout(
 
 st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True, 'displayModeBar': False})
 
-# --- DETAILS BLOCK FOR CAREER PATH ---
+# --- DETAILS BLOCK ---
 BLOCK_HEIGHT = 750
 IMAGE_WIDTH = 350
 INFO_FONT_SIZE = "24px"
@@ -516,7 +502,6 @@ with st.container():
         </div>
     """, unsafe_allow_html=True)
 
-# --- PDF GALLERY with st.button ---
 if "active_doc" not in st.session_state:
     st.session_state.active_doc = "Namensaenderung.pdf"
 
@@ -544,7 +529,6 @@ other_docs = [
     {"file": "Data_Science.pdf", "icon": "🐍", "label": "Data Science"}
 ]
 
-# Global CSS for ALL buttons
 st.markdown("""
 <style>
     .stButton > button {
@@ -592,11 +576,9 @@ col_gallery, col_viewer = st.columns([1, 1.4])
 with col_gallery:
     st.markdown("<div style='height: 30px;'></div>", unsafe_allow_html=True)
     
-    # Top document centered
     t_c1, t_c2, t_c3 = st.columns(3)
     with t_c2:
         doc = top_doc
-        is_active = st.session_state.active_doc == doc['file']
         
         if st.button(f"{doc['icon']}\n{doc['label']}", key=f"btn_{doc['file']}", use_container_width=True):
             st.session_state.active_doc = doc['file']
@@ -604,7 +586,6 @@ with col_gallery:
     
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     
-    # Other documents in a 3-column grid
     grid_cols = st.columns(3)
     for i, doc in enumerate(other_docs):
         with grid_cols[i % 3]:
@@ -616,10 +597,8 @@ with col_gallery:
 
 with col_viewer:
     active_pdf = st.session_state.active_doc
-    
     pdf_path = os.path.join("documents", active_pdf)
     
-    # Exception mapping for image previews
     mapping_exceptions = {
         "Namensaenderung.pdf": "NamensaenderungAG.jpg",
         "Berufsschule.pdf": "Berufsschule.jpg",
@@ -644,7 +623,6 @@ with col_viewer:
         
     image_path = os.path.join("images", "Zertifikate", img_file)
 
-    # 1. DOWNLOAD BUTTON
     if os.path.exists(pdf_path):
         with open(pdf_path, "rb") as f:
             st.download_button(
@@ -657,7 +635,6 @@ with col_viewer:
     
     st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
 
-    # 2. IMAGE PREVIEW
     if os.path.exists(image_path):
         st.image(image_path, use_container_width=True, caption=f"Preview: {active_pdf}")
     else:
@@ -668,17 +645,20 @@ with col_viewer:
                 <iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" 
                         width="100%" height="800px" style="border-radius:15px; border:1px solid #e2e8f0;">
                 </iframe>
-            ''', unsafe_allow_html=True)
+            ''", unsafe_allow_html=True)
 
 st.write("")
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ==================== FLOWING 3D WALL WITH THREE.JS ====================
+# ==================== 3D WALL WITH THREE.JS ====================
+import streamlit.components.v1 as components
+import json
+import math
+
 st.markdown("<h2 style='text-align: left; margin-top: 50px;'>💻 Data Science & Machine Learning</h2>", unsafe_allow_html=True)
 st.markdown("<h5 style='text-align: left; margin-top: 10px;'>a 3D wall that you can zoom and rotate.</h5>", unsafe_allow_html=True)
 
-# Your 24 certificate names with numbering
 cert_names = [
     "1_Python_for_Data_Science", "2_Exploratory_Statistics_with_Python", "3_Data_Quality",
     "4_Data_Visualization_Matplotlib", "5_Data_Visualization_with_Seaborn", "6_Matplotlib_Complements",
@@ -693,7 +673,6 @@ cert_names = [
 cert_folder = "images"
 cert_data = []
 
-# Collect existing images with Base64
 if os.path.exists(cert_folder):
     for cert_name in cert_names:
         for ext in ['.png', '.jpg', '.jpeg']:
@@ -712,7 +691,6 @@ if os.path.exists(cert_folder):
 num_certs = len(cert_data)
 
 if num_certs > 0:
-    import math
     positions = []
     for i in range(num_certs):
         angle = i * 0.65
@@ -803,15 +781,13 @@ if num_certs > 0:
     </html>
     """
 
-    # Layout: 3 columns (20% : 60% : 20%)
     col1, col2, col3 = st.columns([0.7, 3, 0.7])
     with col2:
         components.html(threejs_html, height=700, scrolling=False)
-    
+
 st.markdown("<br>" * 3, unsafe_allow_html=True)
 
 # --- SKILLS SECTION ---
-# Function for scaling images
 def load_scaled_img(path, degrees=0, scale_percent=40):
     if os.path.exists(path):
         img = Image.open(path)
@@ -822,10 +798,8 @@ def load_scaled_img(path, degrees=0, scale_percent=40):
         return img.resize(new_size, Image.Resampling.LANCZOS)
     return None
 
-# Settings
-IMAGE_SCALING = 38 
+IMAGE_SCALING = 38
 
-# CSS for background color and spacing
 st.markdown("""
     <style>
         [data-testid="stVerticalBlockBorderWrapper"] {
@@ -843,7 +817,6 @@ st.markdown("""
 st.title("🛠️ My Skills")
 st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
 
-# Main columns
 col1, col2 = st.columns(2)
 
 with col1:
@@ -877,9 +850,8 @@ with col2:
         
         st.markdown("<div style='margin-top: 58px;'></div>", unsafe_allow_html=True)
 
-st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True) 
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
 
-# --- Hard & Soft Skills ---
 st.markdown("""
     <style>
         .exp-box {
@@ -893,11 +865,10 @@ st.markdown("""
         .exp-box ul { line-height: 1.8; padding-left: 1.2rem; }
         .no-bullet { list-style-type: none; padding-left: 1.2rem; font-weight: bold; }
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 exp_col1, exp_col2 = st.columns(2)
 
-# Central styling for the boxes (larger font)
 st.html("""
     <style>
         .exp-box {
@@ -938,9 +909,8 @@ with exp_col2:
         </div>
         """, unsafe_allow_html=True)
     
-st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True) 
+st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
 
-# Programming section
 st.markdown(f"""
     <div style="background-color: #d1e7dd; padding: 25px; border-radius: 15px; border-left: 6px solid #0f5132; color: #0f5132; font-size: 1.35rem; line-height: 1.6; margin-top: 20px;">
         <span style="font-size: 1.75rem;">🐍</span> <strong>Can I code?</strong><br><br>
@@ -952,7 +922,7 @@ st.markdown(f"""
 
 st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 
-# --- HOBBIES & PASSIONS SECTION ---
+# --- HOBBIES SECTION ---
 def get_base64_img(file_path):
     if os.path.exists(file_path):
         with open(file_path, "rb") as f:
@@ -963,7 +933,6 @@ st.divider()
 st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: left;'>Passions & Balance</h2>", unsafe_allow_html=True)
 
-# CSS for layout, zoom, and scalable fonts
 st.markdown("""
 <style>
     :root, [data-testid="stHorizontalBlock"] {
@@ -1083,7 +1052,7 @@ with col3:
     </div>
     """, unsafe_allow_html=True)
 
-# --- BONUS SECTION: MISJUDGMENTS ---
+# --- BONUS SECTION ---
 st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
 st.divider()
 st.markdown("<div style='margin-top: 150px;'></div>", unsafe_allow_html=True)
@@ -1165,11 +1134,10 @@ with q_col3:
 
 st.markdown("<div style='margin-top: 200px;'></div>", unsafe_allow_html=True)
 
-# --- BONUS SECTION: VIDEO & FREQUENCY IMAGE ---
+# --- VIDEO & FREQUENCY SECTION ---
 video_path = os.path.join("videos", "VID_20240910_195820976.mp4")
 image_path = os.path.join("images", "Frequenzen.png")
 
-# CSS for layout optimization
 st.markdown(
     """
     <style>
@@ -1198,7 +1166,6 @@ st.markdown(
 
 st.title("Bonus")
 
-# Columns in ratio 1:2 (video narrower, image wider)
 col1, col2 = st.columns([1, 2])
 
 with col1:
@@ -1217,7 +1184,7 @@ with col2:
 
 st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
 
-# --- THE BOOK SYMBOL (At the end of your app) ---
+# --- BOOK SYMBOL ---
 st.write("") 
 st.write("") 
 
