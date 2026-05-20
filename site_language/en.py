@@ -1341,7 +1341,7 @@ with col1:
         st.error("Video nicht gefunden")
 
 with col2:
-    st.write("### Frequenzbereich")
+    st.write("### Frequency range")
     if os.path.exists(image_path):
         # use_container_width sorgt dafür, dass das Bild die 2/3 Breite nutzt
         st.image(image_path, caption="Frequenzspektrum der Klangschale", use_container_width=True)
