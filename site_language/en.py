@@ -496,7 +496,7 @@ with st.container():
             <div style="background-color: #fff9c4; padding: 10px; border-radius: 8px; border: 1px solid #fbc02d;">
                 <strong>⚠️ Important note regarding name change:</strong><br>
                 Please note that I have changed my name during my life. Some of the documents listed below 
-                (e.g., high school diploma, Bachelor's degree) are therefore issued under my previous name. 
+                (e.g., high school, Bachelor's degree) are therefore issued under my previous name. 
                 <br>Corresponding proof of the name change is provided as the first document in the gallery.
             </div>
         </div>
