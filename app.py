@@ -94,7 +94,7 @@ div[data-testid="stColumn"] button {
     min-height: 28px !important;
     height: 28px !important;
     line-height: 1.2 !important;
-    font-size: 12px !important;
+    font-size: 8px !important;
     border-radius: 6px !important;
 }
 
