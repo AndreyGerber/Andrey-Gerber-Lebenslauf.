@@ -569,23 +569,24 @@ def get_pdf_base64(file_name):
             return base64.b64encode(f.read()).decode('utf-8')
     return None
 
-top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Namensänderung"}
+top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Official Name Change"}
+
 other_docs = [
-    {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Berufsschule"},
-    {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Abitur"},
-    {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Praktikum V&F"},
-    {"file": "Bachelor.pdf", "icon": "✈️", "label": "Bachelor Zeugnis"},
-    {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Schweißkurs"},
-    {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Wertanalytiker"},
-    {"file": "Master.pdf", "icon": "🎓", "label": "Master Zeugnis"},
+    {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Vocational School"},
+    {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "High School"},
+    {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Internship V&F"},
+    {"file": "Bachelor.pdf", "icon": "✈️", "label": "Bachelor's Degree"},
+    {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Welding course"},
+    {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "Value Analyst"},
+    {"file": "Master.pdf", "icon": "🎓", "label": "Master's Degree"},
     {"file": "b_k_pulse.pdf", "icon": "📟", "label": "B&K Pulse"},
     {"file": "M_BBM.pdf", "icon": "🔊", "label": "M-BBM"},
     {"file": "Interner_Auditor.pdf", "icon": "🕵️", "label": "Auditor 9000 ff."},
-    {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "QMB ISO 9001"},
-    {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMB ISO 17025"},
-    {"file": "Data_Science.pdf", "icon": "🐍", "label": "Data_Science"}
-    
+    {"file": "Qualitätsbeauftragter.pdf", "icon": "🛡️", "label": "QMR 9001"},
+    {"file": "QMB_ISO_17025.pdf", "icon": "🛡️", "label": "QMR ISO 17025"},
+    {"file": "Data_Science.pdf", "icon": "🐍", "label": "Data Science"}
 ]
+
 
 # Globales CSS für ALLE Buttons (akzeptiere bitte)
 st.markdown("""
