@@ -8,7 +8,6 @@ def show_experience():
     with st.expander(t["experience_title"], expanded=False):
 
         for job in t["experience"]:
-
             st.markdown(
                 f"""
                 <div style="
