@@ -47,5 +47,45 @@ TEXTS = {
         {"flag": "🇩🇪", "name": "Deutsch", "level": "C2"},
         {"flag": "🇷🇺", "name": "Russisch", "level": "C2"},
         {"flag": "🇺🇸", "name": "Englisch", "level": "B2"}
-    ]
+    ],
+
+    "career_title": "Mein Werdegang",
+    "career_timeline": {
+        1988: "Geboren in der UdSSR ☭",
+        1991: "Umzug in die Russische Föderation<br>ohne umzuziehen 🇷🇺",
+        1996: "Schulzeit",
+        2006: "Auswanderung nach Deutschland 🇩🇪",
+        2010: "Studium Flugzeugbau<br>(B.Eng. & M.Sc.)",
+        2017: "TÜV Rheinland",
+        2019: "Quality Expert",
+        2022: "Ferchau (Siemens)",
+        2026: "Data Science & Machine Learning"
+    }
+
+    "career_details": {
+        1988: {
+            "title": "📍 1988: Hier begann meine Reise",
+            "text": "Geboren in der UdSSR."
+        },
+        1996: {
+            "title": "🎒 1996: Schulzeit",
+            "text": "So schnell vergehen 10 Jahre."
+        },
+        2006: {
+            "title": "✈️ 2006: Umzug nach Deutschland",
+            "text": "Start eines neuen Lebensabschnitts."
+        },
+        2010: {
+            "title": "🎓 2010: Studium",
+            "text": "<b>Bachelor & Master</b> im Bereich Flugzeugbau."
+        },
+        2017: {
+            "title": "🛠️ 2017–2022: TÜV Rheinland",
+            "text": "Test Engineer & später Quality Expert."
+        },
+        2022: {
+            "title": "⚙️ 2022–2025: Ferchau / Siemens",
+            "text": "Prozesstechnologie & Validierung."
+        }
+    }
 }
