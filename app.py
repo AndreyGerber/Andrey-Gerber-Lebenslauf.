@@ -6,11 +6,8 @@ from components.career import show_career
 
 st.set_page_config(layout="wide")
 
-# Header + Sprache
 t = show_header()
 
-# About Section
 show_about(t)
 show_experience()
-
 show_career()
