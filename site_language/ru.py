@@ -663,11 +663,11 @@ with col_viewer:
         pdf_b64 = get_pdf_base64(active_pdf)
         if pdf_b64:
             st.warning("Предпросмотр изображения не найден, загружается просмотрщик PDF...")
-            st.markdown(f'''
+            st.markdown(f"""
                 <iframe src="data:application/pdf;base64,{pdf_b64}#toolbar=0" 
                         width="100%" height="800px" style="border-radius:15px; border:1px solid #e2e8f0;">
                 </iframe>
-            ''', unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
 
 st.write("")
 st.markdown("<br>", unsafe_allow_html=True)
