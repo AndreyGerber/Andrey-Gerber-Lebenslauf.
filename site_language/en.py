@@ -164,7 +164,7 @@ texte = {
     2006: "Emigration to Germany 🇩🇪",
     2010: "Studied aircraft design<br>(B.Eng. & M.Sc.)",
     2017: "TÜV Rheinland<br>(Expert in the lab &",
-    2019: "Quality Expert)",
+    2019: "                  Quality Expert)",
     2022: "Ferchau (at Siemens)<br>(Quality Systems Engineering)",
     2026: "Liora<br>(Data Science & ML)"
 }
@@ -216,7 +216,7 @@ fig.add_trace(go.Scatter(
 # Jahreszahlen und Textblöcke (45° gedreht)
 for i, jahr in enumerate(jahre_alle):
     if jahr in [1991, 2017, 2019, 2022]:
-        y_offset = -0.1
+        y_offset = -0.05
     else:
         y_offset = -0.20
     
