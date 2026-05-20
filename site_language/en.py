@@ -1188,6 +1188,7 @@ st.markdown("<div style='margin-top: 350px;'></div>", unsafe_allow_html=True)
 st.write("") 
 st.write("") 
 
+# Spalten für die Positionierung rechts
 spacer1, spacer2, book_col = st.columns([2, 1, 1])
 
 with book_col:
@@ -1212,7 +1213,6 @@ with book_col:
                 filter: drop-shadow(5px 10px 15px rgba(0,0,0,0.2));
                 transition: all 0.4s ease-in-out;
             }
-            
             .book-text {
                 position: absolute;
                 top: 48px;
@@ -1229,17 +1229,14 @@ with book_col:
                 opacity: 0;
                 transition: all 0.4s ease-in-out;
             }
-
             .book-wrapper:hover .book-icon {
                 transform: scale(1.2) rotate(0deg);
                 filter: drop-shadow(2px 5px 5px rgba(0,0,0,0.1));
             }
-            
             .book-wrapper:hover .book-text {
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(1.1);
             }
-
             .book-tag {
                 background: #f1f5f9;
                 color: #64748b;
@@ -1253,7 +1250,7 @@ with book_col:
             }
         </style>
         
-        <div class="book-wrapper" title="📖 My book: This project is currently a work in progress – the story writes itself day by day.">
+        <div class="book-wrapper" title="📖 My book: This project is currently a work in progress">
             <div class="book-icon">📖</div>
             <div class="book-tag">still in progress</div>
         </div>
