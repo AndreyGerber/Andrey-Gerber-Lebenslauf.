@@ -575,11 +575,11 @@ top_doc = {"file": "Namensaenderung.pdf", "icon": "📝", "label": "Свидет
 
 other_docs = [
     {"file": "Berufsschule.pdf", "icon": "⚒️", "label": "Профтехучилище"},
-    {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Школьный аттестат"},
+    {"file": "allgemeineHochschulreife.pdf", "icon": "📜", "label": "Аттестат"},
     {"file": "Praktikum_V&F.pdf", "icon": "🔧", "label": "Практика в V&F"},
     {"file": "Bachelor.pdf", "icon": "✈️", "label": "Диплом бакалавра"},
-    {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Сертификат сварщика"},
-    {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "стоимостный анализ"},
+    {"file": "Schweisskurs.pdf", "icon": "👨‍🏭", "label": "Сварщик"},
+    {"file": "Wertanalytiker.pdf", "icon": "💎", "label": "ФСА"},
     {"file": "Master.pdf", "icon": "🎓", "label": "Диплом магистра"},
     {"file": "b_k_pulse.pdf", "icon": "📟", "label": "B&K Pulse"},
     {"file": "M_BBM.pdf", "icon": "🔊", "label": "M-BBM"},
