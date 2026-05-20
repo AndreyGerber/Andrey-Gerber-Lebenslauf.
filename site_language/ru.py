@@ -957,7 +957,7 @@ with col1:
 
 with col2:
     with st.container(border=True):
-        st.markdown('<div class="equal-height-header"><h3>От идеи до передачи в производство</h3></div>', unsafe_allow_html=True)
+        st.markdown('<div class="equal-height-header"><h3>От идеи до запуска в производство</h3></div>', unsafe_allow_html=True)
         st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
         project_configs = [
             ("images/project1.jpg", 0), ("images/project2.jpeg", 0),
@@ -1012,9 +1012,9 @@ with exp_col1:
             <ul>
                 <li><strong>📐 Создание 3D-моделей в CATIA V5 или AutoCAD.</strong></li>
                 <li><strong>🎙️🎧 Подключение, настройка датчиков и измерение объектов с использованием оборудования B&K или Head Acoustics.</strong></li>
-                <li><strong>🔢 Анализ данных в Minitab или с помощью собственных статистических методов.</strong></li>
-                <li><strong>🗄️ В SAP вроде как умеют работать все, но на самом деле — никто.</strong></li>
-                <li><strong>📑 О продуктах MS Office в наше время уже никто и не говорит. Или как?</strong></li>
+                <li><strong>🔢 Анализ данных в Minitab или с помощью статистических методов.</strong></li>
+                <li><strong>🗄️ В SAP вроде как умеют работать все и одновременно никто.</strong></li>
+                <li><strong>📑 О программах MS Office в наше время уже никто и не говорит. Или?</strong></li>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1028,7 +1028,7 @@ with exp_col2:
                 <li><strong>🔍 ISO 9001 или IATF 16949 | CAPA или 8D | DMAIC или PDCA</strong></li>
             </ul>
             <div class="no-bullet" style="margin-top: 20px;">
-                Здесь нам сначала нужно определиться с терминами, чтобы не говорить на разных языках.
+                На этом этапе нам сначала необходимо определиться с терпинологией, чтобы не говорить на разных языках.
             </div>
             <div style="margin-top: 13px;"></div> 
         </div>
