@@ -22,13 +22,13 @@ TRANSLATIONS = {
     "tl_section_title": "Mein Werdegang",
     "tl_year_1988": "Geboren in der UdSSR ☭",
     "tl_year_1991": "In die Russische Föderation<br>umgezogen – ohne umzuziehen 🇷🇺",
-    "tl_year_1996": "Schule (nicht cool)",
+    "tl_year_1996": "School (not cool)",
     "tl_year_2006": "Emigration nach Deutschland 🇩🇪",
     "tl_year_2010": "Studium Flugzeugbau<br>(B.Eng. & M.Sc.)",
-    "tl_year_2017": "TÜV Rheinland<br>(Experte im Labor &                    ",
-    "tl_year_2019": "                  Qualitätsexperte)",
-    "tl_year_2022": "Ferchau (bei Siemens)<br>(Qualitätssystemtechnik)",
-    "tl_year_2026": "Liora<br>(Data Science & ML)",
+    "tl_year_2017": "TÜV Rheinland<br>Sachverständiger für Technische Akustik", 
+    "tl_year_2019": "TÜV Rheinland<br> Quality Expert)",
+    "tl_year_2022": "Ferchau (bei Siemens)<br>Prozesstechnologe",
+    "tl_year_2026": "Liora<br>Data Science & MLOps",
 
     # --- Werdegang: Detailblöcke ---
     "tl_nav_back": "⬅️ Zurück",
