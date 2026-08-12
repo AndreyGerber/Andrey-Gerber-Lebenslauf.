@@ -9,6 +9,7 @@ Statisch, keine Interaktivität -> kein @st.fragment nötig.
 """
 
 import os
+from string import Template
 import streamlit as st
 
 VIDEO_PATH = os.path.join("videos", "VID_20240910_195820976.mp4")
@@ -31,7 +32,7 @@ _LAYOUT_CSS = """
 </style>
 """
 
-_BOOK_CSS_AND_HTML = """
+_BOOK_CSS_AND_HTML = Template("""
 <style>
     @keyframes float {
         0% { transform: translateY(0px) rotate(15deg); }
@@ -68,11 +69,11 @@ _BOOK_CSS_AND_HTML = """
         box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
 </style>
-<div class="book-wrapper" title="{tooltip}">
+<div class="book-wrapper" title="$tooltip">
     <div class="book-icon">📖</div>
-    <div class="book-tag">{tag}</div>
+    <div class="book-tag">$tag</div>
 </div>
-"""
+""")
 
 
 def render_bonus(t: dict):
@@ -106,6 +107,6 @@ def render_bonus(t: dict):
     spacer1, spacer2, book_col = st.columns([2, 1, 1])
     with book_col:
         st.markdown(
-            _BOOK_CSS_AND_HTML.format(tooltip=t["footer_book_tooltip"], tag=t["footer_book_tag"]),
+            _BOOK_CSS_AND_HTML.substitute(tooltip=t["footer_book_tooltip"], tag=t["footer_book_tag"]),
             unsafe_allow_html=True,
         )
