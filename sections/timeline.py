@@ -58,14 +58,13 @@ def render_timeline_graph(t: dict):
     ))
 
     for jahr in YEARS_ALL:
-        y_offset = -0.05 if jahr in (1991, 2017, 2019, 2022) else -0.20
         fig.add_annotation(
             x=jahr, y=-0.1, text=f"<b>{jahr}</b>", showarrow=False, textangle=-30,
             font=dict(size=SIZE_YEARS, color="black"), xanchor="center", yanchor="top"
         )
         fig.add_annotation(
-            x=jahr, y=y_offset, text=t.get(YEAR_TEXT_KEYS[jahr], ""), showarrow=False, textangle=-30,
-            font=dict(size=SIZE_TEXTS, color="#4B0082"), xanchor="center", yanchor="top"
+            x=jahr, y=-0.22, text=t.get(YEAR_TEXT_KEYS[jahr], ""), showarrow=False, textangle=-30,
+            font=dict(size=SIZE_TEXTS, color="#4B0082"), xanchor="right", yanchor="top"
         )
 
     fig.add_annotation(
