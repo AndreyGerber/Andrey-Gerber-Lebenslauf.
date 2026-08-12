@@ -19,7 +19,7 @@ TRANSLATIONS = {
     "tl_year_1996": "School (not cool)",
     "tl_year_2006": "Emigration to Germany 🇩🇪",
     "tl_year_2010": "Studied Aircraft Design<br>(B.Eng. & M.Sc.)",
-    "tl_year_2017": "TÜV Rheinland<br>(Lab Expert &",
+    "tl_year_2017": "TÜV Rheinland<br>(Expert of Technical Acoustics &",
     "tl_year_2019": "Quality Expert)",
     "tl_year_2022": "Ferchau (at Siemens)<br>(Process Technologist)",
     "tl_year_2026": "Liora<br>(Data Science & MLOps)",
