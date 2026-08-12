@@ -88,6 +88,10 @@ def load_scaled_image_cached(path: str, degrees: int = 0, scale_percent: int = 4
     except Exception as e:
         print(f"Fehler beim Laden von {path}: {e}")
         return None
+
+
+@st.cache_resource(show_spinner=False)
+def collect_cert_images_cached(cert_defs: tuple, folder: str) -> list:
     """
     Sammelt Base64-Bilddaten für eine Liste von Zertifikaten.
 

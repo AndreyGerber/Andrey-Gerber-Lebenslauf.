@@ -33,5 +33,5 @@ OTHER_DOCUMENTS = [
     {"pdf": "Qualitätsbeauftragter.pdf", "image": "images/Zertifikate/QMB9001.jpg", "icon": "🛡️", "label_key": "cert_gallery_label_qmb9001"},
     {"pdf": "QMB_ISO_17025.pdf", "image": "images/Zertifikate/QMB17025.jpg", "icon": "🛡️", "label_key": "cert_gallery_label_qmb17025"},
     {"pdf": "Data_Science.pdf", "image": "images/Zertifikate/Data_Science.jpg", "icon": "🐍", "label_key": "cert_gallery_label_datascience"},
-    {"pdf": "00_MLOps Engineer_Diploma.pdf", "image": "images/MLOps/00_MLOps Engineer_Diploma.jpg", "icon": "⚙️", "label_key": "cert_gallery_label_diploma_mlops"},
+    {"pdf": "MLOps Engineer_Diploma.pdf", "image": "images/Zertifikate/00_MLOps Engineer_Diploma.jpg", "icon": "⚙️", "label_key": "cert_gallery_label_diploma_mlops"},
 ]
