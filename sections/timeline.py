@@ -38,46 +38,57 @@ BLOCK_HEIGHT = 750
 def render_timeline_graph(t: dict):
     st.markdown(f"<h2 style='text-align: left;'>{t['tl_section_title']}</h2>", unsafe_allow_html=True)
 
+    # WICHTIG: Positionierung erfolgt über den INDEX (0,1,2,...), nicht über
+    # das echte Kalenderjahr. Sonst bekommen eng beieinanderliegende Jahre
+    # (z.B. 2017/2019/2022, nur 2-3 Jahre auseinander) viel weniger Platz als
+    # weiter auseinanderliegende (z.B. 1996-2006, 10 Jahre) - das führt zu
+    # Textüberschneidungen, egal wie die Höhe variiert wird. Mit Index-
+    # Positionen bekommt JEDES Jahr denselben visuellen Abstand; angezeigt
+    # wird trotzdem die echte Jahreszahl (nur als Text, nicht als Position).
+    pos = {jahr: i for i, jahr in enumerate(YEARS_ALL)}
+    last = len(YEARS_ALL) - 1
+
     fig = go.Figure()
 
     fig.add_trace(go.Scatter(
-        x=[1988, 2029], y=[0, 0], mode='lines',
+        x=[0, last + 1], y=[0, 0], mode='lines',
         line=dict(color='black', width=LINE_WIDTH),
         showlegend=False, hoverinfo='none'
     ))
 
     fig.add_shape(
-        type="line", x0=1988, y0=-START_TICK_LENGTH, x1=1988, y1=START_TICK_LENGTH,
+        type="line", x0=0, y0=-START_TICK_LENGTH, x1=0, y1=START_TICK_LENGTH,
         line=dict(color="black", width=LINE_WIDTH + 1)
     )
 
     fig.add_trace(go.Scatter(
-        x=YEARS_WITH_DIAMOND, y=[0] * len(YEARS_WITH_DIAMOND), mode='markers',
+        x=[pos[jahr] for jahr in YEARS_WITH_DIAMOND], y=[0] * len(YEARS_WITH_DIAMOND), mode='markers',
         marker=dict(symbol='diamond', size=16, color='white', line=dict(color='black', width=2)),
         showlegend=False, hoverinfo='none'
     ))
 
-    for i, jahr in enumerate(YEARS_ALL):
+    for jahr in YEARS_ALL:
         y_offset = -0.05 if jahr in (1991, 2017, 2019, 2022) else -0.20
+        x = pos[jahr]
 
         fig.add_annotation(
-            x=jahr, y=-0.1, text=f"<b>{jahr}</b>", showarrow=False, textangle=-30,
+            x=x, y=-0.1, text=f"<b>{jahr}</b>", showarrow=False, textangle=-30,
             font=dict(size=SIZE_YEARS, color="black"), xanchor="center", yanchor="top"
         )
         fig.add_annotation(
-            x=jahr, y=y_offset, text=t.get(YEAR_TEXT_KEYS[jahr], ""), showarrow=False, textangle=-30,
+            x=x, y=y_offset, text=t.get(YEAR_TEXT_KEYS[jahr], ""), showarrow=False, textangle=-30,
             font=dict(size=SIZE_TEXTS, color="#4B0082"), xanchor="center", yanchor="top"
         )
 
     fig.add_annotation(
-        x=2030, y=0, ax=2028, ay=0, xref="x", yref="y", axref="x", ayref="y",
+        x=last + 1.4, y=0, ax=last + 0.8, ay=0, xref="x", yref="y", axref="x", ayref="y",
         showarrow=True, arrowhead=2, arrowsize=1.5, arrowwidth=LINE_WIDTH, arrowcolor="black"
     )
 
     fig.update_layout(
         height=450,
         margin=dict(l=0, r=0, t=10, b=150),
-        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1985, 2035]),
+        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, last + 1.8]),
         yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1.8, 0.6]),
         plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
