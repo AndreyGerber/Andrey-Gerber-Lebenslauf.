@@ -57,10 +57,19 @@ def render_timeline_graph(t: dict):
         showlegend=False, hoverinfo='none'
     ))
 
-    for jahr in YEARS_ALL:
-        y_offset = -0.10 if jahr in (2017, 2019, 2022) else -0.10
+    # Zickzack-Staffelung: abwechselnd flacher/tieferer Abstand.
+    # Löst das Problem, dass eng beieinanderliegende Jahre (z.B. 2017/2019/2022)
+    # sich sonst unabhängig vom gewählten Abstand überschneiden würden -
+    # benachbarte Jahre landen dadurch IMMER auf unterschiedlicher Höhe.
+    NUMBER_Y = -0.09
+    LANE_SHALLOW = -0.22
+    LANE_DEEP = -0.42
+
+    for i, jahr in enumerate(YEARS_ALL):
+        y_offset = LANE_SHALLOW if i % 2 == 0 else LANE_DEEP
+
         fig.add_annotation(
-            x=jahr, y=-0.1, text=f"<b>{jahr}</b>", showarrow=False, textangle=-30,
+            x=jahr, y=NUMBER_Y, text=f"<b>{jahr}</b>", showarrow=False, textangle=-30,
             font=dict(size=SIZE_YEARS, color="black"), xanchor="center", yanchor="top"
         )
         fig.add_annotation(
@@ -74,10 +83,10 @@ def render_timeline_graph(t: dict):
     )
 
     fig.update_layout(
-        height=450,
-        margin=dict(l=0, r=0, t=10, b=150),
+        height=520,
+        margin=dict(l=0, r=0, t=10, b=220),
         xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[1985, 2035]),
-        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1.8, 0.6]),
+        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-2.4, 0.6]),
         plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
     )
