@@ -1,0 +1,31 @@
+name: Keep Streamlit App Awake
+
+# Läuft automatisch alle 8 Stunden (deutlich unter der 12h-Schlafgrenze
+# von Streamlit Community Cloud) UND lässt sich manuell über den
+# "Actions"-Tab in GitHub auslösen (workflow_dispatch).
+on:
+  schedule:
+    - cron: "0 */8 * * *"
+  workflow_dispatch:
+
+jobs:
+  wake-up:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Playwright installieren
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+
+      - name: App besuchen und ggf. aufwecken
+        env:
+          STREAMLIT_APP_URL: "https://andrey-gerber-lebenslauf.streamlit.app/"
+        run: python scripts/keep_streamlit_awake.py
