@@ -46,7 +46,7 @@ TRANSLATIONS = {
 
     "tl_2022_heading": "⚙️ 2022 – 2025: Ferchau GmbH",
     "tl_2022_role_title": "Process Technologist at Siemens Healthineers",
-    "tl_2022_role_bullets": "<li>Maintenance and repair of existing <b>acoustic and vibration measurement</b> systems</li><li>Overseeing the setup of several <b>acoustic and vibration test chambers</b> at the new production site</li><li><b>Developing new test methods</b></li><li><b>Validation and commissioning</b> for series production</li>",
+    "tl_2022_role_bullets": "<li>Maintenance and repair of existing <b>acoustic and vibration measurement</b> systems</li><li>Overseeing the setup of several <b>acoustic and vibration test chambers</b> at the new production factory</li><li><b>Developing new test methods</b></li><li><b>Validation and commissioning</b> for series production</li>",
 
     "tl_2026_heading": "🤖 2026: Liora",
     "tl_2026_role_title": "Further training: Data Science & MLOps Engineer",
