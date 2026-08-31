@@ -28,23 +28,40 @@ YEAR_TEXT_KEYS = {
 SIZE_YEARS = 19
 SIZE_TEXTS = 17
 LINE_WIDTH = 3
-START_TICK_LENGTH = 0.18
+START_TICK_LENGTH = 0.1
 
 HIGHLIGHT_YEARS = [1988, 1996, 2006, 2010, 2017, 2022, 2026]
 BLOCK_HEIGHT = 750
 
 
 # ---------------------------------------------------------------- GRAFIK ---
+# Feste Seiten-Zuordnung pro Jahr (statt automatischem Wechsel), damit wir
+# gezielt steuern können, welche Jahre zusammengehören (TÜV: 2017 & 2019
+# beide unterhalb der Linie, aber unterschiedlich tief, damit sie sich
+# nicht überlappen).
+YEAR_SIDE = {
+    1988: "above", 1991: "below", 1996: "above",
+    2006: "below", 2010: "above",
+    2017: "below", 2019: "below",
+    2022: "above", 2026: "below",
+}
+# Zusätzliche Tiefe für Jahre, die dieselbe Seite wie ihr Nachbar teilen
+# (aktuell keine - 2017/2019 sollen bewusst auf GLEICHER Höhe stehen)
+YEAR_EXTRA_DEPTH = {}
+
+NUMBER_OFFSET = 0.1
+TEXT_OFFSET_BASE = 0.2
+TEXT_OFFSET_STEP = 0.18
+
+
 def render_timeline_graph(t: dict):
     st.markdown(f"<h2 style='text-align: left;'>{t['tl_section_title']}</h2>", unsafe_allow_html=True)
 
-    # WICHTIG: Positionierung erfolgt über den INDEX (0,1,2,...), nicht über
-    # das echte Kalenderjahr. Sonst bekommen eng beieinanderliegende Jahre
-    # (z.B. 2017/2019/2022, nur 2-3 Jahre auseinander) viel weniger Platz als
-    # weiter auseinanderliegende (z.B. 1996-2006, 10 Jahre) - das führt zu
-    # Textüberschneidungen, egal wie die Höhe variiert wird. Mit Index-
-    # Positionen bekommt JEDES Jahr denselben visuellen Abstand; angezeigt
-    # wird trotzdem die echte Jahreszahl (nur als Text, nicht als Position).
+    # Positionierung über den INDEX (0,1,2,...), nicht das echte Kalenderjahr.
+    # Sonst bekommen eng beieinanderliegende Jahre (z.B. 2017/2019/2022, nur
+    # 2-3 Jahre auseinander) viel weniger Platz als weiter auseinanderliegende
+    # (z.B. 1996-2006, 10 Jahre). Angezeigt wird trotzdem die echte Jahreszahl,
+    # nur die Position auf der Linie ist gleichmäßig verteilt.
     pos = {jahr: i for i, jahr in enumerate(YEARS_ALL)}
     last = len(YEARS_ALL) - 1
 
@@ -68,16 +85,29 @@ def render_timeline_graph(t: dict):
     ))
 
     for jahr in YEARS_ALL:
-        y_offset = -0.05 if jahr in (1991, 2017, 2019, 2022) else -0.20
         x = pos[jahr]
+        sign = 1 if YEAR_SIDE[jahr] == "above" else -1
+        depth = YEAR_EXTRA_DEPTH.get(jahr, 0)
+
+        y_number = sign * NUMBER_OFFSET
+        y_text = sign * (TEXT_OFFSET_BASE + depth * TEXT_OFFSET_STEP)
+
+        # Kurzer "Stiel" von der Linie zum Text - macht die Zuordnung
+        # optisch klarer, wie bei einem klassischen Zeitstrahl-Diagramm.
+        fig.add_shape(
+            type="line", x0=x, y0=0, x1=x, y1=y_number,
+            line=dict(color="#cbd5e1", width=1)
+        )
 
         fig.add_annotation(
-            x=x, y=-0.1, text=f"<b>{jahr}</b>", showarrow=False, textangle=-30,
-            font=dict(size=SIZE_YEARS, color="black"), xanchor="center", yanchor="top"
+            x=x, y=y_number, text=f"<b>{jahr}</b>", showarrow=False,
+            font=dict(size=SIZE_YEARS, color="black"),
+            xanchor="center", yanchor="bottom" if sign > 0 else "top"
         )
         fig.add_annotation(
-            x=x, y=y_offset, text=t.get(YEAR_TEXT_KEYS[jahr], ""), showarrow=False, textangle=-30,
-            font=dict(size=SIZE_TEXTS, color="#4B0082"), xanchor="center", yanchor="top"
+            x=x, y=y_text, text=t.get(YEAR_TEXT_KEYS[jahr], ""), showarrow=False,
+            font=dict(size=SIZE_TEXTS, color="#4B0082"),
+            xanchor="center", yanchor="bottom" if sign > 0 else "top"
         )
 
     fig.add_annotation(
@@ -86,10 +116,10 @@ def render_timeline_graph(t: dict):
     )
 
     fig.update_layout(
-        height=450,
-        margin=dict(l=0, r=0, t=10, b=150),
-        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.5, last + 1.8]),
-        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1.8, 0.6]),
+        height=420,
+        margin=dict(l=0, r=0, t=10, b=10),
+        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1.6, last + 1.8]),
+        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-0.85, 0.62]),
         plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
     )

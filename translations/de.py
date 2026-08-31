@@ -4,10 +4,6 @@ translations/de.py
 Zentrales Text-Dictionary für die deutsche Version.
 Prinzip: JEDER sichtbare Text bekommt einen Key. Layout-Code (in sections/)
 verwendet nur noch t["key"] und bleibt für alle Sprachen identisch.
-
-Aktuell befüllt: Zertifikatswand-Texte (als Startpunkt).
-TODO: restliche Sektionen (Header, Werdegang, Zeugnisse, Fertigkeiten,
-Hobbies, Zitate, Bonus) folgen, sobald wir sie modularisieren.
 """
 
 TRANSLATIONS = {
@@ -20,15 +16,15 @@ TRANSLATIONS = {
 
     # --- Werdegang: Zeitstrahl-Grafik ---
     "tl_section_title": "Mein Werdegang",
-    "tl_year_1988": "Geboren in der UdSSR ☭",
-    "tl_year_1991": "In die Russische Föderation<br>umgezogen – ohne umzuziehen 🇷🇺",
-    "tl_year_1996": "School (not cool)",
-    "tl_year_2006": "Emigration nach Deutschland 🇩🇪",
+    "tl_year_1988": "Geboren          <br>in der UdSSR ☭",
+    "tl_year_1991": "Umzug in die Russische Föderation<br>– ohne Umzug 🇷🇺",
+    "tl_year_1996": "Schule",
+    "tl_year_2006": "Emigration<br>nach Deutschland 🇩🇪",
     "tl_year_2010": "Studium Flugzeugbau<br>(B.Eng. & M.Sc.)",
-    "tl_year_2017": "TÜV Rheinland<br>Sachverständiger für Technische Akustik", 
-    "tl_year_2019": "TÜV Rheinland<br> Quality Expert)",
-    "tl_year_2022": "Ferchau (bei Siemens)<br>Prozesstechnologe",
-    "tl_year_2026": "Liora<br>Data Science & MLOps",
+    "tl_year_2017": "TÜV Rheinland<br>(Akustik-Ingenieur",
+    "tl_year_2019": " <br>                     + Qualitätsexperte)",
+    "tl_year_2022": "Ferchau (bei Siemens)<br>(Prozesstechnologe, Akustik & Vibration)",
+    "tl_year_2026": "Liora<br>(Data Science & ML)",
 
     # --- Werdegang: Detailblöcke ---
     "tl_nav_back": "⬅️ Zurück",
@@ -72,18 +68,18 @@ TRANSLATIONS = {
     "cert_gallery_label_berufsschule": "Berufsschule",
     "cert_gallery_label_abitur": "Abitur",
     "cert_gallery_label_praktikum": "Praktikum V&F",
-    "cert_gallery_label_bachelor": "Bachelor Zeugnis",
+    "cert_gallery_label_bachelor": "Bachelor",
     "cert_gallery_label_schweisskurs": "Schweißkurs",
     "cert_gallery_label_wertanalytiker": "Wertanalytiker",
-    "cert_gallery_label_master": "Master Zeugnis",
+    "cert_gallery_label_master": "Master",
     "cert_gallery_label_bk_pulse": "B&K Pulse",
     "cert_gallery_label_mbbm": "M-BBM",
     "cert_gallery_label_auditor": "Auditor 9000 ff.",
     "cert_gallery_label_qmb9001": "QMB ISO 9001",
     "cert_gallery_label_qmb17025": "QMB ISO 17025",
     "cert_gallery_label_datascience": "Data_Science",
-    "cert_gallery_label_diploma_ds": "Diplom: Data Science",
-    "cert_gallery_label_diploma_mlops": "Diplom: MLOps Engineer",
+    "cert_gallery_label_diploma_ds": "Data Science",
+    "cert_gallery_label_diploma_mlops": "MLOps Engineer",
 
     # --- Fertigkeiten ---
     "skills_title": "🛠️ Meine Fertigkeiten",

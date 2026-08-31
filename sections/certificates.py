@@ -38,7 +38,7 @@ _BUTTON_CSS = """
     }
     .st-key-cert_gallery_buttons .stButton > button p {
         margin: 0 !important;
-        font-size: 20px !important;
+        font-size: 15px !important;
         font-weight: 600 !important;
         color: #475569 !important;
         line-height: 1.3 !important;
@@ -46,7 +46,7 @@ _BUTTON_CSS = """
         width: 100% !important;
     }
     .st-key-cert_gallery_buttons .stButton > button p::first-line {
-        font-size: 25px !important;
+        font-size: 23px !important;
         line-height: 1.5 !important;
     }
     .st-key-cert_gallery_buttons .stButton > button:hover {
